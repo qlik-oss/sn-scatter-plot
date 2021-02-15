@@ -1,0 +1,103 @@
+{
+  "name": "@qlik/sn-scatter-plot",
+  "version": "0.1.3",
+  "description": "A scatter plot.",
+  "license": "MIT",
+  "author": "QlikTech International AB",
+  "keywords": [
+    "qlik",
+    "nebula",
+    "stardust",
+    "scatter",
+    "scatterplot"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qlik-trial/sn-scatter-plot.git"
+  },
+  "files": [
+    "assets",
+    "dist"
+  ],
+  "engines": {
+    "node": ">=8"
+  },
+  "main": "dist/sn-scatter-plot.js",
+  "module": "dist/sn-scatter-plot.esm.js",
+  "scripts": {
+    "build": "cp assets/* dist && rollup -c rollup.config.js",
+    "build:watch": "rollup -c rollup.config.js -w",
+    "lint": "eslint src",
+    "start": "nebula serve --build false  --type scatterplot",
+    "sense": "nebula sense",
+    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
+    "test:unit": "aw -c aw.config.js",
+    "test:integration": "aw puppet --testExt '*.int.js' --glob 'test/integration/**/*.int.js'"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js, jsx}": [
+      "eslint"
+    ]
+  },
+  "devDependencies": {
+    "@after-work.js/aw": "6.0.14",
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/eslint-parser": "7.12.13",
+    "@babel/plugin-transform-react-jsx": "^7.12.12",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/preset-react": "^7.12.10",
+    "@commitlint/cli": "9.1.2",
+    "@commitlint/config-conventional": "9.1.2",
+    "@nebula.js/cli": "1.1.0",
+    "@nebula.js/cli-build": "1.1.0",
+    "@nebula.js/cli-sense": "1.1.0",
+    "@nebula.js/cli-serve": "1.1.0",
+    "@rollup/plugin-babel": "5.2.3",
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-node-resolve": "^11.1.1",
+    "@rollup/plugin-replace": "^2.3.4",
+    "babel-plugin-istanbul": "^6.0.0",
+    "eslint": "7.19.0",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-config-prettier": "7.2.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-mocha": "8.0.0",
+    "eslint-plugin-prettier": "3.3.1",
+    "eslint-plugin-react": "7.22.0",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "husky": "4.2.5",
+    "lint-staged": "10.2.2",
+    "mocha-junit-reporter": "2.0.0",
+    "hammerjs": "2.0.8",
+    "picasso-plugin-hammer": "0.34.0",
+    "picasso-plugin-q": "0.34.0",
+    "picasso.js": "0.34.0",
+    "prettier": "2.2.1",
+    "pretty-quick": "3.1.0",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "rollup": "^2.38.4",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-visualizer": "^4.2.0",
+    "scriptappy-from-jsdoc": "0.7.0"
+  },
+  "peerDependencies": {
+    "@nebula.js/stardust": "^1.1",
+    "hammerjs": "^2.0.8",
+    "picasso-plugin-hammer": ">=0.34.0",
+    "picasso-plugin-q": ">=0.34.0",
+    "picasso.js": ">=0.34.0"
+  }
+}

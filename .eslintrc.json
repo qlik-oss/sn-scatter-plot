@@ -1,0 +1,46 @@
+{
+  "root": true,
+  "parser": "@babel/eslint-parser",
+  "env": {
+    "browser": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "extends": ["airbnb", "prettier", "prettier/react"],
+  "plugins": ["prettier"],
+  "rules": {
+    "max-len": 0,
+    "no-plusplus": 0,
+    "no-bitwise": 0,
+    "prettier/prettier": 2,
+    "no-unused-expressions": 0,
+    "no-nested-ternary": 0,
+    "react/forbid-prop-types": 0,
+    "react/jsx-props-no-spreading": 0,
+    "import/no-extraneous-dependencies": [2, { "devDependencies": true }],
+    "prefer-destructuring": ["error", { "object": true, "array": false }]
+  },
+
+  "overrides": [
+    {
+      "files": ["**/*.spec.js", "**/*.spec.jsx"],
+      "env": {
+        "browser": false,
+        "node": true,
+        "mocha": true
+      },
+      "globals": {
+        "chai": false,
+        "expect": false,
+        "sinon": false,
+        "aw": false,
+        "page": false
+      },
+      "plugins": ["mocha", "react"],
+      "rules": {
+        "mocha/no-exclusive-tests": "error"
+      }
+    }
+  ]
+}

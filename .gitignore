@@ -1,0 +1,16 @@
+*.log
+*.log
+.cache
+.DS_Store
+.idea
+.vscode
+.npmrc
+stats.html
+
+node_modules
+coverage
+dist/
+qext/
+
+sn-scatter-plot.js
+sn-scatter-plot.qext
