@@ -1,13 +1,13 @@
 import KEYS from '../../constants/keys';
 
 function hideTooltips({ chart }) {
-  const gridTooltip = chart.component(KEYS.COMPONENT.POINT_TOOLTIP);
-  if (gridTooltip && gridTooltip.show) {
-    gridTooltip.emit('hide');
+  const pointTooltip = chart.component(KEYS.COMPONENT.POINT_TOOLTIP);
+  if (pointTooltip?.show) {
+    pointTooltip.emit('hide');
   }
 
   const legendTooltip = chart.component(KEYS.COMPONENT.LEGEND_CAT_TOOLTIP);
-  if (legendTooltip && legendTooltip.show) {
+  if (legendTooltip?.show) {
     legendTooltip.emit('hide');
   }
 }
@@ -57,17 +57,17 @@ export default function native({ chart, actions, zoomHandler }) {
       mousemove(e) {
         if (actions.tooltip.enabled()) {
           const target = chart.componentsFromPoint({ x: e.clientX, y: e.clientY });
-          const gridTooltip = chart.component(KEYS.COMPONENT.POINT_TOOLTIP);
-          if (gridTooltip && gridTooltip.show && target.some((c) => c.key === KEYS.COMPONENT.POINT)) {
-            gridTooltip.emit('show', e);
-          } else if (gridTooltip && gridTooltip.show) {
-            gridTooltip.emit('hide');
+          const pointTooltip = chart.component(KEYS.COMPONENT.POINT_TOOLTIP);
+          if (pointTooltip?.show && target.some((c) => c.key === KEYS.COMPONENT.POINT)) {
+            pointTooltip.emit('show', e);
+          } else if (pointTooltip?.show) {
+            pointTooltip.emit('hide');
           }
 
           const legendTooltip = chart.component(KEYS.COMPONENT.LEGEND_CAT_TOOLTIP);
-          if (legendTooltip && legendTooltip.show && target.some((c) => c.key === KEYS.COMPONENT.LEGEND_CATEGORICAL)) {
+          if (legendTooltip?.show && target.some((c) => c.key === KEYS.COMPONENT.LEGEND_CATEGORICAL)) {
             legendTooltip.emit('show', e);
-          } else if (legendTooltip && legendTooltip.show) {
+          } else if (legendTooltip?.show) {
             legendTooltip.emit('hide');
           }
         }

@@ -17,14 +17,13 @@ export default {
     LEGEND_CAT_TOOLTIP: 'legend-cat-tooltip',
     XAXIS: 'x-axis',
     YAXIS: 'y-axis',
-    X_AXIS_TITLE: 'x-axis-title',
-    Y_AXIS_TITLE: 'y-axis-title',
+    XAXIS_TITLE: 'x-axis-title',
+    YAXIS_TITLE: 'y-axis-title',
   },
   COLLECTION: {
     MAIN: 'main-collection',
   },
   FORMATTER: {
-    MINOR: 'minor',
     COLOR: 'color',
   },
   FIELDS: {

@@ -5,8 +5,8 @@ import createZoomHandler from '../../zoom-handler';
 export default function createChartModel({ chart, localeInfo, layoutModel, dockModel, model, picasso, options }) {
   let interactionInProgess = false;
   const EXCLUDE = [
-    KEYS.COMPONENT.X_AXIS_TITLE,
-    KEYS.COMPONENT.Y_AXIS_TITLE,
+    KEYS.COMPONENT.XAXIS_TITLE,
+    KEYS.COMPONENT.YAXIS_TITLE,
     // KEYS.COMPONENT.XAXIS,
     // KEYS.COMPONENT.YAXIS,
     // KEYS.COMPONENT.GRID_LINES,

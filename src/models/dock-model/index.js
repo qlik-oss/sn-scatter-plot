@@ -1,5 +1,5 @@
 // TODO: replace with proper module/implementation
-function getLayoutMode(width, height) {
+export function getLayoutMode(width, height) {
   if (width < 150 || height < 75) {
     return 'spark';
   }
@@ -10,7 +10,7 @@ function getLayoutMode(width, height) {
 }
 
 // TODO: replace with proper module/implementation
-function getDock(orientation, setting, rtl) {
+export function getDock(orientation, setting, rtl) {
   if (orientation === 'vertical') {
     return setting === 'near' ? 'bottom' : 'top';
   }
@@ -21,7 +21,7 @@ function getDock(orientation, setting, rtl) {
 }
 
 // TODO: replace with proper module/implementation
-function getOppositeDock(dock) {
+export function getOppositeDock(dock) {
   switch (dock) {
     case 'left':
       return 'right';

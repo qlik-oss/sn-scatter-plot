@@ -13,35 +13,6 @@ const properties = () => {
      * @default
      */
     version: '__PACKAGE_VERSION__',
-    qHyperCubeDef: {
-      qDimensions: [],
-      qMeasures: [],
-      qSuppressMissing: true,
-    },
-    refLine: {
-      refLinesX: [],
-      refLinesY: [],
-    },
-    showTitles: true,
-    title: '',
-    subtitle: '',
-    footnote: '',
-    disableNavMenu: false,
-    showDetails: false,
-    showDisclaimer: true,
-    navigation: false,
-    dataPoint: {
-      bubbleSizes: 5,
-      rangeBubbleSizes: [2, 8],
-    },
-    labels: {
-      mode: 1,
-    },
-    compressionResolution: 5,
-    gridLine: {
-      auto: true,
-      spacing: 2,
-    },
     color: {
       auto: true,
       mode: 'primary',
@@ -64,10 +35,43 @@ const properties = () => {
       measureMin: 0,
       measureMax: 10,
     },
+    compressionResolution: 5,
+    dataPoint: {
+      bubbleSizes: 5,
+      rangeBubbleSizes: [2, 8],
+    },
+    disableNavMenu: false,
+    footnote: '',
+    labels: {
+      mode: 1,
+    },
+    gridLine: {
+      auto: true,
+      spacing: 2,
+    },
     legend: {
       show: true,
       dock: 'auto',
       showTitle: true,
+    },
+    navigation: false,
+    qHyperCubeDef: {
+      qDimensions: [],
+      qMeasures: [],
+      qSuppressMissing: true,
+    },
+    refLine: {
+      refLinesX: [],
+      refLinesY: [],
+    },
+    showTitles: true,
+    showDetails: false,
+    showDisclaimer: true,
+    subtitle: '',
+    title: '',
+    tooltip: {
+      auto: true,
+      hideBasic: false,
     },
     xAxis: {
       show: 'all',
@@ -86,10 +90,6 @@ const properties = () => {
       minMax: 'min',
       min: 0,
       max: 10,
-    },
-    tooltip: {
-      auto: true,
-      hideBasic: false,
     },
   };
 
