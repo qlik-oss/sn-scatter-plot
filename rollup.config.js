@@ -14,6 +14,7 @@ try {
   const qextInputPath = path.resolve(__dirname, './assets/sn-scatter-plot.qext');
   const qextOutputPath = path.resolve(__dirname, './dist/sn-scatter-plot.qext');
   const qext = fs.readFileSync(qextInputPath, 'utf8').replace('__PACKAGE_VERSION__', version);
+  fs.mkdirSync('./dist', { recursive: true });
   fs.writeFileSync(qextOutputPath, qext);
 } catch (err) {
   throw Error(`error while updating version in qext file: ${err}`);
