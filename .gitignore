@@ -10,7 +10,3 @@ stats.html
 node_modules
 coverage
 dist/
-qext/
-
-sn-scatter-plot.js
-sn-scatter-plot.qext
