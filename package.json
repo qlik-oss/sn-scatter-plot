@@ -28,7 +28,7 @@
   "main": "dist/sn-scatter-plot.js",
   "module": "dist/sn-scatter-plot.esm.js",
   "scripts": {
-    "build": "cp assets/* dist && rollup -c rollup.config.js",
+    "build": "rollup -c rollup.config.js",
     "build:watch": "rollup -c rollup.config.js -w",
     "lint": "eslint src",
     "start": "nebula serve --build false  --type scatterplot",

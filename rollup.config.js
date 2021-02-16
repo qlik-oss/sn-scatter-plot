@@ -10,16 +10,13 @@ import jsxPlugin from '@babel/plugin-transform-react-jsx';
 
 const { version } = require(path.resolve(__dirname, './package.json')); // eslint-disable-line
 
-const watch = process.argv.indexOf('-w') > 2;
-
-if (!watch) {
-  try {
-    const qextPath = path.resolve(__dirname, './dist/sn-scatter-plot.qext');
-    const qext = fs.readFileSync(qextPath, 'utf8').replace('__PACKAGE_VERSION__', version);
-    fs.writeFileSync(qextPath, qext);
-  } catch (err) {
-    throw Error(`error while updating version in qext file: ${err}`);
-  }
+try {
+  const qextInputPath = path.resolve(__dirname, './assets/sn-scatter-plot.qext');
+  const qextOutputPath = path.resolve(__dirname, './dist/sn-scatter-plot.qext');
+  const qext = fs.readFileSync(qextInputPath, 'utf8').replace('__PACKAGE_VERSION__', version);
+  fs.writeFileSync(qextOutputPath, qext);
+} catch (err) {
+  throw Error(`error while updating version in qext file: ${err}`);
 }
 
 export default {
