@@ -1,7 +1,3 @@
-[![CircleCI](https://circleci.com/gh/qlik-trial/sn-scatter-plot.svg?style=shield)](https://circleci.com/gh/qlik-trial/sn-scatter-plot)
-[![Maintainability](https://api.codeclimate.com/v1/badges/cffe9ecd336c16de6dc2/maintainability)](https://codeclimate.com/github/qlik-trial/sn-scatter-plot/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/cffe9ecd336c16de6dc2/test_coverage)](https://codeclimate.com/github/qlik-trial/sn-scatter-plot/test_coverage)
-
 # sn-scatter-plot
 
 scatterplot supernova for nebula.js
