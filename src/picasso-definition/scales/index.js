@@ -19,7 +19,7 @@ export default function createScales({ layoutModel, viewState }) {
       max: () => viewState.get('zoom').yAxisMax,
       invert: true,
     },
-    size: layoutModel.getHyperCubeValue('qMeasureInfo.2')
+    size: layoutModel.meta.hasSizeMeasure
       ? {
           data: {
             extract: {
@@ -28,6 +28,6 @@ export default function createScales({ layoutModel, viewState }) {
             },
           },
         }
-      : [1],
+      : undefined,
   };
 }

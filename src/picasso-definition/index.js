@@ -36,7 +36,7 @@ export default function createPicassoDefinition({
     viewState,
   });
 
-  const collections = createCollections();
+  const collections = createCollections({ layoutModel });
 
   const components = createComponents({
     context,

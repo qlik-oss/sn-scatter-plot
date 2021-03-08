@@ -1,6 +1,6 @@
 import KEYS from '../../constants/keys';
 
-export default function createCollections() {
+export default function createCollections({ layoutModel }) {
   const collectionDef = {
     key: KEYS.COLLECTION.MAIN,
     data: {
@@ -9,7 +9,7 @@ export default function createCollections() {
         props: {
           x: { field: KEYS.FIELDS.X },
           y: { field: KEYS.FIELDS.Y },
-          size: { field: KEYS.FIELDS.SIZE },
+          size: layoutModel.meta.hasSizeMeasure ? { field: KEYS.FIELDS.SIZE } : undefined,
         },
       },
     },
