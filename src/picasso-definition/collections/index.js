@@ -9,7 +9,7 @@ export default function createCollections({ layoutModel }) {
         props: {
           x: { field: KEYS.FIELDS.X },
           y: { field: KEYS.FIELDS.Y },
-          size: layoutModel.getHyperCubeValue('qMeasureInfo.2') ? { field: KEYS.FIELDS.SIZE } : undefined,
+          size: layoutModel.meta.hasSizeMeasure ? { field: KEYS.FIELDS.SIZE } : undefined,
         },
       },
     },

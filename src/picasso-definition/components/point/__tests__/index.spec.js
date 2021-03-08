@@ -18,7 +18,13 @@ describe('grid chart point', () => {
     }));
     const layoutValueStub = sandbox.stub();
     layoutValueStub.withArgs('dataPoint.rangeBubbleSizes').returns([0.1, 1]);
-    layoutModel = { key: 'layout-model', getLayoutValue: layoutValueStub };
+    layoutModel = {
+      key: 'layout-model',
+      getLayoutValue: layoutValueStub,
+      meta: {
+        hasSizeMeasure: true,
+      },
+    };
 
     create = () =>
       createPoint({
@@ -39,7 +45,7 @@ describe('grid chart point', () => {
     });
 
     it('should have correct properties', () => {
-      expect(create()).to.have.all.keys(['key', 'type', 'data', 'rendererSettings', 'settings']);
+      expect(create()).to.have.all.keys(['key', 'type', 'data', 'rendererSettings', 'settings', 'beforeRender']);
     });
 
     it('should have correct key', () => {

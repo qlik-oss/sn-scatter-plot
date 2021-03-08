@@ -28,7 +28,7 @@ export default function createPoint({ layoutModel, chartModel }) {
       y: {
         scale: 'y',
       },
-      size: layoutModel.getHyperCubeValue('qMeasureInfo.2')
+      size: layoutModel.meta.hasSizeMeasure
         ? {
             scale: 'size',
             fn: (d) => {

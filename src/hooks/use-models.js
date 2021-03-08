@@ -38,6 +38,7 @@ const useModels = ({ core }) => {
     const layoutModel = {
       meta: {
         isSnapshot: !!layout.snapshotData,
+        hasSizeMeasure: !!utils.getValue(layout.qHyperCube, 'qMeasureInfo.2'),
       },
       getDataPages: () => layout.qHyperCube.qDataPages,
       getHyperCube: () => layout.qHyperCube,

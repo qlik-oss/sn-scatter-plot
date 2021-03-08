@@ -15,6 +15,9 @@ describe('scales', () => {
     )[0].default;
     layoutModel = {
       getHyperCubeValue: sinon.stub().withArgs('qMeasureInfo.2').returns({}),
+      meta: {
+        hasSizeMeasure: true,
+      },
     };
     viewState = {
       get: sinon.stub().withArgs('zoom').returns({
