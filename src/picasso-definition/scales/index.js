@@ -28,6 +28,6 @@ export default function createScales({ layoutModel, viewState }) {
             },
           },
         }
-      : [1],
+      : undefined,
   };
 }
