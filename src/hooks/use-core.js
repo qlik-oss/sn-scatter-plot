@@ -11,7 +11,7 @@ const useCore = () => {
     element.style.overflow = 'hidden';
     const picasso = configurePicasso();
     const picassoInstance = picasso({
-      renderer: { prio: [options.renderer || 'canvas'] },
+      renderer: { prio: [options.renderer || 'svg'] },
     });
 
     const chart = picassoInstance.chart({
