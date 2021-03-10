@@ -21,10 +21,10 @@ describe('keys', () => {
       'LEGEND',
       'LEGEND_CATEGORICAL',
       'LEGEND_CAT_TOOLTIP',
-      'XAXIS',
-      'YAXIS',
-      'XAXIS_TITLE',
-      'YAXIS_TITLE',
+      'X_AXIS',
+      'Y_AXIS',
+      'X_AXIS_TITLE',
+      'Y_AXIS_TITLE',
     ]);
   });
 

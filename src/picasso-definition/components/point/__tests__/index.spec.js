@@ -15,6 +15,10 @@ describe('grid chart point', () => {
       COLLECTION: {
         MAIN: 'mainCollectionKey',
       },
+      SCALE: {
+        X: 'x',
+        Y: 'y',
+      },
     }));
     const layoutValueStub = sandbox.stub();
     layoutValueStub.withArgs('dataPoint.rangeBubbleSizes').returns([0.1, 1]);

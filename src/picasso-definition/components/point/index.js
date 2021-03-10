@@ -23,10 +23,10 @@ export default function createPoint({ layoutModel, chartModel }) {
     },
     settings: {
       x: {
-        scale: 'x',
+        scale: KEYS.SCALE.X,
       },
       y: {
-        scale: 'y',
+        scale: KEYS.SCALE.Y,
       },
       size: layoutModel.meta.hasSizeMeasure
         ? {

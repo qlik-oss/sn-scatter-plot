@@ -15,8 +15,8 @@ export default function createAxes({ context, layoutModel, dockModel }) {
   return [
     {
       type: 'axis',
-      key: KEYS.COMPONENT.XAXIS,
-      scale: 'x',
+      key: KEYS.COMPONENT.X_AXIS,
+      scale: KEYS.SCALE.X,
       layout: {
         dock: dockModel.x.dock,
         minimumLayoutMode: MODES.AXIS.X,
@@ -24,7 +24,7 @@ export default function createAxes({ context, layoutModel, dockModel }) {
       brush: {
         consume: [
           {
-            context: `highlight-${KEYS.COMPONENT.XAXIS}`,
+            context: `highlight-${KEYS.COMPONENT.X_AXIS}`,
             data: '',
             style: {
               inactive: {
@@ -56,8 +56,8 @@ export default function createAxes({ context, layoutModel, dockModel }) {
     },
     {
       type: 'axis',
-      key: KEYS.COMPONENT.YAXIS,
-      scale: 'y',
+      key: KEYS.COMPONENT.Y_AXIS,
+      scale: KEYS.SCALE.Y,
       layout: {
         dock: dockModel.y.dock,
         minimumLayoutMode: MODES.AXIS.Y,
@@ -65,7 +65,7 @@ export default function createAxes({ context, layoutModel, dockModel }) {
       brush: {
         consume: [
           {
-            context: `highlight-${KEYS.COMPONENT.YAXIS}`,
+            context: `highlight-${KEYS.COMPONENT.Y_AXIS}`,
             data: '',
             style: {
               inactive: {
