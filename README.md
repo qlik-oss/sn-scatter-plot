@@ -21,3 +21,7 @@ nuked.render({
   type: 'scatterplot',
 });
 ```
+
+## Contributing
+
+Follow the instructions in our [contributing guide](./.github/CONTRIBUTING.md).
