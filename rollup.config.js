@@ -39,7 +39,7 @@ export default {
   external: ['@nebula.js/stardust', 'picasso.js', 'picasso-plugin-q', 'picasso-plugin-hammer'],
   plugins: [
     replace({
-      __PACKAGE_VERSION__: version,
+      __PACKAGE_VERSION__: JSON.stringify(version),
     }),
     resolve({
       extensions: ['.js', '.jsx'],

@@ -10,9 +10,8 @@ const properties = () => {
     /**
      * Current version of this generic object definition
      * @type {string}
-     * @default
      */
-    version: '__PACKAGE_VERSION__',
+    version: __PACKAGE_VERSION__, // eslint-disable-line no-undef
     color: {
       auto: true,
       mode: 'primary',

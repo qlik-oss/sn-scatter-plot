@@ -57,14 +57,32 @@ jobs:
       - attach_workspace:
           at: ~/scatter
       - run:
+          name: Setup git user
+          command: |
+            git config user.email "auto-merger@qlik.com"
+            git config user.name $GIT_USER
+      - run:
+          name: Update specs
+          command: |
+            if [ "$CIRCLE_BRANCH" = "main" ]; then
+              yarn run spec
+              set +e
+              git diff --exit-code --quiet;
+              exitstat=$?; set -e;
+              if [ $exitstat -eq 0 ]; then
+                echo "Specs are up to date";
+              else
+                echo "Updating API specs";
+                git commit -am "docs: update api specs [skip ci]";
+                git push -q https://$AUTO_MERGER_ACCESS_TOKEN@github.com/qlik-trial/la-vie.git main;
+              fi;
+            fi
+      - run:
           name: Build
           command: yarn run build
       - run:
           name: Lint
           command: yarn run lint
-      - run:
-          name: Update spec
-          command: yarn run spec
       - run:
           name: Run unit tests and publish to codeclimate
           command: |
@@ -75,13 +93,6 @@ jobs:
             ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
       - store_artifacts:
           path: coverage
-      #  - run:
-      #      name: Integration tests
-      #      command: |
-      #       DocId=$(curl -s --data-binary @data/apps/org-chart-test.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id')
-      #        APP_ID=$DocId yarn run test:integration --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
-      # - store_artifacts:
-      #     path: ./test/integration/__artifacts__
       - persist_to_workspace:
           root: ~/scatter
           paths:
