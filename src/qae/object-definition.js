@@ -11,7 +11,7 @@ const properties = () => {
      * Current version of this generic object definition
      * @type {string}
      */
-    version: __PACKAGE_VERSION__, // eslint-disable-line no-undef
+    version: process.env.PACKAGE_VERSION,
     color: {
       auto: true,
       mode: 'primary',
