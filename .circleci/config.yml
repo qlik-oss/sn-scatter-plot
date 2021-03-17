@@ -99,53 +99,32 @@ jobs:
       - store_artifacts:
           path: ./sn-scatter-plot.zip
 
-  # publish:
-  #   <<: *defaults
-  #   docker:
-  #     - image: circleci/node:10.19.0
-  #   steps:
-  #     - attach_workspace:
-  #         at: ~/scatter
-  #     - run:
-  #         name: Setup npm
-  #         command: |
-  #           set -eo pipefail
-  #           # Amend auth token for access to public npm registry for @nebula.js packages
-  #           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-  #     - run:
-  #         name: Publish
-  #         command: |
-  #           set -euo pipefail
-  #           PROJ_VER=v$(cat package.json | jq -r '.version')
-  #           TAG_NAME=$(git tag --points-at HEAD)
-
-  #           if [ "$TAG_NAME" == "$PROJ_VER" ]
-  #           then
-  #             echo "Running >> npm publish"
-  #             npm publish
-  #           fi
-  api-governance:
-    machine: true
-    working_directory: ~/project
+  publish:
+    <<: *defaults
+    docker:
+      - image: circleci/node:10.19.0
     steps:
-      - checkout
       - attach_workspace:
-          at: ~/project
+          at: ~/scatter
       - run:
-          name: Login for Docker
-          command: echo $DOCKER_TOKEN | docker login -u "$DOCKER_USER" --password-stdin
-      - run:
-          name: API Governance Compliance
+          name: Setup Artifactory
           command: |
-            docker pull qlik/asmquery
-            docker create -v /specs --name specs alpine:3.4 /bin/true
-            docker cp ./api-specifications/properties.json specs:/specs
-            docker run --volumes-from specs \
-            -e target=Colony \
-            -e runMode=failBuild \
-            -e apiId=b96971ec-2f58-4ba3-9213-440e689471a0 \
-            -e specPath='/specs/properties.json' \
-            -e commit="$CIRCLE_SHA1" qlik/asmquery
+            set -eo pipefail
+            # Setup .npmrc to access artifactory for @qlik packages
+            curl -u $ARTIFACTORY_USER:$ARTIFACTORY_PWD $ARTIFACTORY_URL/api/npm/npm-local/auth/qlik > ~/.npmrc
+      - run:
+          name: Publish
+          command: |
+            set -euo pipefail
+            PROJ_VER=v$(cat package.json | jq -r '.version')
+            TAG_NAME=$(git tag --points-at HEAD)
+
+            if [ "$TAG_NAME" == "$PROJ_VER" ]
+            then
+              echo "Running >> npm publish"
+              npm publish
+            fi
+
 workflows:
   version: 2
   build-all:
@@ -154,21 +133,13 @@ workflows:
       - build:
           requires:
             - install
-      # - api-governance:
-      #     filters:
-      #       branches:
-      #         # Forked pull requests have CIRCLE_BRANCH set to pull/XXX
-      #         ignore: /pull\/[0-9]+/
-      #       tags:
-      #         only:
-      #           - /v.*/
       - publish-dev:
           requires:
             - build
-      # - publish:
-      #     requires:
-      #       - build
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
+      - publish:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main

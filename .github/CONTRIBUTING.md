@@ -23,7 +23,7 @@ Run lint with:
 
 Currently only admins are able to publish.
 
-1. Check out master and make sure it is up to date
+1. Check out main and make sure it is up to date
 2. Run `npm version minor/patch`
 3. Verify changes in `package.json`, commit and run `git push && git push --tags`
 4. Make sure all checks pass, then Circle automatically publishes to NPM.
