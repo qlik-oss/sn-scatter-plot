@@ -1,30 +1,32 @@
 export default {
-  getDotRadius(value, minValue, maxValue, minRadius, maxRadius) {
+  getDotRadius(value, props) {
+    const { sizeDataMin, minDotSize, sizeDataMax, maxDotSize } = props;
+
     if (Number.isNaN(+value) || value === null) {
       return NaN;
     }
 
-    if (minValue === maxValue) {
-      return (minRadius + maxRadius) / 2;
+    if (sizeDataMin === sizeDataMax) {
+      return (minDotSize + maxDotSize) / 2;
     }
 
-    if (value <= minValue) {
-      return minRadius;
+    if (value <= sizeDataMin) {
+      return minDotSize;
     }
 
-    if (value >= maxValue) {
-      return maxRadius;
+    if (value >= sizeDataMax) {
+      return maxDotSize;
     }
 
-    const scaledValue = (value - minValue) / (maxValue - minValue);
-    const radius = minRadius + (maxRadius - minRadius) * Math.sqrt(scaledValue);
+    const scaledValue = (value - sizeDataMin) / (sizeDataMax - sizeDataMin);
+    const radius = minDotSize + (maxDotSize - minDotSize) * Math.sqrt(scaledValue);
     return radius;
   },
-  getDotMeasureSize(rValue, props, wsm) {
-    const radius = this.getDotRadius(rValue, props.sizeDataMin, props.sizeDataMax, props.minDotSize, props.maxDotSize);
-    return `${radius * wsm * 2}px`;
+  getDotMeasureSize(rValue, props, windowSizeMultiplier) {
+    const radius = this.getDotRadius(rValue, props);
+    return `${radius * windowSizeMultiplier * 2}px`;
   },
-  getDotSize(bubbleSize, wsm) {
-    return `${bubbleSize * wsm * 2}px`;
+  getDotSize(bubbleSize, windowSizeMultiplier) {
+    return `${bubbleSize * windowSizeMultiplier * 2}px`;
   },
 };

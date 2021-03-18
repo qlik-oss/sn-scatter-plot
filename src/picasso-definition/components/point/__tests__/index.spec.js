@@ -6,9 +6,10 @@ describe('grid chart point', () => {
   let sandbox;
   let layoutModel;
   let create;
-  const props = {};
+  let props = {};
   let layoutValueStub;
   let sizeStub;
+  let hyperCubeValueStub;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -27,23 +28,26 @@ describe('grid chart point', () => {
     layoutValueStub = sandbox.stub();
     layoutValueStub.withArgs('dataPoint.rangeBubbleSizes').returns([2, 8]);
     layoutValueStub.withArgs('dataPoint.bubbleSizes').returns(5);
-    const hyperCube = {
-      qMeasureInfo: [{}, {}, { qMin: 1, qMax: 10 }],
-    };
+    hyperCubeValueStub = sandbox.stub();
+    hyperCubeValueStub.withArgs('qMeasureInfo.2', {}).returns({ qMin: 1, qMax: 10 });
     layoutModel = {
       key: 'layout-model',
       getLayoutValue: layoutValueStub,
+      getHyperCubeValue: hyperCubeValueStub,
       meta: {
         hasSizeMeasure: true,
       },
-      getHyperCube: () => hyperCube,
     };
 
     sizeStub = sandbox.stub();
-    props.minDotSize = layoutValueStub('dataPoint.rangeBubbleSizes')[0];
-    props.maxDotSize = layoutValueStub('dataPoint.rangeBubbleSizes')[0];
-    props.sizeDataMin = layoutModel.getHyperCube().qMeasureInfo[2].qMin;
-    props.sizeDataMax = layoutModel.getHyperCube().qMeasureInfo[2].qMax;
+    const [minDotSize, maxDotSize] = layoutValueStub('dataPoint.rangeBubbleSizes');
+    const { qMin, qMax } = hyperCubeValueStub('qMeasureInfo.2', {});
+    props = {
+      minDotSize,
+      maxDotSize,
+      sizeDataMin: qMin,
+      sizeDataMax: qMax,
+    };
 
     create = () =>
       createPoint({
@@ -99,7 +103,7 @@ describe('grid chart point', () => {
 
       it('should return correctly calculated value of size when has measure size', () => {
         sizeStub.withArgs(d).returns(pointHelper.getDotMeasureSize(d.datum.size.value, props, windowSizeMultiplier));
-        expect(sizeStub(d)).to.equal('4px');
+        expect(sizeStub(d)).to.equal('12px');
       });
 
       it('should return correctly calculated value of size when has NOT measure size', () => {

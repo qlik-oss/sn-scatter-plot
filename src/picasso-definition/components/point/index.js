@@ -2,13 +2,12 @@ import KEYS from '../../../constants/keys';
 import pointHelper from './pointHelper';
 
 export default function createPoint({ layoutModel, chartModel }) {
-  let wsm;
-  const sizeDataMin = layoutModel.meta.hasSizeMeasure ? layoutModel.getHyperCube().qMeasureInfo[2].qMin : undefined;
-  const sizeDataMax = layoutModel.meta.hasSizeMeasure ? layoutModel.getHyperCube().qMeasureInfo[2].qMax : undefined;
+  let windowSizeMultiplier;
+  const { qMin, qMax } = layoutModel.getHyperCubeValue('qMeasureInfo.2', {});
   const [minDotSize, maxDotSize] = layoutModel.getLayoutValue('dataPoint.rangeBubbleSizes') || [];
   const props = {
-    sizeDataMin,
-    sizeDataMax,
+    sizeDataMin: qMin,
+    sizeDataMax: qMax,
     minDotSize,
     maxDotSize,
   };
@@ -39,15 +38,15 @@ export default function createPoint({ layoutModel, chartModel }) {
         scale: KEYS.SCALE.Y,
       },
       size: layoutModel.meta.hasSizeMeasure
-        ? (d) => pointHelper.getDotMeasureSize(d.datum.size.value, props, wsm)
-        : () => pointHelper.getDotSize(layoutModel.getLayoutValue('dataPoint.bubbleSizes'), wsm),
+        ? (d) => pointHelper.getDotMeasureSize(d.datum.size.value, props, windowSizeMultiplier)
+        : () => pointHelper.getDotSize(layoutModel.getLayoutValue('dataPoint.bubbleSizes'), windowSizeMultiplier),
       // fill: color,
       // opacity: 0.8,
       strokeWidth: 0.5,
       stroke: '#fff',
     },
     beforeRender: ({ size }) => {
-      wsm = Math.min(size.height, size.width) / 300;
+      windowSizeMultiplier = Math.min(size.height, size.width) / 300;
     },
   };
 }
