@@ -16,11 +16,6 @@ aliases:
     paths:
       - ~/.cache/yarn
     key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
-  - &filter_main
-    branches:
-      only: main
-  - &attach
-    at: ~/project
 
 jobs:
   install:
