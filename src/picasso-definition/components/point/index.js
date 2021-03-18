@@ -1,30 +1,17 @@
 import KEYS from '../../../constants/keys';
-
-function getDotRadius(value, minValue, maxValue, minRadius, maxRadius) {
-  if (Number.isNaN(+value) || value === null) {
-    return NaN;
-  }
-
-  if (minValue === maxValue) {
-    return (minRadius + maxRadius) / 2;
-  }
-
-  if (value <= minValue) {
-    return minRadius;
-  }
-  if (value >= maxValue) {
-    return maxRadius;
-  }
-  const scaledValue = (value - minValue) / (maxValue - minValue);
-  const radius = minRadius + (maxRadius - minRadius) * Math.sqrt(scaledValue);
-  return radius;
-}
+import pointHelper from './pointHelper';
 
 export default function createPoint({ layoutModel, chartModel }) {
   let wsm;
   const sizeDataMin = layoutModel.meta.hasSizeMeasure ? layoutModel.getHyperCube().qMeasureInfo[2].qMin : undefined;
   const sizeDataMax = layoutModel.meta.hasSizeMeasure ? layoutModel.getHyperCube().qMeasureInfo[2].qMax : undefined;
   const [minDotSize, maxDotSize] = layoutModel.getLayoutValue('dataPoint.rangeBubbleSizes') || [];
+  const props = {
+    sizeDataMin,
+    sizeDataMax,
+    minDotSize,
+    maxDotSize,
+  };
   return {
     key: KEYS.COMPONENT.POINT,
     type: 'point',
@@ -52,11 +39,8 @@ export default function createPoint({ layoutModel, chartModel }) {
         scale: KEYS.SCALE.Y,
       },
       size: layoutModel.meta.hasSizeMeasure
-        ? (d) => {
-            const r = getDotRadius(d.datum.size.value, sizeDataMin, sizeDataMax, minDotSize, maxDotSize);
-            return `${r * wsm * 2}px`;
-          }
-        : () => `${layoutModel.getLayoutValue('dataPoint.bubbleSizes') * wsm * 2}px`,
+        ? (d) => pointHelper.getDotMeasureSize(d.datum.size.value, props, wsm)
+        : () => pointHelper.getDotSize(layoutModel.getLayoutValue('dataPoint.bubbleSizes'), wsm),
       // fill: color,
       // opacity: 0.8,
       strokeWidth: 0.5,
