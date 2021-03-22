@@ -1,7 +1,7 @@
-export default {
-  getDotRadius(value, props) {
-    const { sizeDataMin, minDotSize, sizeDataMax, maxDotSize } = props;
+const DIAMETER_OVER_RADIUS = 2;
 
+export default {
+  getDotRadius({ sizeDataMin, minDotSize, sizeDataMax, maxDotSize, value }) {
     if (Number.isNaN(+value) || value === null) {
       return NaN;
     }
@@ -22,11 +22,11 @@ export default {
     const radius = minDotSize + (maxDotSize - minDotSize) * Math.sqrt(scaledValue);
     return radius;
   },
-  getDotMeasureSize(rValue, props, windowSizeMultiplier) {
-    const radius = this.getDotRadius(rValue, props);
-    return `${radius * windowSizeMultiplier * 2}px`;
+  getDotMeasureSize({ sizeDataMin, minDotSize, sizeDataMax, maxDotSize, value, windowSizeMultiplier }) {
+    const radius = this.getDotRadius({ sizeDataMin, minDotSize, sizeDataMax, maxDotSize, value });
+    return `${radius * windowSizeMultiplier * DIAMETER_OVER_RADIUS}px`;
   },
   getDotSize(bubbleSize, windowSizeMultiplier) {
-    return `${bubbleSize * windowSizeMultiplier * 2}px`;
+    return `${bubbleSize * windowSizeMultiplier * DIAMETER_OVER_RADIUS}px`;
   },
 };

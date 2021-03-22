@@ -1,33 +1,34 @@
 import pointHelper from '../index';
 
 describe('Point helper', () => {
-  let props = {};
   const windowSizeMultiplier = 1;
-  let dotDataValue;
+  let value;
+  let sizeDataMin;
+  let sizeDataMax;
+  let minDotSize;
+  let maxDotSize;
 
   beforeEach(() => {
-    dotDataValue = 10;
-    props = {
-      sizeDataMin: 10,
-      sizeDataMax: 20,
-      minDotSize: 2,
-      maxDotSize: 8,
-    };
+    value = 10;
+    sizeDataMin = 10;
+    sizeDataMax = 20;
+    minDotSize = 2;
+    maxDotSize = 8;
   });
 
   it('it should correctly calculate the radius', () => {
-    expect(pointHelper.getDotRadius(dotDataValue, props)).to.equal(2);
-    dotDataValue = 20;
-    expect(pointHelper.getDotRadius(dotDataValue, props)).to.equal(8);
-    dotDataValue = 9;
-    expect(pointHelper.getDotRadius(dotDataValue, props)).to.equal(2);
-    dotDataValue = 21;
-    expect(pointHelper.getDotRadius(dotDataValue, props)).to.equal(8);
-    dotDataValue = null;
-    expect(pointHelper.getDotRadius(dotDataValue, props)).to.deep.equal(NaN);
-    dotDataValue = 20;
-    props.sizeDataMax = props.sizeDataMin;
-    expect(pointHelper.getDotRadius(dotDataValue, props)).to.equal(5);
+    expect(pointHelper.getDotRadius({ value, sizeDataMax, sizeDataMin, minDotSize, maxDotSize })).to.equal(2);
+    value = 20;
+    expect(pointHelper.getDotRadius({ value, sizeDataMax, sizeDataMin, minDotSize, maxDotSize })).to.equal(8);
+    value = 9;
+    expect(pointHelper.getDotRadius({ value, sizeDataMax, sizeDataMin, minDotSize, maxDotSize })).to.equal(2);
+    value = 21;
+    expect(pointHelper.getDotRadius({ value, sizeDataMax, sizeDataMin, minDotSize, maxDotSize })).to.equal(8);
+    value = null;
+    expect(pointHelper.getDotRadius({ value, sizeDataMax, sizeDataMin, minDotSize, maxDotSize })).to.deep.equal(NaN);
+    value = 20;
+    sizeDataMax = sizeDataMin;
+    expect(pointHelper.getDotRadius({ value, sizeDataMax, sizeDataMin, minDotSize, maxDotSize })).to.equal(5);
   });
 
   it('it should correctly calculate the point size', () => {
@@ -38,8 +39,26 @@ describe('Point helper', () => {
   });
 
   it('it should correctly calculate the point measure size', () => {
-    expect(pointHelper.getDotMeasureSize(dotDataValue, props, windowSizeMultiplier)).to.equal('4px');
-    dotDataValue = 20;
-    expect(pointHelper.getDotMeasureSize(dotDataValue, props, windowSizeMultiplier)).to.equal('16px');
+    expect(
+      pointHelper.getDotMeasureSize({
+        value,
+        sizeDataMax,
+        sizeDataMin,
+        minDotSize,
+        maxDotSize,
+        windowSizeMultiplier,
+      })
+    ).to.equal('4px');
+    value = 20;
+    expect(
+      pointHelper.getDotMeasureSize({
+        value,
+        sizeDataMax,
+        sizeDataMin,
+        minDotSize,
+        maxDotSize,
+        windowSizeMultiplier,
+      })
+    ).to.equal('16px');
   });
 });

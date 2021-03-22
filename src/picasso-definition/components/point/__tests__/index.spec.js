@@ -1,12 +1,11 @@
 import createPoint from '../index';
 import * as KEYS from '../../../../constants/keys';
-import pointHelper from '../pointHelper';
+import createSizeScale from '../../../scales/size/index';
 
 describe('grid chart point', () => {
   let sandbox;
   let layoutModel;
   let create;
-  let props = {};
   let layoutValueStub;
   let sizeStub;
   let hyperCubeValueStub;
@@ -40,14 +39,6 @@ describe('grid chart point', () => {
     };
 
     sizeStub = sandbox.stub();
-    const [minDotSize, maxDotSize] = layoutValueStub('dataPoint.rangeBubbleSizes');
-    const { qMin, qMax } = hyperCubeValueStub('qMeasureInfo.2', {});
-    props = {
-      minDotSize,
-      maxDotSize,
-      sizeDataMin: qMin,
-      sizeDataMax: qMax,
-    };
 
     create = () =>
       createPoint({
@@ -102,13 +93,15 @@ describe('grid chart point', () => {
       const windowSizeMultiplier = 1;
 
       it('should return correctly calculated value of size when has measure size', () => {
-        sizeStub.withArgs(d).returns(pointHelper.getDotMeasureSize(d.datum.size.value, props, windowSizeMultiplier));
-        expect(sizeStub(d)).to.equal('12px');
+        sizeStub.withArgs(d).returns(createSizeScale(layoutModel));
+        expect(sizeStub(d)).to.be.a('Function');
+        expect(createSizeScale(layoutModel)(d, windowSizeMultiplier)).to.equal('12px');
       });
 
       it('should return correctly calculated value of size when has NOT measure size', () => {
-        sizeStub.returns(pointHelper.getDotSize(layoutValueStub('dataPoint.bubbleSizes'), windowSizeMultiplier));
-        expect(sizeStub()).to.equal('10px');
+        layoutModel.meta.hasSizeMeasure = false;
+        sizeStub.withArgs(d).returns(createSizeScale(layoutModel));
+        expect(sizeStub(d)(d, windowSizeMultiplier)).to.equal('10px');
       });
     });
   });
