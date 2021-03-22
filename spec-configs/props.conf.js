@@ -1,5 +1,6 @@
 const path = require('path');
-const pkg = require(path.resolve(__dirname, '../package.json'));
+
+const pkg = require(path.resolve(__dirname, '../package.json')); // eslint-disable-line
 
 module.exports = {
   glob: ['./src/qae/object-definition.js'],

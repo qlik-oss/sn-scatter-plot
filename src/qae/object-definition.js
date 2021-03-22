@@ -10,9 +10,8 @@ const properties = () => {
     /**
      * Current version of this generic object definition
      * @type {string}
-     * @default
      */
-    version: '__PACKAGE_VERSION__',
+    version: process.env.PACKAGE_VERSION,
     color: {
       auto: true,
       mode: 'primary',

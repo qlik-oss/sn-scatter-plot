@@ -13,7 +13,7 @@ const { version } = require(path.resolve(__dirname, './package.json')); // eslin
 try {
   const qextInputPath = path.resolve(__dirname, './assets/sn-scatter-plot.qext');
   const qextOutputPath = path.resolve(__dirname, './dist/sn-scatter-plot.qext');
-  const qext = fs.readFileSync(qextInputPath, 'utf8').replace('__PACKAGE_VERSION__', version);
+  const qext = fs.readFileSync(qextInputPath, 'utf8').replace('process.env.PACKAGE_VERSION', version);
   fs.mkdirSync('./dist', { recursive: true });
   fs.writeFileSync(qextOutputPath, qext);
 } catch (err) {
@@ -39,7 +39,7 @@ export default {
   external: ['@nebula.js/stardust', 'picasso.js', 'picasso-plugin-q', 'picasso-plugin-hammer'],
   plugins: [
     replace({
-      __PACKAGE_VERSION__: version,
+      'process.env.PACKAGE_VERSION': JSON.stringify(version),
     }),
     resolve({
       extensions: ['.js', '.jsx'],
