@@ -31,6 +31,6 @@ describe('scales', () => {
 
   it('should contain correct scales', () => {
     const scales = createScales({ layoutModel, viewState });
-    expect(Object.keys(scales)).to.deep.equal(['x', 'y', 'size']);
+    expect(Object.keys(scales)).to.deep.equal(['x', 'y']);
   });
 });

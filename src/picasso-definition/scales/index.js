@@ -1,6 +1,6 @@
 import KEYS from '../../constants/keys';
 
-export default function createScales({ layoutModel, viewState }) {
+export default function createScales({ viewState }) {
   return {
     x: {
       data: {
@@ -19,15 +19,5 @@ export default function createScales({ layoutModel, viewState }) {
       max: () => viewState.get('zoom').yAxisMax,
       invert: true,
     },
-    size: layoutModel.meta.hasSizeMeasure
-      ? {
-          data: {
-            extract: {
-              field: KEYS.FIELDS.SIZE,
-              filter: (d) => d,
-            },
-          },
-        }
-      : undefined,
   };
 }

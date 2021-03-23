@@ -1,7 +1,9 @@
 import KEYS from '../../../constants/keys';
+import createSizeScale from '../../scales/size';
 
 export default function createPoint({ layoutModel, chartModel }) {
-  let wsm;
+  let windowSizeMultiplier;
+  const sizeScaleFn = createSizeScale(layoutModel);
   return {
     key: KEYS.COMPONENT.POINT,
     type: 'point',
@@ -28,26 +30,14 @@ export default function createPoint({ layoutModel, chartModel }) {
       y: {
         scale: KEYS.SCALE.Y,
       },
-      size: layoutModel.meta.hasSizeMeasure
-        ? {
-            scale: 'size',
-            fn: (d) => {
-              const value = d.scale(d.datum.size.value);
-              const [min, max] = layoutModel.getLayoutValue('dataPoint.rangeBubbleSizes') || [];
-              const minValue = min / 20; // ugly hack for now - px to relative -> / 20
-              const maxValue = max / 20; // ugly hack for now - px to relative -> / 20
-              const norm = (maxValue - minValue) * value + minValue;
-              return norm;
-            },
-          }
-        : () => `${layoutModel.getLayoutValue('dataPoint.bubbleSizes') * wsm * 2}px`,
+      size: (d) => sizeScaleFn(d, windowSizeMultiplier),
       // fill: color,
       // opacity: 0.8,
       strokeWidth: 0.5,
       stroke: '#fff',
     },
     beforeRender: ({ size }) => {
-      wsm = Math.min(size.height, size.width) / 300;
+      windowSizeMultiplier = Math.min(size.height, size.width) / 300;
     },
   };
 }
