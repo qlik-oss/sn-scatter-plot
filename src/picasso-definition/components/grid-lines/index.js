@@ -8,6 +8,12 @@ const SPACINGS = {
 };
 
 export default function createGridLines({ layoutModel, context }) {
+  const { auto, spacing } = layoutModel.getLayoutValue('gridLine', {});
+
+  if (!auto && spacing === SPACINGS.NONE) {
+    return false;
+  }
+
   const gridLinesDef = {
     type: 'grid-line',
     key: KEYS.COMPONENT.GRID_LINES,
@@ -18,18 +24,14 @@ export default function createGridLines({ layoutModel, context }) {
       scale: KEYS.SCALE.Y,
     },
     ticks: {
-      show:
-        layoutModel.getLayoutValue('gridLine.auto') ||
-        layoutModel.getLayoutValue('gridLine.spacing') !== SPACINGS.NO_LINES,
-      // TODO: show every second tick if spacing === WIDE
+      // internal trick with Picasso: passing "(d, i) => i % 2 === 0" to display every second major tick
+      show: !auto && spacing === SPACINGS.WIDE ? (d, i) => i % 2 === 0 : true,
       stroke: context.theme.getStyle('object', 'grid.line.major', 'color') || '#cccccc',
       strokeWidth: 1,
     },
     minorTicks: {
-      show:
-        !layoutModel.getLayoutValue('gridLine.auto') &&
-        layoutModel.getLayoutValue('gridLine.spacing') === SPACINGS.NARROW,
-      stroke: context.theme.getStyle('object', 'grid.line.minor', 'color') || '#cccccc',
+      show: !auto && spacing === SPACINGS.NARROW,
+      stroke: '#d1d1d1',
       strokeWidth: 1,
     },
   };

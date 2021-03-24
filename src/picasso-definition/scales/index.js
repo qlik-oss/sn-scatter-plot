@@ -1,6 +1,6 @@
 import KEYS from '../../constants/keys';
 
-export default function createScales({ layoutModel, viewState }) {
+export default function createScales({ layoutModel, tickModel, viewState }) {
   return {
     x: {
       data: {
@@ -8,6 +8,9 @@ export default function createScales({ layoutModel, viewState }) {
       },
       min: () => viewState.get('zoom').xAxisMin,
       max: () => viewState.get('zoom').xAxisMax,
+      ticks: {
+        values: tickModel.query.getXTicks(),
+      },
     },
     y: {
       data: {
@@ -18,6 +21,9 @@ export default function createScales({ layoutModel, viewState }) {
       min: () => viewState.get('zoom').yAxisMin,
       max: () => viewState.get('zoom').yAxisMax,
       invert: true,
+      ticks: {
+        values: tickModel.query.getYTicks(),
+      },
     },
     size: layoutModel.meta.hasSizeMeasure
       ? {
