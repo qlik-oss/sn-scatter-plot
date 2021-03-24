@@ -17,7 +17,7 @@ export default function createSizeScale(layoutModel) {
     });
   };
 
-  const getDotSize = (d, windowSizeMultiplier) => pointHelper.getDotSize(dotSize, windowSizeMultiplier);
+  const getDotSize = (d, windowSizeMultiplier) => pointHelper.getDotSize({ dotSize, windowSizeMultiplier });
 
   return layoutModel.meta.hasSizeMeasure ? getDotMeasureSize : getDotSize;
 }
