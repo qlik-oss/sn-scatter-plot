@@ -5,6 +5,8 @@ describe('grid chart point', () => {
   let sandbox;
   let layoutModel;
   let create;
+  let layoutValueStub;
+  let hyperCubeValueStub;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -15,12 +17,18 @@ describe('grid chart point', () => {
       COLLECTION: {
         MAIN: 'mainCollectionKey',
       },
+      SCALE: {
+        X: 'x',
+        Y: 'y',
+      },
     }));
-    const layoutValueStub = sandbox.stub();
-    layoutValueStub.withArgs('dataPoint.rangeBubbleSizes').returns([0.1, 1]);
+    layoutValueStub = sandbox.stub();
+    hyperCubeValueStub = sandbox.stub();
+    hyperCubeValueStub.withArgs('qMeasureInfo.2', {}).returns({ qMin: 1, qMax: 10 });
     layoutModel = {
       key: 'layout-model',
       getLayoutValue: layoutValueStub,
+      getHyperCubeValue: hyperCubeValueStub,
       meta: {
         hasSizeMeasure: true,
       },
@@ -66,23 +74,7 @@ describe('grid chart point', () => {
 
     describe('size', () => {
       it('should be set with a function', () => {
-        expect(create().settings.size.fn).to.be.a('function');
-      });
-
-      it('should return correctly calculated value', () => {
-        const d = {
-          scale: sandbox.stub().returns(0.1),
-          datum: {
-            size: {
-              value: 0,
-            },
-          },
-        };
-        expect(create().settings.size.fn(d).toFixed(4)).to.equal('0.0095');
-        d.scale = sandbox.stub().returns(0);
-        expect(create().settings.size.fn(d)).to.equal(0.005);
-        d.scale = sandbox.stub().returns(1);
-        expect(create().settings.size.fn(d)).to.equal(0.05);
+        expect(create().settings.size).to.be.a('function');
       });
     });
   });

@@ -1,6 +1,6 @@
 import KEYS from '../../constants/keys';
 
-export default function createScales({ layoutModel, tickModel, viewState }) {
+export default function createScales({ tickModel, viewState }) {
   return {
     x: {
       data: {
@@ -25,15 +25,5 @@ export default function createScales({ layoutModel, tickModel, viewState }) {
         values: tickModel.query.getYTicks(),
       },
     },
-    size: layoutModel.meta.hasSizeMeasure
-      ? {
-          data: {
-            extract: {
-              field: KEYS.FIELDS.SIZE,
-              filter: (d) => d,
-            },
-          },
-        }
-      : undefined,
   };
 }
