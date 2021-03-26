@@ -13,7 +13,6 @@ export default function createResolver({ layoutModel, chartModel, dockModel }) {
       min,
       max,
     });
-
     return ticks;
   };
 }

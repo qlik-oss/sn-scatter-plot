@@ -1,4 +1,4 @@
-import getScale from './scale';
+import { scaleLinear } from 'd3-scale';
 import getCount from './count';
 
 export default function getTicks({ layoutModel, size, min, max }) {
@@ -8,11 +8,7 @@ export default function getTicks({ layoutModel, size, min, max }) {
     size,
   });
   // get a "nice" scale using d3-scale
-  const scale = getScale({
-    min,
-    max,
-    count,
-  });
+  const scale = scaleLinear().domain([min, max]).nice(count);
 
   const ticks = scale.ticks(count);
 

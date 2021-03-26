@@ -10,13 +10,13 @@ const SPACINGS = {
 export default function createGridLines({ layoutModel, context }) {
   const { auto, spacing } = layoutModel.getLayoutValue('gridLine', {});
 
-  if (!auto && spacing === SPACINGS.NONE) {
+  if (!auto && spacing === SPACINGS.NO_LINES) {
     return false;
   }
 
   const gridLinesDef = {
-    type: 'grid-line',
     key: KEYS.COMPONENT.GRID_LINES,
+    type: 'grid-line',
     x: {
       scale: KEYS.SCALE.X,
     },
@@ -31,7 +31,7 @@ export default function createGridLines({ layoutModel, context }) {
     },
     minorTicks: {
       show: !auto && spacing === SPACINGS.NARROW,
-      stroke: '#d1d1d1',
+      stroke: context.theme.getStyle('object', 'grid.line.minor', 'color') || '#d1d1d1',
       strokeWidth: 1,
     },
   };
