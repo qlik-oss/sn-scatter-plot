@@ -1,6 +1,6 @@
 describe('scales', () => {
   let createScales;
-  let layoutModel;
+  let tickModel;
   let viewState;
 
   beforeEach(() => {
@@ -13,10 +13,10 @@ describe('scales', () => {
       ],
       ['../index']
     )[0].default;
-    layoutModel = {
-      getHyperCubeValue: sinon.stub().withArgs('qMeasureInfo.2').returns({}),
-      meta: {
-        hasSizeMeasure: true,
+    tickModel = {
+      query: {
+        getXTicks: sinon.stub(),
+        getYTicks: sinon.stub(),
       },
     };
     viewState = {
@@ -30,7 +30,13 @@ describe('scales', () => {
   });
 
   it('should contain correct scales', () => {
-    const scales = createScales({ layoutModel, viewState });
+    const scales = createScales({ tickModel, viewState });
     expect(Object.keys(scales)).to.deep.equal(['x', 'y']);
+  });
+
+  it('should create X and Y ticks', () => {
+    createScales({ tickModel, viewState });
+    expect(tickModel.query.getXTicks).to.have.been.calledOnce;
+    expect(tickModel.query.getYTicks).to.have.been.calledOnce;
   });
 });

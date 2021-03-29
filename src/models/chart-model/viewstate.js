@@ -1,4 +1,5 @@
 function getMinMax(layoutModel) {
+  // TODO: get explicit min and max, use explicit min/max if exist.
   return {
     xAxisMin: layoutModel.getHyperCubeValue('qMeasureInfo.0.qMin', 0),
     xAxisMax: layoutModel.getHyperCubeValue('qMeasureInfo.0.qMax', 1),

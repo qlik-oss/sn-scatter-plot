@@ -12,6 +12,7 @@ import {
 } from '@nebula.js/stardust';
 
 import createChartModel from '../models/chart-model';
+import createTickModel from '../models/tick-model';
 import createDockModel from '../models/dock-model';
 import getLogicalSize from '../logical-size';
 import utils from '../utils';
@@ -63,8 +64,15 @@ const useModels = ({ core }) => {
       options,
     });
 
+    const tickModel = createTickModel({
+      layoutModel,
+      chartModel,
+      dockModel,
+    });
+
     setModels({
       layoutModel,
+      tickModel,
       chartModel,
       dockModel,
     });

@@ -18,7 +18,7 @@ export default function createPicassoDefinition({
   logicalSize,
 }) {
   const { chart } = core;
-  const { chartModel, dockModel, layoutModel } = models;
+  const { chartModel, tickModel, dockModel, layoutModel } = models;
   const zoomHandler = chartModel.query.getZoomHandler();
   const viewState = chartModel.query.getViewState();
   const context = {
@@ -31,8 +31,8 @@ export default function createPicassoDefinition({
   const actions = createActions(constraints);
 
   const scales = createScales({
-    zoomHandler,
     layoutModel,
+    tickModel,
     viewState,
   });
 
