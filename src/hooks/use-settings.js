@@ -13,7 +13,7 @@ import {
 import createPicassoDefinition from '../picasso-definition';
 import getLogicalSize from '../logical-size';
 
-const useSettings = ({ core, models }) => {
+const useSettings = ({ core, models, flags }) => {
   const rect = useRect();
   const [settings, setSettings] = useState();
   const model = useModel();
@@ -34,6 +34,7 @@ const useSettings = ({ core, models }) => {
       selections,
       translator,
       logicalSize,
+      flags,
     });
 
   usePromise(() => {

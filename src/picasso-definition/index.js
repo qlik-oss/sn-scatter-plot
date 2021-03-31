@@ -4,7 +4,7 @@ import createCollections from './collections';
 import createComponents from './components';
 import createScales from './scales';
 import createInteractions from './interactions';
-import createActions from '../actions';
+import createSelectables from './selectables';
 
 export default function createPicassoDefinition({
   core,
@@ -16,9 +16,10 @@ export default function createPicassoDefinition({
   translator,
   app,
   logicalSize,
+  flags,
 }) {
-  const { chart } = core;
-  const { chartModel, tickModel, dockModel, layoutModel } = models;
+  const { chart, actions } = core;
+  const { chartModel, tickModel, dockModel, layoutModel, selectionModel } = models;
   const zoomHandler = chartModel.query.getZoomHandler();
   const viewState = chartModel.query.getViewState();
   const context = {
@@ -28,7 +29,6 @@ export default function createPicassoDefinition({
     constraints,
     model,
   };
-  const actions = createActions(constraints);
 
   const scales = createScales({
     layoutModel,
@@ -47,15 +47,23 @@ export default function createPicassoDefinition({
     chartModel,
   });
 
+  const selectables = createSelectables({
+    actions,
+    selectionModel,
+    dockModel,
+    scales,
+    flags,
+  });
+
   return {
     interactions: createInteractions({
       chart,
       actions,
       zoomHandler,
-      gestures: [],
+      gestures: [...selectables.gestures],
     }),
     scales,
-    components,
+    components: [...components, ...selectables.components],
     collections,
     // palettes: colorModel.main.model().palettes(),
     strategy: {
