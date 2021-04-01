@@ -10,6 +10,8 @@ export default {
   },
   COMPONENT: {
     GRID_LINES: 'grid-lines',
+    REFERENCE_LINES_X: 'reference-line-x',
+    REFERENCE_LINES_Y: 'reference-line-y',
     POINT: 'point-component',
     POINT_TOOLTIP: 'tooltip',
     LEGEND: 'legend-color',

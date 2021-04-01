@@ -13,4 +13,5 @@ export default {
     },
     Y: 'SMALL',
   },
+  REFERENCE_LINE: 'XSMALL',
 };
