@@ -19,7 +19,8 @@ function scrollLegend(e, comp) {
   comp.emit(dir);
 }
 
-function zoom(e, zoomHandler) {
+function zoom(/* e, zoomHandler */) {
+  /*
   const { x, y } = zoomHandler.getPxOffsets();
 
   const { deltaX, deltaY } = e;
@@ -28,6 +29,7 @@ function zoom(e, zoomHandler) {
     x: x + deltaX,
     y: y + deltaY,
   });
+  */
 }
 
 export default function native({ chart, actions, zoomHandler }) {

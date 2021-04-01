@@ -9,11 +9,13 @@ import {
   useModel,
   useOptions,
   useRect,
+  useSelections,
 } from '@nebula.js/stardust';
 
 import createChartModel from '../models/chart-model';
 import createTickModel from '../models/tick-model';
 import createDockModel from '../models/dock-model';
+import createSelectionModel from '../models/selection-model';
 import getLogicalSize from '../logical-size';
 import utils from '../utils';
 
@@ -25,11 +27,33 @@ const useModels = ({ core }) => {
   const constraints = useConstraints();
   const options = useOptions();
   const rect = useRect();
+  const selections = useSelections();
   const { qLocaleInfo: localeInfo } = useAppLayout();
+  const [selectionModel, setSelectionModel] = useState();
   const [models, setModels] = useState();
 
   useEffect(() => {
-    if (!layout || !core) {
+    if (!core) {
+      return () => {};
+    }
+
+    const { chart, actions } = core;
+    const sm = createSelectionModel({
+      chart,
+      actions,
+      selections,
+      document,
+    });
+
+    setSelectionModel(sm);
+
+    return () => {
+      sm.command.destroy();
+    };
+  }, [core]);
+
+  useEffect(() => {
+    if (!layout || !selectionModel) {
       return;
     }
 
@@ -70,13 +94,16 @@ const useModels = ({ core }) => {
       dockModel,
     });
 
+    selectionModel.command.setLayout({ layout });
+
     setModels({
       layoutModel,
       tickModel,
       chartModel,
       dockModel,
+      selectionModel,
     });
-  }, [core, layout, constraints, theme.name(), translator.language(), options.direction, options.viewState]);
+  }, [selectionModel, layout, constraints, theme.name(), translator.language(), options.direction, options.viewState]);
 
   return models;
 };

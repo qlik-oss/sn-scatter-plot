@@ -1,9 +1,11 @@
 import { useElement, useEffect, useState, useOptions } from '@nebula.js/stardust';
+import useActions from './use-actions';
 import configurePicasso from '../configure-picasso';
 
 const useCore = () => {
   const element = useElement();
   const options = useOptions();
+  const actions = useActions();
 
   const [core, setCore] = useState();
 
@@ -23,6 +25,7 @@ const useCore = () => {
     setCore({
       picassoInstance,
       chart,
+      actions,
     });
 
     return () => {
