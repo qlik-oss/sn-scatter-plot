@@ -101,5 +101,8 @@
     "picasso-plugin-hammer": ">=0.34.0",
     "picasso-plugin-q": ">=0.34.0",
     "picasso.js": ">=0.34.0"
+  },
+  "dependencies": {
+    "extend": "^3.0.2"
   }
 }
