@@ -53,7 +53,15 @@ describe('grid chart point', () => {
     });
 
     it('should have correct properties', () => {
-      expect(create()).to.have.all.keys(['key', 'type', 'data', 'rendererSettings', 'settings', 'beforeRender']);
+      expect(create()).to.have.all.keys([
+        'key',
+        'type',
+        'data',
+        'brush',
+        'rendererSettings',
+        'settings',
+        'beforeRender',
+      ]);
     });
 
     it('should have correct key', () => {
