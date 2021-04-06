@@ -1,5 +1,6 @@
 import KEYS from '../../../constants/keys';
 import createSizeScale from '../../scales/size';
+import createBrush from '../../brush';
 
 export default function createPoint({ layoutModel, chartModel }) {
   let windowSizeMultiplier;
@@ -10,6 +11,7 @@ export default function createPoint({ layoutModel, chartModel }) {
     data: {
       collection: KEYS.COLLECTION.MAIN,
     },
+    brush: createBrush(),
     rendererSettings: {
       transform: () => {
         if (chartModel.query.isInteractionInProgess()) {
