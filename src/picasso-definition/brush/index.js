@@ -14,7 +14,7 @@ export default function createBrush() {
             opacity: 0.3,
           },
           active: {
-            stroke: '#fff',
+            stroke: '#000',
             strokeWidth: 2,
           },
         },
