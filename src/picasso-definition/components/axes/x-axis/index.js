@@ -8,16 +8,6 @@ export default function createXaxis({ context, layoutModel, dockModel, themeMode
   const glyphCount = getGlyphCount({ layoutModel, axis: 'X' });
 
   if (!axis || axis.show === 'none') {
-    return [];
-  }
-
-  if (!axis) {
-    return false;
-  }
-
-  const { show } = axis;
-
-  if (show === 'none') {
     return false;
   }
 
@@ -47,7 +37,6 @@ export default function createXaxis({ context, layoutModel, dockModel, themeMode
     settings: {
       labels: {
         show: !(axis.show === 'title' || axis.show === 'none'),
-        mode: axis.label,
         tiltAngle: context.rtl ? -40 : 40,
         maxEdgeBleed: 50,
         maxLengthPx: axis.label === 'horizontal' ? undefined : dockModel.chartSize.height / 4,

@@ -1,23 +1,20 @@
-import * as glyphCount from '../glyph-count';
-import createAxes from '../index';
+import createYaxis from '..';
 
-describe('axes', () => {
+describe('y-axis', () => {
   let sandbox;
-  let context;
   let layout;
   let layoutModel;
   let dockModel;
-  let axes;
   let themeModel;
+  let axis;
+  let gridLine;
+  const scales = {
+    X: 'x',
+    Y: 'y',
+  };
 
-  before(() => {
+  beforeEach(() => {
     sandbox = sinon.createSandbox();
-    context = {
-      rtl: false,
-      theme: {
-        getStyle: sandbox.spy(),
-      },
-    };
     dockModel = {
       chartSize: {
         width: 700,
@@ -42,8 +39,9 @@ describe('axes', () => {
     layoutModel = {
       getLayout: () => layout,
       getLayoutValue: sandbox.stub(),
+      getHyperCubeValue: sandbox.stub(),
     };
-    const gridLine = {
+    gridLine = {
       auto: true,
       spacing: 1,
     };
@@ -68,14 +66,28 @@ describe('axes', () => {
         getStyle: () => style,
       },
     };
-
-    sandbox.stub(glyphCount, 'default').returns(5);
+    axis = createYaxis({
+      layoutModel,
+      dockModel,
+      themeModel,
+    });
   });
 
-  it('should create two axes', () => {
-    axes = createAxes({ context, layoutModel, dockModel, themeModel });
-    expect(axes.length).to.equal(2);
-    expect(axes[0].type).to.equal('axis');
-    expect(axes[1].type).to.equal('axis');
+  describe('settings', () => {
+    it('should have correct scale', () => {
+      expect(axis.scale).to.equal(scales.Y);
+    });
+
+    it('should have correct show property for labels', () => {
+      expect(axis.settings.labels.show).to.equal(true);
+      layout.yAxis.show = 'title';
+      axis = createYaxis({ layoutModel, dockModel, themeModel });
+      expect(axis.settings.labels.show).to.equal(false);
+    });
+
+    it('should have correct font size property for labels', () => {
+      const { fontSize } = themeModel.query.getStyle().axis.label.name;
+      expect(axis.settings.labels.fontSize).to.equal(fontSize);
+    });
   });
 });

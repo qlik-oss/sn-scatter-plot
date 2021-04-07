@@ -82,6 +82,7 @@
     "lint-staged": "10.2.2",
     "mocha-junit-reporter": "2.0.0",
     "hammerjs": "2.0.8",
+    "extend": "3.0.2",
     "picasso-plugin-hammer": "0.34.0",
     "picasso-plugin-q": "0.34.0",
     "picasso.js": "0.34.0",
@@ -101,8 +102,5 @@
     "picasso-plugin-hammer": ">=0.34.0",
     "picasso-plugin-q": ">=0.34.0",
     "picasso.js": ">=0.34.0"
-  },
-  "dependencies": {
-    "extend": "^3.0.2"
   }
 }

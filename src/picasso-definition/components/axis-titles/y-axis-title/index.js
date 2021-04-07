@@ -19,9 +19,7 @@ export default function createYAxisTitle({ layoutModel, dockModel, themeModel })
     type: 'text',
     key: 'y-axis-title',
     text: layoutModel.getHyperCubeValue(`${KEYS.FIELDS.Y.replace(/\//g, '.')}.qFallbackTitle`),
-    layout: {
-      dock: dockModel.y.dock,
-    },
+    dock: dockModel.y.dock,
     style: {
       text: {
         fontFamily: style.axis.title.fontFamily,

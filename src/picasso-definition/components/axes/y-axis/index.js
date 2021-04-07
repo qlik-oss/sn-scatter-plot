@@ -4,13 +4,7 @@ import MODES from '../../../../constants/modes';
 export default function createYaxis({ layoutModel, dockModel, themeModel }) {
   const { yAxis: axis } = layoutModel.getLayout();
 
-  if (!axis) {
-    return false;
-  }
-
-  const { show } = axis;
-
-  if (show === 'none') {
+  if (!axis || axis.show === 'none') {
     return false;
   }
 
@@ -26,7 +20,7 @@ export default function createYaxis({ layoutModel, dockModel, themeModel }) {
     },
     settings: {
       labels: {
-        show: show !== 'title',
+        show: axis.show !== 'title',
         fontFamily: style.axis.label.name.fontFamily,
         fontSize: style.axis.label.name.fontSize,
         fill: style.axis.label.name.color,
