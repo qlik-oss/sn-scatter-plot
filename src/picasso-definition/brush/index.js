@@ -1,6 +1,6 @@
 export default function createBrush() {
-  const data = (brusher) => {
-    const res = brusher.brushes();
+  const data = ({ brush }) => {
+    const res = brush.brushes();
     return res.length > 1 ? ['x', 'y'] : undefined;
   };
   return {

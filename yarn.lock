@@ -8557,20 +8557,20 @@ phin@^2.9.1:
   resolved "https://registry.yarnpkg.com/phin/-/phin-2.9.3.tgz#f9b6ac10a035636fb65dfc576aaaa17b8743125c"
   integrity sha512-CzFr90qM24ju5f88quFC/6qohjC144rehe5n6DH900lgXmUe86+xCKc10ev56gRKC4/BkHUoG4uSiQgBiIXwDA==
 
-picasso-plugin-hammer@0.34.0:
-  version "0.34.0"
-  resolved "https://registry.yarnpkg.com/picasso-plugin-hammer/-/picasso-plugin-hammer-0.34.0.tgz#45a4e51b12e87333fbec6b935fdd974e17c9c884"
-  integrity sha512-Bnqa+SQWbrvWijqFP909GiMwTXLUoyL3FzvIn9iZtOsV2ouNU9dj57aYWmqt3/VSm73wvYy4RBgStkb3HteJRw==
+picasso-plugin-hammer@0.36.0:
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/picasso-plugin-hammer/-/picasso-plugin-hammer-0.36.0.tgz#7de1ab0b8cd9819b527887dfb3a88db0ea929f4c"
+  integrity sha512-UZEbRRnSVe2jgQ9c8ltiM3KewexqBjoAIFG5kSkx8rN8iJUKpCznXIpcQM8vHN8P5C4VR+9VTi9aseizL83nzA==
 
-picasso-plugin-q@0.34.0:
-  version "0.34.0"
-  resolved "https://registry.yarnpkg.com/picasso-plugin-q/-/picasso-plugin-q-0.34.0.tgz#ec4afd8eb4f5f6e2e3c8b4abf495b1576a7b4e53"
-  integrity sha512-WsVoaIqwqf29mnuIX1Xm3nnqol+k+4HRT1dNzq8ChudF6c9qxbHNQrqEpWLMvKouPP/NlergGFO2OY9Wo9h+ig==
+picasso-plugin-q@0.36.0:
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/picasso-plugin-q/-/picasso-plugin-q-0.36.0.tgz#e3289cdc7677f5975b6078b260544022cb991d4d"
+  integrity sha512-8/LI8UZVBEgoe2ZZ6femZct50ykYNA97BMLrZGuDf8Mozi1rEKBP5R0wzYs/gh8HDeUb4QtgBIDZkVH9L7rHtw==
 
-picasso.js@0.34.0:
-  version "0.34.0"
-  resolved "https://registry.yarnpkg.com/picasso.js/-/picasso.js-0.34.0.tgz#ac4b01926bc9d641032d2e97d906d4efeb98204b"
-  integrity sha512-Wot3FpTtBcgqr2IPd1eo6t3Y6fF63yjFuULizu6HRIeWpy4+sGGDU8VgX0pc+fRPL7ZzabbulsFIWeN8MhOk4A==
+picasso.js@0.36.0:
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/picasso.js/-/picasso.js-0.36.0.tgz#e6b5b13881cfd86ca3c76474f3fde9d540258969"
+  integrity sha512-HaeXrj4/xlp+OhR9avNa7BqaW4zV51C3WA6VGRFTU7yNRfZUbmxUNfWVs4LgbspBWHweTKm6soTGkJAfXAhmag==
 
 picomatch@^2.0.4, picomatch@^2.0.5, picomatch@^2.0.7, picomatch@^2.2.1, picomatch@^2.2.2:
   version "2.2.2"
