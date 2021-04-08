@@ -17,7 +17,9 @@ export default function createComponents({ context, layoutModel, dockModel, char
       dockModel,
     }),
     ...createReferenceLines({
+      context,
       layoutModel,
+      dockModel,
     }),
     // ...legend.components,
   ].filter(Boolean);
