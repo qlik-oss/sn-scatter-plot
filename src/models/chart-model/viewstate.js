@@ -1,11 +1,45 @@
 function getMinMax(layoutModel) {
-  // TODO: get explicit min and max, use explicit min/max if exist.
-  return {
-    xAxisMin: layoutModel.getHyperCubeValue('qMeasureInfo.0.qMin', 0),
-    xAxisMax: layoutModel.getHyperCubeValue('qMeasureInfo.0.qMax', 1),
-    yAxisMin: layoutModel.getHyperCubeValue('qMeasureInfo.1.qMin', 0),
-    yAxisMax: layoutModel.getHyperCubeValue('qMeasureInfo.1.qMax', 1),
-  };
+  // Choose between data min/max and explicit min/max.
+  // Explicit min/max have higher priority
+
+  let xAxisMin = layoutModel.getHyperCubeValue('qMeasureInfo.0.qMin', 0);
+  let xAxisMax = layoutModel.getHyperCubeValue('qMeasureInfo.0.qMax', 1);
+  let yAxisMin = layoutModel.getHyperCubeValue('qMeasureInfo.1.qMin', 0);
+  let yAxisMax = layoutModel.getHyperCubeValue('qMeasureInfo.1.qMax', 1);
+
+  let { autoMinMax, minMax, min, max } = layoutModel.getLayoutValue('xAxis');
+  if (!autoMinMax) {
+    switch (minMax) {
+      case 'min':
+        xAxisMin = min;
+        break;
+      case 'max':
+        xAxisMax = max;
+        break;
+      default:
+        xAxisMin = min;
+        xAxisMax = max;
+        break;
+    }
+  }
+
+  ({ autoMinMax, minMax, min, max } = layoutModel.getLayoutValue('yAxis'));
+  if (!autoMinMax) {
+    switch (minMax) {
+      case 'min':
+        yAxisMin = min;
+        break;
+      case 'max':
+        yAxisMax = max;
+        break;
+      default:
+        yAxisMin = min;
+        yAxisMax = max;
+        break;
+    }
+  }
+
+  return { xAxisMin, xAxisMax, yAxisMin, yAxisMax };
 }
 
 /**

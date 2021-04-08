@@ -10,6 +10,9 @@ export default function createCollections({ layoutModel }) {
           x: { field: KEYS.FIELDS.X },
           y: { field: KEYS.FIELDS.Y },
           size: layoutModel.meta.hasSizeMeasure ? { field: KEYS.FIELDS.SIZE } : undefined,
+          selectionDimension: {
+            field: KEYS.FIELDS.DIM,
+          },
         },
       },
     },

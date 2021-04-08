@@ -16,6 +16,7 @@ export default {
     REFERENCE_LINE_LABELS_Y: 'reference-line-labels-y',
     POINT: 'point-component',
     POINT_TOOLTIP: 'tooltip',
+    POINT_LABELS: 'point-labels',
     LEGEND: 'legend-color',
     LEGEND_CATEGORICAL: 'legend-color-cat',
     LEGEND_CAT_TOOLTIP: 'legend-cat-tooltip',

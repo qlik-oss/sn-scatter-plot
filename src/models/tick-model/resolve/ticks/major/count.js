@@ -1,4 +1,3 @@
-// should I move this to constants/keys ?
 const AXIS_SPACING = {
   NARROW: 50,
   MEDIUM: 100,

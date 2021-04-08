@@ -36,5 +36,6 @@ export default function useSelect() {
         listeners[event] = [listener];
       }
     },
+    getBrushOptions: () => ({ orMode: false }),
   };
 }
