@@ -1,23 +1,20 @@
-import * as glyphCount from '../glyph-count';
 import createAxes from '../index';
 
 describe('axes', () => {
   let sandbox;
-  let context;
   let layout;
   let layoutModel;
   let dockModel;
   let axes;
+  let gridLine;
   let themeModel;
+  const scales = {
+    X: 'x',
+    Y: 'y',
+  };
 
   before(() => {
     sandbox = sinon.createSandbox();
-    context = {
-      rtl: false,
-      theme: {
-        getStyle: sandbox.spy(),
-      },
-    };
     dockModel = {
       chartSize: {
         width: 700,
@@ -43,7 +40,7 @@ describe('axes', () => {
       getLayout: () => layout,
       getLayoutValue: sandbox.stub(),
     };
-    const gridLine = {
+    gridLine = {
       auto: true,
       spacing: 1,
     };
@@ -68,14 +65,50 @@ describe('axes', () => {
         getStyle: () => style,
       },
     };
-
-    sandbox.stub(glyphCount, 'default').returns(5);
   });
 
   it('should create two axes', () => {
-    axes = createAxes({ context, layoutModel, dockModel, themeModel });
+    axes = createAxes({ layoutModel, dockModel, themeModel });
     expect(axes.length).to.equal(2);
     expect(axes[0].type).to.equal('axis');
     expect(axes[1].type).to.equal('axis');
+  });
+
+  it('should have correct scale', () => {
+    expect(axes[0].scale).to.equal(scales.X);
+    expect(axes[1].scale).to.equal(scales.Y);
+  });
+
+  it('should have correct layout', () => {
+    expect(axes[0].layout.dock).to.equal(dockModel.x.dock);
+    expect(axes[1].layout.dock).to.equal(dockModel.y.dock);
+  });
+
+  describe('settings', () => {
+    it('should have correct show property for labels', () => {
+      expect(axes[0].settings.labels.show).to.equal(true);
+      expect(axes[1].settings.labels.show).to.equal(true);
+      layout.yAxis.show = 'title';
+      layout.xAxis.show = 'title';
+      axes = createAxes({ layoutModel, dockModel, themeModel });
+      expect(axes[0].settings.labels.show).to.equal(false);
+      expect(axes[1].settings.labels.show).to.equal(false);
+    });
+
+    it('should have correct font size property for labels', () => {
+      const { fontSize } = themeModel.query.getStyle().axis.label.name;
+      expect(axes[0].settings.labels.fontSize).to.equal(fontSize);
+    });
+
+    it('should have correct show property for line', () => {
+      expect(axes[0].settings.line.show).to.equal(false);
+      gridLine = {
+        auto: false,
+        spacing: 0,
+      };
+      layoutModel.getLayoutValue.withArgs('gridLine', {}).returns(gridLine);
+      axes = createAxes({ layoutModel, dockModel, themeModel });
+      expect(axes[0].settings.line.show).to.equal(true);
+    });
   });
 });

@@ -12,7 +12,6 @@ export default function createComponents({ context, layoutModel, dockModel, char
       chartModel,
     }),
     ...createAxes({
-      context,
       layoutModel,
       dockModel,
       themeModel,
