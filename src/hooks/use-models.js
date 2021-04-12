@@ -17,6 +17,7 @@ import createChartModel from '../models/chart-model';
 import createTickModel from '../models/tick-model';
 import createDockModel from '../models/dock-model';
 import createSelectionModel from '../models/selection-model';
+import createThemeModel from '../models/theme-model';
 import getLogicalSize from '../logical-size';
 
 const useModels = ({ core }) => {
@@ -81,12 +82,15 @@ const useModels = ({ core }) => {
 
     selectionModel.command.setLayout({ layout });
 
+    const themeModel = createThemeModel({ theme });
+
     setModels({
       layoutModel,
       tickModel,
       chartModel,
       dockModel,
       selectionModel,
+      themeModel,
     });
   }, [selectionModel, layout, constraints, theme.name(), translator.language(), options.direction, options.viewState]);
 

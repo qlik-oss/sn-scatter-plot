@@ -19,7 +19,7 @@ export default function createPicassoDefinition({
   flags,
 }) {
   const { chart, actions } = core;
-  const { chartModel, tickModel, dockModel, layoutModel, selectionModel } = models;
+  const { chartModel, tickModel, dockModel, layoutModel, selectionModel, themeModel } = models;
   const zoomHandler = chartModel.query.getZoomHandler();
   const viewState = chartModel.query.getViewState();
   const context = {
@@ -45,6 +45,7 @@ export default function createPicassoDefinition({
     app,
     dockModel,
     chartModel,
+    themeModel,
   });
 
   const selectables = createSelectables({
