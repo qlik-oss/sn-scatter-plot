@@ -1,7 +1,7 @@
 import component from './visual';
 import event from './event';
 
-export default function (cfg, opts) {
+export default function createLasso(cfg, opts) {
   // if (!opts.actions.select.enabled()) {
   //   return {
   //     interactions: [],
