@@ -6,7 +6,7 @@ function onBubble(e, key) {
   return false;
 }
 
-const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith }, opts, emit) => ({
+const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith }, opts) => ({
   key: `event:${key}`,
   type: 'Pan',
   requireFailure,
@@ -43,12 +43,12 @@ const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith
       }
       e.preventDefault();
       opts.actions.select.emit('start', eventName);
-      this.chart.component(key).emit(`${emit}Start`, e);
+      this.chart.component(key).emit('rangeStart', e);
       this.started = eventName;
     },
     [`${eventName}move`](e) {
       e.preventDefault();
-      this.chart.component(key).emit(`${emit}Move`, e);
+      this.chart.component(key).emit('rangeMove', e);
     },
     [`${eventName}end`](e) {
       if (this.chart.brushSelectionIncludeMax === undefined) {
@@ -56,7 +56,7 @@ const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith
         opts.actions.select.brushSelectionIncludeMax = true; // eslint-disable-line no-param-reassign
       }
       e.preventDefault();
-      this.chart.component(key).emit(`${emit}End`, e);
+      this.chart.component(key).emit('rangeEnd', e);
       opts.actions.select.emit('end', eventName);
       this.started = false;
     },
