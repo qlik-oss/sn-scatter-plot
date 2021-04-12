@@ -3,6 +3,7 @@ import createGridLines from './grid-lines';
 import createAxes from './axes';
 import createAxisTitles from './axis-titles';
 import createPoint from './point';
+import createPointLabels from './point-labels';
 
 export default function createComponents({ context, layoutModel, dockModel, chartModel, themeModel }) {
   const components = [
@@ -20,6 +21,9 @@ export default function createComponents({ context, layoutModel, dockModel, char
       layoutModel,
       dockModel,
       themeModel,
+    }),
+    createPointLabels({
+      layoutModel,
     }),
     // ...legend.components,
   ].filter(Boolean);

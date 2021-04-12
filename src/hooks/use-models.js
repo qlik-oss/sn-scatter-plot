@@ -12,13 +12,13 @@ import {
   useSelections,
 } from '@nebula.js/stardust';
 
+import createLayoutModel from '../models/layout-model';
 import createChartModel from '../models/chart-model';
 import createTickModel from '../models/tick-model';
 import createDockModel from '../models/dock-model';
 import createSelectionModel from '../models/selection-model';
 import createThemeModel from '../models/theme-model';
 import getLogicalSize from '../logical-size';
-import utils from '../utils';
 
 const useModels = ({ core }) => {
   const layout = useStaleLayout();
@@ -60,22 +60,7 @@ const useModels = ({ core }) => {
 
     const { picassoInstance, chart } = core;
 
-    // TODO: use the layoutmodel module or another proper implementation
-    const layoutModel = {
-      meta: {
-        isSnapshot: !!layout.snapshotData,
-        hasSizeMeasure: !!utils.getValue(layout.qHyperCube, 'qMeasureInfo.2'),
-      },
-      getDataPages: () => layout.qHyperCube.qDataPages,
-      getHyperCube: () => layout.qHyperCube,
-      getHyperCubeValue: (path, defaultValue) => utils.getValue(layout.qHyperCube, path, defaultValue),
-      getLayoutValue: (path, defaultValue) => utils.getValue(layout, path, defaultValue),
-      getLayout: () => layout,
-      setDataPages: (pages) => {
-        layout.qHyperCube.qDataPages = pages;
-      },
-    };
-
+    const layoutModel = createLayoutModel({ layout });
     const logicalSize = getLogicalSize({ layout: layoutModel.getLayout(), options });
     const dockModel = createDockModel({ layoutModel, size: logicalSize || rect, rtl: options.direction === 'rtl' });
 

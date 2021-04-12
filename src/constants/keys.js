@@ -12,6 +12,7 @@ export default {
     GRID_LINES: 'grid-lines',
     POINT: 'point-component',
     POINT_TOOLTIP: 'tooltip',
+    POINT_LABELS: 'point-labels',
     LEGEND: 'legend-color',
     LEGEND_CATEGORICAL: 'legend-color-cat',
     LEGEND_CAT_TOOLTIP: 'legend-cat-tooltip',

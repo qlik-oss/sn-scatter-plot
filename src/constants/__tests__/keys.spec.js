@@ -18,6 +18,7 @@ describe('keys', () => {
       'GRID_LINES',
       'POINT',
       'POINT_TOOLTIP',
+      'POINT_LABELS',
       'LEGEND',
       'LEGEND_CATEGORICAL',
       'LEGEND_CAT_TOOLTIP',
