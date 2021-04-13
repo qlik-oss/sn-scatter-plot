@@ -15,8 +15,8 @@ describe('scales', () => {
     )[0].default;
     tickModel = {
       query: {
-        getXTicks: sinon.stub(),
-        getYTicks: sinon.stub(),
+        getXTicks: sinon.stub().returns('x-ticks'),
+        getYTicks: sinon.stub().returns('y-ticks'),
       },
     };
     viewState = {
@@ -35,8 +35,10 @@ describe('scales', () => {
   });
 
   it('should create X and Y ticks', () => {
-    createScales({ tickModel, viewState });
-    expect(tickModel.query.getXTicks).to.have.been.calledOnce;
-    expect(tickModel.query.getYTicks).to.have.been.calledOnce;
+    const result = createScales({ tickModel, viewState });
+    const xTicks = result.x.ticks.values();
+    const yTicks = result.y.ticks.values();
+    expect(xTicks).to.deep.equal('x-ticks');
+    expect(yTicks).to.deep.equal('y-ticks');
   });
 });

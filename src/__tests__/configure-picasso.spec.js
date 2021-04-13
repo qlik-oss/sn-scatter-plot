@@ -19,6 +19,7 @@ describe('configure-picasso', () => {
         ['**/dist/picasso-q.js', () => ({ key: 'picasso-q' })],
         ['**/dist/picasso-hammer.js', () => picassoHammer],
         ['**/hammer.js', () => 'touch it'],
+        ['**/picasso-components/ref-line-labels/index.js', () => 'refLineLabelsComponent'],
       ],
       ['../configure-picasso']
     )[0].default;
@@ -46,6 +47,10 @@ describe('configure-picasso', () => {
   it('should use picasso-hammer', () => {
     expect(picassoHammer).to.have.been.calledWithExactly('touch it');
     expect(picasso.use.withArgs('picasso hammered it')).to.have.been.calledOnce;
+  });
+
+  it('should register reference line labels component', () => {
+    expect(picasso.component).to.have.been.calledWithExactly('reference-line-labels', 'refLineLabelsComponent');
   });
 
   it('should return picasso instance', () => {

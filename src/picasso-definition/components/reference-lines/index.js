@@ -4,7 +4,7 @@ import createLines from './lines';
 import createLabels from './labels';
 
 export default function createReferenceLines({ context, layoutModel, dockModel }) {
-  const { rtl } = context;
+  const { rtl, localeInfo } = context;
   const fontFamily = context.theme.getStyle('object', 'referenceLine.label.name', 'fontFamily');
   const fontSize = context.theme.getStyle('object', 'referenceLine.label.name', 'fontSize');
   return [
@@ -20,7 +20,7 @@ export default function createReferenceLines({ context, layoutModel, dockModel }
       key: KEYS.COMPONENT.REFERENCE_LINES_Y,
       minimumLayoutMode: MODES.REFERENCE_LINE,
     }),
-    ...createLabels({
+    createLabels({
       layoutModel,
       scale: KEYS.SCALE.X,
       key: KEYS.COMPONENT.REFERENCE_LINE_LABELS_X,
@@ -28,8 +28,9 @@ export default function createReferenceLines({ context, layoutModel, dockModel }
       rtl,
       fontFamily,
       fontSize,
+      localeInfo,
     }),
-    ...createLabels({
+    createLabels({
       layoutModel,
       scale: KEYS.SCALE.Y,
       key: KEYS.COMPONENT.REFERENCE_LINE_LABELS_Y,
@@ -37,6 +38,7 @@ export default function createReferenceLines({ context, layoutModel, dockModel }
       rtl,
       fontFamily,
       fontSize,
+      localeInfo,
     }),
   ];
 }

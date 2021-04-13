@@ -9,7 +9,7 @@ export default function createScales({ tickModel, viewState }) {
       min: () => viewState.get('zoom').xAxisMin,
       max: () => viewState.get('zoom').xAxisMax,
       ticks: {
-        values: tickModel.query.getXTicks(),
+        values: () => tickModel.query.getXTicks(),
       },
     },
     y: {
@@ -22,7 +22,7 @@ export default function createScales({ tickModel, viewState }) {
       max: () => viewState.get('zoom').yAxisMax,
       invert: true,
       ticks: {
-        values: tickModel.query.getYTicks(),
+        values: () => tickModel.query.getYTicks(),
       },
     },
   };

@@ -1,6 +1,6 @@
 import KEYS from '../../../constants/keys';
 
-export default function createRefLineLabels({ layoutModel, dock, scale, fontFamily, fontSize, rtl, key }) {
+export default function createRefLineLabels({ layoutModel, dock, scale, fontFamily, fontSize, rtl, key, localeInfo }) {
   const path = scale === KEYS.SCALE.X ? 'refLine.refLinesX' : 'refLine.refLinesY';
   const refLineLabels = layoutModel
     .getLayoutValue(path)
@@ -10,23 +10,21 @@ export default function createRefLineLabels({ layoutModel, dock, scale, fontFami
     return false;
   }
 
-  const refLineLabelDefs = [];
   const labels = refLineLabels.map((refLineLayout) => ({
     text: refLineLayout.label,
     fill: refLineLayout.paletteColor.color,
-    inputValue: refLineLayout.refLineExpr.value,
-    inputValueLabel: refLineLayout.refLineExpr.label,
-    scale,
     value: refLineLayout.refLineExpr.value,
+    valueLabel: refLineLayout.refLineExpr.label,
+    scale,
   }));
 
-  refLineLabelDefs.push({
+  const refLineLabelsDef = {
     key,
     type: 'reference-line-labels',
     renderer: 'svg',
     labels,
     scale,
-    layoutModel,
+    localeInfo,
     layout: { dock, rtl },
     style: {
       label: {
@@ -38,11 +36,12 @@ export default function createRefLineLabels({ layoutModel, dock, scale, fontFami
           left: rtl ? 2 : 4,
           right: rtl ? 4 : 2,
         },
-        maxWidth: 50,
+        maxWidth: 60,
+        maxNumLines: 3,
         gap: dock === 'left' || dock === 'right' ? 10 : 16,
       },
     },
-  });
+  };
 
-  return refLineLabelDefs;
+  return refLineLabelsDef;
 }

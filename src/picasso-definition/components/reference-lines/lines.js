@@ -10,7 +10,7 @@ export default function createRefLines({ layoutModel, scale, key, minimumLayoutM
     return false;
   }
 
-  const setting = {
+  const settings = {
     key,
     type: 'ref-line',
     layout: {
@@ -23,7 +23,7 @@ export default function createRefLines({ layoutModel, scale, key, minimumLayoutM
   };
 
   refLines.forEach((refLineLayout) => {
-    setting.lines[scale].push({
+    settings.lines[scale].push({
       line: {
         stroke: refLineLayout.paletteColor.color,
         strokeWidth: 2,
@@ -33,5 +33,5 @@ export default function createRefLines({ layoutModel, scale, key, minimumLayoutM
     });
   });
 
-  return setting;
+  return settings;
 }

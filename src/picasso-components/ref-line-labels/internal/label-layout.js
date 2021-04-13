@@ -1,58 +1,53 @@
 const labelLayout = {
-  isInside(segment, min, max) {
-    const smin = segment.position - segment.radius;
-    const smax = segment.position + segment.radius;
-    return smin >= min && smax <= max;
-  },
-
   getGap(segment1, segment2) {
     const minSegment = segment1.position < segment2.position ? segment1 : segment2;
     const maxSegment = segment1.position < segment2.position ? segment2 : segment1;
     return maxSegment.position - maxSegment.radius - (minSegment.position + minSegment.radius);
   },
-
-  findSegmentPositionMeetMax(segment, max) {
-    const d = Math.max(0, segment.max - max);
-    return segment.center - d;
-  },
-
-  findSegmentPositionMeetMin(segment, min) {
-    const d = Math.max(0, min - segment.min);
-    return segment.center + d;
-  },
-
   findSegmentPositionMeetMaxThenMin(segment, min, max) {
-    const position = labelLayout.findSegmentPositionMeetMax(segment, max);
-    return labelLayout.findSegmentPositionMeetMin({ center: position, min: position - segment.radius }, min);
+    // Push the segment back in, in case its max exceeds max
+    const sMax = segment.position + segment.radius;
+    const newPosition = segment.position - Math.max(0, sMax - max);
+
+    // Push the segment back in, in case its new min is lower than min
+    const sMin = newPosition - segment.radius;
+    return newPosition + Math.max(0, min - sMin);
   },
 
-  layoutPositionFromMin(segments, min, max, gap = 0) {
+  layoutPositionFromMin(segments, areaMin, areaMax, gap = 0) {
     const n = segments.length - 1;
     let segment;
     let nextSegment;
-    let min1 = min;
+    let min = areaMin;
+    let max;
     for (let i = 0; i < n; i++) {
       segment = segments[i];
       nextSegment = segments[i + 1];
-      segment.position = labelLayout.findSegmentPositionMeetMaxThenMin(
-        segment,
-        min1,
-        (segment.center + nextSegment.center - gap) / 2
-      );
-      min1 = segment.position + segment.radius + gap / 2;
+      max = (segment.position + nextSegment.position) / 2 - gap / 2;
+      segment.position = labelLayout.findSegmentPositionMeetMaxThenMin(segment, min, max);
+
+      // Prepare min for the next round
+      min = segment.position + segment.radius + gap;
     }
-    nextSegment.position = labelLayout.findSegmentPositionMeetMaxThenMin(nextSegment, min1, max);
+    nextSegment.position = labelLayout.findSegmentPositionMeetMaxThenMin(nextSegment, min, areaMax);
   },
 
+  /**
+   * In case the highest segement's max exceeds max, this method moves segments towards lower positions to fix the issue.
+   * Starting from higher segments, it moves the segments down by shrinking the gap between them to the default gap.
+   * The process continues until the highest segment's max is equal max or if the lowest segment has already been moved.
+   * @param {object} segments are the 1D ranges to place the reference labels
+   * @param {number} min is the min of the available space
+   * @param {number} max is the max of the available space
+   * @param {number} gap is the gap between two segements (default gap)
+   */
   adjustPositionFromMax(segments, min, max, gap = 0) {
     const n = segments.length - 1;
+    const d = Math.max(0, segments[n].position + segments[n].radius - max);
+    if (d === 0) return;
     let i;
     let segment;
     let prevSegment;
-    const d = Math.max(0, segments[n].position + segments[n].radius - max);
-    if (d === 0) {
-      return;
-    }
     let move;
     let totalMove = 0;
     for (i = n; i > 0; i--) {
@@ -62,9 +57,7 @@ const labelLayout = {
       move -= Math.max(0, totalMove + move - d);
       totalMove += move;
       segment.move = move;
-      if (totalMove >= d) {
-        break;
-      }
+      if (totalMove >= d) break;
     }
     if (totalMove < d) {
       move = Math.max(0, prevSegment.position - prevSegment.radius - min);
@@ -81,18 +74,25 @@ const labelLayout = {
     }
   },
 
-  layout({ segments, min, max, gap = 0 }) {
+  createLayout(labels, min, max, gap = 0) {
+    const segments = labels.map((label) => label.segment);
     const n = segments.length - 1;
-    if (n < 0) {
-      return;
-    }
+    if (n < 0) return [];
     if (n === 0) {
       const segment = segments[0];
       segment.position = labelLayout.findSegmentPositionMeetMaxThenMin(segment, min, max);
-      return;
+    } else {
+      labelLayout.layoutPositionFromMin(segments, min, max, gap);
+      labelLayout.adjustPositionFromMax(segments, min, max, gap);
     }
-    labelLayout.layoutPositionFromMin(segments, min, max, gap);
-    labelLayout.adjustPositionFromMax(segments, min, max, gap);
+
+    const filteredLabels = labels.filter((label) => {
+      const smin = label.segment.position - label.segment.radius;
+      const smax = label.segment.position + label.segment.radius;
+      return smin >= min && smax <= max;
+    });
+
+    return filteredLabels;
   },
 };
 

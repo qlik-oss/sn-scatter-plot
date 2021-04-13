@@ -57,6 +57,7 @@ export default function createChartModel({ chart, localeInfo, layoutModel, dockM
       getDataset: () => dataset,
       getViewState: () => viewState,
       getZoomHandler: () => zoomHandler,
+      getLocaleInfo: () => localeInfo,
       isInteractionInProgess: () => interactionInProgess,
     },
     command: {
