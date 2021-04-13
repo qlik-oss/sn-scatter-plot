@@ -2,7 +2,7 @@ import KEYS from '../../../constants/keys';
 import createSizeScale from '../../scales/size';
 import createBrush from '../../brush';
 
-export default function createPoint({ layoutModel, chartModel }) {
+export default function createPoint({ layoutModel, chartModel, colorService }) {
   let windowSizeMultiplier;
   const sizeScaleFn = createSizeScale(layoutModel);
   return {
@@ -33,7 +33,7 @@ export default function createPoint({ layoutModel, chartModel }) {
         scale: KEYS.SCALE.Y,
       },
       size: (d) => sizeScaleFn(d, windowSizeMultiplier),
-      // fill: color,
+      fill: colorService.getColor(),
       // opacity: 0.8,
       strokeWidth: 0.5,
       stroke: '#fff',

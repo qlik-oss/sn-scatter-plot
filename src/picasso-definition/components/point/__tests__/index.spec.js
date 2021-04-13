@@ -4,6 +4,7 @@ import * as KEYS from '../../../../constants/keys';
 describe('grid chart point', () => {
   let sandbox;
   let layoutModel;
+  let colorService;
   let create;
   let layoutValueStub;
   let hyperCubeValueStub;
@@ -34,9 +35,12 @@ describe('grid chart point', () => {
       },
     };
 
+    colorService = { getColor: sandbox.stub() };
+
     create = () =>
       createPoint({
         layoutModel,
+        colorService,
       });
   });
 
@@ -77,7 +81,7 @@ describe('grid chart point', () => {
 
   describe('settings', () => {
     it('should have correct properties', () => {
-      expect(create().settings).to.have.all.keys(['x', 'y', 'size', 'strokeWidth', 'stroke']);
+      expect(create().settings).to.have.all.keys(['x', 'y', 'size', 'strokeWidth', 'stroke', 'fill']);
     });
 
     describe('size', () => {
