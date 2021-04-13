@@ -18,7 +18,7 @@ describe('theme-model', () => {
   });
 
   it('should expose correct composition', () => {
-    expect(themeModel).to.have.all.keys(['query']);
+    expect(themeModel).to.have.all.keys(['command', 'query']);
   });
 
   describe('query', () => {

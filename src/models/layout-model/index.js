@@ -7,6 +7,7 @@ export default function createLayoutModel({ layout }) {
       isSnapshot: !!layout.snapshotData,
       hasSizeMeasure: !!utils.getValue(layout.qHyperCube, 'qMeasureInfo.2'),
     },
+    hasData: () => layout.qHyperCube.qDataPages.length > 0,
     getDataPages: () => layout.qHyperCube.qDataPages,
     getHyperCube: () => layout.qHyperCube,
     getHyperCubeValue: (path, defaultValue) => utils.getValue(layout.qHyperCube, path, defaultValue),

@@ -1,6 +1,6 @@
 import KEYS from '../../../constants/keys';
 
-export default function createIsLocked({ selectionModel /* , colorModel */ }) {
+export default function createIsLocked({ selectionModel, colorService }) {
   return (components) => {
     selectionModel.query.getIsLockedSelection(components);
 
@@ -9,7 +9,7 @@ export default function createIsLocked({ selectionModel /* , colorModel */ }) {
     const isDimensionLocked = selectionModel.query.getIsDimensionLocked();
 
     if (key === KEYS.COMPONENT.LEGEND_CATEGORICAL) {
-      // return colorModel.main.model().isSelectionLocked({ isMeasureSelectionLocked: isDimensionLocked });
+      return colorService.isSelectionLocked({ isMeasureSelectionLocked: isDimensionLocked });
     }
 
     return isDimensionLocked;

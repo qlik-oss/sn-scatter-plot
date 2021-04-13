@@ -19,7 +19,7 @@ export default function createPicassoDefinition({
   flags,
 }) {
   const { chart, actions } = core;
-  const { chartModel, tickModel, dockModel, layoutModel, selectionModel, themeModel } = models;
+  const { chartModel, tickModel, dockModel, layoutModel, selectionModel, themeModel, colorService } = models;
   const zoomHandler = chartModel.query.getZoomHandler();
   const viewState = chartModel.query.getViewState();
   const localeInfo = chartModel.query.getLocaleInfo();
@@ -33,12 +33,12 @@ export default function createPicassoDefinition({
   };
 
   const scales = createScales({
-    layoutModel,
     tickModel,
+    colorService,
     viewState,
   });
 
-  const collections = createCollections({ layoutModel });
+  const collections = createCollections({ layoutModel, colorService });
 
   const components = createComponents({
     context,
@@ -48,11 +48,13 @@ export default function createPicassoDefinition({
     dockModel,
     chartModel,
     themeModel,
+    colorService,
   });
 
   const selectables = createSelectables({
     actions,
     selectionModel,
+    colorService,
     dockModel,
     scales,
     flags,
@@ -68,7 +70,7 @@ export default function createPicassoDefinition({
     scales,
     components: [...components, ...selectables.components],
     collections,
-    // palettes: colorModel.main.model().palettes(),
+    palettes: colorService.getPalettes(),
     strategy: {
       // TODO: use a common module for this or a proper implementation
       layoutModes: {

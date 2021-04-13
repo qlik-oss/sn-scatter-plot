@@ -5,11 +5,13 @@ import {
   useTheme,
   useConstraints,
   useTranslator,
+  useApp,
   useAppLayout,
   useModel,
   useOptions,
   useRect,
   useSelections,
+  usePromise,
 } from '@nebula.js/stardust';
 
 import createLayoutModel from '../models/layout-model';
@@ -18,6 +20,7 @@ import createTickModel from '../models/tick-model';
 import createDockModel from '../models/dock-model';
 import createSelectionModel from '../models/selection-model';
 import createThemeModel from '../models/theme-model';
+import createColorService from '../models/color-service';
 import getLogicalSize from '../logical-size';
 
 const useModels = ({ core }) => {
@@ -29,9 +32,11 @@ const useModels = ({ core }) => {
   const options = useOptions();
   const rect = useRect();
   const selections = useSelections();
+  const app = useApp();
   const { qLocaleInfo: localeInfo } = useAppLayout();
   const [selectionModel, setSelectionModel] = useState();
   const [models, setModels] = useState();
+  const [updatedModels, setUpdatedModels] = useState();
 
   useEffect(() => {
     if (!core) {
@@ -58,7 +63,7 @@ const useModels = ({ core }) => {
       return;
     }
 
-    const { picassoInstance, chart } = core;
+    const { picassoInstance, chart, actions } = core;
 
     const layoutModel = createLayoutModel({ layout });
     const logicalSize = getLogicalSize({ layout: layoutModel.getLayout(), options });
@@ -84,6 +89,20 @@ const useModels = ({ core }) => {
 
     const themeModel = createThemeModel({ theme });
 
+    const colorService = createColorService({
+      actions,
+      localeInfo,
+      app,
+      chart,
+      theme,
+      translator,
+      options,
+      model,
+      layoutModel,
+      picasso: picassoInstance,
+      viewState: chartModel.query.getViewState(),
+    });
+
     setModels({
       layoutModel,
       tickModel,
@@ -91,10 +110,43 @@ const useModels = ({ core }) => {
       dockModel,
       selectionModel,
       themeModel,
+      colorService,
     });
-  }, [selectionModel, layout, constraints, theme.name(), translator.language(), options.direction, options.viewState]);
+  }, [
+    model,
+    app,
+    selectionModel,
+    layout,
+    constraints,
+    theme.name(),
+    translator.language(),
+    options.direction,
+    options.viewState,
+  ]);
 
-  return models;
+  usePromise(() => {
+    if (!models) {
+      return Promise.resolve();
+    }
+
+    const { layoutModel, themeModel, colorService } = models;
+
+    const hasData = layoutModel.hasData();
+
+    if (!hasData) {
+      layoutModel.setDataPages([{ qArea: { qLeft: 0, qTop: 0, qWidth: 0, qHeight: 0 }, qMatrix: [] }]);
+    }
+
+    const promises = [colorService.initialize(), themeModel.command.setTheme(theme)];
+
+    const firstStage = () => Promise.all(promises);
+
+    return firstStage().then(() => {
+      setUpdatedModels(models);
+    });
+  }, [models]);
+
+  return updatedModels;
 };
 
 export default useModels;

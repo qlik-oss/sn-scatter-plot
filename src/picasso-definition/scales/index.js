@@ -1,6 +1,6 @@
 import KEYS from '../../constants/keys';
 
-export default function createScales({ tickModel, viewState }) {
+export default function createScales({ tickModel, colorService, viewState }) {
   return {
     x: {
       data: {
@@ -25,5 +25,6 @@ export default function createScales({ tickModel, viewState }) {
         values: () => tickModel.query.getYTicks(),
       },
     },
+    ...colorService.getScales(),
   };
 }
