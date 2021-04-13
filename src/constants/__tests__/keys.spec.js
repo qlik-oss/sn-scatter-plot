@@ -16,6 +16,10 @@ describe('keys', () => {
   it('should have correct component keys', () => {
     expect(KEYS.COMPONENT).to.have.all.keys([
       'GRID_LINES',
+      'REFERENCE_LINES_X',
+      'REFERENCE_LINES_Y',
+      'REFERENCE_LINE_LABELS_X',
+      'REFERENCE_LINE_LABELS_Y',
       'POINT',
       'POINT_TOOLTIP',
       'POINT_LABELS',

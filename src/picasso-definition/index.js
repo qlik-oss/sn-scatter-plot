@@ -22,12 +22,14 @@ export default function createPicassoDefinition({
   const { chartModel, tickModel, dockModel, layoutModel, selectionModel, themeModel } = models;
   const zoomHandler = chartModel.query.getZoomHandler();
   const viewState = chartModel.query.getViewState();
+  const localeInfo = chartModel.query.getLocaleInfo();
   const context = {
     rtl: options.direction === 'rtl',
     theme,
     translator,
     constraints,
     model,
+    localeInfo,
   };
 
   const scales = createScales({

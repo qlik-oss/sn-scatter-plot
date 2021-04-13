@@ -3,6 +3,7 @@ import createGridLines from './grid-lines';
 import createAxes from './axes';
 import createAxisTitles from './axis-titles';
 import createPoint from './point';
+import createReferenceLines from './reference-lines';
 import createPointLabels from './point-labels';
 
 export default function createComponents({ context, layoutModel, dockModel, chartModel, themeModel }) {
@@ -21,6 +22,11 @@ export default function createComponents({ context, layoutModel, dockModel, char
       layoutModel,
       dockModel,
       themeModel,
+    }),
+    ...createReferenceLines({
+      context,
+      layoutModel,
+      dockModel,
     }),
     createPointLabels({
       layoutModel,

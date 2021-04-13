@@ -2,7 +2,7 @@ import MODES from '../modes';
 
 describe('modes', () => {
   it('should have correct group properties', () => {
-    expect(MODES).to.have.all.keys(['AXIS', 'AXIS_TITLE']);
+    expect(MODES).to.have.all.keys(['AXIS', 'AXIS_TITLE', 'REFERENCE_LINE']);
   });
 
   describe('AXIS', () => {
