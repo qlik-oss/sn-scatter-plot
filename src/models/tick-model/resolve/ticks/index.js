@@ -1,15 +1,8 @@
 import getMajorTicks from './major';
 import getMinorTicks from './minor';
 
-export default function getTicks({ layoutModel, dockModel, size, min, max }) {
-  const majorTicks = getMajorTicks({
-    layoutModel,
-    dockModel,
-    size,
-    min,
-    max,
-  });
-
+export default function getTicks(scale) {
+  const majorTicks = getMajorTicks(scale);
   const minorTicks = getMinorTicks({
     majorTicks,
     count: 1,

@@ -26,7 +26,7 @@ export default function createRefLines({ layoutModel, scale, key, minimumLayoutM
     settings.lines[scale].push({
       line: {
         stroke: refLineLayout.paletteColor.color,
-        strokeWidth: 2,
+        strokeWidth: 1,
       },
       scale,
       value: refLineLayout.refLineExpr.value,

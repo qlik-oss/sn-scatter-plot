@@ -1,4 +1,4 @@
-import * as CONSTANTS from '../../../../constants/keys';
+import * as KEYS from '../../../../constants/keys';
 import * as getTicks from '../ticks';
 import createResolver from '..';
 
@@ -29,7 +29,7 @@ describe('resolve', () => {
 
   beforeEach(() => {
     sandbox.reset();
-    sandbox.stub(CONSTANTS, 'default').returns({ SCALE: { X: 'x', Y: 'y' } });
+    sandbox.stub(KEYS, 'default').returns({ SCALE: { X: 'x', Y: 'y' } });
     dockModel = {
       chartSize: {
         width: 201,

@@ -1,18 +1,19 @@
-import CONSTANTS from '../../../constants/keys';
+import KEYS from '../../../constants/keys';
 import getTicks from './ticks';
 
-export default function createResolver({ layoutModel, chartModel, dockModel }) {
-  return (scale) => {
-    const { width, height } = dockModel.chartSize;
-    const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = chartModel.query.getViewState().get('zoom');
-    const [min, max, size] = scale === CONSTANTS.SCALE.X ? [xAxisMin, xAxisMax, width] : [yAxisMin, yAxisMax, height];
-
-    const ticks = getTicks({
-      layoutModel,
-      size,
-      min,
-      max,
-    });
+export default function createResolver(chartModel) {
+  return (scaleName) => {
+    let scale;
+    if (scaleName === KEYS.SCALE.X) {
+      const { xAxisMin, xAxisMax } = chartModel.query.getViewState().get('zoom');
+      ({ scaleX: scale } = chartModel.query.getViewState().get('scale'));
+      scale.updateMinMax(xAxisMin, xAxisMax);
+    } else {
+      const { yAxisMin, yAxisMax } = chartModel.query.getViewState().get('zoom');
+      ({ scaleY: scale } = chartModel.query.getViewState().get('scale'));
+      scale.updateMinMax(yAxisMin, yAxisMax);
+    }
+    const ticks = getTicks(scale);
     return ticks;
   };
 }

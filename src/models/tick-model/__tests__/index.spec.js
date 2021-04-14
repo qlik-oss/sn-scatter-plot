@@ -1,4 +1,4 @@
-import * as CONSTANTS from '../../../constants/keys';
+import * as KEYS from '../../../constants/keys';
 import * as createResolver from '../resolve';
 import createTickModel from '..';
 
@@ -17,7 +17,7 @@ describe('tick-model', () => {
     layoutModel = { key: 'layout-model' };
     chartModel = { key: 'chart-model' };
     dockModel = { key: 'dock-model' };
-    sandbox.stub(CONSTANTS, 'default').returns({ SCALE: { X: 'x', Y: 'y' } });
+    sandbox.stub(KEYS, 'default').returns({ SCALE: { X: 'x', Y: 'y' } });
     create = () =>
       createTickModel({
         layoutModel,

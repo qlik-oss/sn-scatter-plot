@@ -74,11 +74,7 @@ const useModels = ({ core }) => {
       options,
     });
 
-    const tickModel = createTickModel({
-      layoutModel,
-      chartModel,
-      dockModel,
-    });
+    const tickModel = createTickModel(chartModel);
 
     selectionModel.command.setLayout({ layout });
 

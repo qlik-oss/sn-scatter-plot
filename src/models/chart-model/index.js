@@ -21,7 +21,7 @@ export default function createChartModel({ chart, localeInfo, layoutModel, dockM
   };
 
   const dataset = picasso.data('q')(mainConfig);
-  const viewState = createViewState({ layoutModel, options });
+  const viewState = createViewState({ layoutModel, dockModel, options });
 
   const zoomHandler = createZoomHandler({
     dockModel,

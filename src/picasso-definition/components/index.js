@@ -8,7 +8,7 @@ import createPointLabels from './point-labels';
 
 export default function createComponents({ context, layoutModel, dockModel, chartModel, themeModel }) {
   const components = [
-    createGridLines({ layoutModel, context }),
+    createGridLines({ layoutModel, themeModel }),
     createPoint({
       layoutModel,
       chartModel,
