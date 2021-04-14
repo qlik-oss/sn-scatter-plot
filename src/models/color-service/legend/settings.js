@@ -1,5 +1,3 @@
-import KEYS from '../../../constants/keys';
-
 export default function createSettings({ colorService }) {
   const { type: colorType } = colorService.getSettings();
 
@@ -11,14 +9,7 @@ export default function createSettings({ colorService }) {
     item: {
       shape: {
         type: 'circle',
-        stroke: {
-          // scale: 'colorLegend' or KEYS.SCALE.COLOR,
-        },
-        strokeWidth: 0,
         size: 10,
-        fill: {
-          scale: KEYS.SCALE.COLOR,
-        },
       },
     },
   };

@@ -3,6 +3,7 @@ describe('interactions', () => {
   let createNative;
   let create;
   let gestures;
+  let colorService;
   let actions;
   let args;
   let chart;
@@ -27,12 +28,18 @@ describe('interactions', () => {
       { key: 'gesture-2', prio: 2 },
       { key: 'gesture-3', prio: 1 },
     ];
+    colorService = {
+      custom: {
+        legendInteractions: sandbox.stub().returns(['legend-i1', 'legend-i2']),
+      },
+    };
     actions = { key: 'actions' };
     args = {
       chart,
       actions,
       zoomHandler,
       gestures,
+      colorService,
     };
   });
 
@@ -58,6 +65,8 @@ describe('interactions', () => {
         type: 'hammer',
         enable: true,
         gestures: [
+          'legend-i1',
+          'legend-i2',
           { key: 'gesture-1', prio: 2 },
           { key: 'gesture-2', prio: 2 },
           { key: 'gesture-3', prio: 1 },

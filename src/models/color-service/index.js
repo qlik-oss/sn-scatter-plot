@@ -74,6 +74,12 @@ export default function createService({
     config: {
       localeInfo,
     },
+    custom: {
+      wrappedScales: () => state.wrappedScales,
+      legendComponents: () => state.legendComponents,
+      legendInteractions: () => state.legendInteractions,
+      updateLegend,
+    },
   });
 
   return colorService;
