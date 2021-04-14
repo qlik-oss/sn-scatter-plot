@@ -1,8 +1,16 @@
 import KEYS from '../../constants/keys';
-import createViewState from './viewstate';
 import createZoomHandler from '../../zoom-handler';
 
-export default function createChartModel({ chart, localeInfo, layoutModel, dockModel, model, picasso, options }) {
+export default function createChartModel({
+  chart,
+  localeInfo,
+  layoutModel,
+  dockModel,
+  model,
+  colorService,
+  picasso,
+  viewState,
+}) {
   let interactionInProgess = false;
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
@@ -21,7 +29,6 @@ export default function createChartModel({ chart, localeInfo, layoutModel, dockM
   };
 
   const dataset = picasso.data('q')(mainConfig);
-  const viewState = createViewState({ layoutModel, dockModel, options });
 
   const zoomHandler = createZoomHandler({
     dockModel,
@@ -68,6 +75,7 @@ export default function createChartModel({ chart, localeInfo, layoutModel, dockM
               type: 'q',
               ...mainConfig,
             },
+            ...colorService.getData(),
           ],
           settings,
         });

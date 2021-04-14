@@ -5,6 +5,7 @@ import {
   useTheme,
   useConstraints,
   useTranslator,
+  useApp,
   useAppLayout,
   useModel,
   useOptions,
@@ -18,7 +19,9 @@ import createTickModel from '../models/tick-model';
 import createDockModel from '../models/dock-model';
 import createSelectionModel from '../models/selection-model';
 import createThemeModel from '../models/theme-model';
+import createColorService from '../models/color-service';
 import getLogicalSize from '../logical-size';
+import createViewState from '../models/chart-model/viewstate';
 
 const useModels = ({ core }) => {
   const layout = useStaleLayout();
@@ -29,6 +32,7 @@ const useModels = ({ core }) => {
   const options = useOptions();
   const rect = useRect();
   const selections = useSelections();
+  const app = useApp();
   const { qLocaleInfo: localeInfo } = useAppLayout();
   const [selectionModel, setSelectionModel] = useState();
   const [models, setModels] = useState();
@@ -58,11 +62,27 @@ const useModels = ({ core }) => {
       return;
     }
 
-    const { picassoInstance, chart } = core;
+    const { picassoInstance, chart, actions } = core;
 
     const layoutModel = createLayoutModel({ layout });
     const logicalSize = getLogicalSize({ layout: layoutModel.getLayout(), options });
     const dockModel = createDockModel({ layoutModel, size: logicalSize || rect, rtl: options.direction === 'rtl' });
+
+    const viewState = createViewState({ layoutModel, dockModel, options });
+
+    const colorService = createColorService({
+      actions,
+      localeInfo,
+      app,
+      chart,
+      theme,
+      translator,
+      options,
+      model,
+      layoutModel,
+      picasso: picassoInstance,
+      viewState,
+    });
 
     const chartModel = createChartModel({
       chart,
@@ -72,6 +92,8 @@ const useModels = ({ core }) => {
       model,
       picasso: picassoInstance,
       options,
+      viewState,
+      colorService,
     });
 
     const tickModel = createTickModel(chartModel);
@@ -87,8 +109,19 @@ const useModels = ({ core }) => {
       dockModel,
       selectionModel,
       themeModel,
+      colorService,
     });
-  }, [selectionModel, layout, constraints, theme.name(), translator.language(), options.direction, options.viewState]);
+  }, [
+    model,
+    app,
+    selectionModel,
+    layout,
+    constraints,
+    theme.name(),
+    translator.language(),
+    options.direction,
+    options.viewState,
+  ]);
 
   return models;
 };

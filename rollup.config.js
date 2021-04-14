@@ -6,6 +6,7 @@ import external from 'rollup-plugin-peer-deps-external';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import visualizer from 'rollup-plugin-visualizer';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 import jsxPlugin from '@babel/plugin-transform-react-jsx';
 
 const { version } = require(path.resolve(__dirname, './package.json')); // eslint-disable-line
@@ -65,5 +66,6 @@ export default {
     }),
     commonjs(),
     visualizer(),
+    sourcemaps(),
   ],
 };

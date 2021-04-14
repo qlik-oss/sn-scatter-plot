@@ -7,7 +7,7 @@ export default function getTable() {
     /**
      * fontFamily
      */
-    ['object.scatterplot', '', 'fontFamily'],
+    ['object.scatterPlot', '', 'fontFamily'],
     /**
      * Axis
      */

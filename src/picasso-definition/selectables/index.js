@@ -7,16 +7,19 @@ const EMPTY = { components: [], interactions: [] };
 export default function createSelectables({
   actions,
   selectionModel,
+  colorService,
   dockModel,
   scales,
-  legend,
   customTooltipModel,
   flags,
 }) {
+  const legend = colorService.custom.legendComponents();
+
   const tap =
     createTap({
       actions,
       selectionModel,
+      colorService,
       customTooltipModel,
       flags,
     }) || EMPTY;

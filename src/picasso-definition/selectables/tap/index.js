@@ -3,7 +3,7 @@ import debouncer from '../../../utils/debouncer';
 import KEYS from '../../../constants/keys';
 import createIsLocked from './is-locked';
 
-export default function createTap({ actions, selectionModel, customTooltipModel, flags }) {
+export default function createTap({ actions, selectionModel, colorService, customTooltipModel, flags }) {
   const targets = [KEYS.COMPONENT.POINT, KEYS.COMPONENT.LEGEND_CATEGORICAL];
 
   const brushFromShapesConfig = (e, shapes) => {
@@ -45,6 +45,7 @@ export default function createTap({ actions, selectionModel, customTooltipModel,
     actions,
     isLocked: createIsLocked({
       selectionModel,
+      colorService,
     }),
     hitRadius: (components) => (components.some((component) => component.key === KEYS.COMPONENT.POINT) ? 3 : 0),
   };

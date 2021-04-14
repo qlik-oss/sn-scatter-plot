@@ -2,6 +2,7 @@ describe('scales', () => {
   let createScales;
   let tickModel;
   let viewState;
+  let colorService;
 
   beforeEach(() => {
     createScales = aw.mock(
@@ -27,15 +28,18 @@ describe('scales', () => {
         yAxisMax: 30,
       }),
     };
+    colorService = {
+      getScales: sinon.stub().returns({ s1: 's1', s2: 's2' }),
+    };
   });
 
   it('should contain correct scales', () => {
-    const scales = createScales({ tickModel, viewState });
-    expect(Object.keys(scales)).to.deep.equal(['x', 'y']);
+    const scales = createScales({ tickModel, viewState, colorService });
+    expect(Object.keys(scales)).to.deep.equal(['x', 'y', 's1', 's2']);
   });
 
   it('scales should have proper properties', () => {
-    const { x, y } = createScales({ tickModel, viewState });
+    const { x, y } = createScales({ tickModel, viewState, colorService });
     expect(typeof x.ticks.values === 'function').to.equal(true);
     expect(typeof x.min === 'function').to.equal(true);
     expect(typeof x.max === 'function').to.equal(true);
@@ -45,37 +49,37 @@ describe('scales', () => {
   });
 
   it('x.min should return correct ticks', () => {
-    const { x } = createScales({ tickModel, viewState });
+    const { x } = createScales({ tickModel, viewState, colorService });
     const res = x.min();
     expect(res).to.equal(0);
   });
 
   it('x.max should return correct ticks', () => {
-    const { x } = createScales({ tickModel, viewState });
+    const { x } = createScales({ tickModel, viewState, colorService });
     const res = x.max();
     expect(res).to.equal(10);
   });
 
   it('x.ticks.values should return correct ticks', () => {
-    const { x } = createScales({ tickModel, viewState });
+    const { x } = createScales({ tickModel, viewState, colorService });
     const ticks = x.ticks.values();
     expect(ticks).to.deep.equal(['x1', 'x2']);
   });
 
   it('y.ticks.values should return correct ticks', () => {
-    const { y } = createScales({ tickModel, viewState });
+    const { y } = createScales({ tickModel, viewState, colorService });
     const ticks = y.ticks.values();
     expect(ticks).to.deep.equal(['y1', 'y2', 'y3']);
   });
 
   it('y.min should return correct ticks', () => {
-    const { y } = createScales({ tickModel, viewState });
+    const { y } = createScales({ tickModel, viewState, colorService });
     const res = y.min();
     expect(res).to.equal(20);
   });
 
   it('y.max should return correct ticks', () => {
-    const { y } = createScales({ tickModel, viewState });
+    const { y } = createScales({ tickModel, viewState, colorService });
     const res = y.max();
     expect(res).to.equal(30);
   });

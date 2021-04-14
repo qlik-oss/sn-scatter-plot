@@ -6,12 +6,13 @@ import createPoint from './point';
 import createReferenceLines from './reference-lines';
 import createPointLabels from './point-labels';
 
-export default function createComponents({ context, layoutModel, dockModel, chartModel, themeModel }) {
+export default function createComponents({ context, layoutModel, dockModel, chartModel, themeModel, colorService }) {
   const components = [
     createGridLines({ layoutModel, themeModel }),
     createPoint({
       layoutModel,
       chartModel,
+      colorService,
     }),
     ...createAxes({
       layoutModel,
@@ -31,7 +32,7 @@ export default function createComponents({ context, layoutModel, dockModel, char
     createPointLabels({
       layoutModel,
     }),
-    // ...legend.components,
+    ...colorService.custom.legendComponents(),
   ].filter(Boolean);
   // setDisplayOrder(components);
 

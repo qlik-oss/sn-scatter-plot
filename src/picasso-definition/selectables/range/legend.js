@@ -1,7 +1,7 @@
 import { range } from '../../../interactive';
 
 export default function createLegendRange({ actions, selectionModel, scales, legend }) {
-  const [legendComponent] = legend?.components || [];
+  const [legendComponent] = legend || [];
 
   if (!legendComponent) {
     return false;

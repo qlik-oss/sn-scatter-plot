@@ -1,6 +1,6 @@
 import KEYS from '../../constants/keys';
 
-export default function createCollections({ layoutModel }) {
+export default function createCollections({ layoutModel, colorService }) {
   const collectionDef = {
     key: KEYS.COLLECTION.MAIN,
     data: {
@@ -13,6 +13,7 @@ export default function createCollections({ layoutModel }) {
           selectionDimension: {
             field: KEYS.FIELDS.DIM,
           },
+          ...colorService.getDatumProps(0),
         },
       },
     },
