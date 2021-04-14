@@ -19,24 +19,7 @@ export default function createLegend({ viewState, chart, options, colorService, 
   const scales = colorService.getScales();
 
   return {
-    components: components.filter(Boolean).map((comp) => {
-      const { layout } = comp;
-      const { dock } = layout;
-      const rangeScaleDef = scales[`${KEYS.SCALE.COLOR}Range`];
-
-      // TODO colorService module should handle this..
-      if (rangeScaleDef && (dock === 'right' || dock === 'left')) {
-        rangeScaleDef.invert = true;
-      }
-
-      if (comp.type === 'legend-cat') {
-        // reuse the main color legend scale
-        comp.settings.item.shape.fill.scale = comp.scale; // eslint-disable-line no-param-reassign
-        comp.settings.item.shape.stroke.scale = comp.scale; // eslint-disable-line no-param-reassign
-      }
-
-      return comp;
-    }),
+    components,
     interactions,
     scales,
   };

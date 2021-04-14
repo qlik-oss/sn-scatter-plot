@@ -66,6 +66,7 @@ export default function createPicassoDefinition({
       actions,
       zoomHandler,
       gestures: [...selectables.gestures],
+      colorService,
     }),
     scales,
     components: [...components, ...selectables.components],

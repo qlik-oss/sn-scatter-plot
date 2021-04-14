@@ -10,10 +10,11 @@ export default function createSelectables({
   colorService,
   dockModel,
   scales,
-  legend,
   customTooltipModel,
   flags,
 }) {
+  const legend = colorService.custom.legendComponents();
+
   const tap =
     createTap({
       actions,

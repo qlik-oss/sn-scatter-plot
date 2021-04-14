@@ -11,7 +11,6 @@ import {
   useOptions,
   useRect,
   useSelections,
-  usePromise,
 } from '@nebula.js/stardust';
 
 import createLayoutModel from '../models/layout-model';
@@ -22,6 +21,7 @@ import createSelectionModel from '../models/selection-model';
 import createThemeModel from '../models/theme-model';
 import createColorService from '../models/color-service';
 import getLogicalSize from '../logical-size';
+import createViewState from '../models/chart-model/viewstate';
 
 const useModels = ({ core }) => {
   const layout = useStaleLayout();
@@ -36,7 +36,6 @@ const useModels = ({ core }) => {
   const { qLocaleInfo: localeInfo } = useAppLayout();
   const [selectionModel, setSelectionModel] = useState();
   const [models, setModels] = useState();
-  const [updatedModels, setUpdatedModels] = useState();
 
   useEffect(() => {
     if (!core) {
@@ -69,25 +68,7 @@ const useModels = ({ core }) => {
     const logicalSize = getLogicalSize({ layout: layoutModel.getLayout(), options });
     const dockModel = createDockModel({ layoutModel, size: logicalSize || rect, rtl: options.direction === 'rtl' });
 
-    const chartModel = createChartModel({
-      chart,
-      localeInfo,
-      layoutModel,
-      dockModel,
-      model,
-      picasso: picassoInstance,
-      options,
-    });
-
-    const tickModel = createTickModel({
-      layoutModel,
-      chartModel,
-      dockModel,
-    });
-
-    selectionModel.command.setLayout({ layout });
-
-    const themeModel = createThemeModel({ theme });
+    const viewState = createViewState({ layoutModel, options });
 
     const colorService = createColorService({
       actions,
@@ -100,8 +81,30 @@ const useModels = ({ core }) => {
       model,
       layoutModel,
       picasso: picassoInstance,
-      viewState: chartModel.query.getViewState(),
+      viewState,
     });
+
+    const chartModel = createChartModel({
+      chart,
+      localeInfo,
+      layoutModel,
+      dockModel,
+      model,
+      picasso: picassoInstance,
+      options,
+      viewState,
+      colorService,
+    });
+
+    const tickModel = createTickModel({
+      layoutModel,
+      chartModel,
+      dockModel,
+    });
+
+    selectionModel.command.setLayout({ layout });
+
+    const themeModel = createThemeModel({ theme });
 
     setModels({
       layoutModel,
@@ -124,29 +127,7 @@ const useModels = ({ core }) => {
     options.viewState,
   ]);
 
-  usePromise(() => {
-    if (!models) {
-      return Promise.resolve();
-    }
-
-    const { layoutModel, themeModel, colorService } = models;
-
-    const hasData = layoutModel.hasData();
-
-    if (!hasData) {
-      layoutModel.setDataPages([{ qArea: { qLeft: 0, qTop: 0, qWidth: 0, qHeight: 0 }, qMatrix: [] }]);
-    }
-
-    const promises = [colorService.initialize(), themeModel.command.setTheme(theme)];
-
-    const firstStage = () => Promise.all(promises);
-
-    return firstStage().then(() => {
-      setUpdatedModels(models);
-    });
-  }, [models]);
-
-  return updatedModels;
+  return models;
 };
 
 export default useModels;

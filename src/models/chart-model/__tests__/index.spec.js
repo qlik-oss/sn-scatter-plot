@@ -4,23 +4,22 @@ describe('chart-model', () => {
   let localeInfo;
   let hyperCube;
   let layoutModel;
-  let colorModel;
+  let colorService;
   let dockModel;
   let model;
-  let options;
   let picassoInstance;
   let picassoDataFn;
   let colorModelDataFn;
   let create;
   let zoomHandler;
   let createChartModel;
-  let fakeStorageObject;
+  let viewState;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     global.requestAnimationFrame = (cb) => setTimeout(cb, 20);
     zoomHandler = {};
-    fakeStorageObject = {
+    viewState = {
       get() {
         return this.props;
       },
@@ -31,19 +30,7 @@ describe('chart-model', () => {
         this[key] = cb;
       },
     };
-    createChartModel = aw.mock(
-      [
-        [
-          '**/src/models/chart-model/viewstate.js',
-          () => (props) => {
-            fakeStorageObject.props = props;
-            return fakeStorageObject;
-          },
-        ],
-        ['**/src/zoom-handler/index.js', () => () => zoomHandler],
-      ],
-      ['../index']
-    )[0].default;
+    createChartModel = aw.mock([['**/src/zoom-handler/index.js', () => () => zoomHandler]], ['../index'])[0].default;
     chart = {
       update: sandbox.stub(),
     };
@@ -61,12 +48,8 @@ describe('chart-model', () => {
       getHyperCubeValue: (path, defaultValue) => defaultValue,
     };
     colorModelDataFn = sandbox.stub().returns([{ colorData: 'oh yes' }]);
-    colorModel = {
-      main: {
-        model: () => ({
-          data: colorModelDataFn,
-        }),
-      },
+    colorService = {
+      getData: colorModelDataFn,
     };
     picassoDataFn = sandbox.spy();
     picassoInstance = {
@@ -74,17 +57,16 @@ describe('chart-model', () => {
     };
     dockModel = {};
     model = {};
-    options = {};
     create = () =>
       createChartModel({
         chart,
         localeInfo,
         layoutModel,
         dockModel,
-        colorModel,
+        colorService,
         model,
         picasso: picassoInstance,
-        options,
+        viewState,
       });
   });
 
@@ -129,7 +111,7 @@ describe('chart-model', () => {
         sandbox.useFakeTimers();
         const { clock } = sandbox;
         create();
-        fakeStorageObject.zoom();
+        viewState.zoom();
         await clock.tick(50);
         expect(
           chart.update.withArgs({

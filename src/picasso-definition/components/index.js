@@ -32,7 +32,7 @@ export default function createComponents({ context, layoutModel, dockModel, char
     createPointLabels({
       layoutModel,
     }),
-    // ...legend.components,
+    ...colorService.custom.legendComponents(),
   ].filter(Boolean);
   // setDisplayOrder(components);
 

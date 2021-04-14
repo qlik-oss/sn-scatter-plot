@@ -42,13 +42,13 @@ const useSettings = ({ core, models, flags }) => {
       return Promise.resolve();
     }
 
-    const { layoutModel, chartModel } = models;
+    const { layoutModel, chartModel, colorService } = models;
     const zoomHandler = chartModel.query.getZoomHandler();
     const logicalSize = getLogicalSize({ layout: layoutModel.getLayout(), options });
 
     return zoomHandler.fetchData().then((pages) => {
       layoutModel.setDataPages(pages);
-      setSettings(getPicassoDef(logicalSize));
+      return colorService.initialize().then(() => setSettings(getPicassoDef(logicalSize)));
     });
   }, [models]);
 
