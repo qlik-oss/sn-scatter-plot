@@ -5,6 +5,7 @@ import createAxisTitles from './axis-titles';
 import createPoint from './point';
 import createReferenceLines from './reference-lines';
 import createPointLabels from './point-labels';
+import createTooltips from './tooltips';
 
 export default function createComponents({ context, layoutModel, dockModel, chartModel, themeModel, colorService }) {
   const components = [
@@ -33,6 +34,11 @@ export default function createComponents({ context, layoutModel, dockModel, char
       layoutModel,
     }),
     ...colorService.custom.legendComponents(),
+    ...createTooltips({
+      context,
+      themeModel,
+      layoutModel,
+    }),
   ].filter(Boolean);
   // setDisplayOrder(components);
 
