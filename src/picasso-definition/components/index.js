@@ -7,38 +7,17 @@ import createReferenceLines from './reference-lines';
 import createPointLabels from './point-labels';
 import createTooltips from './tooltips';
 
-export default function createComponents({ context, layoutModel, dockModel, chartModel, themeModel, colorService }) {
+export default function createComponents({ context, models }) {
+  const { layoutModel, colorService } = models;
   const components = [
     createGridLines({ layoutModel, context }),
-    createPoint({
-      layoutModel,
-      chartModel,
-      colorService,
-    }),
-    ...createAxes({
-      layoutModel,
-      dockModel,
-      themeModel,
-    }),
-    ...createAxisTitles({
-      layoutModel,
-      dockModel,
-      themeModel,
-    }),
-    ...createReferenceLines({
-      context,
-      layoutModel,
-      dockModel,
-    }),
-    createPointLabels({
-      layoutModel,
-    }),
+    createPoint(models),
+    ...createAxes(models),
+    ...createAxisTitles(models),
+    ...createReferenceLines({ models, context }),
+    createPointLabels(models),
     ...colorService.custom.legendComponents(),
-    ...createTooltips({
-      context,
-      themeModel,
-      layoutModel,
-    }),
+    ...createTooltips({ models, context }),
   ].filter(Boolean);
   // setDisplayOrder(components);
 

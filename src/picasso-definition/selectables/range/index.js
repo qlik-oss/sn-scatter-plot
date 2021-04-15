@@ -4,7 +4,10 @@ import createYRange from './y-range';
 
 const EMPTY = { components: [], interactions: [] };
 
-export default function createRange({ actions, selectionModel, dockModel, scales, legend }) {
+export default function createRange({ models, actions, scales }) {
+  const { selectionModel, dockModel, colorService } = models;
+  const legend = colorService.custom.legendComponents();
+
   const xRange =
     createXRange({
       actions,

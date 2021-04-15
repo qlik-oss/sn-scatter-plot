@@ -8,6 +8,7 @@ describe('createReferenceLines', () => {
   let sandbox;
   let context;
   let dockModel;
+  let models;
   const layoutModel = 'layoutModel';
 
   beforeEach(() => {
@@ -28,6 +29,7 @@ describe('createReferenceLines', () => {
     sandbox.stub(MODES, 'REFERENCE_LINE').value('XSMALL');
     sandbox.stub(createLines, 'default');
     sandbox.stub(createLabels, 'default');
+    models = { layoutModel, dockModel };
   });
 
   afterEach(() => {
@@ -35,12 +37,12 @@ describe('createReferenceLines', () => {
   });
 
   it('should call getStyle twice', () => {
-    createReferenceLines({ context, layoutModel, dockModel });
+    createReferenceLines({ models, context });
     expect(context.theme.getStyle).to.have.been.calledTwice;
   });
 
   it('should call createLines twice, each with correct arguments', () => {
-    createReferenceLines({ context, layoutModel, dockModel });
+    createReferenceLines({ models, context });
     expect(
       createLines.default.withArgs({
         layoutModel: 'layoutModel',
@@ -60,7 +62,7 @@ describe('createReferenceLines', () => {
   });
 
   it('should call createLabels twice, each with correct arguments', () => {
-    createReferenceLines({ context, layoutModel, dockModel });
+    createReferenceLines({ models, context });
     expect(
       createLabels.default.withArgs({
         layoutModel: 'layoutModel',

@@ -12,7 +12,8 @@ const getMeasureTitle = (dataset, prop) => {
   return measureField.title();
 };
 
-export default function createPointTooltip({ themeModel, layoutModel, rtl = false }) {
+export default function createPointTooltip({ models, rtl = false }) {
+  const { themeModel, layoutModel } = models;
   const hasSizeMeasure = layoutModel.meta;
   const baseTooltip = createBaseTooltip({
     key: KEYS.COMPONENT.POINT_TOOLTIP,
