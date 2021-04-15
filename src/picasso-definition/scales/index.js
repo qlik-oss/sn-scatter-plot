@@ -1,6 +1,7 @@
 import KEYS from '../../constants/keys';
 
-export default function createScales({ tickModel, colorService, viewState }) {
+export default function createScales({ models, viewState }) {
+  const { tickModel, colorService } = models;
   return {
     x: {
       data: {
