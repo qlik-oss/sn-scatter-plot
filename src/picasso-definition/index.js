@@ -14,7 +14,6 @@ export default function createPicassoDefinition({
   options,
   constraints,
   translator,
-  app,
   logicalSize,
   flags,
 }) {
@@ -43,8 +42,6 @@ export default function createPicassoDefinition({
   const components = createComponents({
     context,
     layoutModel,
-    translator,
-    app,
     dockModel,
     chartModel,
     themeModel,
