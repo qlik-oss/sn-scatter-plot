@@ -25,12 +25,8 @@ export default function createGridLines({ layoutModel, themeModel }) {
     },
     preferredSize() {
       return {
-        size: 0,
         edgeBleed: {
-          left: 1,
-          right: 1,
           top: 1,
-          bottom: 1,
         },
       };
     },

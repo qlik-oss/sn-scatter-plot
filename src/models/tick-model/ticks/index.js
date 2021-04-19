@@ -1,8 +1,7 @@
-import getMajorTicks from './major';
 import getMinorTicks from './minor';
 
-export default function getTicks(scale) {
-  const majorTicks = getMajorTicks(scale);
+export default function getTicks(scale, nicing, count) {
+  const majorTicks = nicing ? scale.nice(count).ticks(count) : scale.ticks(count);
   const minorTicks = getMinorTicks({
     majorTicks,
     count: 1,

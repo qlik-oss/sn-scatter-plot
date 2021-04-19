@@ -4,8 +4,8 @@ import createGridLines from '..';
 describe('grid-line', () => {
   let sandbox;
   let layoutModel;
+  let themeModel;
   let gridLine;
-  let context;
   let create;
 
   before(() => {
@@ -13,15 +13,15 @@ describe('grid-line', () => {
     layoutModel = {
       getLayoutValue: sandbox.stub(),
     };
-    context = {
-      theme: {
+    themeModel = {
+      query: {
         getStyle: sandbox.stub(),
       },
     };
     create = () =>
       createGridLines({
         layoutModel,
-        context,
+        themeModel,
       });
   });
 
@@ -32,8 +32,15 @@ describe('grid-line', () => {
       spacing: 1,
     };
     layoutModel.getLayoutValue.withArgs('gridLine', {}).returns(gridLine);
-    context.theme.getStyle.withArgs('object', 'grid.line.major', 'color').returns('major-style');
-    context.theme.getStyle.withArgs('object', 'grid.line.minor', 'color').returns('minor-style');
+    themeModel.query.getStyle.returns({
+      grid: {
+        line: {
+          major: { color: 'major-style' },
+          minor: { color: 'minor-style' },
+        },
+      },
+    });
+
     sandbox.stub(KEYS, 'default').returns({
       SCALE: { X: 'x', Y: 'y' },
       COMPONENT: {

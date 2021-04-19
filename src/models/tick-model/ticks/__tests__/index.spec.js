@@ -1,4 +1,3 @@
-import * as getMajorTicks from '../major';
 import * as getMinorTicks from '../minor';
 import getTicks from '..';
 
@@ -6,59 +5,48 @@ describe('ticks', () => {
   let sandbox;
   let majorTicks;
   let minorTicks;
-  let layoutModel;
-  let dockModel;
-  let size;
-  let min;
-  let max;
   let ticks;
+  let scale;
+  let nicing;
+  let count;
+  let create;
+  let nicedScale;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     majorTicks = [0, 100, 200, 300, 400];
     minorTicks = [150, 250, 50, 350];
-    sandbox.stub(getMajorTicks, 'default').returns(majorTicks);
+    scale = { nice: sandbox.stub().returns(nicedScale), ticks: sandbox.stub().returns(majorTicks) };
+    nicedScale = { ticks: sandbox.stub().returns(majorTicks) };
     sandbox.stub(getMinorTicks, 'default').returns(minorTicks);
-    layoutModel = { key: 'layout-model' };
-    dockModel = { key: 'dock-model' };
-    size = { key: 'size' };
-    min = { key: 'min' };
-    max = { key: 'max' };
-    ticks = getTicks({
-      layoutModel,
-      dockModel,
-      size,
-      min,
-      max,
-    });
+    count = 4;
+    nicing = false;
+    create = () => getTicks(scale, nicing, count);
   });
 
   afterEach(() => {
     sandbox.restore();
   });
 
-  it('should get major ticks', () => {
-    expect(
-      getMajorTicks.default.withArgs({
-        layoutModel,
-        dockModel,
-        size,
-        min,
-        max,
-      })
-    ).to.have.been.calledOnce;
+  it('should get nice major ticks when nicing is true', () => {
+    count = 5;
+    nicing = true;
+    create();
+    expect(nicedScale.ticks.withArgs(5)).to.have.been.calledOnce;
+  });
+
+  it('should get normal major ticks when nicing is false', () => {
+    create();
+    expect(scale.ticks.withArgs(4)).to.have.been.calledOnce;
   });
 
   it('should get minor ticks', () => {
-    expect(
-      getMinorTicks.default.withArgs({
-        majorTicks,
-        count: 1,
-      })
-    ).to.have.been.calledOnce;
+    create();
+    expect(getMinorTicks.default.withArgs({ majorTicks, count: 1 })).to.have.been.calledOnce;
   });
 
-  it('should return correct ticks', () => {
+  it('should return correct combined and sorted ticks', () => {
+    ticks = create();
     expect(ticks).to.deep.equal([
       { value: 0, isMinor: false },
       { value: 50, isMinor: true },
