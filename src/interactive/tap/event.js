@@ -19,7 +19,7 @@ function eventToLocalPoint(event, chart) {
 
 const tap = ({ targets, requireFailure, recognizeWith, components, eventName = 'tap' }, opts) => {
   let targetComponents;
-  const customTooltipUtils = opts.customTooltipModel ? opts.customTooltipModel.utils : undefined;
+  const customTooltipUtils = opts.customTooltipModel?.utils;
   const debouncedDisplayCustomTooltip = customTooltipUtils
     ? opts.debouncer(customTooltipUtils.displayTooltip, customTooltipUtils.DEBOUNCE_THRESHOLD)
     : undefined;
@@ -103,6 +103,7 @@ const tap = ({ targets, requireFailure, recognizeWith, components, eventName = '
             } else if (
               opts.flags &&
               opts.flags.isEnabled('CUSTOM_TOOLTIP_IMAGES') &&
+              customTooltipModel &&
               customTooltipModel.useCustomTooltip &&
               customTooltipUtils.checkIfPromisesExist({ customTooltipModel })
             ) {
