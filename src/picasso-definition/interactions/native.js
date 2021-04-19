@@ -1,24 +1,5 @@
 import KEYS from '../../constants/keys';
 
-function hideTooltips({ chart }) {
-  const pointTooltip = chart.component(KEYS.COMPONENT.POINT_TOOLTIP);
-  if (pointTooltip?.show) {
-    pointTooltip.emit('hide');
-  }
-
-  const legendTooltip = chart.component(KEYS.COMPONENT.LEGEND_CAT_TOOLTIP);
-  if (legendTooltip?.show) {
-    legendTooltip.emit('hide');
-  }
-}
-
-function scrollLegend(e, comp) {
-  // To make it the same as the old one, always scroll by item instead of pixel
-  const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-  const dir = delta >= 0 ? 'next' : 'prev';
-  comp.emit(dir);
-}
-
 function zoom(/* e, zoomHandler */) {
   /*
   const { x, y } = zoomHandler.getPxOffsets();
@@ -33,6 +14,27 @@ function zoom(/* e, zoomHandler */) {
 }
 
 export default function native({ chart, actions, zoomHandler }) {
+  const getPointTooltip = () => chart.component(KEYS.COMPONENT.POINT_TOOLTIP);
+  const getLegendTooltip = () => chart.component(KEYS.COMPONENT.LEGEND_CAT_TOOLTIP);
+
+  const hideTooltips = () => {
+    const pointTooltip = getPointTooltip();
+    if (pointTooltip?.show) {
+      pointTooltip.emit('hide');
+    }
+
+    const legendTooltip = getLegendTooltip();
+    if (legendTooltip?.show) {
+      legendTooltip.emit('hide');
+    }
+  };
+
+  function scrollLegend(e, comp) {
+    // To make it the same as the old one, always scroll by item instead of pixel
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    const dir = delta >= 0 ? 'next' : 'prev';
+    comp.emit(dir);
+  }
   return {
     type: 'native',
     events: {
@@ -59,18 +61,21 @@ export default function native({ chart, actions, zoomHandler }) {
       mousemove(e) {
         if (actions.tooltip.enabled()) {
           const target = chart.componentsFromPoint({ x: e.clientX, y: e.clientY });
-          const pointTooltip = chart.component(KEYS.COMPONENT.POINT_TOOLTIP);
-          if (pointTooltip?.show && target.some((c) => c.key === KEYS.COMPONENT.POINT)) {
-            pointTooltip.emit('show', e);
-          } else if (pointTooltip?.show) {
-            pointTooltip.emit('hide');
+          const pointTooltip = getPointTooltip();
+          if (pointTooltip?.show) {
+            if (target.some((c) => c.key === KEYS.COMPONENT.POINT)) {
+              pointTooltip.emit('show', e);
+            } else {
+              pointTooltip.emit('hide');
+            }
           }
-
-          const legendTooltip = chart.component(KEYS.COMPONENT.LEGEND_CAT_TOOLTIP);
-          if (legendTooltip?.show && target.some((c) => c.key === KEYS.COMPONENT.LEGEND_CATEGORICAL)) {
-            legendTooltip.emit('show', e);
-          } else if (legendTooltip?.show) {
-            legendTooltip.emit('hide');
+          const legendTooltip = getLegendTooltip();
+          if (legendTooltip?.show) {
+            if (target.some((c) => c.key === KEYS.COMPONENT.LEGEND_CATEGORICAL)) {
+              legendTooltip.emit('show', e);
+            } else {
+              legendTooltip.emit('hide');
+            }
           }
         }
       },

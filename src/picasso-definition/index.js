@@ -14,12 +14,11 @@ export default function createPicassoDefinition({
   options,
   constraints,
   translator,
-  app,
   logicalSize,
   flags,
 }) {
   const { chart, actions } = core;
-  const { chartModel, tickModel, dockModel, layoutModel, selectionModel, themeModel, colorService } = models;
+  const { chartModel, colorService } = models;
   const zoomHandler = chartModel.query.getZoomHandler();
   const viewState = chartModel.query.getViewState();
   const localeInfo = chartModel.query.getLocaleInfo();
@@ -32,33 +31,13 @@ export default function createPicassoDefinition({
     localeInfo,
   };
 
-  const scales = createScales({
-    tickModel,
-    colorService,
-    viewState,
-  });
+  const scales = createScales({ models, viewState });
 
-  const collections = createCollections({ layoutModel, colorService });
+  const collections = createCollections(models);
 
-  const components = createComponents({
-    context,
-    layoutModel,
-    translator,
-    app,
-    dockModel,
-    chartModel,
-    themeModel,
-    colorService,
-  });
+  const components = createComponents({ models, context });
 
-  const selectables = createSelectables({
-    actions,
-    selectionModel,
-    colorService,
-    dockModel,
-    scales,
-    flags,
-  });
+  const selectables = createSelectables({ models, actions, scales, flags });
 
   return {
     interactions: createInteractions({
