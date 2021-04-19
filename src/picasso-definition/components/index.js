@@ -8,9 +8,9 @@ import createPointLabels from './point-labels';
 import createTooltips from './tooltips';
 
 export default function createComponents({ context, models }) {
-  const { layoutModel, colorService } = models;
+  const { colorService } = models;
   const components = [
-    createGridLines({ layoutModel, context }),
+    createGridLines(models),
     createPoint(models),
     ...createAxes(models),
     ...createAxisTitles(models),

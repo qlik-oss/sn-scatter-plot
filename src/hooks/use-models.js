@@ -67,8 +67,9 @@ const useModels = ({ core }) => {
     const layoutModel = createLayoutModel({ layout });
     const logicalSize = getLogicalSize({ layout: layoutModel.getLayout(), options });
     const dockModel = createDockModel({ layoutModel, size: logicalSize || rect, rtl: options.direction === 'rtl' });
+    const themeModel = createThemeModel({ theme });
     const extremumModel = createExtremumModel(layoutModel, options.viewState);
-    const tickModel = createTickModel(layoutModel, dockModel, extremumModel);
+    const tickModel = createTickModel({ layoutModel, dockModel, extremumModel, themeModel, chart });
     const viewState = createViewState(layoutModel, options.viewState, tickModel);
     const colorService = createColorService({
       actions,
@@ -98,7 +99,6 @@ const useModels = ({ core }) => {
     });
 
     selectionModel.command.setLayout({ layout });
-    const themeModel = createThemeModel({ theme });
     setModels({
       layoutModel,
       tickModel,

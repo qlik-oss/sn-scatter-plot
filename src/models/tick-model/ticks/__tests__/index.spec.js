@@ -11,17 +11,23 @@ describe('ticks', () => {
   let count;
   let create;
   let nicedScale;
+  let size;
+  let measure;
+  let formatter;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     majorTicks = [0, 100, 200, 300, 400];
     minorTicks = [150, 250, 50, 350];
-    scale = { nice: sandbox.stub().returns(nicedScale), ticks: sandbox.stub().returns(majorTicks) };
     nicedScale = { ticks: sandbox.stub().returns(majorTicks) };
+    scale = { nice: sandbox.stub().returns(nicedScale), ticks: sandbox.stub().returns(majorTicks) };
     sandbox.stub(getMinorTicks, 'default').returns(minorTicks);
     count = 4;
     nicing = false;
-    create = () => getTicks(scale, nicing, count);
+    size = 500;
+    measure = sandbox.stub().returns(1);
+    formatter = sandbox.stub().returns('formatted');
+    create = () => getTicks({ scale, nicing, count, size, measure, formatter });
   });
 
   afterEach(() => {

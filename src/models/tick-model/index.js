@@ -1,4 +1,5 @@
 import { scaleLinear } from 'd3-scale';
+import picasso from 'picasso.js';
 import KEYS from '../../constants/keys';
 import getTicks from './ticks';
 
@@ -27,30 +28,44 @@ export function getCount(size, spacing) {
   return Math.max(1, Math.round(size / distance));
 }
 
-export default function createTickModel(layoutModel, dockModel, extremumModel) {
+export default function createTickModel({ layoutModel, dockModel, extremumModel, themeModel, chart }) {
   function getChartProperties(scaleName) {
     let min;
     let max;
-    let size;
     let spacing;
+    let dimension;
     if (scaleName === KEYS.SCALE.X) {
       ({ xAxisMin: min, xAxisMax: max } = extremumModel.query.getXExtrema());
-      size = dockModel.chartSize.width;
+      dimension = 'width';
       spacing = layoutModel.getLayoutValue('xAxis.spacing', 1);
     } else {
       ({ yAxisMin: min, yAxisMax: max } = extremumModel.query.getYExtrema());
-      size = dockModel.chartSize.height;
+      dimension = 'height';
       spacing = layoutModel.getLayoutValue('yAxis.spacing', 1);
     }
+    const size = chart.component(KEYS.COMPONENT.POINT)?.rect?.[dimension] || dockModel.chartSize[dimension];
     const count = getCount(size, spacing);
     const isHomeState = extremumModel.query.getIsHomeState();
-    return { min, max, count, isHomeState };
+
+    // Get the measureText function from renderer
+    const { measureText } = picasso.renderer('svg')();
+    const style = themeModel.query.getStyle();
+    const measure = (text) =>
+      measureText({
+        text,
+        fontFamily: style.axis.label.name.fontFamily,
+        fontSize: style.axis.label.name.fontSize,
+      })[dimension];
+
+    return { min, max, count, isHomeState, size, measure };
   }
 
   function resolveTicks(scaleName) {
-    const { min, max, count, isHomeState: nicing } = getChartProperties(scaleName);
+    const { min, max, count, isHomeState: nicing, size, measure } = getChartProperties(scaleName);
     const scale = scaleLinear().domain([min, max]);
-    const ticks = getTicks(scale, nicing, count);
+    const formatterName = scaleName === KEYS.SCALE.X ? KEYS.FORMATTER.X : KEYS.FORMATTER.Y;
+    const formatter = chart.formatter(formatterName);
+    const ticks = getTicks({ scale, nicing, count, size, measure, formatter });
     return ticks;
   }
 

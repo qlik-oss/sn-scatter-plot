@@ -7,9 +7,9 @@ const SPACINGS = {
   NARROW: 3,
 };
 
-export default function createGridLines({ layoutModel, themeModel }) {
+export default function createGridLines(models) {
+  const { layoutModel, themeModel } = models;
   const { auto, spacing } = layoutModel.getLayoutValue('gridLine', {});
-
   if (!auto && spacing === SPACINGS.NO_LINES) {
     return false;
   }

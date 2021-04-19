@@ -6,6 +6,8 @@ describe('createExtremumModel', () => {
     let create;
     let layoutModel;
     let viewStateOptions;
+    let extremumModel;
+    let result;
 
     beforeEach(() => {
       sandbox = sinon.createSandbox();
@@ -33,14 +35,15 @@ describe('createExtremumModel', () => {
         yAxisMin: -100,
         yAxisMax: 500,
       });
-      const result = create().query.getExtrema();
+      extremumModel = create();
+      result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
         xAxisMin: 0,
         xAxisMax: 600,
         yAxisMin: -100,
         yAxisMax: 500,
-        xExplicitType: 'minMax',
-        yExplicitType: 'minMax',
+        xAxisExplicitType: 'minMax',
+        yAxisExplicitType: 'minMax',
       });
     });
 
@@ -54,20 +57,21 @@ describe('createExtremumModel', () => {
       });
 
       layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(600);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-300);
       layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
       layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: true, minMax: 'min', min: 0.2, max: 0.8 });
       layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: true, minMax: 'min', min: 0.2, max: 0.8 });
 
-      const result = create().query.getExtrema();
+      extremumModel = create();
+      result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
         xAxisMin: 0,
-        xAxisMax: 601,
-        yAxisMin: -321,
+        xAxisMax: 660,
+        yAxisMin: -380,
         yAxisMax: 500,
-        xExplicitType: 'min',
-        yExplicitType: 'max',
+        xAxisExplicitType: 'min',
+        yAxisExplicitType: 'max',
       });
     });
 
@@ -79,14 +83,15 @@ describe('createExtremumModel', () => {
         yAxisMin: 3,
         yAxisMax: 4,
       };
-      const result = create().query.getExtrema();
+      extremumModel = create();
+      result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
         xAxisMin: 1,
         xAxisMax: 2,
         yAxisMin: 3,
         yAxisMax: 4,
-        xExplicitType: 'minMax',
-        yExplicitType: 'minMax',
+        xAxisExplicitType: 'minMax',
+        yAxisExplicitType: 'minMax',
       });
     });
 
@@ -102,18 +107,19 @@ describe('createExtremumModel', () => {
       layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
       layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
       layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(4);
       layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
       layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
 
-      const result = create().query.getExtrema();
+      extremumModel = create();
+      result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
         xAxisMin: 0.2,
         xAxisMax: 2,
         yAxisMin: 3,
-        yAxisMax: 0.9,
-        xExplicitType: 'minMax',
-        yExplicitType: 'min',
+        yAxisMax: 4.1,
+        xAxisExplicitType: 'minMax',
+        yAxisExplicitType: 'min',
       });
     });
 
@@ -129,18 +135,19 @@ describe('createExtremumModel', () => {
       layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
       layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
       layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(4);
       layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'max', min: 0.2, max: 0.8 });
       layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
 
-      const result = create().query.getExtrema();
+      extremumModel = create();
+      result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
-        xAxisMin: 0.1,
+        xAxisMin: 0.03,
         xAxisMax: 0.8,
         yAxisMin: 3,
-        yAxisMax: 0.9,
-        xExplicitType: 'max',
-        yExplicitType: 'min',
+        yAxisMax: 4.1,
+        xAxisExplicitType: 'max',
+        yAxisExplicitType: 'min',
       });
     });
 
@@ -149,20 +156,21 @@ describe('createExtremumModel', () => {
       viewStateOptions = {};
 
       layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(600.1);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-300);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0);
       layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: true, minMax: 'max', min: 0.2, max: 0.8 });
       layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: true, minMax: 'min', min: 0.2, max: 0.8 });
 
-      const result = create().query.getExtrema();
+      extremumModel = create();
+      result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
-        xAxisMin: 0.1,
-        xAxisMax: 601,
-        yAxisMin: -321,
-        yAxisMax: 0.9,
-        xExplicitType: 'none',
-        yExplicitType: 'none',
+        xAxisMin: -59.9,
+        xAxisMax: 660.1,
+        yAxisMin: -330,
+        yAxisMax: 30,
+        xAxisExplicitType: 'none',
+        yAxisExplicitType: 'none',
       });
     });
 
@@ -170,21 +178,22 @@ describe('createExtremumModel', () => {
       layoutModel.meta.isSnapshot = true;
       layoutModel.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({});
 
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.2);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(600.2);
       layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(1.2);
       layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: true, minMax: 'max', min: 0.2, max: 0.8 });
       layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
 
-      const result = create().query.getExtrema();
+      extremumModel = create();
+      result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
-        xAxisMin: 0.1,
-        xAxisMax: 601,
+        xAxisMin: -59.8,
+        xAxisMax: 660.2,
         yAxisMin: 0.2,
-        yAxisMax: 0.9,
-        xExplicitType: 'none',
-        yExplicitType: 'min',
+        yAxisMax: 1.3,
+        xAxisExplicitType: 'none',
+        yAxisExplicitType: 'min',
       });
     });
 
@@ -192,21 +201,22 @@ describe('createExtremumModel', () => {
       layoutModel.meta.isSnapshot = true;
       layoutModel.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({});
 
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.2);
       layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-300);
+      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0);
       layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'max', min: 0.2, max: 0.8 });
       layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: true, minMax: 'min', min: 0.2, max: 0.8 });
 
-      const result = create().query.getExtrema();
+      extremumModel = create();
+      result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
-        xAxisMin: 0.1,
+        xAxisMin: 0.14,
         xAxisMax: 0.8,
-        yAxisMin: -321,
-        yAxisMax: 0.9,
-        xExplicitType: 'max',
-        yExplicitType: 'none',
+        yAxisMin: -330,
+        yAxisMax: 30,
+        xAxisExplicitType: 'max',
+        yAxisExplicitType: 'none',
       });
     });
 
@@ -221,23 +231,26 @@ describe('createExtremumModel', () => {
       layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'max', min: 0.2, max: 0.8 });
       layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'minMax', min: 0.2, max: 0.8 });
 
-      const result = create().query.getExtrema();
+      extremumModel = create();
+      result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
-        xAxisMin: 0.1,
+        xAxisMin: 0.03,
         xAxisMax: 0.8,
         yAxisMin: 0.2,
         yAxisMax: 0.8,
-        xExplicitType: 'max',
-        yExplicitType: 'minMax',
+        xAxisExplicitType: 'max',
+        yAxisExplicitType: 'minMax',
       });
     });
   });
 
-  describe('setExtrema', () => {
+  describe('updateExtrema', () => {
     let sandbox;
     let create;
     let layoutModel;
     let viewStateOptions;
+    let extremumModel;
+    let result;
 
     beforeEach(() => {
       sandbox = sinon.createSandbox();
@@ -268,16 +281,16 @@ describe('createExtremumModel', () => {
       };
       layoutModel.meta.isSnapshot = false;
       viewStateOptions = {};
-      const model = create();
-      model.query.setExtrema(newZoom);
-      const result = model.query.getExtrema();
+      extremumModel = create();
+      extremumModel.query.updateExtrema(newZoom);
+      result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
         xAxisMin: 1,
         xAxisMax: 8,
         yAxisMin: 2,
         yAxisMax: 8,
-        xExplicitType: 'min',
-        yExplicitType: 'none',
+        xAxisExplicitType: 'minMax',
+        yAxisExplicitType: 'minMax',
       });
     });
   });
