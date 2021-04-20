@@ -5,7 +5,9 @@ export default function useLasso() {
   const constraints = useConstraints();
   const [enabled, setEnabled] = useState(false);
   const [active, setActive] = useState(false);
-  const isInSelections = !!useLayout().qSelectionInfo.qInSelections;
+  const layout = useLayout();
+  const isInSelections = !!layout.qSelectionInfo.qInSelections;
+  const isSingleSelection = !!layout.qHyperCube?.qDimensionInfo?.[0]?.qIsOneAndOnlyOne;
 
   useEffect(() => {
     if (!constraints) {
@@ -20,13 +22,13 @@ export default function useLasso() {
       key: 'lasso',
       label: 'Lasso',
       icon: lassoIcon,
-      hidden: !enabled || !isInSelections,
+      hidden: !enabled || !isInSelections || isSingleSelection,
       active,
       action() {
         setActive((a) => !a);
       },
     }),
-    [isInSelections, active, enabled]
+    [isInSelections, isSingleSelection, active, enabled]
   );
 
   return {
