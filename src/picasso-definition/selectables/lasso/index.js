@@ -1,10 +1,12 @@
 import { lasso } from '../../../interactive';
 import KEYS from '../../../constants/keys';
 
-export default function createLasso({ actions, selectionModel }) {
+export default function createLasso({ models, actions }) {
+  const { selectionModel, layoutModel } = models;
   const isDimensionLocked = selectionModel.query.getIsDimensionLocked();
+  const isSingleSelection = layoutModel.getHyperCubeValue('qDimensionInfo.0.qIsOneAndOnlyOne', false);
 
-  if (isDimensionLocked) {
+  if (isDimensionLocked || isSingleSelection) {
     return false;
   }
 
