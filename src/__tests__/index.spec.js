@@ -4,6 +4,7 @@ describe('scatter-plot supernova', () => {
   let env;
   let qae;
   let hooks;
+  let setupSnapshot;
   before(() => {
     env = {
       flags: [],
@@ -19,11 +20,13 @@ describe('scatter-plot supernova', () => {
       useResize: sandbox.stub(),
     };
     qae = sandbox.stub();
+    setupSnapshot = sandbox.stub();
 
     [{ default: supernova }] = aw.mock(
       [
         ['**/qae/index.js', () => qae],
         ['**/hooks/index.js', () => hooks],
+        ['**/snapshot.js', () => setupSnapshot],
       ],
       ['../index']
     );
