@@ -7,9 +7,10 @@ const TOOLTIPPERS = {
   [KEYS.COMPONENT.POINT]: true,
 };
 
-const getMeasureTitle = (dataset, prop) => {
-  const measureField = dataset(prop.source.key).field(prop.source.field);
-  return measureField.title();
+// Get the title of the prop passed (can be a dimension or a measure)
+const getDataTitle = (dataset, prop) => {
+  const dataField = dataset(prop.source.key).field(prop.source.field);
+  return dataField.title();
 };
 
 export default function createPointTooltip({ models, rtl = false }) {
@@ -36,7 +37,7 @@ export default function createPointTooltip({ models, rtl = false }) {
 
   // Get the dimension row element with color symbol
   const getColorRow = ({ context }) => {
-    const dimTitle = getMeasureTitle(context.resources.dataset, context.node.data.selectionDimension);
+    const dimTitle = getDataTitle(context.resources.dataset, context.node.data.selectionDimension);
     const labelDir = rtlUtils.detectTextDirection(dimTitle);
     const labelContent = rtl ? [':', dimTitle] : [dimTitle, ':'];
     const { label } = context.node.data;
@@ -68,7 +69,7 @@ export default function createPointTooltip({ models, rtl = false }) {
 
   // Get the measure row element, with color symbol when coloring by measure
   const getMeasureRow = (context, prop, showColorSymbol) => {
-    const measureTitle = getMeasureTitle(context.resources.dataset, context.node.data[prop]);
+    const measureTitle = getDataTitle(context.resources.dataset, context.node.data[prop]);
     const valueLabel = context.node.data[prop].label;
     const validValueLabel = valueLabel === '' || valueLabel === 'NaN' ? '-' : valueLabel;
     const labelDir = rtlUtils.detectTextDirection(measureTitle);
@@ -94,7 +95,7 @@ export default function createPointTooltip({ models, rtl = false }) {
   };
 
   const shouldShowColorSymbol = (context, prop) => {
-    const dataTitle = getMeasureTitle(context.resources.dataset, context.node.data[prop]);
+    const dataTitle = getDataTitle(context.resources.dataset, context.node.data[prop]);
     return dataTitle === colorService.getSettings().label;
   };
 
