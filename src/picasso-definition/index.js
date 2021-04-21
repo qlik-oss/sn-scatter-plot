@@ -5,6 +5,7 @@ import createComponents from './components';
 import createScales from './scales';
 import createInteractions from './interactions';
 import createSelectables from './selectables';
+import createFormatters from './formatters';
 
 export default function createPicassoDefinition({
   core,
@@ -66,6 +67,7 @@ export default function createPicassoDefinition({
       },
       logicalSize,
     },
+    formatters: createFormatters(),
     // strategy: createDockLayout(layout, {
     //   logicalSize,
     //   minCenterRatio: 0,

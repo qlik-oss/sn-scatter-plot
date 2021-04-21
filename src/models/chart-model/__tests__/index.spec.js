@@ -14,6 +14,7 @@ describe('chart-model', () => {
   let zoomHandler;
   let createChartModel;
   let viewState;
+  let extremumModel;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -47,6 +48,7 @@ describe('chart-model', () => {
       }),
       getHyperCubeValue: (path, defaultValue) => defaultValue,
     };
+    extremumModel = { query: { updateExtrema: sandbox.stub() } };
     colorModelDataFn = sandbox.stub().returns([{ colorData: 'oh yes' }]);
     colorService = {
       getData: colorModelDataFn,
@@ -67,6 +69,7 @@ describe('chart-model', () => {
         model,
         picasso: picassoInstance,
         viewState,
+        extremumModel,
       });
   });
 
@@ -113,6 +116,7 @@ describe('chart-model', () => {
         create();
         viewState.zoom();
         await clock.tick(50);
+        expect(extremumModel.query.updateExtrema).to.have.been.calledOnce;
         expect(
           chart.update.withArgs({
             partialData: true,

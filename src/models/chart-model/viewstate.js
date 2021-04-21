@@ -1,67 +1,18 @@
-function getMinMax(layoutModel) {
-  // Choose between data min/max and explicit min/max.
-  // Explicit min/max have higher priority
-
-  let xAxisMin = layoutModel.getHyperCubeValue('qMeasureInfo.0.qMin', 0);
-  let xAxisMax = layoutModel.getHyperCubeValue('qMeasureInfo.0.qMax', 1);
-  let yAxisMin = layoutModel.getHyperCubeValue('qMeasureInfo.1.qMin', 0);
-  let yAxisMax = layoutModel.getHyperCubeValue('qMeasureInfo.1.qMax', 1);
-
-  let { autoMinMax, minMax, min, max } = layoutModel.getLayoutValue('xAxis');
-  if (!autoMinMax) {
-    switch (minMax) {
-      case 'min':
-        xAxisMin = min;
-        break;
-      case 'max':
-        xAxisMax = max;
-        break;
-      default:
-        xAxisMin = min;
-        xAxisMax = max;
-        break;
-    }
-  }
-
-  ({ autoMinMax, minMax, min, max } = layoutModel.getLayoutValue('yAxis'));
-  if (!autoMinMax) {
-    switch (minMax) {
-      case 'min':
-        yAxisMin = min;
-        break;
-      case 'max':
-        yAxisMax = max;
-        break;
-      default:
-        yAxisMin = min;
-        yAxisMax = max;
-        break;
-    }
-  }
-
-  return { xAxisMin, xAxisMax, yAxisMin, yAxisMax };
-}
-
 /**
  * Get relative zoom from:
  * - snapshot data
  * - options.viewState
- * - default to: { x: 0, y:0 }
+ * - default to: { x: 0, y: 0 }
  */
-function getInitialViewState({ layoutModel, viewStateOptions = {} }) {
+
+export default function createViewState(layoutModel, viewStateOptions = {}, tickModel) {
   const source = layoutModel.meta.isSnapshot
     ? layoutModel.getLayoutValue('snapshotData.content.chartData', {})
     : viewStateOptions;
-
-  const minMax = getMinMax(layoutModel);
-
+  const [xAxisMin, xAxisMax] = tickModel.query.getXMinMax();
+  const [yAxisMin, yAxisMax] = tickModel.query.getYMinMax();
   const storage = {
-    zoom: {
-      xAxisMin: typeof source.xAxisMin === 'number' ? source.xAxisMin : minMax.xAxisMin,
-      xAxisMax: typeof source.xAxisMax === 'number' ? source.xAxisMax : minMax.xAxisMax,
-      yAxisMin: typeof source.yAxisMin === 'number' ? source.yAxisMin : minMax.yAxisMin,
-      yAxisMax: typeof source.yAxisMax === 'number' ? source.yAxisMax : minMax.yAxisMax,
-    },
+    zoom: { xAxisMin, xAxisMax, yAxisMin, yAxisMax },
     legendScrollOffset: source.legendScrollOffset || 0,
   };
 
@@ -95,13 +46,4 @@ function getInitialViewState({ layoutModel, viewStateOptions = {} }) {
   };
 
   return api;
-}
-
-export default function createViewState({ layoutModel, options }) {
-  const viewState = getInitialViewState({
-    layoutModel,
-    viewStateOptions: options.viewState,
-  });
-
-  return viewState;
 }

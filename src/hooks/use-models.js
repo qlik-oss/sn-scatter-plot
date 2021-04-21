@@ -22,6 +22,7 @@ import createThemeModel from '../models/theme-model';
 import createColorService from '../models/color-service';
 import getLogicalSize from '../logical-size';
 import createViewState from '../models/chart-model/viewstate';
+import createExtremumModel from '../models/extremum-model';
 
 const useModels = ({ core }) => {
   const layout = useStaleLayout();
@@ -63,13 +64,13 @@ const useModels = ({ core }) => {
     }
 
     const { picassoInstance, chart, actions } = core;
-
     const layoutModel = createLayoutModel({ layout });
     const logicalSize = getLogicalSize({ layout: layoutModel.getLayout(), options });
     const dockModel = createDockModel({ layoutModel, size: logicalSize || rect, rtl: options.direction === 'rtl' });
-
-    const viewState = createViewState({ layoutModel, options });
-
+    const themeModel = createThemeModel({ theme });
+    const extremumModel = createExtremumModel(layoutModel, options.viewState);
+    const tickModel = createTickModel({ layoutModel, dockModel, extremumModel, themeModel, chart });
+    const viewState = createViewState(layoutModel, options.viewState, tickModel);
     const colorService = createColorService({
       actions,
       localeInfo,
@@ -94,18 +95,10 @@ const useModels = ({ core }) => {
       options,
       viewState,
       colorService,
-    });
-
-    const tickModel = createTickModel({
-      layoutModel,
-      chartModel,
-      dockModel,
+      extremumModel,
     });
 
     selectionModel.command.setLayout({ layout });
-
-    const themeModel = createThemeModel({ theme });
-
     setModels({
       layoutModel,
       tickModel,
