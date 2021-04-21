@@ -43,7 +43,7 @@ export default function createTickModel({ layoutModel, dockModel, extremumModel,
       dimension = 'height';
       spacing = layoutModel.getLayoutValue('yAxis.spacing', 1);
     }
-    const size = chart.component(KEYS.COMPONENT.POINT)?.rect?.[dimension] || dockModel.chartSize[dimension];
+    const size = dockModel.chartSize[dimension];
     const count = getCount(size, spacing);
     const isHomeState = extremumModel.query.getIsHomeState();
 
