@@ -65,7 +65,7 @@ export default function createService({
     model,
     app,
     translator,
-    layoutModel,
+    layoutService: layoutModel,
     createConfig,
     onInitialized() {
       updateBrushAliases();
