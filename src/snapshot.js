@@ -28,7 +28,6 @@ const setupSnapshot = (models) => {
     }
 
     layout.snapshotData.content.chartData = {
-      scrollOffset: viewState.get('scrollOffset'),
       zoom: viewState.get('zoom'),
     };
 
