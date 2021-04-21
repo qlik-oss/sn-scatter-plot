@@ -1,8 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 import extend from 'extend';
 import { onTakeSnapshot } from '@nebula.js/stardust';
+import KEYS from './constants/keys';
 
-const setupSnapshot = (models) => {
+const setupSnapshot = ({ core, models }) => {
   onTakeSnapshot((layout) => {
     if (!models) {
       return undefined;
@@ -27,8 +29,11 @@ const setupSnapshot = (models) => {
       return Promise.resolve();
     }
 
+    const legend = core.chart.component(KEYS.COMPONENT.LEGEND_CATEGORICAL);
+    const legendScrollOffset = legend && legend._DO_NOT_USE_getInfo && legend._DO_NOT_USE_getInfo().offset;
     layout.snapshotData.content.chartData = {
       zoom: viewState.get('zoom'),
+      legendScrollOffset,
     };
 
     return colorService
