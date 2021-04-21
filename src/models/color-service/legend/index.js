@@ -16,7 +16,14 @@ export default function createLegend({ viewState, chart, options, colorService, 
     actions,
     navigationDisabled: !actions.interact.enabled(),
   });
+
   const scales = colorService.getScales();
+  const range = scales[`${KEYS.SCALE.COLOR}Range`];
+  const [legendComponent] = components;
+  const dock = legendComponent && legendComponent.layout.dock;
+  if (range && (dock === 'right' || dock === 'left')) {
+    range.invert = true;
+  }
 
   return {
     components,
