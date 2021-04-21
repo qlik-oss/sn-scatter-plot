@@ -3,7 +3,6 @@ import MODES from '../../../constants/modes';
 
 export default function createAxes({ layoutModel, dockModel, themeModel }) {
   const { xAxis, yAxis } = layoutModel.getLayout();
-  const { auto, spacing } = layoutModel.getLayoutValue('gridLine', {});
 
   const style = themeModel.query.getStyle();
 
@@ -26,7 +25,6 @@ export default function createAxes({ layoutModel, dockModel, themeModel }) {
               fill: style.axis.label.name.color,
             },
             line: {
-              show: !auto && spacing === 0,
               stroke: style.axis.line.major.color,
             },
             ticks: {

@@ -38,7 +38,7 @@ describe('keys', () => {
   });
 
   it('should have correct formatter keys', () => {
-    expect(KEYS.FORMATTER).to.have.all.keys(['COLOR']);
+    expect(KEYS.FORMATTER).to.have.all.keys(['COLOR', 'X', 'Y']);
   });
 
   it('should have correct fields keys', () => {

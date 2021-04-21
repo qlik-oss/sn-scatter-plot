@@ -30,6 +30,8 @@ export default {
   },
   FORMATTER: {
     COLOR: 'color',
+    X: 'x',
+    Y: 'y',
   },
   FIELDS: {
     DIM: 'qDimensionInfo/0',

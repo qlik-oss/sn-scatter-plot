@@ -99,16 +99,5 @@ describe('axes', () => {
       const { fontSize } = themeModel.query.getStyle().axis.label.name;
       expect(axes[0].settings.labels.fontSize).to.equal(fontSize);
     });
-
-    it('should have correct show property for line', () => {
-      expect(axes[0].settings.line.show).to.equal(false);
-      gridLine = {
-        auto: false,
-        spacing: 0,
-      };
-      layoutModel.getLayoutValue.withArgs('gridLine', {}).returns(gridLine);
-      axes = createAxes({ layoutModel, dockModel, themeModel });
-      expect(axes[0].settings.line.show).to.equal(true);
-    });
   });
 });
