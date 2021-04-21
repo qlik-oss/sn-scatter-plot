@@ -99,6 +99,14 @@ export default function createPointTooltip({ models, rtl = false }) {
     return dataTitle === colorService.getSettings().label;
   };
 
+  // checks that measure row and color row have not the same content
+  const isSameMeasureAndColorRow = ({ measureRow, colorRow }) =>
+    colorRow &&
+    measureRow &&
+    colorRow[0].content[0] === measureRow[0].content[0] &&
+    colorRow[0].content[1] === measureRow[0].content[1] &&
+    colorRow[1].content[rtl ? 0 : 1] === measureRow[1].content[0];
+
   const extractData = ({ context }) => {
     const { node } = context;
     const titleRow = getTitleRow({ node });
@@ -107,10 +115,11 @@ export default function createPointTooltip({ models, rtl = false }) {
       measures.push('size');
     }
     const hideColRow = !shouldShowColorSymbol(context, 'selectionDimension');
-    const dimColorRow = hideColRow ? false : getColorRow({ context });
+    const colorRow = hideColRow ? false : getColorRow({ context });
     const measureRows = measures.map((m) => getMeasureRow(context, m, shouldShowColorSymbol(context, m)));
+    const filteredMeasureRows = measureRows.filter((measureRow) => !isSameMeasureAndColorRow({ measureRow, colorRow }));
 
-    return [titleRow, dimColorRow, ...measureRows].filter(Boolean);
+    return [titleRow, colorRow, ...filteredMeasureRows].filter(Boolean);
   };
 
   return extend(true, baseTooltip, {
