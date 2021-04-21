@@ -1,9 +1,9 @@
+/*
 const COMPORESSION_THRESHOLD = 1000;
 function showCompressionResolution(layout) {
   const dim = layout.qHypercube.qDimensionInfo[0];
   return dim?.qCardinal > COMPORESSION_THRESHOLD;
 }
-
 const nonCompProp = {
   component: 'text',
   translation: 'properties.compression.willNotAffect',
@@ -11,6 +11,7 @@ const nonCompProp = {
     return showCompressionResolution(handler.layout);
   },
 };
+*/
 
 export default function propertyDefinition(env) {
   const settings = {
@@ -88,7 +89,7 @@ export default function propertyDefinition(env) {
                   return data.qHyperCubeDef.qMeasures.length >= 3;
                 },
               },
-              rangeBubbleCompressionNote: nonCompProp,
+              // rangeBubbleCompressionNote: nonCompProp,
             },
           },
           label: {
@@ -118,9 +119,10 @@ export default function propertyDefinition(env) {
                   tid: 'property-labels',
                 },
               },
-              labelModeCompressionNote: nonCompProp,
+              // labelModeCompressionNote: nonCompProp,
             },
           },
+          /*
           queryLevel: {
             type: 'integer',
             component: 'slider',
@@ -134,6 +136,7 @@ export default function propertyDefinition(env) {
               return showCompressionResolution(handler.layout);
             },
           },
+          */
           gridLines: {
             type: 'items',
             snapshot: {
@@ -194,6 +197,31 @@ export default function propertyDefinition(env) {
           colors: {
             items: {
               persistentColors: null,
+              colorMode: {
+                options(data) {
+                  const colorOptions = [
+                    {
+                      value: 'primary',
+                      translation: 'properties.colorMode.primary',
+                    },
+                    {
+                      value: 'byDimension',
+                      translation: 'properties.colorMode.byDimension',
+                    },
+                    {
+                      value: 'byMeasure',
+                      translation: 'properties.colorMode.byMeasure',
+                    },
+                  ];
+                  if (data?.qHyperCubeDef?.qMeasures?.length > 0) {
+                    colorOptions.push({
+                      value: 'byExpression',
+                      translation: 'properties.colorMode.byExpression',
+                    });
+                  }
+                  return colorOptions;
+                },
+              },
             },
           },
           legend: {

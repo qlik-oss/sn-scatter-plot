@@ -1,10 +1,12 @@
 import { useCore, useModels, useSettings, useRender } from './hooks';
 import createQae from './qae';
+import ext from './ext/ext';
 
 export default function scatterplot(env) {
   const { flags } = env;
   return {
     qae: createQae(env),
+    ext: ext(env),
     component() {
       const core = useCore();
       const models = useModels({ core });

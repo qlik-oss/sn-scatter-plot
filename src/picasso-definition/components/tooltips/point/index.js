@@ -15,7 +15,7 @@ const getDataTitle = (dataset, prop) => {
 
 export default function createPointTooltip({ models, rtl = false }) {
   const { themeModel, layoutModel, colorService } = models;
-  const hasSizeMeasure = layoutModel.meta;
+  const { hasSizeMeasure } = layoutModel.meta;
   const baseTooltip = createBaseTooltip({
     key: KEYS.COMPONENT.POINT_TOOLTIP,
     rtl,

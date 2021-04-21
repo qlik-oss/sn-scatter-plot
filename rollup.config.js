@@ -2,11 +2,11 @@ import path from 'path';
 import fs from 'fs';
 import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
-import external from 'rollup-plugin-peer-deps-external';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import visualizer from 'rollup-plugin-visualizer';
 import sourcemaps from 'rollup-plugin-sourcemaps';
+import command from 'rollup-plugin-command';
 import jsxPlugin from '@babel/plugin-transform-react-jsx';
 
 const { version } = require(path.resolve(__dirname, './package.json')); // eslint-disable-line
@@ -37,7 +37,7 @@ export default {
       hammerjs: 'Hammer',
     },
   },
-  external: ['@nebula.js/stardust', 'picasso.js', 'picasso-plugin-q', 'picasso-plugin-hammer'],
+  external: ['@nebula.js/stardust'],
   plugins: [
     replace({
       'process.env.PACKAGE_VERSION': JSON.stringify(version),
@@ -45,7 +45,6 @@ export default {
     resolve({
       extensions: ['.js', '.jsx'],
     }),
-    external(),
     babel({
       babelrc: false,
       include: ['src/**'],
@@ -67,5 +66,6 @@ export default {
     commonjs(),
     visualizer(),
     sourcemaps(),
+    command(`node copy-ext.js`),
   ],
 };
