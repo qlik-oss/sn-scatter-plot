@@ -1,6 +1,7 @@
 import { useCore, useModels, useSettings, useRender } from './hooks';
 import createQae from './qae';
 import ext from './ext/ext';
+import setupSnapshot from './snapshot';
 
 export default function scatterplot(env) {
   const { flags } = env;
@@ -13,6 +14,7 @@ export default function scatterplot(env) {
       const settings = useSettings({ core, models, flags });
 
       useRender({ settings, models });
+      setupSnapshot(models);
     },
   };
 }
