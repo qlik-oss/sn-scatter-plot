@@ -36,11 +36,13 @@ export default function createPointTooltip({ models, rtl = false }) {
     });
 
   // Get the dimension row element with color symbol
-  const getColorRow = ({ context }) => {
-    const dimTitle = getDataTitle(context.resources.dataset, context.node.data.selectionDimension);
-    const labelDir = rtlUtils.detectTextDirection(dimTitle);
-    const labelContent = rtl ? [':', dimTitle] : [dimTitle, ':'];
-    const { label } = context.node.data;
+  const getColorRow = ({ context, isExpr }) => {
+    const dataTitle = isExpr
+      ? 'Color expression'
+      : getDataTitle(context.resources.dataset, context.node.data.selectionDimension);
+    const labelDir = rtlUtils.detectTextDirection(dataTitle);
+    const labelContent = rtl ? [':', dataTitle] : [dataTitle, ':'];
+    const { label } = context.node.data.color;
     const valueDir = rtlUtils.detectTextDirection(label);
     const { fill } = context.node.attrs;
     const colorContent = rtl ? [label, getColorSymbol({ context, fill })] : [getColorSymbol({ context, fill }), label];
@@ -114,8 +116,9 @@ export default function createPointTooltip({ models, rtl = false }) {
     if (hasSizeMeasure) {
       measures.push('size');
     }
-    const hideColRow = !shouldShowColorSymbol(context, 'selectionDimension');
-    const colorRow = hideColRow ? false : getColorRow({ context });
+    const isExpr = colorService.getSettings().label === 'Object.ChartTooltip.ColorExpression';
+    const hideColRow = !shouldShowColorSymbol(context, 'selectionDimension') && !isExpr;
+    const colorRow = hideColRow ? false : getColorRow({ context, isExpr });
     const measureRows = measures.map((m) => getMeasureRow(context, m, shouldShowColorSymbol(context, m)));
     const filteredMeasureRows = measureRows.filter((measureRow) => !isSameMeasureAndColorRow({ measureRow, colorRow }));
 
