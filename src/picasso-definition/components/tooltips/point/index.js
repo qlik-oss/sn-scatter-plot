@@ -35,17 +35,17 @@ export default function createPointTooltip({ models, rtl = false }) {
       },
     });
 
-  // Get the dimension row element with color symbol
-  const getColorRow = ({ context, isExpr }) => {
-    const dataTitle = isExpr
-      ? 'Color expression'
-      : getDataTitle(context.resources.dataset, context.node.data.selectionDimension);
-    const labelDir = rtlUtils.detectTextDirection(dataTitle);
-    const labelContent = rtl ? [':', dataTitle] : [dataTitle, ':'];
-    const { label } = context.node.data.color;
-    const valueDir = rtlUtils.detectTextDirection(label);
+  // Get the color row element with color symbol
+  const getColorRow = ({ context }) => {
+    const colorLabel = colorService.getSettings().label;
+    const labelDir = rtlUtils.detectTextDirection(colorLabel);
+    const labelContent = rtl ? [':', colorLabel] : [colorLabel, ':'];
+    const colorValueLabel = context.node.data.color.label;
+    const valueDir = rtlUtils.detectTextDirection(colorValueLabel);
     const { fill } = context.node.attrs;
-    const colorContent = rtl ? [label, getColorSymbol({ context, fill })] : [getColorSymbol({ context, fill }), label];
+    const colorContent = rtl
+      ? [colorValueLabel, getColorSymbol({ context, fill })]
+      : [getColorSymbol({ context, fill }), colorValueLabel];
 
     return [
       { content: labelContent, style: { 'text-align': rtl ? 'right' : 'left', direction: labelDir } },
@@ -116,9 +116,10 @@ export default function createPointTooltip({ models, rtl = false }) {
     if (hasSizeMeasure) {
       measures.push('size');
     }
-    const isExpr = colorService.getSettings().label === 'Object.ChartTooltip.ColorExpression';
-    const hideColRow = !shouldShowColorSymbol(context, 'selectionDimension') && !isExpr;
-    const colorRow = hideColRow ? false : getColorRow({ context, isExpr });
+    const hideColRow =
+      !shouldShowColorSymbol(context, 'selectionDimension') &&
+      !(colorService.getSettings().label === 'Object.ChartTooltip.ColorExpression');
+    const colorRow = hideColRow ? false : getColorRow({ context });
     const measureRows = measures.map((m) => getMeasureRow(context, m, shouldShowColorSymbol(context, m)));
     const filteredMeasureRows = measureRows.filter((measureRow) => !isSameMeasureAndColorRow({ measureRow, colorRow }));
 
