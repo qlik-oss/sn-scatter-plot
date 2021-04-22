@@ -10,6 +10,7 @@ describe('configure-picasso', () => {
     picasso = {
       use: sandbox.spy(),
       component: sandbox.spy(),
+      renderer: sandbox.spy(),
     };
     createPicassoJS = sandbox.stub().returns(picasso);
     picassoHammer = sandbox.stub();

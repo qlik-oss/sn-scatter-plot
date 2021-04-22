@@ -6,9 +6,16 @@ import createPoint from './point';
 import createReferenceLines from './reference-lines';
 import createPointLabels from './point-labels';
 import createTooltips from './tooltips';
+import createDisclaimer from './disclaimer';
 
 export default function createComponents({ context, models }) {
-  const { colorService } = models;
+  const { colorService, disclaimerModel } = models;
+  const disclaimer = createDisclaimer({ disclaimerModel, context });
+
+  if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
+    return [disclaimer];
+  }
+
   const components = [
     createGridLines(models),
     createPoint(models),
@@ -17,6 +24,7 @@ export default function createComponents({ context, models }) {
     ...createReferenceLines({ models, context }),
     createPointLabels(models),
     ...colorService.custom.legendComponents(),
+    disclaimer,
     ...createTooltips({ models, context }),
   ].filter(Boolean);
   // setDisplayOrder(components);

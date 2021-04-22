@@ -23,8 +23,9 @@ import createColorService from '../models/color-service';
 import getLogicalSize from '../logical-size';
 import createViewState from '../models/chart-model/viewstate';
 import createExtremumModel from '../models/extremum-model';
+import createDisclaimerModel from '../models/disclaimer-model';
 
-const useModels = ({ core }) => {
+const useModels = ({ core, flags }) => {
   const layout = useStaleLayout();
   const theme = useTheme();
   const model = useModel();
@@ -98,6 +99,8 @@ const useModels = ({ core }) => {
       extremumModel,
     });
 
+    const disclaimerModel = createDisclaimerModel({ layoutModel, flags });
+
     selectionModel.command.setLayout({ layout });
     setModels({
       layoutModel,
@@ -106,6 +109,7 @@ const useModels = ({ core }) => {
       dockModel,
       selectionModel,
       themeModel,
+      disclaimerModel,
       colorService,
     });
   }, [
