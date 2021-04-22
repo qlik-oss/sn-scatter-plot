@@ -7,12 +7,6 @@ const TOOLTIPPERS = {
   [KEYS.COMPONENT.POINT]: true,
 };
 
-// Get the title of the prop passed (can be a dimension or a measure)
-const getDataTitle = (dataset, prop) => {
-  const dataField = dataset(prop.source.key).field(prop.source.field);
-  return dataField.title();
-};
-
 export default function createPointTooltip({ models, rtl = false }) {
   const { themeModel, layoutModel, colorService } = models;
   const { hasSizeMeasure } = layoutModel.meta;
@@ -37,18 +31,24 @@ export default function createPointTooltip({ models, rtl = false }) {
 
   // Get the color row element with color symbol
   const getColorRow = ({ context }) => {
-    const colorLabel = colorService.getSettings().label;
-    const labelDir = rtlUtils.detectTextDirection(colorLabel);
-    const labelContent = rtl ? [':', colorLabel] : [colorLabel, ':'];
-    const colorValueLabel = context.node.data.color.label;
-    const valueDir = rtlUtils.detectTextDirection(colorValueLabel);
+    const rowTitle = colorService.getSettings().label;
+    const rowTitleDir = rtlUtils.detectTextDirection(rowTitle);
+    const labelContent = rtl ? [':', rowTitle] : [rowTitle, ':'];
+    const { color } = context.node.data;
+    const { value } = color;
+    const { dataset } = context.resources;
+    const { key, field } = color.source;
+    const formatter = dataset(key).field(field).formatter();
+    let { label } = color;
+    if (formatter && colorService.getSettings().fieldType === 'measure') {
+      label = Number.isNaN(value) ? '-' : formatter(value);
+    }
+    const valueDir = rtlUtils.detectTextDirection(label);
     const { fill } = context.node.attrs;
-    const colorContent = rtl
-      ? [colorValueLabel, getColorSymbol({ context, fill })]
-      : [getColorSymbol({ context, fill }), colorValueLabel];
+    const colorContent = rtl ? [label, getColorSymbol({ context, fill })] : [getColorSymbol({ context, fill }), label];
 
     return [
-      { content: labelContent, style: { 'text-align': rtl ? 'right' : 'left', direction: labelDir } },
+      { content: labelContent, style: { 'text-align': rtl ? 'right' : 'left', direction: rowTitleDir } },
       {
         content: colorContent,
         style: { 'text-align': rtl ? 'left' : 'right', direction: valueDir, 'vertical-align': 'middle' },
@@ -67,6 +67,12 @@ export default function createPointTooltip({ models, rtl = false }) {
       },
       {},
     ];
+  };
+
+  // Get the title of the prop passed (can be a dimension or a measure)
+  const getDataTitle = (dataset, prop) => {
+    const dataField = dataset(prop.source.key).field(prop.source.field);
+    return dataField.title();
   };
 
   // Get the measure row element, with color symbol when coloring by measure
