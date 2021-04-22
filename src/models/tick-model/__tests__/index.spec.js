@@ -86,7 +86,7 @@ describe('createTickModel', () => {
     measureText = sandbox.stub().returns({ width: 10, height: 20 });
     renderer = sandbox.stub().returns(measureText);
     sandbox.stub(picasso, 'renderer').returns(renderer);
-    chart = { formatter: sandbox.stub(), component: sandbox.stub() };
+    chart = { formatter: sandbox.stub() };
     chart.formatter.withArgs('x').returns('x-formatter');
     chart.formatter.withArgs('y').returns('y-formatter');
     themeModel = { query: { getStyle: sandbox.stub().returns('theme') } };
