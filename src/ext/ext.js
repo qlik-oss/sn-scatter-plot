@@ -1,6 +1,6 @@
 import pp from './property-definition';
 
-const isValidLayout = (layout) => !!(layout && layout.qHyperCube.qSize.qcy > 0);
+const isValidLayout = (layout) => !!((layout?.qHyperCube?.qSize?.qcy || 0) > 0);
 
 export default function ext(env) {
   return {

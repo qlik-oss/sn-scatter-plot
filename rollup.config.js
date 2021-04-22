@@ -8,8 +8,15 @@ import visualizer from 'rollup-plugin-visualizer';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 import command from 'rollup-plugin-command';
 import jsxPlugin from '@babel/plugin-transform-react-jsx';
+import crypto from 'crypto';
 
-const { version } = require(path.resolve(__dirname, './package.json')); // eslint-disable-line
+const { name, version } = require(path.resolve(__dirname, './package.json')); // eslint-disable-line
+
+const versionHash = crypto
+  .createHash('md5')
+  .update(`${name}@${version}`) // TODO - consider using the commit sha since all charts from the same commit could have the same style
+  .digest('hex')
+  .slice(0, 4);
 
 try {
   const qextInputPath = path.resolve(__dirname, './assets/sn-scatter-plot.qext');
@@ -39,11 +46,13 @@ export default {
   },
   external: ['@nebula.js/stardust'],
   plugins: [
-    replace({
-      'process.env.PACKAGE_VERSION': JSON.stringify(version),
-    }),
     resolve({
       extensions: ['.js', '.jsx'],
+    }),
+    replace({
+      'process.env.VERSION_HASH': JSON.stringify(versionHash),
+      'process.env.NODE_ENV': JSON.stringify('production'),
+      'process.env.PACKAGE_VERSION': JSON.stringify(version),
     }),
     babel({
       babelrc: false,

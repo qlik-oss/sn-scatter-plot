@@ -10,7 +10,7 @@ export default function scatterplot(env) {
     ext: ext(env),
     component() {
       const core = useCore();
-      const models = useModels({ core });
+      const models = useModels({ core, flags });
       const settings = useSettings({ core, models, flags });
 
       useRender({ settings, models });
