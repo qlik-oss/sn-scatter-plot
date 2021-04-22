@@ -1,146 +1,111 @@
 import extend from 'extend';
-import rtlUtils from '../../../../utils/rtl-utils';
 import createBaseTooltip from '../base-tooltip';
+import createPointTooltipContent from './content';
+import getMore from './more';
 import KEYS from '../../../../constants/keys';
+
+const LIMIT = 7;
 
 const TOOLTIPPERS = {
   [KEYS.COMPONENT.POINT]: true,
 };
 
-export default function createPointTooltip({ models, rtl = false }) {
-  const { themeModel, layoutModel, colorService } = models;
-  const { hasSizeMeasure } = layoutModel.meta;
+export default function createPointTooltip({ models, context }) {
+  const { themeModel } = models;
+  const { rtl, translator } = context;
   const baseTooltip = createBaseTooltip({
     key: KEYS.COMPONENT.POINT_TOOLTIP,
     rtl,
   });
 
-  const style = themeModel.query.getStyle();
+  const style2 = themeModel.query.getStyle();
 
-  // Creates a color symbol <div> element; fill is measure or dimension color
-  const getColorSymbol = ({ context, fill }) =>
-    context.h('div', {
-      style: {
-        display: 'inline-block',
-        width: '10px',
-        height: '10px',
-        backgroundColor: fill,
-        margin: '0 8px',
-      },
+  const createPointContent = createPointTooltipContent({ models, rtl });
+
+  const getTitleRow = ({ title }) => [
+    {
+      content: title.label,
+      style: { 'font-weight': 'bold', 'text-align': rtl ? 'right' : 'left', direction: title.direction },
+      colspan: 2,
+    },
+  ];
+
+  const getColorRow = ({ color }) => [
+    {
+      content: color.label,
+      style: { 'text-align': rtl ? 'right' : 'left', direction: color.labelDirection },
+    },
+    {
+      content: color.value,
+      style: { 'text-align': rtl ? 'left' : 'right', 'vertical-align': 'middle', direction: color.valueDirection },
+    },
+  ];
+
+  const getMeasureRow = ({ measure }) => [
+    {
+      content: measure.label,
+      style: { 'text-align': rtl ? 'right' : 'left', direction: measure.labelDirection },
+    },
+    {
+      content: measure.value,
+      style: { 'text-align': rtl ? 'left' : 'right', 'vertical-align': 'middle', direction: measure.valueDirection },
+    },
+  ];
+
+  const getMeasureRows = ({ measures }) => measures.map((measure) => getMeasureRow({ measure }));
+
+  const createPointContentRows = (content) => {
+    const nodeRows = [];
+    nodeRows.push(getTitleRow(content));
+    if (content.color) {
+      nodeRows.push(getColorRow(content));
+    }
+    nodeRows.push(...getMeasureRows(content));
+    return nodeRows;
+  };
+
+  const rowContent = (inputRow, { h, style }) =>
+    inputRow.map((cell) => {
+      const attributes = {
+        style: { ...(style.cell || {}), ...(cell.style || {}) },
+        class: cell.class,
+      };
+      if (cell.colspan) {
+        attributes.colspan = cell.colspan;
+      }
+      return h('td', attributes, cell.content);
     });
-
-  // Get the color row element with color symbol
-  const getColorRow = ({ context }) => {
-    const rowTitle = colorService.getSettings().label;
-    const rowTitleDir = rtlUtils.detectTextDirection(rowTitle);
-    const labelContent = rtl ? [':', rowTitle] : [rowTitle, ':'];
-    const { color } = context.node.data;
-    const { value } = color;
-    const { dataset } = context.resources;
-    const { key, field } = color.source;
-    const formatter = dataset(key).field(field).formatter();
-    let { label } = color;
-    if (formatter && colorService.getSettings().fieldType === 'measure') {
-      label = Number.isNaN(value) ? '-' : formatter(value);
-    }
-    const valueDir = rtlUtils.detectTextDirection(label);
-    const { fill } = context.node.attrs;
-    const colorContent = rtl ? [label, getColorSymbol({ context, fill })] : [getColorSymbol({ context, fill }), label];
-
-    return [
-      { content: labelContent, style: { 'text-align': rtl ? 'right' : 'left', direction: rowTitleDir } },
-      {
-        content: colorContent,
-        style: { 'text-align': rtl ? 'left' : 'right', direction: valueDir, 'vertical-align': 'middle' },
-      },
-    ];
-  };
-
-  // Gets the title row element of the tooltip
-  const getTitleRow = ({ node }) => {
-    const contentDir = rtlUtils.detectTextDirection(node.data.label);
-    return [
-      {
-        content: node.data.label,
-        style: { 'font-weight': 'bold', 'text-align': rtl ? 'right' : 'left', direction: contentDir },
-        colspan: 2,
-      },
-      {},
-    ];
-  };
-
-  // Get the title of the prop passed (can be a dimension or a measure)
-  const getDataTitle = (dataset, prop) => {
-    const dataField = dataset(prop.source.key).field(prop.source.field);
-    return dataField.title();
-  };
-
-  // Get the measure row element, with color symbol when coloring by measure
-  const getMeasureRow = (context, prop, showColorSymbol) => {
-    const measureTitle = getDataTitle(context.resources.dataset, context.node.data[prop]);
-    const valueLabel = context.node.data[prop].label;
-    const validValueLabel = valueLabel === '' || valueLabel === 'NaN' ? '-' : valueLabel;
-    const labelDir = rtlUtils.detectTextDirection(measureTitle);
-    const labelContent = rtl ? [':', measureTitle] : [measureTitle, ':'];
-    const valueDir = rtlUtils.detectTextDirection();
-    const { fill } = context.node.attrs;
-    let valueContent;
-    if (showColorSymbol) {
-      valueContent = rtl
-        ? [validValueLabel, getColorSymbol({ context, fill })]
-        : [getColorSymbol({ context, fill }), validValueLabel];
-    } else {
-      valueContent = validValueLabel;
-    }
-
-    return [
-      { content: labelContent, style: { 'text-align': rtl ? 'right' : 'left', direction: labelDir } },
-      {
-        content: valueContent,
-        style: { 'text-align': rtl ? 'left' : 'right', direction: valueDir, 'vertical-align': 'middle' },
-      },
-    ];
-  };
-
-  const shouldShowColorSymbol = (context, prop) => {
-    const dataTitle = getDataTitle(context.resources.dataset, context.node.data[prop]);
-    return dataTitle === colorService.getSettings().label;
-  };
-
-  // checks that measure row and color row have not the same content
-  const isSameMeasureAndColorRow = ({ measureRow, colorRow }) =>
-    colorRow &&
-    measureRow &&
-    colorRow[0].content[0] === measureRow[0].content[0] &&
-    colorRow[0].content[1] === measureRow[0].content[1] &&
-    colorRow[1].content[rtl ? 0 : 1] === measureRow[1].content[0];
-
-  const extractData = ({ context }) => {
-    const { node } = context;
-    const titleRow = getTitleRow({ node });
-    const measures = ['x', 'y'];
-    if (hasSizeMeasure) {
-      measures.push('size');
-    }
-    const hideColRow =
-      !shouldShowColorSymbol(context, 'selectionDimension') &&
-      !(colorService.getSettings().label === 'Object.ChartTooltip.ColorExpression');
-    const colorRow = hideColRow ? false : getColorRow({ context });
-    const measureRows = measures.map((m) => getMeasureRow(context, m, shouldShowColorSymbol(context, m)));
-    const filteredMeasureRows = measureRows.filter((measureRow) => !isSameMeasureAndColorRow({ measureRow, colorRow }));
-
-    return [titleRow, colorRow, ...filteredMeasureRows].filter(Boolean);
-  };
 
   return extend(true, baseTooltip, {
     settings: {
       filter: (nodes) => nodes.filter((node) => node.data && TOOLTIPPERS[node.key]),
-      extract: (context) => extractData({ context }),
+      extract: (nodeContext) => nodeContext,
+      content: ({ h, data, style }) => {
+        const createTooltipRows = (nodeContext) => {
+          const pointContent = createPointContent({ context: nodeContext });
+          return createPointContentRows(pointContent);
+        };
+        const tooltipRows = [];
+        const [firstNode] = data;
+        const firstNodeRows = createTooltipRows(firstNode);
+        tooltipRows.push(...firstNodeRows);
+        const numRowsPerNode = firstNodeRows.length;
+        const numVisibleNodes = Math.ceil(LIMIT / numRowsPerNode);
+        const len = Math.min(numVisibleNodes, data.length);
+        for (let i = 1; i < len; i++) {
+          tooltipRows.push(...createTooltipRows(data[i]));
+        }
+        const numHiddenNodes = data.length - numVisibleNodes;
+        if (numHiddenNodes > 0) {
+          tooltipRows.push(getMore({ count: numHiddenNodes, rtl, translator }));
+        }
+        return tooltipRows.map((row) => h('tr', {}, rowContent(row, { h, style })));
+      },
       placement: 'bounds',
     },
     style: {
       content: {
-        fontFamily: style.fontFamily,
+        fontFamily: style2.fontFamily,
       },
     },
   });

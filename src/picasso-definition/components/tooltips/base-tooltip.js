@@ -23,19 +23,6 @@ function destroyTooltipContainer() {
   }
 }
 
-function rowContent(inputRow, { h, style }) {
-  return inputRow.map((cell) => {
-    const attributes = {
-      style: { ...(style.cell || {}), ...(cell.style || {}) },
-      class: cell.class,
-    };
-    if (cell.colspan) {
-      attributes.colspan = cell.colspan;
-    }
-    return h('td', attributes, cell.content);
-  });
-}
-
 /**
  * Base tooltip definition
  */
@@ -58,7 +45,6 @@ export default function createBaseTooltip({ key = 'tooltip', rtl }) {
     },
     settings: {
       appendTo: () => document.querySelector(TOOLTIP_CONTAINER_SELECTOR),
-      content: ({ h, data, style }) => [].concat(...data).map((row) => h('tr', {}, rowContent(row, { h, style }))),
       direction: rtl ? 'rtl' : 'ltr',
     },
     style: {
