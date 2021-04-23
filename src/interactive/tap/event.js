@@ -59,8 +59,7 @@ const tap = ({ targets, requireFailure, recognizeWith, components, eventName = '
         const shapes = opts.shapesAt
           ? opts.shapesAt(shape)
           : this.chart.shapesAt(shape, {
-              components: targets.map((c) => ({ key: c, propagation: 'stop' })),
-              propagation: 'stop',
+              components: targets.map((c) => ({ key: c })),
             });
 
         const tooltip = this.chart.component('tooltip');
