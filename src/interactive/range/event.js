@@ -31,7 +31,6 @@ const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith
         this.started = eventName;
         return true;
       }
-      // console.log(`${e.center.x}, ${e.center.y}`);
 
       return components.length > 0;
     },
@@ -50,7 +49,6 @@ const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith
     [`${eventName}move`](e) {
       e.preventDefault();
       this.chart.component(key).emit('rangeMove', e);
-      // console.log('1: key');
     },
     [`${eventName}end`](e) {
       if (this.chart.brushSelectionIncludeMax === undefined) {
