@@ -66,7 +66,7 @@ describe('createRefLines', () => {
           {
             line: {
               stroke: 'red',
-              strokeWidth: 1,
+              strokeWidth: 2,
             },
             scale: 'x',
             value: 1234,
@@ -107,7 +107,7 @@ describe('createRefLines', () => {
           {
             line: {
               stroke: 'blue',
-              strokeWidth: 1,
+              strokeWidth: 2,
             },
             scale: 'y',
             value: 4321,
