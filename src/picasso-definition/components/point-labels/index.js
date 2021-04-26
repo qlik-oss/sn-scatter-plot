@@ -17,7 +17,8 @@ export default function createPointLabels({ layoutModel }) {
     type: 'point-label',
     key: KEYS.COMPONENT.POINT_LABELS,
     settings: {
-      label: (data) => data.label,
+      label: (node) => node.data.label,
+      mode: labels.mode,
     },
   };
 
