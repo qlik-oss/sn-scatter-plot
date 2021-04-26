@@ -1,4 +1,5 @@
 import createAxisTitles from '../index';
+import KEYS from '../../../../constants/keys';
 
 describe('axis-titles', () => {
   let sandbox;
@@ -55,8 +56,8 @@ describe('axis-titles', () => {
 
   it('should create two axis titles', () => {
     expect(axisTitles.length).to.equal(2);
-    expect(axisTitles[0].key).to.equal('x-axis-title');
-    expect(axisTitles[1].key).to.equal('y-axis-title');
+    expect(axisTitles[0].key).to.equal(KEYS.COMPONENT.X_AXIS_TITLE);
+    expect(axisTitles[1].key).to.equal(KEYS.COMPONENT.Y_AXIS_TITLE);
   });
 
   it('should have correct type proprty', () => {
