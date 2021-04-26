@@ -3,6 +3,7 @@ import picassoQ from 'picasso-plugin-q';
 import picassoHammer from 'picasso-plugin-hammer';
 import Hammer from 'hammerjs';
 import refLineLabelsComponent from './picasso-components/ref-line-labels';
+import pointLabelComponent from './picasso-components/point-label';
 import renderer from './picasso-components/react-components/react-renderer';
 import disclaimer from './picasso-components/react-components/disclaimer';
 
@@ -14,6 +15,7 @@ export default function configurePicasso() {
 
   picasso.renderer('react', renderer());
   picasso.component('reference-line-labels', refLineLabelsComponent);
+  picasso.component('point-label', pointLabelComponent);
   picasso.component('disclaimer', disclaimer());
 
   return picasso;

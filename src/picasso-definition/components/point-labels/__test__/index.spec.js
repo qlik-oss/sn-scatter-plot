@@ -1,7 +1,7 @@
 import * as KEYS from '../../../../constants/keys';
 import createPointLabels from '..';
 
-describe('point-labels', () => {
+describe.skip('point-labels', () => {
   let sandbox;
   let layoutModel;
   let labels;

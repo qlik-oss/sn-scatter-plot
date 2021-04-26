@@ -14,35 +14,10 @@ export default function createPointLabels({ layoutModel }) {
   }
 
   const pointLabelsComponent = {
-    type: 'labels',
+    type: 'point-label',
     key: KEYS.COMPONENT.POINT_LABELS,
     settings: {
-      sources: [
-        {
-          component: KEYS.COMPONENT.POINT,
-          selector: 'circle',
-          strategy: {
-            type: 'bar',
-            settings: {
-              direction: 'up',
-              labels: [
-                {
-                  placements: [
-                    {
-                      position: 'outside',
-                      justify: 0,
-                      align: 0.5,
-                      fill: 'black',
-                      overflow: true,
-                    },
-                  ],
-                  label: ({ data }) => data.label,
-                },
-              ],
-            },
-          },
-        },
-      ],
+      label: (data) => data.label,
     },
   };
 
