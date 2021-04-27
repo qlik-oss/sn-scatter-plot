@@ -1,5 +1,7 @@
-const testRectRect = (rect1, rect2) =>
-  rect1.x1 <= rect2.x2 && rect2.x1 <= rect1.x2 && rect1.y1 <= rect2.y2 && rect2.y1 <= rect1.y2;
+import testRectRect from '../../utils/math/collision/rect-rect';
+import testRectCircle from '../../utils/math/collision/rect-circle';
+
+const DISTANCE = 6;
 
 export default {
   require: ['chart', 'renderer'],
@@ -76,42 +78,69 @@ export default {
         fontFamily: style.fontFamily,
       });
 
-    const { height } = measureText('M');
+    const th = measureText('M').height - 2;
 
     const nodeRects = filteredNodes.map((node) => {
       const { localBounds } = node;
       const text = label(node);
-      const { width } = measureText(text);
-      const x = localBounds.x + localBounds.width / 2;
-      const { y } = localBounds;
-      const x1 = x - width / 2;
-      const x2 = x + width;
-      const y1 = y - height;
-      const y2 = y;
-      return { text, x, y, x1, y1, x2, y2, width, height };
+      const tw = measureText(text).width;
+      const { x, y, width, height } = localBounds;
+      const cx = x + width / 2;
+      const x1 = cx - tw / 2;
+      const x2 = cx + tw / 2;
+      const y1 = y - th - DISTANCE;
+      const y2 = y - DISTANCE;
+      return {
+        label: { text, cx, x1, y1, x2, y2, width: tw, height: th },
+        circle: { x: cx, y: y + height / 2, r: height / 2 },
+      };
     });
 
-    const visibleRects = [];
+    const visibleLabels = [];
 
-    const isOverlapping = (node) => visibleRects.some((node2) => testRectRect(node, node2));
+    const isOverlapping = (node) => {
+      const overlappingLabels = visibleLabels.some((node2) => testRectRect(node.label, node2.label));
+      if (overlappingLabels) {
+        return true;
+      }
+      return nodeRects.some((node2) => testRectCircle(node.label, node2.circle));
+    };
 
     const filteredNodeRects = nodeRects.filter((node) => {
       if (isOverlapping(node)) {
         return false;
       }
-      visibleRects.push(node);
+      visibleLabels.push(node);
       return true;
     });
-    return filteredNodeRects.map((node) => ({
+    const labels = filteredNodeRects.map((node) => ({
       type: 'text',
-      text: node.text,
-      x: node.x,
-      y: node.y,
+      text: node.label.text,
+      x: node.label.cx,
+      y: node.label.y2,
       fontSize: style.fontSize,
       fontFamily: style.fontFamily,
       fill: style.fill,
       baseline: 'text-after-edge',
       anchor: 'middle',
     }));
+    const rects = filteredNodeRects.map((node) => ({
+      type: 'rect',
+      x: node.label.x1,
+      y: node.label.y1,
+      width: node.label.width,
+      height: node.label.height,
+      fill: 'yellow',
+    }));
+    const lines = filteredNodeRects.map((node) => ({
+      type: 'line',
+      x1: node.label.cx,
+      x2: node.label.cx,
+      y1: node.label.y2,
+      y2: node.label.y2 + DISTANCE - 1,
+      stroke: 'black',
+      strokeWidth: 1,
+    }));
+    return [...rects, ...labels, ...lines];
   },
 };
