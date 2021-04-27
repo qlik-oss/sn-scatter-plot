@@ -4,10 +4,10 @@ import createLines from './lines';
 import createLabels from './labels';
 
 export default function createReferenceLines({ models, context }) {
-  const { layoutModel, dockModel } = models;
-  const { theme, rtl, localeInfo } = context;
-  const fontFamily = theme.getStyle('object', 'referenceLine.label.name', 'fontFamily');
-  const fontSize = theme.getStyle('object', 'referenceLine.label.name', 'fontSize');
+  const { layoutModel, dockModel, themeModel } = models;
+  const { rtl, localeInfo } = context;
+  const style = themeModel.query.getStyle();
+
   return [
     createLines({
       layoutModel,
@@ -27,8 +27,7 @@ export default function createReferenceLines({ models, context }) {
       key: KEYS.COMPONENT.REFERENCE_LINE_LABELS_X,
       dock: dockModel.x.opposite,
       rtl,
-      fontFamily,
-      fontSize,
+      style,
       localeInfo,
     }),
     createLabels({
@@ -37,8 +36,7 @@ export default function createReferenceLines({ models, context }) {
       key: KEYS.COMPONENT.REFERENCE_LINE_LABELS_Y,
       dock: dockModel.y.opposite,
       rtl,
-      fontFamily,
-      fontSize,
+      style,
       localeInfo,
     }),
   ];

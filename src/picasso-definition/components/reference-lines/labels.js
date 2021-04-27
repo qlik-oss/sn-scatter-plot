@@ -1,6 +1,24 @@
+import extend from 'extend';
 import KEYS from '../../../constants/keys';
 
-export default function createRefLineLabels({ layoutModel, dock, scale, fontFamily, fontSize, rtl, key, localeInfo }) {
+const defaultStyle = {
+  referenceLine: {
+    label: {
+      name: {
+        fontFamily: 'Source Sans Pro, sans-serif',
+        fontSize: '12px',
+      },
+    },
+    outOfBounds: {
+      backgroundColor: '#737373',
+      color: '#e6e6e6',
+      fontFamily: 'Source Sans Pro, sans-serif',
+      fontSize: '10px',
+    },
+  },
+};
+
+export default function createRefLineLabels({ layoutModel, dock, scale, style: themeStyle, rtl, key, localeInfo }) {
   const path = scale === KEYS.SCALE.X ? 'refLine.refLinesX' : 'refLine.refLinesY';
   const refLineLabels = layoutModel
     .getLayoutValue(path)
@@ -18,6 +36,7 @@ export default function createRefLineLabels({ layoutModel, dock, scale, fontFami
     scale,
   }));
 
+  const style = extend(true, {}, defaultStyle, themeStyle);
   const refLineLabelsDef = {
     key,
     type: 'reference-line-labels',
@@ -28,8 +47,8 @@ export default function createRefLineLabels({ layoutModel, dock, scale, fontFami
     layout: { dock, rtl },
     style: {
       label: {
-        fontFamily: fontFamily || 'Source Sans Pro, sans-serif',
-        fontSize: fontSize || '12px',
+        fontFamily: style.referenceLine.label.name.fontFamily,
+        fontSize: style.referenceLine.label.name.fontSize,
         padding: {
           top: 2,
           bottom: 2,
@@ -39,6 +58,18 @@ export default function createRefLineLabels({ layoutModel, dock, scale, fontFami
         maxWidth: 60,
         maxNumLines: 3,
         gap: dock === 'left' || dock === 'right' ? 10 : 16,
+      },
+      oob: {
+        size: 8,
+        fill: style.referenceLine.outOfBounds.backgroundColor,
+        text: {
+          fontFamily: style.referenceLine.outOfBounds.fontFamily,
+          fontSize: style.referenceLine.outOfBounds.fontSize,
+          fill: style.referenceLine.outOfBounds.color,
+          background: {
+            fill: style.referenceLine.outOfBounds.backgroundColor,
+          },
+        },
       },
     },
   };

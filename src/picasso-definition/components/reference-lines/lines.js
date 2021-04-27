@@ -20,6 +20,11 @@ export default function createRefLines({ layoutModel, scale, key, minimumLayoutM
       y: [],
       x: [],
     },
+    style: {
+      oob: {
+        show: false,
+      },
+    },
   };
 
   refLines.forEach((refLineLayout) => {

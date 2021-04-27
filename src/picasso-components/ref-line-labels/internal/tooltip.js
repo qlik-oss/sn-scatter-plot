@@ -12,3 +12,24 @@ export default function getLabelTooltip({ title, font, ellipsis, maxNumLines = 5
   }
   return text;
 }
+
+export function getOobsTooltip({ oobs, font, ellipsis, maxNumLines = 5, maxWidth = 200 }) {
+  const tooltips = oobs.map((oob) =>
+    getLabelTooltip({
+      title: oob.title,
+      font,
+      ellipsis: `${ellipsis} ${oob.valueString}`,
+      maxNumLines,
+      maxWidth,
+    })
+  );
+  const numTooltips = tooltips.length;
+  let text = '';
+  if (numTooltips) {
+    [text] = tooltips;
+    for (let i = 1; i < numTooltips; i++) {
+      text = `${text}\n\n${tooltips[i]}`;
+    }
+  }
+  return text;
+}

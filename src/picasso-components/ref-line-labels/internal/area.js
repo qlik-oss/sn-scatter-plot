@@ -8,6 +8,7 @@ export function createArea(rect, dock, padding) {
       majorDimension: 'height',
       majorSize: rect.height,
       minorAxis: 'x',
+      minorDimension: 'width',
       minorCenter: (rect.width - padding.right - padding.left) / 2 + padding.left,
     };
   return {
@@ -16,6 +17,7 @@ export function createArea(rect, dock, padding) {
     majorDimension: 'width',
     majorSize: rect.width,
     minorAxis: 'y',
+    minorDimension: 'height',
     minorCenter: (rect.height - padding.top - padding.bottom) / 2 + padding.top,
   };
 }

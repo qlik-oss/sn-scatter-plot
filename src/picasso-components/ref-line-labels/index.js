@@ -5,11 +5,12 @@ import { createArea, getPreferredSize } from './internal/area';
 import getLabelTooltip from './internal/tooltip';
 import getLabelStyle from './internal/label-style';
 import { tokenizeLabels, retokenizeLabels } from './internal/tokenize';
+import * as oob from './internal/oob';
 
 const ellipsis = '…';
 
 export default {
-  require: ['renderer'],
+  require: ['renderer', 'symbol'],
   defaultSettings: {
     layout: {
       displayOrder: 0,
@@ -47,7 +48,7 @@ export default {
   },
 
   render() {
-    const { scale } = this;
+    const { scale, rect, symbol } = this;
     const labels = this.resolveLabels(this.settings.labels);
     if (scale.domain().length <= 0 || labels.length <= 0) return false;
     const { dock } = this.settings.layout;
@@ -56,29 +57,51 @@ export default {
       style.label
     );
     const formatter = getFormatter(scale);
-    const area = createArea(this.rect, dock, padding);
+    const area = createArea(rect, dock, padding);
     const { orientation, majorAxis, majorDimension, majorSize, minorAxis, minorCenter } = area;
-    const min = 0;
-    const max = majorSize;
 
     labelHelper.addLabelTitles(labels, formatter, localeInfo);
     labelHelper.addLabelPositions(labels, scale, majorSize);
 
+    // filteredLabels: labels that are not out of bounds
+    const {
+      filteredLabels,
+      lowerOobs,
+      upperOobs,
+      lowerCircleSize,
+      upperCircleSize,
+      lowerOobSpace,
+      upperOobSpace,
+    } = oob.createOobsInfo({
+      labels,
+      minValue: scale.domain()[0],
+      maxValue: scale.domain()[1],
+      orientation,
+      style,
+      padding,
+      measureText: this.measureText,
+    });
+
+    const min = lowerOobSpace;
+    const max = majorSize - upperOobSpace;
+
     // Tokenizing means breaking the label titles into many lines if it is too long
-    tokenizeLabels(labels, font, maxLabelWidth, maxNumLines);
+    tokenizeLabels(filteredLabels, font, maxLabelWidth, maxNumLines);
     if (orientation === 'vertical') {
       // In case there is not enough space vertically for some labels
-      labelHelper.reduceMaxNumLines({ labels, min, max, gap, lineHeight, epsilon: gap * 0.05 });
-      retokenizeLabels(labels, font, maxLabelWidth);
+      labelHelper.reduceMaxNumLines({ labels: filteredLabels, min, max, gap, lineHeight, epsilon: gap * 0.05 });
+      retokenizeLabels(filteredLabels, font, maxLabelWidth);
     }
 
-    labelHelper.addLabelSizes(labels, maxLabelWidth, lineHeight, this.measureText);
+    labelHelper.addLabelSizes(filteredLabels, maxLabelWidth, lineHeight, this.measureText);
 
     // A label's segment is the rectangle that will contain the label
-    labelHelper.addLabelSegments(labels, majorDimension);
-    const filteredLabels = labelLayout.createLayout(labels, min, max, gap);
+    labelHelper.addLabelSegments(filteredLabels, majorDimension);
+
+    // filteredLabels2: filteredLabels whose segments are not out of bounds
+    const filteredLabels2 = labelLayout.createLayout(filteredLabels, min, max, gap);
     let renderedLabels = [];
-    filteredLabels.forEach((label) => {
+    filteredLabels2.forEach((label) => {
       const { lines } = label;
       const count = lines.length;
       const renderedTextLines = lines.map((line, idx) => {
@@ -112,6 +135,35 @@ export default {
       renderedLabels = renderedLabels.concat(renderedTextLines);
     });
 
-    return renderedLabels;
+    let lowerPosition = style.oob.size + lowerCircleSize / 2;
+    let upperPosition = majorSize - (style.oob.size + upperCircleSize / 2);
+    if (majorAxis === 'y') [lowerPosition, upperPosition] = [upperPosition, lowerPosition];
+
+    const renderedLowerOobs = oob.createOobs({
+      alignment: 0,
+      dockValue: 0,
+      oobs: lowerOobs,
+      style: style.oob,
+      rect,
+      symbol,
+      position: lowerPosition,
+      area,
+      radius: lowerCircleSize / 2,
+      font,
+    });
+    const renderedUpperOobs = oob.createOobs({
+      alignment: 1,
+      dockValue: 1,
+      oobs: upperOobs,
+      style: style.oob,
+      rect,
+      symbol,
+      position: upperPosition,
+      area,
+      radius: upperCircleSize / 2,
+      font,
+    });
+
+    return renderedLabels.concat([...renderedLowerOobs, ...renderedUpperOobs]);
   },
 };
