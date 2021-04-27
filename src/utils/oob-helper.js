@@ -65,28 +65,6 @@ const oobHelper = {
     }
 
     return symbol(extend({}, oob, { x, y, startAngle }));
-
-    // let x = 'x';
-    // let y = 'y';
-    // let calcwidth = rendWidth;
-    // let calcheight = rendHeight;
-    // let startAngle = dockValue < 0.5 ? 90 : -90;
-
-    // if (majorAxis === 'x') {
-    //   x = 'y';
-    //   y = 'x';
-    //   calcwidth = rendHeight;
-    //   calcheight = rendWidth;
-    //   startAngle = dockValue < 0.5 ? 180 : 0;
-    // }
-
-    // return symbol(
-    //   extend({}, oob, {
-    //     [x]: boxCenter * calcwidth,
-    //     [y]: Math.max(oob.size / 2, Math.min(dockValue * calcheight, calcheight - oob.size / 2)),
-    //     startAngle,
-    //   })
-    // );
   },
 };
 
