@@ -82,8 +82,8 @@ export default {
       measureText: this.measureText,
     });
 
-    const min = lowerOobSpace;
-    const max = majorSize - upperOobSpace;
+    const [min, max] =
+      majorAxis === 'x' ? [lowerOobSpace, majorSize - upperOobSpace] : [upperOobSpace, majorSize - lowerOobSpace];
 
     // Tokenizing means breaking the label titles into many lines if it is too long
     tokenizeLabels(filteredLabels, font, maxLabelWidth, maxNumLines);

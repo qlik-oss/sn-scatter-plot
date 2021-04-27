@@ -55,7 +55,7 @@ export default function createRefLineLabels({ layoutModel, dock, scale, style: t
           left: rtl ? 2 : 4,
           right: rtl ? 4 : 2,
         },
-        maxWidth: 60,
+        maxWidth: dock === 'left' || dock === 'right' ? 70 : 100,
         maxNumLines: 3,
         gap: dock === 'left' || dock === 'right' ? 10 : 16,
       },
