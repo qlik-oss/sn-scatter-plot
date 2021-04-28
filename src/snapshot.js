@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 import extend from 'extend';
-import { onTakeSnapshot } from '@nebula.js/stardust';
+import { onTakeSnapshot, useImperativeHandle } from '@nebula.js/stardust';
 import KEYS from './constants/keys';
 
 const setupSnapshot = ({ core, models }) => {
@@ -31,8 +31,12 @@ const setupSnapshot = ({ core, models }) => {
 
     const legend = core.chart.component(KEYS.COMPONENT.LEGEND_CATEGORICAL);
     const legendScrollOffset = legend && legend._DO_NOT_USE_getInfo && legend._DO_NOT_USE_getInfo().offset;
+    const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewState.get('zoom');
     layout.snapshotData.content.chartData = {
-      zoom: viewState.get('zoom'),
+      xAxisMin,
+      xAxisMax,
+      yAxisMin,
+      yAxisMax,
       legendScrollOffset,
     };
 
@@ -46,6 +50,28 @@ const setupSnapshot = ({ core, models }) => {
       })
       .catch(() => {});
   });
+
+  useImperativeHandle(
+    () => ({
+      getViewState() {
+        if (!models) {
+          return undefined;
+        }
+        const legend = core.chart.component(KEYS.COMPONENT.LEGEND_CATEGORICAL);
+        const legendScrollOffset = legend && legend._DO_NOT_USE_getInfo && legend._DO_NOT_USE_getInfo().offset;
+        const viewState = models.chartModel.query.getViewState();
+        const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewState.get('zoom');
+        return {
+          xAxisMin,
+          xAxisMax,
+          yAxisMin,
+          yAxisMax,
+          legendScrollOffset,
+        };
+      },
+    }),
+    [models]
+  );
 };
 
 export default setupSnapshot;
