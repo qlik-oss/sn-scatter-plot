@@ -14,6 +14,7 @@ export default function createRefLines({ layoutModel, scale, key, minimumLayoutM
     key,
     type: 'ref-line',
     layout: {
+      displayOrder: 0,
       minimumLayoutMode,
     },
     lines: {
