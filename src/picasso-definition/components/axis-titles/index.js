@@ -10,8 +10,7 @@ export default function createAxisTitles({ layoutModel, dockModel, themeModel })
       ? false
       : {
           type: 'text',
-          key: 'x-axis-title',
-          show: xAxis && (xAxis.show === 'all' || xAxis.show === 'title'),
+          key: KEYS.COMPONENT.X_AXIS_TITLE,
           text: layoutModel.getHyperCubeValue(`${KEYS.FIELDS.X.replace(/\//g, '.')}.qFallbackTitle`),
           dock: dockModel.x.dock,
           style: {
@@ -28,8 +27,7 @@ export default function createAxisTitles({ layoutModel, dockModel, themeModel })
       ? false
       : {
           type: 'text',
-          key: 'y-axis-title',
-          show: yAxis && (yAxis.show === 'all' || yAxis.show === 'title'),
+          key: KEYS.COMPONENT.Y_AXIS_TITLE,
           text: layoutModel.getHyperCubeValue(`${KEYS.FIELDS.Y.replace(/\//g, '.')}.qFallbackTitle`),
           dock: dockModel.y.dock,
           style: {
