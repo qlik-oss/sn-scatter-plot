@@ -38,6 +38,11 @@ export default function createPoint({ layoutModel, chartModel, colorService }) {
       strokeWidth: 0.5,
       stroke: '#fff',
     },
+    errorShape: {
+      shape: 'saltire',
+      width: 2,
+      size: '8px',
+    },
     beforeRender: ({ size }) => {
       windowSizeMultiplier = Math.min(size.height, size.width) / 300;
     },
