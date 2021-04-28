@@ -18,10 +18,10 @@ export default function createComponents({ context, models }) {
 
   const components = [
     createGridLines(models),
+    ...createReferenceLines({ models, context }),
     createPoint(models),
     ...createAxes(models),
     ...createAxisTitles(models),
-    ...createReferenceLines({ models, context }),
     createPointLabels(models),
     ...colorService.custom.legendComponents(),
     disclaimer,
