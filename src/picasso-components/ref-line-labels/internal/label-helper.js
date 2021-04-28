@@ -1,3 +1,5 @@
+import * as oob from './oob';
+
 const labelHelper = {
   addLabelPositions(labels, scale, size) {
     for (let i = 0; i < labels.length; i++) {
@@ -53,9 +55,9 @@ const labelHelper = {
     }
   },
 
-  filterOutOfScaleLabels(labels, scale) {
+  filterOobLabels(labels, scale) {
     const [qMin, qMax] = scale.domain();
-    return labels.filter((label) => label.value >= qMin && label.value <= qMax);
+    return oob.filterOobLabels(labels, qMin, qMax);
   },
 
   hasEngineFormat(value, valueLabel, localeInfo) {
