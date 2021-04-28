@@ -32,16 +32,12 @@ export default function createPoint({ layoutModel, chartModel, colorService }) {
       y: {
         scale: KEYS.SCALE.Y,
       },
-      size: (d) => sizeScaleFn(d, windowSizeMultiplier),
+      size: (d) => sizeScaleFn(d, windowSizeMultiplier) || '8px',
       fill: colorService.getColor(),
       // opacity: 0.8,
       strokeWidth: 0.5,
       stroke: '#fff',
-    },
-    errorShape: {
-      shape: 'saltire',
-      width: 2,
-      size: '8px',
+      shape: (d) => (sizeScaleFn(d, windowSizeMultiplier) ? 'circle' : 'saltire'),
     },
     beforeRender: ({ size }) => {
       windowSizeMultiplier = Math.min(size.height, size.width) / 300;
