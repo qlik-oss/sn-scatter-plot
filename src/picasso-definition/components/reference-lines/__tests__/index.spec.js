@@ -10,13 +10,13 @@ describe('createReferenceLines', () => {
   let dockModel;
   let models;
   const layoutModel = 'layoutModel';
+  let themeModel;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    context = { theme: { getStyle: sandbox.stub() }, rtl: 'some rtl', localeInfo: 'valid localeInfo' };
-    context.theme.getStyle.withArgs('object', 'referenceLine.label.name', 'fontFamily').returns('some font');
-    context.theme.getStyle.withArgs('object', 'referenceLine.label.name', 'fontSize').returns('some size');
+    context = { rtl: 'some rtl', localeInfo: 'valid localeInfo' };
     dockModel = { x: { opposite: 'top' }, y: { opposite: 'right' } };
+    themeModel = { query: { getStyle: sandbox.stub().returns('themeStyle') } };
     sandbox.stub(KEYS, 'default').value({
       SCALE: { X: 'X', Y: 'Y' },
       COMPONENT: {
@@ -29,7 +29,7 @@ describe('createReferenceLines', () => {
     sandbox.stub(MODES, 'REFERENCE_LINE').value('XSMALL');
     sandbox.stub(createLines, 'default');
     sandbox.stub(createLabels, 'default');
-    models = { layoutModel, dockModel };
+    models = { layoutModel, dockModel, themeModel };
   });
 
   afterEach(() => {
@@ -38,7 +38,7 @@ describe('createReferenceLines', () => {
 
   it('should call getStyle twice', () => {
     createReferenceLines({ models, context });
-    expect(context.theme.getStyle).to.have.been.calledTwice;
+    expect(themeModel.query.getStyle).to.have.been.calledOnce;
   });
 
   it('should call createLines twice, each with correct arguments', () => {
@@ -70,8 +70,7 @@ describe('createReferenceLines', () => {
         key: 'ref-line-labels-x',
         dock: 'top',
         rtl: 'some rtl',
-        fontFamily: 'some font',
-        fontSize: 'some size',
+        themeStyle: 'themeStyle',
         localeInfo: 'valid localeInfo',
       })
     ).to.have.been.calledOnce;
@@ -82,8 +81,7 @@ describe('createReferenceLines', () => {
         key: 'ref-line-labels-y',
         dock: 'right',
         rtl: 'some rtl',
-        fontFamily: 'some font',
-        fontSize: 'some size',
+        themeStyle: 'themeStyle',
         localeInfo: 'valid localeInfo',
       })
     ).to.have.been.calledOnce;

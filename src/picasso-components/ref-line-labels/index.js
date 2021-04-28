@@ -18,13 +18,6 @@ export default {
     },
   },
 
-  resolveLabels(labels) {
-    return labels.map((label) => ({
-      ...label,
-      value: typeof label.value === 'function' ? label.value() : label.value,
-    }));
-  },
-
   measureText(text) {
     return this.renderer.measureText({
       text,
@@ -37,7 +30,7 @@ export default {
     const { scale } = this;
     const { style } = this.settings;
     const formatter = getFormatter(scale);
-    const labels = this.resolveLabels(this.settings.labels);
+    const labels = labelHelper.resolveLabels(this.settings.labels);
     labelHelper.addLabelTitles(labels, formatter);
     const { numLowerOobs, numUpperOobs, filteredLabels } = labelHelper.filterOobLabels(labels, scale);
     let preferredSize;
@@ -57,7 +50,7 @@ export default {
 
   render() {
     const { scale, rect, symbol } = this;
-    const labels = this.resolveLabels(this.settings.labels);
+    const labels = labelHelper.resolveLabels(this.settings.labels);
     if (scale.domain().length <= 0 || labels.length <= 0) return false;
     const { dock } = this.settings.layout;
     const { style, localeInfo } = this.settings;

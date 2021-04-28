@@ -43,27 +43,30 @@ describe('createRefLineLabels', () => {
   });
 
   it('should return false if there is no reference line to show', () => {
-    const scale = 'y';
-    const key = 'reference-line-Y';
-    const dock = 'left';
-    const fontFamily = '"font1", "font2", "fontType"';
-    const fontSize = '13px';
-    const rtl = false;
-    const localeInfo = 'valid localeInfo';
     layoutModel.getLayoutValue.withArgs('refLine.refLinesY').returns([]);
-    const result = createRefLineLabels({ layoutModel, dock, scale, fontFamily, fontSize, rtl, key, localeInfo });
+    const dock = 'left';
+    const scale = 'y';
+    const themeStyle = 'theme';
+    const rtl = false;
+    const key = 'reference-line-Y';
+    const localeInfo = 'valid localeInfo';
+    const result = createRefLineLabels({ layoutModel, dock, scale, themeStyle, rtl, key, localeInfo });
     expect(result).to.deep.equal(false);
   });
 
   it('should return correct x reference lables when show is enabled', () => {
-    const scale = 'x';
-    const key = 'reference-line-labels-X';
     const dock = 'top';
-    const fontFamily = '"font1", "font2", "fontType"';
-    const fontSize = '13px';
+    const scale = 'x';
+    const themeStyle = {
+      referenceLine: {
+        label: { name: { fontFamily: '"font1", "font2", "fontType"', fontSize: '13px' } },
+        outOfBounds: { backgroundColor: '#111111', color: '#ffffff', fontFamily: 'oob font', fontSize: 'oob fontSize' },
+      },
+    };
     const rtl = false;
+    const key = 'reference-line-labels-X';
     const localeInfo = 'valid localeInfo';
-    const result = createRefLineLabels({ layoutModel, dock, scale, fontFamily, fontSize, rtl, key, localeInfo });
+    const result = createRefLineLabels({ layoutModel, dock, scale, themeStyle, rtl, key, localeInfo });
     expect(result).to.deep.equal({
       key: 'reference-line-labels-X',
       type: 'reference-line-labels',
@@ -90,41 +93,49 @@ describe('createRefLineLabels', () => {
             left: 4,
             right: 2,
           },
-          maxWidth: 60,
+          maxWidth: 100,
           maxNumLines: 3,
           gap: 16,
+        },
+        oob: {
+          size: 8,
+          fill: '#111111',
+          text: { fontFamily: 'oob font', fontSize: 'oob fontSize', fill: '#ffffff', background: { fill: '#111111' } },
         },
       },
     });
   });
 
   it('should return false if x reference lines are selected but not enabled', () => {
-    const scale = 'x';
-    const key = 'reference-line-labels-X';
     const dock = 'top';
-    const fontFamily = '"font1", "font2", "fontType"';
-    const fontSize = '13px';
-    const localeInfo = 'valid localeInfo';
+    const scale = 'x';
+    const themeStyle = '';
     const rtl = false;
+    const key = 'reference-line-labels-X';
+    const localeInfo = 'valid localeInfo';
     layoutModel.getLayoutValue.withArgs('refLine.refLinesX').returns([
       {
         show: false,
         label: 'X ref label',
       },
     ]);
-    const result = createRefLineLabels({ layoutModel, dock, scale, fontFamily, fontSize, rtl, key, localeInfo });
+    const result = createRefLineLabels({ layoutModel, dock, scale, themeStyle, rtl, key, localeInfo });
     expect(result).to.deep.equal(false);
   });
 
   it('should return correct y reference lables when show is enabled', () => {
-    const scale = 'y';
-    const key = 'reference-line-labels-Y';
     const dock = 'right';
-    const fontFamily = '"font1", "font2", "fontType"';
-    const fontSize = '13px';
-    const localeInfo = 'valid localeInfo';
+    const scale = 'y';
+    const themeStyle = {
+      referenceLine: {
+        label: { name: { fontFamily: '"font1", "font2", "fontType"', fontSize: '13px' } },
+        outOfBounds: { backgroundColor: '#111111', color: '#ffffff', fontFamily: 'oob font', fontSize: 'oob fontSize' },
+      },
+    };
     const rtl = false;
-    const result = createRefLineLabels({ layoutModel, dock, scale, fontFamily, fontSize, rtl, key, localeInfo });
+    const key = 'reference-line-labels-Y';
+    const localeInfo = 'valid localeInfo';
+    const result = createRefLineLabels({ layoutModel, dock, scale, themeStyle, rtl, key, localeInfo });
     expect(result).to.deep.equal({
       key: 'reference-line-labels-Y',
       type: 'reference-line-labels',
@@ -151,23 +162,39 @@ describe('createRefLineLabels', () => {
             left: 4,
             right: 2,
           },
-          maxWidth: 60,
+          maxWidth: 70,
           maxNumLines: 3,
           gap: 10,
+        },
+        oob: {
+          size: 8,
+          fill: '#111111',
+          text: {
+            fontFamily: 'oob font',
+            fontSize: 'oob fontSize',
+            fill: '#ffffff',
+            background: {
+              fill: '#111111',
+            },
+          },
         },
       },
     });
   });
 
   it('should return correct y reference lables when show is enabled, rtl is true, and some layout properties are missing', () => {
-    const scale = 'y';
-    const key = 'reference-line-labels-Y';
     const dock = 'left';
-    const fontFamily = false;
-    const fontSize = false;
+    const scale = 'y';
+    const themeStyle = {
+      referenceLine: {
+        label: { name: { fontSize: '15px' } },
+        outOfBounds: { color: '#ffffff', fontFamily: 'oob font' },
+      },
+    };
     const rtl = true;
+    const key = 'reference-line-labels-Y';
     const localeInfo = 'valid localeInfo';
-    const result = createRefLineLabels({ layoutModel, dock, scale, fontFamily, fontSize, rtl, key, localeInfo });
+    const result = createRefLineLabels({ layoutModel, dock, scale, themeStyle, rtl, key, localeInfo });
     expect(result).to.deep.equal({
       key: 'reference-line-labels-Y',
       type: 'reference-line-labels',
@@ -187,16 +214,28 @@ describe('createRefLineLabels', () => {
       style: {
         label: {
           fontFamily: 'Source Sans Pro, sans-serif',
-          fontSize: '12px',
+          fontSize: '15px',
           padding: {
             top: 2,
             bottom: 2,
             left: 2,
             right: 4,
           },
-          maxWidth: 60,
+          maxWidth: 70,
           maxNumLines: 3,
           gap: 10,
+        },
+        oob: {
+          size: 8,
+          fill: '#737373',
+          text: {
+            fontFamily: 'oob font',
+            fontSize: '10px',
+            fill: '#ffffff',
+            background: {
+              fill: '#737373',
+            },
+          },
         },
       },
     });

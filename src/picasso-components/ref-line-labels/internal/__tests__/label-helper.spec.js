@@ -1,4 +1,5 @@
 import labelHelper from '../label-helper';
+import * as oob from '../oob';
 
 const {
   addLabelPositions,
@@ -7,8 +8,9 @@ const {
   addLabelSegments,
   addLabelTitles,
   hasEngineFormat,
-  filterOutOfScaleLabels,
+  filterOobLabels,
   reduceMaxNumLines,
+  resolveLabels,
 } = labelHelper;
 
 describe('addLabelPositions', () => {
@@ -188,13 +190,30 @@ describe('addLabelTitles', () => {
   });
 });
 
-describe('filterOutOfScaleLabels', () => {
+describe('filterOobLabels', () => {
   const labels = [{ value: 100 }, { value: 600 }, { value: 300 }, { value: 0 }, { value: 500 }];
-  it('should filter out-of-scale labels', () => {
+  it('should filter out-of-bound labels', () => {
     const scale = { domain: sinon.stub() };
     scale.domain.returns([150, 450]);
-    const result = filterOutOfScaleLabels(labels, scale);
-    expect(result).to.deep.equal([{ value: 300 }]);
+    sinon.stub(oob, 'filterOobLabels');
+    oob.filterOobLabels
+      .withArgs([{ value: 100 }, { value: 600 }, { value: 300 }, { value: 0 }, { value: 500 }], 150, 450)
+      .returns({
+        filteredLabels: { value: 300 },
+        lowerOobs: [{ value: 100 }, { value: 0 }],
+        upperOobs: [{ value: 600 }, { value: 500 }],
+        numLowerOobs: 2,
+        numUpperOobs: 2,
+      });
+    const result = filterOobLabels(labels, scale);
+    expect(result).to.deep.equal({
+      filteredLabels: { value: 300 },
+      lowerOobs: [{ value: 100 }, { value: 0 }],
+      upperOobs: [{ value: 600 }, { value: 500 }],
+      numLowerOobs: 2,
+      numUpperOobs: 2,
+    });
+    sinon.reset();
   });
 });
 
@@ -266,6 +285,23 @@ describe('reduceMaxNumLines', () => {
       { center: 100, maxNumLines: 5, cMin: 50, cMax: 140 }, // 140-50=90; (90+10)/20=5;
       { center: 200, maxNumLines: 4, cMin: 160, cMax: 240 }, // 240-160=80; (80+10)/20=4.5
       { center: 300, maxNumLines: 5, cMin: 260, cMax: 350 }, // 350-260=90; (90+10)/20=5
+    ]);
+  });
+});
+
+describe('resolveLabels', () => {
+  const labels = [
+    { value: 100, scale: 'x', text: '100' },
+    { value: 200, scale: 'y', text: '200' },
+    { value: () => 300, scale: 'x', text: '300' },
+  ];
+
+  it('should return correct values', () => {
+    const result = resolveLabels(labels);
+    expect(result).to.deep.equal([
+      { value: 100, scale: 'x', text: '100' },
+      { value: 200, scale: 'y', text: '200' },
+      { value: 300, scale: 'x', text: '300' },
     ]);
   });
 });

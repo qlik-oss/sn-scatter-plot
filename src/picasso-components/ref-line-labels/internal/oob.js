@@ -19,17 +19,6 @@ export function filterOobLabels(labels, minValue, maxValue) {
   };
 }
 
-export function getLowerOobSpace(numOobs, oobSize, circleSize, orientation, padding) {
-  if (numOobs < 1) return 0;
-  const p = orientation === 'vertical' ? padding.top : padding.left;
-  return p + oobSize + circleSize;
-}
-
-export function getUpperOobSpace(numUpperOobs, oobSize, upperCircleSize, orientation, padding) {
-  const p = orientation === 'vertical' ? padding.bottom : padding.right;
-  return p + (numUpperOobs > 0 ? oobSize + upperCircleSize : 0);
-}
-
 export function getOobSizes(measureText) {
   let max = 0;
   let s;
