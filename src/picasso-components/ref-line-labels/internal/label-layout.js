@@ -87,7 +87,8 @@ const labelLayout = {
     }
 
     const filteredLabels = labels.filter((label) => {
-      const smin = label.segment.position - label.segment.radius;
+      // Rounding to prevent 'minus epsilon' bug
+      const smin = Math.ceil(label.segment.position - label.segment.radius);
       const smax = label.segment.position + label.segment.radius;
       return smin >= min && smax <= max;
     });
