@@ -1,7 +1,6 @@
-import testRectRect from '../../utils/math/collision/rect-rect';
-import testRectCircle from '../../utils/math/collision/rect-circle';
+import { getLabels, DISTANCE } from './get-labels';
 
-const DISTANCE = 6;
+const DY = DISTANCE - 1;
 
 export default {
   require: ['chart', 'renderer'],
@@ -33,15 +32,15 @@ export default {
   },
   render() {
     const { settings } = this.settings;
-
-    const component = this.chart.component(settings.target.point);
+    const { target, label, showLabel, mode, debugMode } = settings;
+    const key = target.point;
+    const component = this.chart.component(key);
 
     if (!component) {
       return [];
     }
 
-    const nodeFilter = (node) => node.key === settings.target.point;
-
+    const nodeFilter = (node) => node.key === key && showLabel(node);
     const nodes = [...this.chart.findShapes('circle'), ...this.chart.findShapes('path')].filter(nodeFilter);
 
     if (!nodes.length) {
@@ -50,101 +49,78 @@ export default {
 
     const { style } = this;
 
-    const { label, showLabel, mode, debugMode } = settings;
-
-    const filteredNodes = nodes.filter((node) => showLabel(node));
-
-    const getValidNodes = () => {
-      if (mode === 2) {
-        return filteredNodes.map((node) => {
-          const text = label(node);
-          const { localBounds } = node;
-          const { x, y, width } = localBounds;
-          const cx = x + width / 2;
-          const y2 = y - DISTANCE;
-          return {
-            label: { text, cx, y2 },
-          };
-        });
-      }
-
-      const measureText = (text) =>
-        this.renderer.measureText({
-          text,
-          fontSize: style.fontSize,
-          fontFamily: style.fontFamily,
-        });
-
-      const th = measureText('M').height - 2;
-
-      const nodeRects = filteredNodes.map((node) => {
-        const text = label(node);
-        const tw = measureText(text).width;
-        const { localBounds } = node;
-        const { x, y, width, height } = localBounds;
-        const cx = x + width / 2;
-        const x1 = cx - tw / 2;
-        const x2 = cx + tw / 2;
-        const y1 = y - th - DISTANCE;
-        const y2 = y - DISTANCE;
-        return {
-          label: { text, cx, x1, y1, x2, y2, width: tw, height: th },
-          circle: { x: cx, y: y + height / 2, r: height / 2 },
-        };
+    const measureText = (text) =>
+      this.renderer.measureText({
+        text,
+        fontSize: style.fontSize,
+        fontFamily: style.fontFamily,
       });
+    const labelHeight = measureText('M').height - 2;
 
-      const validNodes = [];
+    const { topLabels, bottomLabels } = getLabels({ measureText, mode, nodes, label, labelHeight });
 
-      const isOverlapping = (node) => {
-        const overlappingLabels = validNodes.some((node2) => testRectRect(node.label, node2.label));
-        if (overlappingLabels) {
-          return true;
-        }
-        return nodeRects.some((node2) => testRectCircle(node.label, node2.circle));
-      };
-
-      return nodeRects.filter((node) => {
-        if (isOverlapping(node)) {
-          return false;
-        }
-        validNodes.push(node);
-        return true;
-      });
-    };
-
-    const nodesHavingLabels = getValidNodes();
-
-    const labels = nodesHavingLabels.map((node) => ({
+    const labels1 = topLabels.map((node) => ({
       type: 'text',
-      text: node.label.text,
-      x: node.label.cx,
-      y: node.label.y2,
+      text: node.text,
+      x: node.cx,
+      y: node.topRect.y2,
       fontSize: style.fontSize,
       fontFamily: style.fontFamily,
       fill: style.fill,
       baseline: 'text-after-edge',
       anchor: 'middle',
     }));
-    const rects =
+    const rects1 =
       mode === 2 || !debugMode
         ? []
-        : nodesHavingLabels.map((node) => ({
+        : topLabels.map((node) => ({
             type: 'rect',
-            x: node.label.x1,
-            y: node.label.y1,
-            width: node.label.width,
-            height: node.label.height,
+            x: node.topRect.x1,
+            y: node.topRect.y1,
+            width: node.labelWidth,
+            height: labelHeight,
             fill: 'yellow',
           }));
-    const lines = nodesHavingLabels.map((node) => ({
+    const lines1 = topLabels.map((node) => ({
       type: 'line',
-      x1: node.label.cx,
-      x2: node.label.cx,
-      y1: node.label.y2,
-      y2: node.label.y2 + DISTANCE - 1,
+      x1: node.cx,
+      x2: node.cx,
+      y1: node.topRect.y2,
+      y2: node.topRect.y2 + DY,
       stroke: 'black',
       strokeWidth: 1,
     }));
-    return [...rects, ...labels, ...lines];
+    const labels2 = bottomLabels.map((node) => ({
+      type: 'text',
+      text: node.text,
+      x: node.cx,
+      y: node.bottomRect.y1,
+      fontSize: style.fontSize,
+      fontFamily: style.fontFamily,
+      fill: style.fill,
+      baseline: 'text-before-edge',
+      anchor: 'middle',
+    }));
+    const rects2 =
+      mode === 2 || !debugMode
+        ? []
+        : bottomLabels.map((node) => ({
+            type: 'rect',
+            x: node.bottomRect.x1,
+            y: node.bottomRect.y1,
+            width: node.labelWidth,
+            height: labelHeight,
+            fill: 'yellow',
+          }));
+    const lines2 = bottomLabels.map((node) => ({
+      type: 'line',
+      x1: node.cx,
+      x2: node.cx,
+      y1: node.bottomRect.y1 - DY,
+      y2: node.bottomRect.y1,
+      stroke: 'black',
+      strokeWidth: 1,
+    }));
+    return [...rects1, ...rects2, ...labels1, ...labels2, ...lines1, ...lines2];
   },
 };
