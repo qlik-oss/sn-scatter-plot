@@ -21,6 +21,7 @@ describe('creatArea', () => {
       majorDimension: 'height',
       majorSize: 400,
       minorAxis: 'x',
+      minorDimension: 'width',
       minorCenter: 52, // 8+(100-8-4)/2 == 52
     });
   });
@@ -44,6 +45,7 @@ describe('creatArea', () => {
       majorDimension: 'width',
       majorSize: 500,
       minorAxis: 'y',
+      minorDimension: 'height',
       minorCenter: 27, // 4 + (50 - 4 - 0) / 2 == 27
     });
   });
@@ -67,6 +69,7 @@ describe('creatArea', () => {
       majorDimension: 'height',
       majorSize: 1000,
       minorAxis: 'x',
+      minorDimension: 'width',
       minorCenter: 102, // 9 + (200 - 9 - 5) / 2 == 102
     });
   });
@@ -90,6 +93,7 @@ describe('creatArea', () => {
       majorDimension: 'width',
       majorSize: 600,
       minorAxis: 'y',
+      minorDimension: 'height',
       minorCenter: 148, // 10 + (300 - 10 - 14) / 2 == 148
     });
   });

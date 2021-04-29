@@ -81,7 +81,7 @@ describe('grid chart point', () => {
 
   describe('settings', () => {
     it('should have correct properties', () => {
-      expect(create().settings).to.have.all.keys(['x', 'y', 'size', 'strokeWidth', 'stroke', 'fill']);
+      expect(create().settings).to.have.all.keys(['x', 'y', 'size', 'strokeWidth', 'stroke', 'fill', 'shape']);
     });
 
     describe('size', () => {

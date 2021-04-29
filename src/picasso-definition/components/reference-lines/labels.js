@@ -18,7 +18,7 @@ const defaultStyle = {
   },
 };
 
-export default function createRefLineLabels({ layoutModel, dock, scale, style: themeStyle, rtl, key, localeInfo }) {
+export default function createRefLineLabels({ layoutModel, dock, scale, themeStyle, rtl, key, localeInfo }) {
   const path = scale === KEYS.SCALE.X ? 'refLine.refLinesX' : 'refLine.refLinesY';
   const refLineLabels = layoutModel
     .getLayoutValue(path)
