@@ -29,6 +29,26 @@ export function getCount(size, spacing) {
 }
 
 export default function createTickModel({ layoutModel, dockModel, extremumModel, themeModel, chart }) {
+  function estimateSize(dimension) {
+    let size = dockModel.chartSize[dimension];
+    if (dimension === 'height') return size;
+    const componentNames = [
+      KEYS.COMPONENT.Y_AXIS_TITLE,
+      KEYS.COMPONENT.Y_AXIS,
+      KEYS.COMPONENT.REFERENCE_LINE_LABELS_Y,
+      KEYS.COMPONENT.LEGEND_CATEGORICAL,
+    ];
+    componentNames.forEach((name) => {
+      const component = chart.component(name);
+      if (!component) return;
+      const { layout, rect } = component;
+      if (!layout || !rect || layout.dock === 'top' || layout.doc === 'bottom') return;
+      size -= rect[dimension];
+    });
+
+    return size;
+  }
+
   function getChartProperties(scaleName) {
     let min;
     let max;
@@ -43,7 +63,8 @@ export default function createTickModel({ layoutModel, dockModel, extremumModel,
       dimension = 'height';
       spacing = layoutModel.getLayoutValue('yAxis.spacing', 1);
     }
-    const size = dockModel.chartSize[dimension];
+
+    const size = estimateSize(dimension);
     const count = getCount(size, spacing);
     const isHomeState = extremumModel.query.getIsHomeState();
 
