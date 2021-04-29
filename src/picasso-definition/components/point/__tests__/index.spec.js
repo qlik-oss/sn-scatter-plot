@@ -1,13 +1,23 @@
 import createPoint from '../index';
 import * as KEYS from '../../../../constants/keys';
+import createSizeScale from '../../../scales/size';
 
-describe('grid chart point', () => {
+describe('point', () => {
   let sandbox;
   let layoutModel;
   let colorService;
   let create;
   let layoutValueStub;
   let hyperCubeValueStub;
+  let chartModel;
+  let interactionInProgress;
+  let viewStateStub;
+  let getZoomStub;
+  let canvasBufferSizeStub;
+  let sizeScaleFn;
+  let d;
+  const wsm = 1;
+  let rect;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -34,12 +44,46 @@ describe('grid chart point', () => {
         hasSizeMeasure: true,
       },
     };
+    sizeScaleFn = createSizeScale(layoutModel);
+    interactionInProgress = true;
+    getZoomStub = sandbox.stub();
+    getZoomStub.withArgs('zoom').returns({ x: 10, y: 10 });
+    viewStateStub = {
+      get: getZoomStub,
+    };
+    chartModel = {
+      key: 'chart-model',
+      query: {
+        getViewState: () => viewStateStub,
+        isInteractionInProgess: () => interactionInProgress,
+      },
+    };
+    canvasBufferSizeStub = sandbox.stub();
+    rect = {
+      computedPhysical: {
+        width: 100,
+        height: 100,
+      },
+    };
+    canvasBufferSizeStub.withArgs(rect).returns({
+      width: rect.computedPhysical.width + 100,
+      height: rect.computedPhysical.height,
+    });
 
     colorService = { getColor: sandbox.stub() };
+
+    d = {
+      datum: {
+        size: {
+          value: 5,
+        },
+      },
+    };
 
     create = () =>
       createPoint({
         layoutModel,
+        chartModel,
         colorService,
       });
   });
@@ -79,6 +123,39 @@ describe('grid chart point', () => {
     });
   });
 
+  describe('rendererSettings', () => {
+    it('should have correct properties', () => {
+      expect(create().rendererSettings).to.have.all.keys(['transform', 'canvasBufferSize']);
+    });
+
+    describe('transform', () => {
+      it('should be set with a function', () => {
+        expect(create().rendererSettings.transform).to.be.a('function');
+      });
+      it('should return correct transform when interaction in progress', () => {
+        const { x, y } = chartModel.query.getViewState().get('zoom');
+        expect(create().rendererSettings.transform()).to.deep.equal({ a: 1, b: 0, c: 0, d: 1, e: x, f: y });
+      });
+      it('should return false when interaction NOT in progress', () => {
+        interactionInProgress = false;
+        expect(create().rendererSettings.transform()).to.equal(false);
+      });
+    });
+
+    describe('canvasBufferSize', () => {
+      it('should be set with a function', () => {
+        expect(create().rendererSettings.canvasBufferSize).to.be.a('function');
+      });
+      it('should return correct size value', () => {
+        create().rendererSettings.canvasBufferSize = canvasBufferSizeStub(rect);
+        expect(create().rendererSettings.canvasBufferSize(rect)).to.deep.equal({
+          width: 100 + 100,
+          height: 100,
+        });
+      });
+    });
+  });
+
   describe('settings', () => {
     it('should have correct properties', () => {
       expect(create().settings).to.have.all.keys(['x', 'y', 'size', 'strokeWidth', 'stroke', 'fill', 'shape']);
@@ -88,6 +165,34 @@ describe('grid chart point', () => {
       it('should be set with a function', () => {
         expect(create().settings.size).to.be.a('function');
       });
+
+      it('should return correct dot size', () => {
+        expect(create().settings.size(d)).to.equal(sizeScaleFn(d, wsm));
+      });
+
+      it('should return size 8px when null measure value', () => {
+        d.datum.size.value = 'NaN';
+        expect(create().settings.size(d)).to.equal('8px');
+      });
+    });
+
+    describe('shape', () => {
+      it('should be set with a function', () => {
+        expect(create().settings.shape).to.be.a('function');
+      });
+      it('should be circle', () => {
+        expect(create().settings.shape(d)).to.equal('circle');
+      });
+      it('should be saltire when null measure value', () => {
+        d.datum.size.value = 'NaN';
+        expect(create().settings.shape(d)).to.equal('saltire');
+      });
+    });
+  });
+
+  describe('beforeRender', () => {
+    it('should be set with a function', () => {
+      expect(create().beforeRender).to.be.a('function');
     });
   });
 });
