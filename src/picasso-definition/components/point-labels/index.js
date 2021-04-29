@@ -19,6 +19,7 @@ export default function createPointLabels({ layoutModel }) {
     settings: {
       label: (node) => node.data.label,
       mode: labels.mode,
+      // debugMode: true,
     },
   };
 
