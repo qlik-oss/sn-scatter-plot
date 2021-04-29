@@ -42,7 +42,7 @@ export default {
 
     const nodeFilter = (node) => node.key === settings.target.point;
 
-    const nodes = this.chart.findShapes('circle').filter(nodeFilter);
+    const nodes = [...this.chart.findShapes('circle'), ...this.chart.findShapes('path')].filter(nodeFilter);
 
     if (!nodes.length) {
       return [];
