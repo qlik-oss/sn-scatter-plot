@@ -42,7 +42,7 @@ export default function createTickModel({ layoutModel, dockModel, extremumModel,
       const component = chart.component(name);
       if (!component) return;
       const { layout, rect } = component;
-      if (!layout || !rect || layout.dock === 'top' || layout.doc === 'bottom') return;
+      if (!layout || !rect || layout.dock === 'top' || layout.dock === 'bottom') return;
       size -= rect[dimension];
     });
 
