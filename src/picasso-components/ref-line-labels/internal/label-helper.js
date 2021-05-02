@@ -111,6 +111,13 @@ const labelHelper = {
       label.maxNumLines = Math.max(b, 1);
     }
   },
+
+  resolveLabels(labels) {
+    return labels.map((label) => ({
+      ...label,
+      value: typeof label.value === 'function' ? label.value() : label.value,
+    }));
+  },
 };
 
 export default labelHelper;

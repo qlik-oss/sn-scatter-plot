@@ -73,6 +73,11 @@ describe('createRefLines', () => {
           },
         ],
       },
+      style: {
+        oob: {
+          show: false,
+        },
+      },
     });
   });
 
@@ -113,6 +118,11 @@ describe('createRefLines', () => {
             value: 4321,
           },
         ],
+      },
+      style: {
+        oob: {
+          show: false,
+        },
       },
     });
   });

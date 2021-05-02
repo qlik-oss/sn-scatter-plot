@@ -1,16 +1,31 @@
 import KEYS from '../../constants/keys';
+import { eventToComponentPoint } from '../../utils/event-utils';
 
-function zoom(/* e, zoomHandler */) {
-  /*
-  const { x, y } = zoomHandler.getPxOffsets();
+const ZOOM_SCALE = 2 ** (1 / 2);
 
-  const { deltaX, deltaY } = e;
+function transform(scale, start, end, factor) {
+  const range = end - start;
+  const value = start + range * scale;
+  const newStart = value - range * scale * factor;
+  const newEnd = newStart + range * factor;
+  return [newStart, newEnd];
+}
 
-  zoomHandler.setPxOffsets({
-    x: x + deltaX,
-    y: y + deltaY,
+function zoom(e, chart, pointComponent, zoomHandler) {
+  const p = eventToComponentPoint(e, chart, pointComponent);
+  const { width, height } = pointComponent.rect.computedPhysical;
+
+  const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = zoomHandler.getZoom();
+  const zoomFactor = e.deltaY > 0 ? ZOOM_SCALE : 1 / ZOOM_SCALE;
+  const [xMin, xMax] = transform(p.x / width, xAxisMin, xAxisMax, zoomFactor);
+  const [yMax, yMin] = transform(p.y / height, yAxisMax, yAxisMin, zoomFactor);
+
+  zoomHandler.setZoom({
+    xAxisMin: xMin,
+    xAxisMax: xMax,
+    yAxisMin: yMin,
+    yAxisMax: yMax,
   });
-  */
 }
 
 export default function native({ chart, actions, zoomHandler }) {
@@ -45,7 +60,7 @@ export default function native({ chart, actions, zoomHandler }) {
         if (actions.zoom.enabled()) {
           [target] = chart.componentsFromPoint(point).filter((c) => c.key === KEYS.COMPONENT.POINT);
           if (target) {
-            zoom(e, zoomHandler);
+            zoom(e, chart, target, zoomHandler);
             e.preventDefault();
           }
         }

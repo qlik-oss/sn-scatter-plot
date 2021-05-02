@@ -6,7 +6,7 @@ import createLabels from './labels';
 export default function createReferenceLines({ models, context }) {
   const { layoutModel, dockModel, themeModel } = models;
   const { rtl, localeInfo } = context;
-  const style = themeModel.query.getStyle();
+  const themeStyle = themeModel.query.getStyle();
 
   return [
     createLines({
@@ -27,7 +27,7 @@ export default function createReferenceLines({ models, context }) {
       key: KEYS.COMPONENT.REFERENCE_LINE_LABELS_X,
       dock: dockModel.x.opposite,
       rtl,
-      style,
+      themeStyle,
       localeInfo,
     }),
     createLabels({
@@ -36,7 +36,7 @@ export default function createReferenceLines({ models, context }) {
       key: KEYS.COMPONENT.REFERENCE_LINE_LABELS_Y,
       dock: dockModel.y.opposite,
       rtl,
-      style,
+      themeStyle,
       localeInfo,
     }),
   ];
