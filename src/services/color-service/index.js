@@ -67,10 +67,6 @@ export default function createService({
     translator,
     layoutService: layoutModel,
     createConfig,
-    onInitialized() {
-      updateBrushAliases();
-      updateLegend();
-    },
     config: {
       localeInfo,
     },
@@ -78,6 +74,7 @@ export default function createService({
       wrappedScales: () => state.wrappedScales,
       legendComponents: () => state.legendComponents,
       legendInteractions: () => state.legendInteractions,
+      updateBrushAliases,
       updateLegend,
     },
   });
