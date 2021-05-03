@@ -1,8 +1,8 @@
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 
-export default function createAxes({ layoutModel, dockModel, themeModel }) {
-  const { xAxis, yAxis } = layoutModel.getLayout();
+export default function createAxes({ layoutService, dockModel, themeModel }) {
+  const { xAxis, yAxis } = layoutService.getLayout();
 
   const style = themeModel.query.getStyle();
 

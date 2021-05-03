@@ -1,8 +1,8 @@
 import resolveDisclaimer from './resolve';
 
-export default function createDisclaimerModel({ layoutModel, flags }) {
+export default function createDisclaimerModel({ layoutService, flags }) {
   const state = {
-    disclaimer: resolveDisclaimer({ layoutModel, flags }),
+    disclaimer: resolveDisclaimer({ layoutService, flags }),
   };
 
   return {

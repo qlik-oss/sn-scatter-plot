@@ -8,8 +8,8 @@ const SPACINGS = {
 };
 
 export default function createGridLines(models) {
-  const { layoutModel, themeModel } = models;
-  const { auto, spacing } = layoutModel.getLayoutValue('gridLine', {});
+  const { layoutService, themeModel } = models;
+  const { auto, spacing } = layoutService.getLayoutValue('gridLine', {});
   if (!auto && spacing === SPACINGS.NO_LINES) {
     return false;
   }

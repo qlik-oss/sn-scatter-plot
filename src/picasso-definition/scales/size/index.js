@@ -1,9 +1,9 @@
 import pointHelper from './helpers';
 
-export default function createSizeScale(layoutModel) {
-  const { qMin: sizeDataMin, qMax: sizeDataMax } = layoutModel.getHyperCubeValue('qMeasureInfo.2', {});
-  const [minDotSize, maxDotSize] = layoutModel.getLayoutValue('dataPoint.rangeBubbleSizes') || [];
-  const dotSize = layoutModel.getLayoutValue('dataPoint.bubbleSizes');
+export default function createSizeScale(layoutService) {
+  const { qMin: sizeDataMin, qMax: sizeDataMax } = layoutService.getHyperCubeValue('qMeasureInfo.2', {});
+  const [minDotSize, maxDotSize] = layoutService.getLayoutValue('dataPoint.rangeBubbleSizes') || [];
+  const dotSize = layoutService.getLayoutValue('dataPoint.bubbleSizes');
 
   const getDotMeasureSize = (d, windowSizeMultiplier) => {
     const { value } = d.datum.size;
@@ -20,5 +20,5 @@ export default function createSizeScale(layoutModel) {
 
   const getDotSize = (d, windowSizeMultiplier) => pointHelper.getDotSize({ dotSize, windowSizeMultiplier });
 
-  return layoutModel.meta.hasSizeMeasure ? getDotMeasureSize : getDotSize;
+  return layoutService.meta.hasSizeMeasure ? getDotMeasureSize : getDotSize;
 }

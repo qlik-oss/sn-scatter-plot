@@ -1,12 +1,12 @@
-export default function createDataFetcher({ layoutModel, model }) {
+export default function createDataFetcher({ layoutService, model }) {
   let lastDataWindow;
   let requestInProgress;
   let nextInLine;
 
   const dataFetcher = {
     fetchData(dataRect) {
-      if (layoutModel.meta.isSnapshot) {
-        return Promise.resolve(layoutModel.getDataPages());
+      if (layoutService.meta.isSnapshot) {
+        return Promise.resolve(layoutService.getDataPages());
       }
 
       // Do not fetch same data window twice in a row (important for performance)

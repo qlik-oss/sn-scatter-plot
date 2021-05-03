@@ -4,7 +4,7 @@ import createZoomHandler from '../../zoom-handler';
 export default function createChartModel({
   chart,
   localeInfo,
-  layoutModel,
+  layoutService,
   dockModel,
   model,
   colorService,
@@ -23,7 +23,7 @@ export default function createChartModel({
 
   const mainConfig = {
     key: KEYS.DATA.MAIN,
-    data: layoutModel.getHyperCube(),
+    data: layoutService.getHyperCube(),
     config: {
       localeInfo,
     },
@@ -33,7 +33,7 @@ export default function createChartModel({
 
   const zoomHandler = createZoomHandler({
     dockModel,
-    layoutModel,
+    layoutService,
     model,
     viewState,
   });
