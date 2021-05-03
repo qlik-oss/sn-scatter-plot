@@ -48,7 +48,11 @@ const useSettings = ({ core, models, flags }) => {
 
     return zoomHandler.fetchData().then((pages) => {
       layoutModel.setDataPages(pages);
-      return colorService.initialize().then(() => setSettings(getPicassoDef(logicalSize)));
+      return colorService.initialize().then(() => {
+        colorService.custom.updateBrushAliases();
+        colorService.custom.updateLegend();
+        setSettings(getPicassoDef(logicalSize));
+      });
     });
   }, [models]);
 
