@@ -4,9 +4,9 @@ import createLines from './lines';
 import createLabels from './labels';
 
 export default function createReferenceLines({ models, context }) {
-  const { layoutService, dockModel, themeModel } = models;
+  const { layoutService, dockModel, themeService } = models;
   const { rtl, localeInfo } = context;
-  const themeStyle = themeModel.query.getStyle();
+  const themeStyle = themeService.getStyles();
 
   return [
     createLines({

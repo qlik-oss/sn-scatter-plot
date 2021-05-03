@@ -4,7 +4,7 @@ import createGridLines from '..';
 describe('grid-line', () => {
   let sandbox;
   let layoutService;
-  let themeModel;
+  let themeService;
   let gridLine;
   let create;
 
@@ -13,15 +13,11 @@ describe('grid-line', () => {
     layoutService = {
       getLayoutValue: sandbox.stub(),
     };
-    themeModel = {
-      query: {
-        getStyle: sandbox.stub(),
-      },
-    };
+    themeService = { getStyles: sandbox.stub() };
     create = () =>
       createGridLines({
         layoutService,
-        themeModel,
+        themeService,
       });
   });
 
@@ -32,7 +28,7 @@ describe('grid-line', () => {
       spacing: 1,
     };
     layoutService.getLayoutValue.withArgs('gridLine', {}).returns(gridLine);
-    themeModel.query.getStyle.returns({
+    themeService.getStyles.returns({
       grid: {
         line: {
           major: { color: 'major-style' },

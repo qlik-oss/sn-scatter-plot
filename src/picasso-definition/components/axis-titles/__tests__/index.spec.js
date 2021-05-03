@@ -6,7 +6,7 @@ describe('axis-titles', () => {
   let dockModel;
   let layout;
   let layoutService;
-  let themeModel;
+  let themeService;
   let axisTitles;
   let style;
 
@@ -42,12 +42,8 @@ describe('axis-titles', () => {
         },
       },
     };
-    themeModel = {
-      query: {
-        getStyle: () => style,
-      },
-    };
-    axisTitles = createAxisTitles({ layoutService, dockModel, themeModel });
+    themeService = { getStyles: () => style };
+    axisTitles = createAxisTitles({ layoutService, dockModel, themeService });
   });
 
   afterEach(() => {

@@ -12,14 +12,13 @@ import {
   useRect,
   useSelections,
 } from '@nebula.js/stardust';
-
-import { layoutService as createLayoutService } from '@qlik/chart-modules';
+import { layoutService as createLayoutService, themeService as createThemeService } from '@qlik/chart-modules';
+import themeStyleMatrix from '../services/theme-service/theme-style-matrix';
 import layoutServiceMeta from '../services/layout-service/meta';
 import createChartModel from '../models/chart-model';
 import createTickModel from '../models/tick-model';
 import createDockModel from '../models/dock-model';
 import createSelectionModel from '../models/selection-model';
-import createThemeModel from '../models/theme-model';
 import createColorService from '../services/color-service';
 import getLogicalSize from '../logical-size';
 import createViewState from '../models/chart-model/viewstate';
@@ -69,9 +68,9 @@ const useModels = ({ core, flags }) => {
     const layoutService = createLayoutService({ source: layout, metaAdditionsFn: layoutServiceMeta });
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
     const dockModel = createDockModel({ layoutService, size: logicalSize || rect, rtl: options.direction === 'rtl' });
-    const themeModel = createThemeModel({ theme });
+    const themeService = createThemeService({ theme, styleMatrix: themeStyleMatrix });
     const extremumModel = createExtremumModel(layoutService, options.viewState);
-    const tickModel = createTickModel({ layoutService, dockModel, extremumModel, themeModel, chart });
+    const tickModel = createTickModel({ layoutService, dockModel, extremumModel, themeService, chart });
     const viewState = createViewState(layoutService, options.viewState, tickModel);
     const colorService = createColorService({
       actions,
@@ -109,7 +108,7 @@ const useModels = ({ core, flags }) => {
       chartModel,
       dockModel,
       selectionModel,
-      themeModel,
+      themeService,
       disclaimerModel,
       colorService,
     });
