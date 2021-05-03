@@ -3,25 +3,21 @@ import createGridLines from '..';
 
 describe('grid-line', () => {
   let sandbox;
-  let layoutModel;
-  let themeModel;
+  let layoutService;
+  let themeService;
   let gridLine;
   let create;
 
   before(() => {
     sandbox = sinon.createSandbox();
-    layoutModel = {
+    layoutService = {
       getLayoutValue: sandbox.stub(),
     };
-    themeModel = {
-      query: {
-        getStyle: sandbox.stub(),
-      },
-    };
+    themeService = { getStyles: sandbox.stub() };
     create = () =>
       createGridLines({
-        layoutModel,
-        themeModel,
+        layoutService,
+        themeService,
       });
   });
 
@@ -31,8 +27,8 @@ describe('grid-line', () => {
       auto: true,
       spacing: 1,
     };
-    layoutModel.getLayoutValue.withArgs('gridLine', {}).returns(gridLine);
-    themeModel.query.getStyle.returns({
+    layoutService.getLayoutValue.withArgs('gridLine', {}).returns(gridLine);
+    themeService.getStyles.returns({
       grid: {
         line: {
           major: { color: 'major-style' },

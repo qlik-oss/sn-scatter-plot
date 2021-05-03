@@ -2,9 +2,9 @@ import KEYS from '../../../constants/keys';
 import createSizeScale from '../../scales/size';
 import createBrush from '../../brush';
 
-export default function createPoint({ layoutModel, chartModel, colorService }) {
+export default function createPoint({ layoutService, chartModel, colorService }) {
   let windowSizeMultiplier;
-  const sizeScaleFn = createSizeScale(layoutModel);
+  const sizeScaleFn = createSizeScale(layoutService);
   return {
     key: KEYS.COMPONENT.POINT,
     type: 'point',

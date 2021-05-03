@@ -3,7 +3,7 @@ describe('chart-model', () => {
   let chart;
   let localeInfo;
   let hyperCube;
-  let layoutModel;
+  let layoutService;
   let colorService;
   let dockModel;
   let model;
@@ -39,7 +39,7 @@ describe('chart-model', () => {
     hyperCube = {
       dataPages: [{ key: 'page-0' }, { key: 'page-1' }],
     };
-    layoutModel = {
+    layoutService = {
       meta: { isContinuous: false, isSnapshot: false },
       getHyperCube: sandbox.stub().returns(hyperCube),
       getDataPages: sandbox.stub().returns(hyperCube.dataPages),
@@ -63,7 +63,7 @@ describe('chart-model', () => {
       createChartModel({
         chart,
         localeInfo,
-        layoutModel,
+        layoutService,
         dockModel,
         colorService,
         model,

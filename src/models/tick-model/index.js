@@ -28,7 +28,7 @@ export function getCount(size, spacing) {
   return Math.max(1, Math.round(size / distance));
 }
 
-export default function createTickModel({ layoutModel, dockModel, extremumModel, themeModel, chart }) {
+export default function createTickModel({ layoutService, dockModel, extremumModel, themeService, chart }) {
   function estimateSize(dimension) {
     let size = dockModel.chartSize[dimension];
     if (dimension === 'height') return size;
@@ -58,11 +58,11 @@ export default function createTickModel({ layoutModel, dockModel, extremumModel,
     if (scaleName === KEYS.SCALE.X) {
       ({ xAxisMin: min, xAxisMax: max, xAxisExplicitType: explicitType } = extremumModel.query.getXExtrema());
       dimension = 'width';
-      spacing = layoutModel.getLayoutValue('xAxis.spacing', 1);
+      spacing = layoutService.getLayoutValue('xAxis.spacing', 1);
     } else {
       ({ yAxisMin: min, yAxisMax: max, yAxisExplicitType: explicitType } = extremumModel.query.getYExtrema());
       dimension = 'height';
-      spacing = layoutModel.getLayoutValue('yAxis.spacing', 1);
+      spacing = layoutService.getLayoutValue('yAxis.spacing', 1);
     }
 
     const size = estimateSize(dimension);
@@ -70,7 +70,7 @@ export default function createTickModel({ layoutModel, dockModel, extremumModel,
 
     // Get the measureText function from renderer
     const { measureText } = picasso.renderer('svg')();
-    const style = themeModel.query.getStyle();
+    const style = themeService.getStyles();
     const measure = (text) =>
       measureText({
         text,

@@ -1,8 +1,8 @@
 import KEYS from '../../../constants/keys';
 
-export default function createRefLines({ layoutModel, scale, key, minimumLayoutMode }) {
+export default function createRefLines({ layoutService, scale, key, minimumLayoutMode }) {
   const path = scale === KEYS.SCALE.X ? 'refLine.refLinesX' : 'refLine.refLinesY';
-  const refLines = layoutModel
+  const refLines = layoutService
     .getLayoutValue(path)
     .filter((refLine) => refLine.show !== false && refLine.show !== 0 && refLine.show !== '0');
 

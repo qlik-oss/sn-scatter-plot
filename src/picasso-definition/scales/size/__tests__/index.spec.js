@@ -1,7 +1,7 @@
 import createSizeScale from '../index';
 
 describe('size scale', () => {
-  let layoutModel;
+  let layoutService;
   let layoutValueStub;
   let hyperCubeValueStub;
   let sandbox;
@@ -13,7 +13,7 @@ describe('size scale', () => {
     layoutValueStub.withArgs('dataPoint.bubbleSizes').returns(5);
     hyperCubeValueStub = sandbox.stub();
     hyperCubeValueStub.withArgs('qMeasureInfo.2', {}).returns({ qMin: 1, qMax: 10 });
-    layoutModel = {
+    layoutService = {
       key: 'layout-model',
       getLayoutValue: layoutValueStub,
       getHyperCubeValue: hyperCubeValueStub,
@@ -33,20 +33,20 @@ describe('size scale', () => {
   let windowSizeMultiplier = 1;
 
   it('should return a function', () => {
-    expect(createSizeScale(layoutModel)).to.be.a('Function');
+    expect(createSizeScale(layoutService)).to.be.a('Function');
   });
 
   it('should return correctly calculated value of size when has measure size', () => {
-    expect(createSizeScale(layoutModel)(d, windowSizeMultiplier)).to.equal('12px');
+    expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('12px');
     windowSizeMultiplier = 2;
-    expect(createSizeScale(layoutModel)(d, windowSizeMultiplier)).to.equal('24px');
+    expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('24px');
   });
 
   it('should return correctly calculated value of size when has NOT measure size', () => {
-    layoutModel.meta.hasSizeMeasure = false;
+    layoutService.meta.hasSizeMeasure = false;
     windowSizeMultiplier = 1;
-    expect(createSizeScale(layoutModel)(d, windowSizeMultiplier)).to.equal('10px');
+    expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('10px');
     windowSizeMultiplier = 2;
-    expect(createSizeScale(layoutModel)(d, windowSizeMultiplier)).to.equal('20px');
+    expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('20px');
   });
 });

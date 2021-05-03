@@ -11,7 +11,7 @@ export default function createService({
   translator,
   options,
   model,
-  layoutModel,
+  layoutService,
   picasso,
   viewState,
 }) {
@@ -53,8 +53,8 @@ export default function createService({
       colorProps: {
         measureOverrides,
       },
-      legendProps: layoutModel.getLayoutValue('legend'),
-      hc: layoutModel.getHyperCube(),
+      legendProps: layoutService.getLayoutValue('legend'),
+      hc: layoutService.getHyperCube(),
       key: KEYS.SCALE.COLOR,
     };
     return settings;
@@ -65,12 +65,8 @@ export default function createService({
     model,
     app,
     translator,
-    layoutService: layoutModel,
+    layoutService,
     createConfig,
-    onInitialized() {
-      updateBrushAliases();
-      updateLegend();
-    },
     config: {
       localeInfo,
     },
@@ -78,6 +74,7 @@ export default function createService({
       wrappedScales: () => state.wrappedScales,
       legendComponents: () => state.legendComponents,
       legendInteractions: () => state.legendInteractions,
+      updateBrushAliases,
       updateLegend,
     },
   });

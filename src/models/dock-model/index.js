@@ -35,9 +35,9 @@ export function getOppositeDock(dock) {
   }
 }
 
-export default function createDockModel({ layoutModel, size: { width = 0, height = 0 } = {}, rtl }) {
+export default function createDockModel({ layoutService, size: { width = 0, height = 0 } = {}, rtl }) {
   const getX = (chartSize) => {
-    const xDock = getDock('vertical', layoutModel.getLayoutValue('xAxis.dock'), rtl);
+    const xDock = getDock('vertical', layoutService.getLayoutValue('xAxis.dock'), rtl);
     return {
       dock: xDock,
       opposite: getOppositeDock(xDock),
@@ -46,7 +46,7 @@ export default function createDockModel({ layoutModel, size: { width = 0, height
   };
 
   const getY = (chartSize) => {
-    const yDock = getDock('horizontal', layoutModel.getLayoutValue('yAxis.dock'), rtl);
+    const yDock = getDock('horizontal', layoutService.getLayoutValue('yAxis.dock'), rtl);
     return {
       dock: yDock,
       opposite: getOppositeDock(yDock),
