@@ -38,8 +38,8 @@ export default function createChartModel({
     viewState,
   });
 
-  function updatePartial() {
-    extremumModel.query.updateExtrema(viewState.get('zoom'));
+  function updatePartial(newZoom) {
+    extremumModel.query.updateExtrema(newZoom);
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???
       // const startTime = Date.now();

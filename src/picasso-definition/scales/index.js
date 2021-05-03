@@ -7,7 +7,10 @@ export default function createScales({ models, viewState }) {
       data: {
         field: KEYS.FIELDS.X,
       },
-      min: () => viewState.get('zoom').xAxisMin,
+      min: () => {
+        console.log(viewState.get('zoom').xAxisMin);
+        return viewState.get('zoom').xAxisMin;
+      },
       max: () => viewState.get('zoom').xAxisMax,
       ticks: {
         values: () => tickModel.query.getXTicks(),
