@@ -9,7 +9,7 @@ describe('createReferenceLines', () => {
   let context;
   let dockModel;
   let models;
-  const layoutModel = 'layoutModel';
+  const layoutService = 'layoutService';
   let themeModel;
 
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe('createReferenceLines', () => {
     sandbox.stub(MODES, 'REFERENCE_LINE').value('XSMALL');
     sandbox.stub(createLines, 'default');
     sandbox.stub(createLabels, 'default');
-    models = { layoutModel, dockModel, themeModel };
+    models = { layoutService, dockModel, themeModel };
   });
 
   afterEach(() => {
@@ -45,7 +45,7 @@ describe('createReferenceLines', () => {
     createReferenceLines({ models, context });
     expect(
       createLines.default.withArgs({
-        layoutModel: 'layoutModel',
+        layoutService: 'layoutService',
         scale: 'Y',
         key: 'ref-lines-y',
         minimumLayoutMode: 'XSMALL',
@@ -53,7 +53,7 @@ describe('createReferenceLines', () => {
     ).to.have.been.calledOnce;
     expect(
       createLines.default.withArgs({
-        layoutModel: 'layoutModel',
+        layoutService: 'layoutService',
         scale: 'X',
         key: 'ref-lines-x',
         minimumLayoutMode: 'XSMALL',
@@ -65,7 +65,7 @@ describe('createReferenceLines', () => {
     createReferenceLines({ models, context });
     expect(
       createLabels.default.withArgs({
-        layoutModel: 'layoutModel',
+        layoutService: 'layoutService',
         scale: 'X',
         key: 'ref-line-labels-x',
         dock: 'top',
@@ -76,7 +76,7 @@ describe('createReferenceLines', () => {
     ).to.have.been.calledOnce;
     expect(
       createLabels.default.withArgs({
-        layoutModel: 'layoutModel',
+        layoutService: 'layoutService',
         scale: 'Y',
         key: 'ref-line-labels-y',
         dock: 'right',

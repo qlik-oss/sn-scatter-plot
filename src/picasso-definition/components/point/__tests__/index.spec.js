@@ -3,7 +3,7 @@ import * as KEYS from '../../../../constants/keys';
 
 describe('grid chart point', () => {
   let sandbox;
-  let layoutModel;
+  let layoutService;
   let colorService;
   let create;
   let layoutValueStub;
@@ -26,7 +26,7 @@ describe('grid chart point', () => {
     layoutValueStub = sandbox.stub();
     hyperCubeValueStub = sandbox.stub();
     hyperCubeValueStub.withArgs('qMeasureInfo.2', {}).returns({ qMin: 1, qMax: 10 });
-    layoutModel = {
+    layoutService = {
       key: 'layout-model',
       getLayoutValue: layoutValueStub,
       getHyperCubeValue: hyperCubeValueStub,
@@ -39,7 +39,7 @@ describe('grid chart point', () => {
 
     create = () =>
       createPoint({
-        layoutModel,
+        layoutService,
         colorService,
       });
   });

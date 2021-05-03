@@ -4,23 +4,27 @@ describe('createExtremumModel', () => {
   describe('getExtrema', () => {
     let sandbox;
     let create;
-    let layoutModel;
+    let layoutService;
     let viewStateOptions;
     let extremumModel;
     let result;
 
     beforeEach(() => {
       sandbox = sinon.createSandbox();
-      layoutModel = { getHyperCubeValue: sandbox.stub(), getLayoutValue: sandbox.stub(), meta: { isSnapshot: false } };
+      layoutService = {
+        getHyperCubeValue: sandbox.stub(),
+        getLayoutValue: sandbox.stub(),
+        meta: { isSnapshot: false },
+      };
 
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(0.9);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(0.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
-      layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
-      layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(0.9);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(0.1);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
+      layoutService.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
+      layoutService.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
 
-      create = () => createExtremumModel(layoutModel, viewStateOptions);
+      create = () => createExtremumModel(layoutService, viewStateOptions);
     });
 
     afterEach(() => {
@@ -28,8 +32,8 @@ describe('createExtremumModel', () => {
     });
 
     it('should return correct extrema when the source is snapshot, and the snapshot has number data', () => {
-      layoutModel.meta.isSnapshot = true;
-      layoutModel.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({
+      layoutService.meta.isSnapshot = true;
+      layoutService.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({
         xAxisMin: 0,
         xAxisMax: 600,
         yAxisMin: -100,
@@ -48,20 +52,20 @@ describe('createExtremumModel', () => {
     });
 
     it('should return correct extrema when the source is snapshot, but some of snapshot data are not number', () => {
-      layoutModel.meta.isSnapshot = true;
-      layoutModel.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({
+      layoutService.meta.isSnapshot = true;
+      layoutService.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({
         xAxisMin: 0,
         xAxisMax: '600',
         yAxisMin: '-100',
         yAxisMax: 500,
       });
 
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(600);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-300);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
-      layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: true, minMax: 'min', min: 0.2, max: 0.8 });
-      layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: true, minMax: 'min', min: 0.2, max: 0.8 });
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(600);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-300);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
+      layoutService.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: true, minMax: 'min', min: 0.2, max: 0.8 });
+      layoutService.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: true, minMax: 'min', min: 0.2, max: 0.8 });
 
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
@@ -76,7 +80,7 @@ describe('createExtremumModel', () => {
     });
 
     it('should return correct extrema when the source is viewStateOptions, and the viewStateOptions has number data', () => {
-      layoutModel.meta.isSnapshot = false;
+      layoutService.meta.isSnapshot = false;
       viewStateOptions = {
         xAxisMin: 1,
         xAxisMax: 2,
@@ -96,7 +100,7 @@ describe('createExtremumModel', () => {
     });
 
     it('should return correct extrema when the source is viewStateOptions, but some of viewStateOptions data are not number, test 1', () => {
-      layoutModel.meta.isSnapshot = false;
+      layoutService.meta.isSnapshot = false;
       viewStateOptions = {
         xAxisMin: '1',
         xAxisMax: 2,
@@ -104,12 +108,12 @@ describe('createExtremumModel', () => {
         yAxisMax: '4',
       };
 
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(4);
-      layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
-      layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(4);
+      layoutService.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
+      layoutService.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
 
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
@@ -124,7 +128,7 @@ describe('createExtremumModel', () => {
     });
 
     it('should return correct extrema when the source is viewStateOptions, but some of viewStateOptions data are not number, test 2', () => {
-      layoutModel.meta.isSnapshot = false;
+      layoutService.meta.isSnapshot = false;
       viewStateOptions = {
         xAxisMin: '1',
         xAxisMax: '2',
@@ -132,12 +136,12 @@ describe('createExtremumModel', () => {
         yAxisMax: '4',
       };
 
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(4);
-      layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'max', min: 0.2, max: 0.8 });
-      layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(4);
+      layoutService.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'max', min: 0.2, max: 0.8 });
+      layoutService.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
 
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
@@ -152,15 +156,15 @@ describe('createExtremumModel', () => {
     });
 
     it('should return correct extrema when the source is not defined, both X and Y have autoMinMax on', () => {
-      layoutModel.meta.isSnapshot = false;
+      layoutService.meta.isSnapshot = false;
       viewStateOptions = {};
 
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(600.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-300);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0);
-      layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: true, minMax: 'max', min: 0.2, max: 0.8 });
-      layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: true, minMax: 'min', min: 0.2, max: 0.8 });
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(600.1);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-300);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0);
+      layoutService.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: true, minMax: 'max', min: 0.2, max: 0.8 });
+      layoutService.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: true, minMax: 'min', min: 0.2, max: 0.8 });
 
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
@@ -175,15 +179,15 @@ describe('createExtremumModel', () => {
     });
 
     it('should return correct extrema when the source is not defined, only X has autoMinMax on', () => {
-      layoutModel.meta.isSnapshot = true;
-      layoutModel.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({});
+      layoutService.meta.isSnapshot = true;
+      layoutService.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({});
 
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.2);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(600.2);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(1.2);
-      layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: true, minMax: 'max', min: 0.2, max: 0.8 });
-      layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.2);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(600.2);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(1.2);
+      layoutService.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: true, minMax: 'max', min: 0.2, max: 0.8 });
+      layoutService.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
 
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
@@ -198,15 +202,15 @@ describe('createExtremumModel', () => {
     });
 
     it('should return correct extrema when the source is not defined, only Y has autoMinMax on', () => {
-      layoutModel.meta.isSnapshot = true;
-      layoutModel.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({});
+      layoutService.meta.isSnapshot = true;
+      layoutService.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({});
 
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.2);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-300);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0);
-      layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'max', min: 0.2, max: 0.8 });
-      layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: true, minMax: 'min', min: 0.2, max: 0.8 });
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.2);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-300);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0);
+      layoutService.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'max', min: 0.2, max: 0.8 });
+      layoutService.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: true, minMax: 'min', min: 0.2, max: 0.8 });
 
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
@@ -221,15 +225,17 @@ describe('createExtremumModel', () => {
     });
 
     it('should return correct extrema when the source is not defined, both X and Y have autoMinMax off', () => {
-      layoutModel.meta.isSnapshot = true;
-      layoutModel.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({});
+      layoutService.meta.isSnapshot = true;
+      layoutService.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({});
 
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
-      layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'max', min: 0.2, max: 0.8 });
-      layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: false, minMax: 'minMax', min: 0.2, max: 0.8 });
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
+      layoutService.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'max', min: 0.2, max: 0.8 });
+      layoutService.getLayoutValue
+        .withArgs('yAxis')
+        .returns({ autoMinMax: false, minMax: 'minMax', min: 0.2, max: 0.8 });
 
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
@@ -247,23 +253,27 @@ describe('createExtremumModel', () => {
   describe('updateExtrema', () => {
     let sandbox;
     let create;
-    let layoutModel;
+    let layoutService;
     let viewStateOptions;
     let extremumModel;
     let result;
 
     beforeEach(() => {
       sandbox = sinon.createSandbox();
-      layoutModel = { getHyperCubeValue: sandbox.stub(), getLayoutValue: sandbox.stub(), meta: { isSnapshot: false } };
+      layoutService = {
+        getHyperCubeValue: sandbox.stub(),
+        getLayoutValue: sandbox.stub(),
+        meta: { isSnapshot: false },
+      };
 
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(0.9);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(0.1);
-      layoutModel.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
-      layoutModel.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
-      layoutModel.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: true, minMax: 'max', min: 0.2, max: 0.8 });
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(0.9);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(0.1);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
+      layoutService.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'min', min: 0.2, max: 0.8 });
+      layoutService.getLayoutValue.withArgs('yAxis').returns({ autoMinMax: true, minMax: 'max', min: 0.2, max: 0.8 });
 
-      create = () => createExtremumModel(layoutModel, viewStateOptions);
+      create = () => createExtremumModel(layoutService, viewStateOptions);
     });
 
     afterEach(() => {
@@ -279,7 +289,7 @@ describe('createExtremumModel', () => {
         x: 0.05,
         y: 0.06,
       };
-      layoutModel.meta.isSnapshot = false;
+      layoutService.meta.isSnapshot = false;
       viewStateOptions = {};
       extremumModel = create();
       extremumModel.query.updateExtrema(newZoom);

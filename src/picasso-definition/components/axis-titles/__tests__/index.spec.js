@@ -5,7 +5,7 @@ describe('axis-titles', () => {
   let sandbox;
   let dockModel;
   let layout;
-  let layoutModel;
+  let layoutService;
   let themeModel;
   let axisTitles;
   let style;
@@ -29,7 +29,7 @@ describe('axis-titles', () => {
         show: 'all',
       },
     };
-    layoutModel = {
+    layoutService = {
       getLayout: () => layout,
       getHyperCubeValue: sandbox.stub(),
     };
@@ -47,7 +47,7 @@ describe('axis-titles', () => {
         getStyle: () => style,
       },
     };
-    axisTitles = createAxisTitles({ layoutModel, dockModel, themeModel });
+    axisTitles = createAxisTitles({ layoutService, dockModel, themeModel });
   });
 
   afterEach(() => {
@@ -66,9 +66,9 @@ describe('axis-titles', () => {
   });
 
   it('should have correct text property', () => {
-    const xTitle = layoutModel.getHyperCubeValue('qMeasureInfo.0.qFallbackTitle');
+    const xTitle = layoutService.getHyperCubeValue('qMeasureInfo.0.qFallbackTitle');
     expect(axisTitles[0].text).to.equal(xTitle);
-    const yTitle = layoutModel.getHyperCubeValue('qMeasureInfo.1.qFallbackTitle');
+    const yTitle = layoutService.getHyperCubeValue('qMeasureInfo.1.qFallbackTitle');
     expect(axisTitles[1].text).to.equal(yTitle);
   });
 
