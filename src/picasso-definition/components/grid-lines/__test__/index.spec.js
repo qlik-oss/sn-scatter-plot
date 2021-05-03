@@ -3,14 +3,14 @@ import createGridLines from '..';
 
 describe('grid-line', () => {
   let sandbox;
-  let layoutModel;
+  let layoutService;
   let themeModel;
   let gridLine;
   let create;
 
   before(() => {
     sandbox = sinon.createSandbox();
-    layoutModel = {
+    layoutService = {
       getLayoutValue: sandbox.stub(),
     };
     themeModel = {
@@ -20,7 +20,7 @@ describe('grid-line', () => {
     };
     create = () =>
       createGridLines({
-        layoutModel,
+        layoutService,
         themeModel,
       });
   });
@@ -31,7 +31,7 @@ describe('grid-line', () => {
       auto: true,
       spacing: 1,
     };
-    layoutModel.getLayoutValue.withArgs('gridLine', {}).returns(gridLine);
+    layoutService.getLayoutValue.withArgs('gridLine', {}).returns(gridLine);
     themeModel.query.getStyle.returns({
       grid: {
         line: {

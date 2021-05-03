@@ -55,7 +55,7 @@ describe('getCount', () => {
 describe('createTickModel', () => {
   let sandbox;
   let resolveTicks;
-  let layoutModel;
+  let layoutService;
   let extremumModel;
   let dockModel;
   let create;
@@ -70,9 +70,9 @@ describe('createTickModel', () => {
     sandbox = sinon.createSandbox();
     resolveTicks = sandbox.stub();
     resolveTicks.returns('called');
-    layoutModel = { getLayoutValue: sandbox.stub() };
-    layoutModel.getLayoutValue.withArgs('xAxis.spacing', 1).returns(0.5);
-    layoutModel.getLayoutValue.withArgs('yAxis.spacing', 1).returns(2);
+    layoutService = { getLayoutValue: sandbox.stub() };
+    layoutService.getLayoutValue.withArgs('xAxis.spacing', 1).returns(0.5);
+    layoutService.getLayoutValue.withArgs('yAxis.spacing', 1).returns(2);
     dockModel = { chartSize: { width: 500, height: 1000 } };
     extremumModel = {
       query: { getXExtrema: sandbox.stub(), getYExtrema: sandbox.stub(), getIsHomeState: sandbox.stub().returns(true) },
@@ -90,7 +90,7 @@ describe('createTickModel', () => {
     chart.formatter.withArgs('x').returns('x-formatter');
     chart.formatter.withArgs('y').returns('y-formatter');
     themeModel = { query: { getStyle: sandbox.stub().returns('theme') } };
-    create = () => createTickModel({ layoutModel, dockModel, extremumModel, themeModel, chart });
+    create = () => createTickModel({ layoutService, dockModel, extremumModel, themeModel, chart });
   });
 
   afterEach(() => {
