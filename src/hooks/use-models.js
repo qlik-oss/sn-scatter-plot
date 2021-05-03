@@ -19,7 +19,7 @@ import createTickModel from '../models/tick-model';
 import createDockModel from '../models/dock-model';
 import createSelectionModel from '../models/selection-model';
 import createThemeModel from '../models/theme-model';
-import createColorService from '../models/color-service';
+import createColorService from '../services/color-service';
 import getLogicalSize from '../logical-size';
 import createViewState from '../models/chart-model/viewstate';
 import createExtremumModel from '../models/extremum-model';
