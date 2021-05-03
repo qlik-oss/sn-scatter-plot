@@ -10,13 +10,13 @@ describe('createReferenceLines', () => {
   let dockModel;
   let models;
   const layoutService = 'layoutService';
-  let themeModel;
+  let themeService;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     context = { rtl: 'some rtl', localeInfo: 'valid localeInfo' };
     dockModel = { x: { opposite: 'top' }, y: { opposite: 'right' } };
-    themeModel = { query: { getStyle: sandbox.stub().returns('themeStyle') } };
+    themeService = { getStyles: sandbox.stub().returns('themeStyle') };
     sandbox.stub(KEYS, 'default').value({
       SCALE: { X: 'X', Y: 'Y' },
       COMPONENT: {
@@ -29,7 +29,7 @@ describe('createReferenceLines', () => {
     sandbox.stub(MODES, 'REFERENCE_LINE').value('XSMALL');
     sandbox.stub(createLines, 'default');
     sandbox.stub(createLabels, 'default');
-    models = { layoutService, dockModel, themeModel };
+    models = { layoutService, dockModel, themeService };
   });
 
   afterEach(() => {
@@ -38,7 +38,7 @@ describe('createReferenceLines', () => {
 
   it('should call getStyle twice', () => {
     createReferenceLines({ models, context });
-    expect(themeModel.query.getStyle).to.have.been.calledOnce;
+    expect(themeService.getStyles).to.have.been.calledOnce;
   });
 
   it('should call createLines twice, each with correct arguments', () => {

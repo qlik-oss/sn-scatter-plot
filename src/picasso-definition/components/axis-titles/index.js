@@ -1,9 +1,9 @@
 import KEYS from '../../../constants/keys';
 
-export default function createAxisTitles({ layoutService, dockModel, themeModel }) {
+export default function createAxisTitles({ layoutService, dockModel, themeService }) {
   const { xAxis, yAxis } = layoutService.getLayout();
 
-  const style = themeModel.query.getStyle();
+  const style = themeService.getStyles();
 
   const xAxisTitleDef =
     !xAxis || (xAxis.show !== 'all' && xAxis.show !== 'title')

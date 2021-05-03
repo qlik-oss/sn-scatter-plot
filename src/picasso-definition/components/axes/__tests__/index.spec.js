@@ -7,7 +7,7 @@ describe('axes', () => {
   let dockModel;
   let axes;
   let gridLine;
-  let themeModel;
+  let themeService;
   const scales = {
     X: 'x',
     Y: 'y',
@@ -60,15 +60,11 @@ describe('axes', () => {
         },
       },
     };
-    themeModel = {
-      query: {
-        getStyle: () => style,
-      },
-    };
+    themeService = { getStyles: () => style };
   });
 
   it('should create two axes', () => {
-    axes = createAxes({ layoutService, dockModel, themeModel });
+    axes = createAxes({ layoutService, dockModel, themeService });
     expect(axes.length).to.equal(2);
     expect(axes[0].type).to.equal('axis');
     expect(axes[1].type).to.equal('axis');
@@ -90,13 +86,13 @@ describe('axes', () => {
       expect(axes[1].settings.labels.show).to.equal(true);
       layout.yAxis.show = 'title';
       layout.xAxis.show = 'title';
-      axes = createAxes({ layoutService, dockModel, themeModel });
+      axes = createAxes({ layoutService, dockModel, themeService });
       expect(axes[0].settings.labels.show).to.equal(false);
       expect(axes[1].settings.labels.show).to.equal(false);
     });
 
     it('should have correct font size property for labels', () => {
-      const { fontSize } = themeModel.query.getStyle().axis.label.name;
+      const { fontSize } = themeService.getStyles().axis.label.name;
       expect(axes[0].settings.labels.fontSize).to.equal(fontSize);
     });
   });

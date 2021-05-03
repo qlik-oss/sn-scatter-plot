@@ -28,7 +28,7 @@ export function getCount(size, spacing) {
   return Math.max(1, Math.round(size / distance));
 }
 
-export default function createTickModel({ layoutService, dockModel, extremumModel, themeModel, chart }) {
+export default function createTickModel({ layoutService, dockModel, extremumModel, themeService, chart }) {
   function getChartProperties(scaleName) {
     let min;
     let max;
@@ -49,7 +49,7 @@ export default function createTickModel({ layoutService, dockModel, extremumMode
 
     // Get the measureText function from renderer
     const { measureText } = picasso.renderer('svg')();
-    const style = themeModel.query.getStyle();
+    const style = themeService.getStyles();
     const measure = (text) =>
       measureText({
         text,

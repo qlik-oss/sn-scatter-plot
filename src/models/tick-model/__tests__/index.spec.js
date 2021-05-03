@@ -60,7 +60,7 @@ describe('createTickModel', () => {
   let dockModel;
   let create;
   let ticks;
-  let themeModel;
+  let themeService;
   let chart;
   let linearScale;
   let renderer;
@@ -89,8 +89,8 @@ describe('createTickModel', () => {
     chart = { formatter: sandbox.stub() };
     chart.formatter.withArgs('x').returns('x-formatter');
     chart.formatter.withArgs('y').returns('y-formatter');
-    themeModel = { query: { getStyle: sandbox.stub().returns('theme') } };
-    create = () => createTickModel({ layoutService, dockModel, extremumModel, themeModel, chart });
+    themeService = { getStyles: sandbox.stub().returns('theme') };
+    create = () => createTickModel({ layoutService, dockModel, extremumModel, themeService, chart });
   });
 
   afterEach(() => {

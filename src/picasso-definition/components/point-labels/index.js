@@ -7,13 +7,13 @@ const LABEL_MODE = {
   FALLBACK: 1,
 };
 
-export default function createPointLabels({ layoutService, themeModel }) {
+export default function createPointLabels({ layoutService, themeService }) {
   const labels = layoutService.getLayoutValue('labels', {});
   if (labels.mode === LABEL_MODE.NONE) {
     return false;
   }
 
-  const style = themeModel.query.getStyle();
+  const style = themeService.getStyles();
   const { fontFamily, fontSize, color } = style.label?.value || {};
 
   const pointLabelsComponent = {
