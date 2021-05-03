@@ -28,7 +28,7 @@ export function getCount(size, spacing) {
   return Math.max(1, Math.round(size / distance));
 }
 
-export default function createTickModel({ layoutModel, dockModel, extremumModel, themeModel, chart }) {
+export default function createTickModel({ layoutService, dockModel, extremumModel, themeModel, chart }) {
   function getChartProperties(scaleName) {
     let min;
     let max;
@@ -37,11 +37,11 @@ export default function createTickModel({ layoutModel, dockModel, extremumModel,
     if (scaleName === KEYS.SCALE.X) {
       ({ xAxisMin: min, xAxisMax: max } = extremumModel.query.getXExtrema());
       dimension = 'width';
-      spacing = layoutModel.getLayoutValue('xAxis.spacing', 1);
+      spacing = layoutService.getLayoutValue('xAxis.spacing', 1);
     } else {
       ({ yAxisMin: min, yAxisMax: max } = extremumModel.query.getYExtrema());
       dimension = 'height';
-      spacing = layoutModel.getLayoutValue('yAxis.spacing', 1);
+      spacing = layoutService.getLayoutValue('yAxis.spacing', 1);
     }
     const size = dockModel.chartSize[dimension];
     const count = getCount(size, spacing);

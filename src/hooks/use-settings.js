@@ -42,12 +42,12 @@ const useSettings = ({ core, models, flags }) => {
       return Promise.resolve();
     }
 
-    const { layoutModel, chartModel, colorService } = models;
+    const { layoutService, chartModel, colorService } = models;
     const zoomHandler = chartModel.query.getZoomHandler();
-    const logicalSize = getLogicalSize({ layout: layoutModel.getLayout(), options });
+    const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
 
     return zoomHandler.fetchData().then((pages) => {
-      layoutModel.setDataPages(pages);
+      layoutService.setDataPages(pages);
       return colorService.initialize().then(() => {
         colorService.custom.updateBrushAliases();
         colorService.custom.updateLegend();
@@ -61,14 +61,14 @@ const useSettings = ({ core, models, flags }) => {
       return;
     }
 
-    const { layoutModel, chartModel, dockModel } = models;
+    const { layoutService, chartModel, dockModel } = models;
     const zoomHandler = chartModel.query.getZoomHandler();
-    const logicalSize = getLogicalSize({ layout: layoutModel.getLayout(), options });
+    const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
 
     dockModel.update(logicalSize || rect);
     zoomHandler.update();
     zoomHandler.fetchData().then((pages) => {
-      layoutModel.setDataPages(pages);
+      layoutService.setDataPages(pages);
       setSettings(getPicassoDef(logicalSize));
     });
   }, [rect.width, rect.height]);

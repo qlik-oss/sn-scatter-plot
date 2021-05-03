@@ -1,15 +1,15 @@
 import KEYS from '../../constants/keys';
 
-export default function createExtremumModel(layoutModel, viewStateOptions = {}) {
+export default function createExtremumModel(layoutService, viewStateOptions = {}) {
   function resolveExtrema(scaleName) {
     // Choose between data min/max and explicit min/max. Explicit values have higher priority
     let holder = scaleName === KEYS.SCALE.X ? 'qMeasureInfo.0' : 'qMeasureInfo.1';
-    let minFromLayout = layoutModel.getHyperCubeValue(`${holder}.qMin`, 0);
-    let maxFromLayout = layoutModel.getHyperCubeValue(`${holder}.qMax`, 1);
+    let minFromLayout = layoutService.getHyperCubeValue(`${holder}.qMin`, 0);
+    let maxFromLayout = layoutService.getHyperCubeValue(`${holder}.qMax`, 1);
     let explicitType = 'none';
 
     holder = scaleName === KEYS.SCALE.X ? 'xAxis' : 'yAxis';
-    const { autoMinMax, minMax, min, max } = layoutModel.getLayoutValue(holder);
+    const { autoMinMax, minMax, min, max } = layoutService.getLayoutValue(holder);
     if (!autoMinMax) {
       explicitType = minMax;
       switch (minMax) {
@@ -26,8 +26,8 @@ export default function createExtremumModel(layoutModel, viewStateOptions = {}) 
       }
     }
 
-    const source = layoutModel.meta.isSnapshot
-      ? layoutModel.getLayoutValue('snapshotData.content.chartData', {})
+    const source = layoutService.meta.isSnapshot
+      ? layoutService.getLayoutValue('snapshotData.content.chartData', {})
       : viewStateOptions;
     holder = scaleName === KEYS.SCALE.X ? 'xAxis' : 'yAxis';
     let axisMin = typeof source[`${holder}Min`] === 'number' ? source[`${holder}Min`] : minFromLayout;

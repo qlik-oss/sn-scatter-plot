@@ -7,8 +7,8 @@ const LABEL_MODE = {
   FALLBACK: 1,
 };
 
-export default function createPointLabels({ layoutModel, themeModel }) {
-  const labels = layoutModel.getLayoutValue('labels', {});
+export default function createPointLabels({ layoutService, themeModel }) {
+  const labels = layoutService.getLayoutValue('labels', {});
   if (labels.mode === LABEL_MODE.NONE) {
     return false;
   }

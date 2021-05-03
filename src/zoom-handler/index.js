@@ -1,13 +1,13 @@
 import createDataFetcher from './data-fetcher';
 
-export default function createZoomHandler({ layoutModel, model, viewState }) {
+export default function createZoomHandler({ layoutService, model, viewState }) {
   let dataFetcher;
 
   const zoomHandler = {
     getZoom: () => viewState.get('zoom'),
     // getPxOffsets: () => pixelOffsets,
     update() {
-      dataFetcher = createDataFetcher({ layoutModel, model });
+      dataFetcher = createDataFetcher({ layoutService, model });
     },
     fetchData() {
       // Calc data window (based on zoom, chart size, data size, settings?)

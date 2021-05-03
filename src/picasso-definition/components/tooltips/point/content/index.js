@@ -9,7 +9,7 @@ export default function createPointTooltipContent({ models, rtl }) {
 
   const createMeasure = createMeasureContent({ rtl });
 
-  const { hasSizeMeasure } = models.layoutModel.meta;
+  const { hasSizeMeasure } = models.layoutService.meta;
 
   const measureProps = ['x', 'y', hasSizeMeasure ? 'size' : false].filter(Boolean);
 

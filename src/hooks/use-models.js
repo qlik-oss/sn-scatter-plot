@@ -13,7 +13,8 @@ import {
   useSelections,
 } from '@nebula.js/stardust';
 
-import createLayoutModel from '../models/layout-model';
+import { layoutService as createLayoutService } from '@qlik/chart-modules';
+import layoutServiceMeta from '../services/layout-service/meta';
 import createChartModel from '../models/chart-model';
 import createTickModel from '../models/tick-model';
 import createDockModel from '../models/dock-model';
@@ -65,13 +66,13 @@ const useModels = ({ core, flags }) => {
     }
 
     const { picassoInstance, chart, actions } = core;
-    const layoutModel = createLayoutModel({ layout });
-    const logicalSize = getLogicalSize({ layout: layoutModel.getLayout(), options });
-    const dockModel = createDockModel({ layoutModel, size: logicalSize || rect, rtl: options.direction === 'rtl' });
+    const layoutService = createLayoutService({ source: layout, metaAdditionsFn: layoutServiceMeta });
+    const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
+    const dockModel = createDockModel({ layoutService, size: logicalSize || rect, rtl: options.direction === 'rtl' });
     const themeModel = createThemeModel({ theme });
-    const extremumModel = createExtremumModel(layoutModel, options.viewState);
-    const tickModel = createTickModel({ layoutModel, dockModel, extremumModel, themeModel, chart });
-    const viewState = createViewState(layoutModel, options.viewState, tickModel);
+    const extremumModel = createExtremumModel(layoutService, options.viewState);
+    const tickModel = createTickModel({ layoutService, dockModel, extremumModel, themeModel, chart });
+    const viewState = createViewState(layoutService, options.viewState, tickModel);
     const colorService = createColorService({
       actions,
       localeInfo,
@@ -81,7 +82,7 @@ const useModels = ({ core, flags }) => {
       translator,
       options,
       model,
-      layoutModel,
+      layoutService,
       picasso: picassoInstance,
       viewState,
     });
@@ -89,7 +90,7 @@ const useModels = ({ core, flags }) => {
     const chartModel = createChartModel({
       chart,
       localeInfo,
-      layoutModel,
+      layoutService,
       dockModel,
       model,
       picasso: picassoInstance,
@@ -99,11 +100,11 @@ const useModels = ({ core, flags }) => {
       extremumModel,
     });
 
-    const disclaimerModel = createDisclaimerModel({ layoutModel, flags });
+    const disclaimerModel = createDisclaimerModel({ layoutService, flags });
 
     selectionModel.command.setLayout({ layout });
     setModels({
-      layoutModel,
+      layoutService,
       tickModel,
       chartModel,
       dockModel,

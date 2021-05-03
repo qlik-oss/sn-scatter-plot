@@ -1,7 +1,7 @@
 import KEYS from '../../../constants/keys';
 
-export default function createAxisTitles({ layoutModel, dockModel, themeModel }) {
-  const { xAxis, yAxis } = layoutModel.getLayout();
+export default function createAxisTitles({ layoutService, dockModel, themeModel }) {
+  const { xAxis, yAxis } = layoutService.getLayout();
 
   const style = themeModel.query.getStyle();
 
@@ -11,7 +11,7 @@ export default function createAxisTitles({ layoutModel, dockModel, themeModel })
       : {
           type: 'text',
           key: KEYS.COMPONENT.X_AXIS_TITLE,
-          text: layoutModel.getHyperCubeValue(`${KEYS.FIELDS.X.replace(/\//g, '.')}.qFallbackTitle`),
+          text: layoutService.getHyperCubeValue(`${KEYS.FIELDS.X.replace(/\//g, '.')}.qFallbackTitle`),
           dock: dockModel.x.dock,
           style: {
             text: {
@@ -28,7 +28,7 @@ export default function createAxisTitles({ layoutModel, dockModel, themeModel })
       : {
           type: 'text',
           key: KEYS.COMPONENT.Y_AXIS_TITLE,
-          text: layoutModel.getHyperCubeValue(`${KEYS.FIELDS.Y.replace(/\//g, '.')}.qFallbackTitle`),
+          text: layoutService.getHyperCubeValue(`${KEYS.FIELDS.Y.replace(/\//g, '.')}.qFallbackTitle`),
           dock: dockModel.y.dock,
           style: {
             text: {

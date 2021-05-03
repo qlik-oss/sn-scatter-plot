@@ -5,8 +5,8 @@ import createYRange from './y-range';
 const EMPTY = { components: [], interactions: [] };
 
 export default function createRange({ models, actions, scales }) {
-  const { selectionModel, dockModel, colorService, layoutModel } = models;
-  const isSingleSelection = layoutModel.getHyperCubeValue('qDimensionInfo.0.qIsOneAndOnlyOne', false);
+  const { selectionModel, dockModel, colorService, layoutService } = models;
+  const isSingleSelection = layoutService.getHyperCubeValue('qDimensionInfo.0.qIsOneAndOnlyOne', false);
   if (isSingleSelection) {
     return { components: [], interactions: [] };
   }
