@@ -7,11 +7,14 @@ const LABEL_MODE = {
   FALLBACK: 1,
 };
 
-export default function createPointLabels({ layoutModel }) {
+export default function createPointLabels({ layoutModel, themeModel }) {
   const labels = layoutModel.getLayoutValue('labels', {});
   if (labels.mode === LABEL_MODE.NONE) {
     return false;
   }
+
+  const style = themeModel.query.getStyle();
+  const { fontFamily, fontSize, color } = style.label?.value || {};
 
   const pointLabelsComponent = {
     type: 'point-label',
@@ -20,6 +23,12 @@ export default function createPointLabels({ layoutModel }) {
       label: (node) => node.data.label,
       mode: labels.mode,
       // debugMode: true,
+    },
+    style: {
+      fontFamily,
+      fontSize,
+      fill: color,
+      backgroundColor: style.backgroundColor,
     },
   };
 

@@ -18,6 +18,7 @@ export default {
       fontFamily: 'QlikView Sans, sans-serif',
       fontSize: '12px',
       fill: '#333',
+      backgroundColor: 'yellow',
     },
   },
   preferredSize() {
@@ -47,13 +48,13 @@ export default {
       return [];
     }
 
-    const { style } = this;
+    const { fontSize, fontFamily, fill, backgroundColor } = this.style;
 
     const measureText = (text) =>
       this.renderer.measureText({
         text,
-        fontSize: style.fontSize,
-        fontFamily: style.fontFamily,
+        fontSize,
+        fontFamily,
       });
     const labelHeight = measureText('M').height - 2;
 
@@ -64,9 +65,9 @@ export default {
       text: node.text,
       x: node.cx,
       y: node.topRect.y2,
-      fontSize: style.fontSize,
-      fontFamily: style.fontFamily,
-      fill: style.fill,
+      fontSize,
+      fontFamily,
+      fill,
       baseline: 'text-after-edge',
       anchor: 'middle',
     }));
@@ -79,7 +80,7 @@ export default {
             y: node.topRect.y1,
             width: node.labelWidth,
             height: labelHeight,
-            fill: 'yellow',
+            fill: backgroundColor,
           }));
     const lines1 = topLabels.map((node) => ({
       type: 'line',
@@ -87,7 +88,7 @@ export default {
       x2: node.cx,
       y1: node.topRect.y2,
       y2: node.topRect.y2 + DY,
-      stroke: 'black',
+      stroke: fill,
       strokeWidth: 1,
     }));
     const labels2 = bottomLabels.map((node) => ({
@@ -95,9 +96,9 @@ export default {
       text: node.text,
       x: node.cx,
       y: node.bottomRect.y1,
-      fontSize: style.fontSize,
-      fontFamily: style.fontFamily,
-      fill: style.fill,
+      fontSize,
+      fontFamily,
+      fill,
       baseline: 'text-before-edge',
       anchor: 'middle',
     }));
@@ -110,7 +111,7 @@ export default {
             y: node.bottomRect.y1,
             width: node.labelWidth,
             height: labelHeight,
-            fill: 'yellow',
+            fill: backgroundColor,
           }));
     const lines2 = bottomLabels.map((node) => ({
       type: 'line',
@@ -118,7 +119,7 @@ export default {
       x2: node.cx,
       y1: node.bottomRect.y1 - DY,
       y2: node.bottomRect.y1,
-      stroke: 'black',
+      stroke: fill,
       strokeWidth: 1,
     }));
     return [...rects1, ...rects2, ...labels1, ...labels2, ...lines1, ...lines2];
