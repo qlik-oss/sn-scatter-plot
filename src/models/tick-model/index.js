@@ -29,27 +29,6 @@ export function getCount(size, spacing) {
 }
 
 export default function createTickModel({ layoutService, dockModel, extremumModel, themeService, chart }) {
-  function estimateSize(dimension) {
-    let size = dockModel.chartSize[dimension];
-    if (dimension === 'height') return size;
-    const componentNames = [
-      KEYS.COMPONENT.Y_AXIS_TITLE,
-      KEYS.COMPONENT.Y_AXIS,
-      KEYS.COMPONENT.REFERENCE_LINE_LABELS_Y,
-      KEYS.COMPONENT.LEGEND_CATEGORICAL,
-    ];
-    const componentWidths = [27, 49, 76, 170];
-    componentNames.forEach((name, index) => {
-      // const component = chart.component(name);
-      // if (!component) return;
-      // const { layout, rect } = component;
-      // if (!layout || !rect || layout.dock === 'top' || layout.dock === 'bottom') return;
-      size -= componentWidths[index];
-    });
-
-    return size;
-  }
-
   function getChartProperties(scaleName) {
     let min;
     let max;
@@ -66,7 +45,7 @@ export default function createTickModel({ layoutService, dockModel, extremumMode
       spacing = layoutService.getLayoutValue('yAxis.spacing', 1);
     }
 
-    const size = estimateSize(dimension);
+    const size = dockModel.chartSize[dimension];
     const count = getCount(size, spacing);
 
     // Get the measureText function from renderer
@@ -90,40 +69,6 @@ export default function createTickModel({ layoutService, dockModel, extremumMode
     const tickObject = getTicks({ scale, explicitType, count, size, measure, formatter });
     return prop === 'ticks' ? tickObject.ticks : tickObject.minMax;
   }
-
-  // function resolveMinMax(scaleName) {
-  //   let normalMin;
-  //   let normalMax;
-  //   let explicitType;
-  //   if (scaleName === KEYS.SCALE.X) {
-  //     ({
-  //       xAxisMin: normalMin,
-  //       xAxisMax: normalMax,
-  //       xAxisExplicitType: explicitType,
-  //     } = extremumModel.query.getXExtrema());
-  //   } else {
-  //     ({
-  //       yAxisMin: normalMin,
-  //       yAxisMax: normalMax,
-  //       yAxisExplicitType: explicitType,
-  //     } = extremumModel.query.getYExtrema());
-  //   }
-  //   const { isHomeState } = getChartProperties(scaleName);
-  //   if (!isHomeState) return [normalMin, normalMax];
-  //   const { min, max, count } = getChartProperties(scaleName);
-  //   const [niceMin, niceMax] = scaleLinear().domain([min, max]).nice(count).domain();
-
-  //   switch (explicitType) {
-  //     case 'minMax':
-  //       return [normalMin, normalMax];
-  //     case 'min':
-  //       return [normalMin, niceMax];
-  //     case 'max':
-  //       return [niceMin, normalMax];
-  //     default:
-  //       return [niceMin, niceMax];
-  //   }
-  // }
 
   return {
     query: {
