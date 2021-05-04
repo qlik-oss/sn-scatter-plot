@@ -19,7 +19,7 @@ export default function getTicks({ scale, explicitType, count, size, measure, fo
     return fits(labels);
   };
 
-  for (let c = count - 1; c > 0; c--) {
+  for (let c = count - 1; c > 1; c--) {
     if (valid()) {
       break;
     }

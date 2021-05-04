@@ -38,12 +38,13 @@ export default function createTickModel({ layoutService, dockModel, extremumMode
       KEYS.COMPONENT.REFERENCE_LINE_LABELS_Y,
       KEYS.COMPONENT.LEGEND_CATEGORICAL,
     ];
-    componentNames.forEach((name) => {
-      const component = chart.component(name);
-      if (!component) return;
-      const { layout, rect } = component;
-      if (!layout || !rect || layout.dock === 'top' || layout.dock === 'bottom') return;
-      size -= rect[dimension];
+    const componentWidths = [27, 49, 76, 170];
+    componentNames.forEach((name, index) => {
+      // const component = chart.component(name);
+      // if (!component) return;
+      // const { layout, rect } = component;
+      // if (!layout || !rect || layout.dock === 'top' || layout.dock === 'bottom') return;
+      size -= componentWidths[index];
     });
 
     return size;
