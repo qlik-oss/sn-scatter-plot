@@ -36,11 +36,6 @@ describe('createReferenceLines', () => {
     sandbox.restore();
   });
 
-  it('should call getStyle twice', () => {
-    createReferenceLines({ models, context });
-    expect(themeService.getStyles).to.have.been.calledOnce;
-  });
-
   it('should call createLines twice, each with correct arguments', () => {
     createReferenceLines({ models, context });
     expect(
@@ -65,24 +60,20 @@ describe('createReferenceLines', () => {
     createReferenceLines({ models, context });
     expect(
       createLabels.default.withArgs({
-        layoutService: 'layoutService',
+        models,
+        context,
         scale: 'X',
         key: 'ref-line-labels-x',
         dock: 'top',
-        rtl: 'some rtl',
-        themeStyle: 'themeStyle',
-        localeInfo: 'valid localeInfo',
       })
     ).to.have.been.calledOnce;
     expect(
       createLabels.default.withArgs({
-        layoutService: 'layoutService',
+        models,
+        context,
         scale: 'Y',
         key: 'ref-line-labels-y',
         dock: 'right',
-        rtl: 'some rtl',
-        themeStyle: 'themeStyle',
-        localeInfo: 'valid localeInfo',
       })
     ).to.have.been.calledOnce;
   });
