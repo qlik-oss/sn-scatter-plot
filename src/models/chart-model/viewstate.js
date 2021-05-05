@@ -6,17 +6,13 @@
  */
 
 export default function createViewState(layoutService, viewStateOptions = {}, tickModel) {
-  function resolveZoom() {
-    const [xAxisMin, xAxisMax] = tickModel.query.getXMinMax();
-    const [yAxisMin, yAxisMax] = tickModel.query.getYMinMax();
-    return { xAxisMin, xAxisMax, yAxisMin, yAxisMax };
-  }
-
   const source = layoutService.meta.isSnapshot
     ? layoutService.getLayoutValue('snapshotData.content.chartData', {})
     : viewStateOptions;
+  const [xAxisMin, xAxisMax] = tickModel.query.getXMinMax();
+  const [yAxisMin, yAxisMax] = tickModel.query.getYMinMax();
   const storage = {
-    zoom: () => resolveZoom(),
+    zoom: { xAxisMin, xAxisMax, yAxisMin, yAxisMax },
     legendScrollOffset: source.legendScrollOffset || 0,
   };
 
@@ -27,11 +23,7 @@ export default function createViewState(layoutService, viewStateOptions = {}, ti
   // TODO: use shared module for this (storage module from la-vie...)
   const api = {};
 
-  api.get = (property) => {
-    const type = typeof storage[property];
-    if (type === 'function') return storage[property]();
-    return storage[property];
-  };
+  api.get = (property) => storage[property];
 
   api.set = (property, value) => {
     const previous = storage[property];
