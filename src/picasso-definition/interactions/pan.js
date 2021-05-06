@@ -48,8 +48,8 @@ const pan = ({ chart, actions, zoomHandler }) => ({
         xAxisMax: xAxisMax - xDiff,
         yAxisMin: yAxisMin + yDiff,
         yAxisMax: yAxisMax + yDiff,
-        // x: e.deltaX,
-        // y: e.deltaY,
+        x: e.deltaX,
+        y: e.deltaY,
       };
 
       zoomHandler.setZoom(zoom);

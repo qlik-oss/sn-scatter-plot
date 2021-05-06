@@ -87,21 +87,21 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
   const xExtrema = resolveExtrema(KEYS.SCALE.X);
   const yExtrema = resolveExtrema(KEYS.SCALE.Y);
 
+  let isHomeState = true;
+
   const model = {
     query: {
       getXExtrema: () => xExtrema,
       getYExtrema: () => yExtrema,
-      updateExtrema: (viewState) => {
-        const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewState.get('zoom');
-        const isHomeState = viewState.get('isHomeState');
-        xExtrema.xAxisMin = xAxisMin;
-        xExtrema.xAxisMax = xAxisMax;
-        yExtrema.yAxisMin = yAxisMin;
-        yExtrema.yAxisMax = yAxisMax;
-        if (!isHomeState) {
-          xExtrema.xAxisExplicitType = 'minMax';
-          yExtrema.yAxisExplicitType = 'minMax';
-        }
+      getIsHomeState: () => isHomeState,
+      updateExtrema: (newZoom) => {
+        xExtrema.xAxisMin = newZoom.xAxisMin;
+        xExtrema.xAxisMax = newZoom.xAxisMax;
+        xExtrema.xAxisExplicitType = 'minMax';
+        yExtrema.yAxisMin = newZoom.yAxisMin;
+        yExtrema.yAxisMax = newZoom.yAxisMax;
+        yExtrema.yAxisExplicitType = 'minMax';
+        isHomeState = false;
       },
     },
   };
