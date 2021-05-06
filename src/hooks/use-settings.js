@@ -66,11 +66,10 @@ const useSettings = ({ core, models, flags }) => {
 
     const { layoutService, chartModel, dockService, tickModel, extremumModel } = models;
     const { viewState } = core;
-    updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
     const zoomHandler = chartModel.query.getZoomHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
-
     dockService.update(logicalSize || rect);
+    updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
     zoomHandler.update();
     zoomHandler.fetchData().then((pages) => {
       layoutService.setDataPages(pages);
