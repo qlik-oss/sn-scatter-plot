@@ -10,12 +10,12 @@ const setupSnapshot = ({ core, models }) => {
       return undefined;
     }
 
-    const { layoutService, dockModel, colorService, chartModel } = models;
+    const { layoutService, dockService, colorService, chartModel } = models;
     const viewState = chartModel.query.getViewState();
 
     // Update snapshot layout with data from the plot
     extend(true, layout.qHyperCube.qDataPages[0], layoutService.getDataPages()[0]);
-    const { width: w, height: h } = dockModel.chartSize;
+    const { width: w, height: h } = dockService.meta.chart.size;
     layout.snapshotData = layout.snapshotData || {};
     layout.snapshotData.content = {
       size: { w, h },

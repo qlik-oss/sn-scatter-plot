@@ -7,7 +7,7 @@ import createReferenceLines from '..';
 describe('createReferenceLines', () => {
   let sandbox;
   let context;
-  let dockModel;
+  let dockService;
   let models;
   const layoutService = 'layoutService';
   let themeService;
@@ -15,7 +15,7 @@ describe('createReferenceLines', () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     context = { rtl: 'some rtl', localeInfo: 'valid localeInfo' };
-    dockModel = { x: { opposite: 'top' }, y: { opposite: 'right' } };
+    dockService = { meta: { x: { opposite: 'top' }, y: { opposite: 'right' } } };
     themeService = { getStyles: sandbox.stub().returns('themeStyle') };
     sandbox.stub(KEYS, 'default').value({
       SCALE: { X: 'X', Y: 'Y' },
@@ -29,7 +29,7 @@ describe('createReferenceLines', () => {
     sandbox.stub(MODES, 'REFERENCE_LINE').value('XSMALL');
     sandbox.stub(createLines, 'default');
     sandbox.stub(createLabels, 'default');
-    models = { layoutService, dockModel, themeService };
+    models = { layoutService, dockService, themeService };
   });
 
   afterEach(() => {
