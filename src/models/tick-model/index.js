@@ -1,4 +1,5 @@
 import { scaleLinear } from 'd3-scale';
+import extend from 'extend';
 import picasso from 'picasso.js';
 import KEYS from '../../constants/keys';
 import getTicks from './ticks';
@@ -28,14 +29,14 @@ export function getCount(size, spacing) {
   return Math.max(1, Math.round(size / distance));
 }
 
-export default function createTickModel({ layoutService, dockModel, extremumModel, themeService, chart }) {
-  function getChartProperties(scaleName) {
+export default function createTickModel({ layoutService, dockModel, extremumModel, themeService }) {
+  function getChartProperties(axis) {
     let min;
     let max;
     let explicitType;
     let spacing;
     let dimension;
-    if (scaleName === KEYS.SCALE.X) {
+    if (axis === KEYS.SCALE.X) {
       ({ xAxisMin: min, xAxisMax: max, xAxisExplicitType: explicitType } = extremumModel.query.getXExtrema());
       dimension = 'width';
       spacing = layoutService.getLayoutValue('xAxis.spacing', 1);
@@ -61,11 +62,11 @@ export default function createTickModel({ layoutService, dockModel, extremumMode
     return { min, max, explicitType, count, size, measure };
   }
 
-  function resolve(scaleName, prop) {
-    const { min, max, explicitType, count, size, measure } = getChartProperties(scaleName);
+  const formatters = {};
+  function resolve(axis, prop) {
+    const { min, max, explicitType, count, size, measure } = getChartProperties(axis);
     const scale = scaleLinear().domain([min, max]);
-    const formatterName = scaleName === KEYS.SCALE.X ? KEYS.FORMATTER.X : KEYS.FORMATTER.Y;
-    const formatter = chart.formatter(formatterName);
+    const formatter = axis === KEYS.SCALE.X ? formatters.x : formatters.y;
     const tickObject = getTicks({ scale, explicitType, count, size, measure, formatter });
     return prop === 'ticks' ? tickObject.ticks : tickObject.minMax;
   }
@@ -76,6 +77,12 @@ export default function createTickModel({ layoutService, dockModel, extremumMode
       getYTicks: () => resolve(KEYS.SCALE.Y, 'ticks'),
       getXMinMax: () => resolve(KEYS.SCALE.X, 'minMax'),
       getYMinMax: () => resolve(KEYS.SCALE.Y, 'minMax'),
+    },
+
+    command: {
+      updateFormatters: (newFormatters) => {
+        extend(true, formatters, newFormatters);
+      },
     },
   };
 }

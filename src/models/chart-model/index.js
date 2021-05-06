@@ -38,8 +38,8 @@ export default function createChartModel({
     viewState,
   });
 
-  function updatePartial(newZoom) {
-    extremumModel.query.updateExtrema(newZoom);
+  function updatePartial() {
+    extremumModel.query.updateExtrema(viewState);
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???
       // const startTime = Date.now();
@@ -68,6 +68,7 @@ export default function createChartModel({
       getZoomHandler: () => zoomHandler,
       getLocaleInfo: () => localeInfo,
       isInteractionInProgess: () => interactionInProgess,
+      getFormatter: (fieldName) => dataset.field(fieldName).formatter(),
     },
     command: {
       update: ({ settings } = {}) => {
