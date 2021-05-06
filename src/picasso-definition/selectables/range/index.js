@@ -5,7 +5,7 @@ import createYRange from './y-range';
 const EMPTY = { components: [], interactions: [] };
 
 export default function createRange({ models, actions, scales }) {
-  const { selectionModel, dockModel, colorService, layoutService } = models;
+  const { selectionModel, dockService, colorService, layoutService } = models;
   const isSingleSelection = layoutService.getHyperCubeValue('qDimensionInfo.0.qIsOneAndOnlyOne', false);
   if (isSingleSelection) {
     return { components: [], interactions: [] };
@@ -17,14 +17,14 @@ export default function createRange({ models, actions, scales }) {
     createXRange({
       actions,
       selectionModel,
-      dockModel,
+      dockService,
     }) || EMPTY;
 
   const yRange =
     createYRange({
       actions,
       selectionModel,
-      dockModel,
+      dockService,
     }) || EMPTY;
 
   const legendRange =

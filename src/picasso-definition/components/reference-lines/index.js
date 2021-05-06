@@ -4,7 +4,7 @@ import createLines from './lines';
 import createLabels from './labels';
 
 export default function createReferenceLines({ models, context }) {
-  const { layoutService, dockModel } = models;
+  const { layoutService, dockService } = models;
 
   return [
     createLines({
@@ -24,14 +24,14 @@ export default function createReferenceLines({ models, context }) {
       context,
       scale: KEYS.SCALE.X,
       key: KEYS.COMPONENT.REFERENCE_LINE_LABELS_X,
-      dock: dockModel.x.opposite,
+      dock: dockService.meta.x.opposite,
     }),
     createLabels({
       models,
       context,
       scale: KEYS.SCALE.Y,
       key: KEYS.COMPONENT.REFERENCE_LINE_LABELS_Y,
-      dock: dockModel.y.opposite,
+      dock: dockService.meta.y.opposite,
     }),
   ];
 }

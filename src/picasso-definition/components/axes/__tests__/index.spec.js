@@ -4,7 +4,7 @@ describe('axes', () => {
   let sandbox;
   let layout;
   let layoutService;
-  let dockModel;
+  let dockService;
   let axes;
   let gridLine;
   let themeService;
@@ -15,16 +15,20 @@ describe('axes', () => {
 
   before(() => {
     sandbox = sinon.createSandbox();
-    dockModel = {
-      chartSize: {
-        width: 700,
-        height: 600,
-      },
-      x: {
-        dock: 'bottom',
-      },
-      y: {
-        dock: 'left',
+    dockService = {
+      meta: {
+        chart: {
+          size: {
+            width: 700,
+            height: 600,
+          },
+        },
+        x: {
+          dock: 'bottom',
+        },
+        y: {
+          dock: 'left',
+        },
       },
     };
     layout = {
@@ -64,7 +68,7 @@ describe('axes', () => {
   });
 
   it('should create two axes', () => {
-    axes = createAxes({ layoutService, dockModel, themeService });
+    axes = createAxes({ layoutService, dockService, themeService });
     expect(axes.length).to.equal(2);
     expect(axes[0].type).to.equal('axis');
     expect(axes[1].type).to.equal('axis');
@@ -76,8 +80,8 @@ describe('axes', () => {
   });
 
   it('should have correct layout', () => {
-    expect(axes[0].layout.dock).to.equal(dockModel.x.dock);
-    expect(axes[1].layout.dock).to.equal(dockModel.y.dock);
+    expect(axes[0].layout.dock).to.equal(dockService.meta.x.dock);
+    expect(axes[1].layout.dock).to.equal(dockService.meta.y.dock);
   });
 
   describe('settings', () => {
@@ -86,7 +90,7 @@ describe('axes', () => {
       expect(axes[1].settings.labels.show).to.equal(true);
       layout.yAxis.show = 'title';
       layout.xAxis.show = 'title';
-      axes = createAxes({ layoutService, dockModel, themeService });
+      axes = createAxes({ layoutService, dockService, themeService });
       expect(axes[0].settings.labels.show).to.equal(false);
       expect(axes[1].settings.labels.show).to.equal(false);
     });

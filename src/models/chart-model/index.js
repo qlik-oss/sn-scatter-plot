@@ -5,7 +5,7 @@ export default function createChartModel({
   chart,
   localeInfo,
   layoutService,
-  dockModel,
+  dockService,
   model,
   colorService,
   picasso,
@@ -32,7 +32,7 @@ export default function createChartModel({
   const dataset = picasso.data('q')(mainConfig);
 
   const zoomHandler = createZoomHandler({
-    dockModel,
+    dockService,
     layoutService,
     model,
     viewState,
