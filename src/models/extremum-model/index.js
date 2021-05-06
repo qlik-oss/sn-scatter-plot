@@ -86,7 +86,6 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
 
   const xExtrema = resolveExtrema(KEYS.SCALE.X);
   const yExtrema = resolveExtrema(KEYS.SCALE.Y);
-
   let isHomeState = true;
 
   const model = {
