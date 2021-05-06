@@ -29,7 +29,7 @@ jobs:
           name: Setup access to Artifactory
           command: |
             set -euo pipefail
-            curl -u $ARTIFACTORY_USER:$ARTIFACTORY_PWD $ARTIFACTORY_URL/api/npm/npm-local/auth/qlik > ~/.npmrc
+            curl -u $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD $ARTIFACTORY_URL/api/npm/npm-local/auth/qlik > ~/.npmrc
       - run: yarn install --frozen-lockfile
       - save_cache: *save_yarn_cache
 
@@ -117,7 +117,7 @@ jobs:
           command: |
             set -eo pipefail
             # Setup .npmrc to access artifactory for @qlik packages
-            curl -u $ARTIFACTORY_USER:$ARTIFACTORY_PWD $ARTIFACTORY_URL/api/npm/npm-local/auth/qlik > ~/.npmrc
+            curl -u $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD $ARTIFACTORY_URL/api/npm/npm-local/auth/qlik > ~/.npmrc
       - run:
           name: Publish
           command: |
@@ -135,8 +135,7 @@ workflows:
   version: 2
   build-all:
     jobs:
-      - install:
-          context: deploy-secrets
+      - install
       - build:
           requires:
             - install
