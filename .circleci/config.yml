@@ -135,7 +135,8 @@ workflows:
   version: 2
   build-all:
     jobs:
-      - install
+      - install:
+          context: deploy-secrets
       - build:
           requires:
             - install
