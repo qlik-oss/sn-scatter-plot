@@ -28,20 +28,25 @@ export default function createZoomHandler({ layoutService, model, viewState }) {
 
       return dataFetcher.fetchData(dataRect);
     },
-    setZoom(newZoom, zoomFactor) {
+    setZoom(newZoom, zoomChange = 0) {
       // scrollUtil.getLimitedPixelOffsets(offsets);
       // relativePos.x = [limitedOffsets.x, limitedOffsets.x + 1];
       // relativePos.y = [limitedOffsets.y, limitedOffsets.y + 1];
       const zoomLevel = viewState.get('zoomLevel');
-      const newZoomLevel = zoomFactor > 1 ? zoomLevel + 1 : zoomLevel - 1;
+      const newZoomLevel = zoomLevel + zoomChange;
       viewState.set('zoomLevel', newZoomLevel);
 
       const { xAxisMin: x, xAxisMax: X, yAxisMin: y, yAxisMax: Y } = newZoom;
       const { xAxisMin: x0, xAxisMax: X0, yAxisMin: y0, yAxisMax: Y0 } = viewState.get('axisInfoAtHomeState');
       const e = 0.01;
-      if (viewState.get('zoomLevel') === 0 && areIntervalsEqual(x, X, x0, X0, e) && areIntervalsEqual(y, Y, y0, Y0, e))
+      if (
+        viewState.get('zoomLevel') === 0 &&
+        areIntervalsEqual(x, X, x0, X0, e) &&
+        areIntervalsEqual(y, Y, y0, Y0, e)
+      ) {
         viewState.set('isHomeState', true);
-      else viewState.set('isHomeState', false);
+        console.log('homestaet');
+      } else viewState.set('isHomeState', false);
 
       viewState.set('zoom', newZoom);
     },
