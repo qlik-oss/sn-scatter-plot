@@ -1,7 +1,7 @@
 import { range } from '../../../interactive';
 import KEYS from '../../../constants/keys';
 
-export default function createXRange({ actions, selectionModel, dockModel }) {
+export default function createXRange({ actions, selectionModel, dockService }) {
   if (selectionModel.query.getIsDimensionLocked()) {
     return false;
   }
@@ -12,7 +12,7 @@ export default function createXRange({ actions, selectionModel, dockModel }) {
       key: 'x-range-brush',
       targets: [KEYS.COMPONENT.X_AXIS, KEYS.COMPONENT.POINT],
       fillTargets: [KEYS.COMPONENT.X_AXIS],
-      dock: dockModel.x.dock,
+      dock: dockService.meta.x.dock,
       scale: KEYS.SCALE.X,
       onEdited() {
         actions.select.emit('end', 'xRange');

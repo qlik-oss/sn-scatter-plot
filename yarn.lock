@@ -2362,10 +2362,10 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
-"@qlik/chart-modules@0.9.1":
-  version "0.9.1"
-  resolved "https://qliktech.jfrog.io/qliktech/api/npm/npm-local/@qlik/chart-modules/-/@qlik/chart-modules-0.9.1.tgz#710fa2280c2210aae8c5d6ef12d51fdc07504f58"
-  integrity sha1-cQ+iKAwiEKroxdbvEtUf3AdQT1g=
+"@qlik/chart-modules@0.10.0":
+  version "0.10.0"
+  resolved "https://qliktech.jfrog.io/qliktech/api/npm/npm-local/@qlik/chart-modules/-/@qlik/chart-modules-0.10.0.tgz#9e45cc4af328311166ba1fac64f9ad08e9c6ce21"
+  integrity sha1-nkXMSvMoMRFmuh+sZPmtCOnGziE=
 
 "@rollup/plugin-babel@5.2.3":
   version "5.2.3"

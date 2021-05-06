@@ -3,7 +3,7 @@ import KEYS from '../../../../constants/keys';
 
 describe('axis-titles', () => {
   let sandbox;
-  let dockModel;
+  let dockService;
   let layout;
   let layoutService;
   let themeService;
@@ -12,12 +12,14 @@ describe('axis-titles', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    dockModel = {
-      x: {
-        dock: 'bottom',
-      },
-      y: {
-        dock: 'left',
+    dockService = {
+      meta: {
+        x: {
+          dock: 'bottom',
+        },
+        y: {
+          dock: 'left',
+        },
       },
     };
     layout = {
@@ -43,7 +45,7 @@ describe('axis-titles', () => {
       },
     };
     themeService = { getStyles: () => style };
-    axisTitles = createAxisTitles({ layoutService, dockModel, themeService });
+    axisTitles = createAxisTitles({ layoutService, dockService, themeService });
   });
 
   afterEach(() => {
@@ -69,8 +71,8 @@ describe('axis-titles', () => {
   });
 
   it('should have correct dock property', () => {
-    expect(axisTitles[0].dock).to.equal(dockModel.x.dock);
-    expect(axisTitles[1].dock).to.equal(dockModel.y.dock);
+    expect(axisTitles[0].dock).to.equal(dockService.meta.x.dock);
+    expect(axisTitles[1].dock).to.equal(dockService.meta.y.dock);
   });
 
   it('should have correct font size', () => {

@@ -57,7 +57,7 @@ describe('createTickModel', () => {
   let resolveTicks;
   let layoutService;
   let extremumModel;
-  let dockModel;
+  let dockService;
   let create;
   let ticks;
   let themeService;
@@ -73,7 +73,7 @@ describe('createTickModel', () => {
     layoutService = { getLayoutValue: sandbox.stub() };
     layoutService.getLayoutValue.withArgs('xAxis.spacing', 1).returns(0.5);
     layoutService.getLayoutValue.withArgs('yAxis.spacing', 1).returns(2);
-    dockModel = { chartSize: { width: 500, height: 1000 } };
+    dockService = { meta: { chart: { size: { width: 500, height: 1000 } } } };
     extremumModel = {
       query: { getXExtrema: sandbox.stub(), getYExtrema: sandbox.stub(), getIsHomeState: sandbox.stub().returns(true) },
     };
@@ -90,7 +90,7 @@ describe('createTickModel', () => {
     chart.formatter.withArgs('x').returns('x-formatter');
     chart.formatter.withArgs('y').returns('y-formatter');
     themeService = { getStyles: sandbox.stub().returns('theme') };
-    create = () => createTickModel({ layoutService, dockModel, extremumModel, themeService, chart });
+    create = () => createTickModel({ layoutService, dockService, extremumModel, themeService, chart });
   });
 
   afterEach(() => {

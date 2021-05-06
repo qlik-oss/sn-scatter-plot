@@ -5,7 +5,7 @@ describe('chart-model', () => {
   let hyperCube;
   let layoutService;
   let colorService;
-  let dockModel;
+  let dockService;
   let model;
   let picassoInstance;
   let picassoDataFn;
@@ -57,14 +57,14 @@ describe('chart-model', () => {
     picassoInstance = {
       data: () => picassoDataFn,
     };
-    dockModel = {};
+    dockService = {};
     model = {};
     create = () =>
       createChartModel({
         chart,
         localeInfo,
         layoutService,
-        dockModel,
+        dockService,
         colorService,
         model,
         picasso: picassoInstance,
