@@ -111,6 +111,7 @@ const useModels = ({ core, flags }) => {
       themeService,
       disclaimerModel,
       colorService,
+      extremumModel,
     });
   }, [
     model,

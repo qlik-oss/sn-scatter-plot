@@ -43,9 +43,9 @@ const useSettings = ({ core, models, flags }) => {
       return Promise.resolve();
     }
 
-    const { layoutService, chartModel, colorService, tickModel } = models;
+    const { layoutService, chartModel, colorService, tickModel, extremumModel } = models;
     const { viewState } = core;
-    initializeViewState(viewState, layoutService, options.viewState, tickModel, chartModel);
+    initializeViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
     const zoomHandler = chartModel.query.getZoomHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
 
@@ -64,9 +64,9 @@ const useSettings = ({ core, models, flags }) => {
       return;
     }
 
-    const { layoutService, chartModel, dockModel, tickModel } = models;
+    const { layoutService, chartModel, dockModel, tickModel, extremumModel } = models;
     const { viewState } = core;
-    updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel);
+    updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
     const zoomHandler = chartModel.query.getZoomHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
 

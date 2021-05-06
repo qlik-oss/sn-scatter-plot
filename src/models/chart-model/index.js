@@ -39,7 +39,7 @@ export default function createChartModel({
   });
 
   function updatePartial() {
-    extremumModel.query.updateExtrema(viewState);
+    extremumModel.command.updateExtrema(viewState);
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???
       // const startTime = Date.now();

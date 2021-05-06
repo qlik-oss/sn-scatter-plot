@@ -36,24 +36,35 @@ export default function createViewState() {
   return api;
 }
 
-export function updateViewState(viewState, layoutService, viewStateOptions = {}, tickModel, chartModel) {
+export function updateViewState(viewState, layoutService, viewStateOptions = {}, tickModel, chartModel, extremumModel) {
   const source = layoutService.meta.isSnapshot
     ? layoutService.getLayoutValue('snapshotData.content.chartData', {})
     : viewStateOptions;
+
   const formatters = {
     x: chartModel.query.getFormatter(KEYS.FIELDS.X),
     y: chartModel.query.getFormatter(KEYS.FIELDS.Y),
   };
   tickModel.command.updateFormatters(formatters);
+
+  if (viewState.get('isHomeState')) extremumModel.command.resetExtrema();
+
   const [xAxisMin, xAxisMax] = tickModel.query.getXMinMax();
   const [yAxisMin, yAxisMax] = tickModel.query.getYMinMax();
   viewState.set('legendScrollOffset', source.legendScrollOffset || 0);
   viewState.set('zoom', { xAxisMin, xAxisMax, yAxisMin, yAxisMax });
+  if (viewState.get('isHomeState')) viewState.set('axisInfoAtHomeState', viewState.get('zoom'));
 }
 
-export function initializeViewState(viewState, layoutService, viewStateOptions = {}, tickModel, chartModel) {
+export function initializeViewState(
+  viewState,
+  layoutService,
+  viewStateOptions = {},
+  tickModel,
+  chartModel,
+  extremumModel
+) {
   viewState.set('zoomLevel', 0);
   viewState.set('isHomeState', true);
-  updateViewState(viewState, layoutService, viewStateOptions, tickModel, chartModel);
-  viewState.set('axisInfoAtHomeState', viewState.get('zoom'));
+  updateViewState(viewState, layoutService, viewStateOptions, tickModel, chartModel, extremumModel);
 }
