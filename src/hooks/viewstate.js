@@ -52,8 +52,5 @@ export function updateViewState(viewState, layoutService, viewStateOptions = {},
 }
 
 export function initializeViewState(viewState, layoutService, viewStateOptions = {}, tickModel, chartModel) {
-  viewState.set('zoomLevel', 0);
-  viewState.set('isHomeState', true);
   updateViewState(viewState, layoutService, viewStateOptions, tickModel, chartModel);
-  viewState.set('axisInfoAtHomeState', viewState.get('zoom'));
 }
