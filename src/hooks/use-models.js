@@ -24,7 +24,6 @@ import createTickModel from '../models/tick-model';
 import createSelectionModel from '../models/selection-model';
 import createColorService from '../services/color-service';
 import getLogicalSize from '../logical-size';
-import createViewState from '../models/chart-model/viewstate';
 import createExtremumModel from '../models/extremum-model';
 import createDisclaimerModel from '../models/disclaimer-model';
 
@@ -67,7 +66,7 @@ const useModels = ({ core, flags }) => {
       return;
     }
 
-    const { picassoInstance, chart, actions } = core;
+    const { picassoInstance, chart, actions, viewState } = core;
     const layoutService = createLayoutService({ source: layout, metaAdditionsFn: layoutServiceMeta });
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
     const dockService = createDockService({
@@ -84,7 +83,6 @@ const useModels = ({ core, flags }) => {
     const themeService = createThemeService({ theme, styleMatrix: themeStyleMatrix });
     const extremumModel = createExtremumModel(layoutService, options.viewState);
     const tickModel = createTickModel({ layoutService, dockService, extremumModel, themeService, chart });
-    const viewState = createViewState(layoutService, options.viewState, tickModel);
     const colorService = createColorService({
       actions,
       localeInfo,

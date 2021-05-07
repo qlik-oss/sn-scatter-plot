@@ -12,6 +12,7 @@ import {
 } from '@nebula.js/stardust';
 import createPicassoDefinition from '../picasso-definition';
 import getLogicalSize from '../logical-size';
+import { initializeViewState, updateViewState } from './viewstate';
 
 const useSettings = ({ core, models, flags }) => {
   const rect = useRect();
@@ -42,7 +43,9 @@ const useSettings = ({ core, models, flags }) => {
       return Promise.resolve();
     }
 
-    const { layoutService, chartModel, colorService } = models;
+    const { layoutService, chartModel, colorService, tickModel } = models;
+    const { viewState } = core;
+    initializeViewState(viewState, layoutService, options.viewState, tickModel, chartModel);
     const zoomHandler = chartModel.query.getZoomHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
 
@@ -61,7 +64,9 @@ const useSettings = ({ core, models, flags }) => {
       return;
     }
 
-    const { layoutService, chartModel, dockService } = models;
+    const { layoutService, chartModel, dockService, tickModel } = models;
+    const { viewState } = core;
+    updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel);
     const zoomHandler = chartModel.query.getZoomHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
 
