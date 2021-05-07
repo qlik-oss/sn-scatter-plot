@@ -3,18 +3,18 @@ import createPointLabels from '..';
 
 describe.skip('point-labels', () => {
   let sandbox;
-  let layoutModel;
+  let layoutService;
   let labels;
   let create;
 
   before(() => {
     sandbox = sinon.createSandbox();
-    layoutModel = {
+    layoutService = {
       getLayoutValue: sandbox.stub(),
     };
     create = () =>
       createPointLabels({
-        layoutModel,
+        layoutService,
       });
   });
 
@@ -23,7 +23,7 @@ describe.skip('point-labels', () => {
     labels = {
       mode: 1,
     };
-    layoutModel.getLayoutValue.withArgs('labels').returns(labels);
+    layoutService.getLayoutValue.withArgs('labels').returns(labels);
     sandbox.stub(KEYS, 'default').returns({
       COMPONENT: {
         POINT: 'point-component',

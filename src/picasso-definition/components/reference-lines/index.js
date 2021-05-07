@@ -4,40 +4,34 @@ import createLines from './lines';
 import createLabels from './labels';
 
 export default function createReferenceLines({ models, context }) {
-  const { layoutModel, dockModel, themeModel } = models;
-  const { rtl, localeInfo } = context;
-  const themeStyle = themeModel.query.getStyle();
+  const { layoutService, dockService } = models;
 
   return [
     createLines({
-      layoutModel,
+      layoutService,
       scale: KEYS.SCALE.X,
       key: KEYS.COMPONENT.REFERENCE_LINES_X,
       minimumLayoutMode: MODES.REFERENCE_LINE,
     }),
     createLines({
-      layoutModel,
+      layoutService,
       scale: KEYS.SCALE.Y,
       key: KEYS.COMPONENT.REFERENCE_LINES_Y,
       minimumLayoutMode: MODES.REFERENCE_LINE,
     }),
     createLabels({
-      layoutModel,
+      models,
+      context,
       scale: KEYS.SCALE.X,
       key: KEYS.COMPONENT.REFERENCE_LINE_LABELS_X,
-      dock: dockModel.x.opposite,
-      rtl,
-      themeStyle,
-      localeInfo,
+      dock: dockService.meta.x.opposite,
     }),
     createLabels({
-      layoutModel,
+      models,
+      context,
       scale: KEYS.SCALE.Y,
       key: KEYS.COMPONENT.REFERENCE_LINE_LABELS_Y,
-      dock: dockModel.y.opposite,
-      rtl,
-      themeStyle,
-      localeInfo,
+      dock: dockService.meta.y.opposite,
     }),
   ];
 }

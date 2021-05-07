@@ -3,9 +3,9 @@ describe('chart-model', () => {
   let chart;
   let localeInfo;
   let hyperCube;
-  let layoutModel;
+  let layoutService;
   let colorService;
-  let dockModel;
+  let dockService;
   let model;
   let picassoInstance;
   let picassoDataFn;
@@ -39,7 +39,7 @@ describe('chart-model', () => {
     hyperCube = {
       dataPages: [{ key: 'page-0' }, { key: 'page-1' }],
     };
-    layoutModel = {
+    layoutService = {
       meta: { isContinuous: false, isSnapshot: false },
       getHyperCube: sandbox.stub().returns(hyperCube),
       getDataPages: sandbox.stub().returns(hyperCube.dataPages),
@@ -57,14 +57,14 @@ describe('chart-model', () => {
     picassoInstance = {
       data: () => picassoDataFn,
     };
-    dockModel = {};
+    dockService = {};
     model = {};
     create = () =>
       createChartModel({
         chart,
         localeInfo,
-        layoutModel,
-        dockModel,
+        layoutService,
+        dockService,
         colorService,
         model,
         picasso: picassoInstance,

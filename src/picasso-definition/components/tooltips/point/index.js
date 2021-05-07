@@ -11,14 +11,14 @@ const TOOLTIPPERS = {
 };
 
 export default function createPointTooltip({ models, context }) {
-  const { themeModel } = models;
+  const { themeService } = models;
   const { rtl, translator } = context;
   const baseTooltip = createBaseTooltip({
     key: KEYS.COMPONENT.POINT_TOOLTIP,
     rtl,
   });
 
-  const style2 = themeModel.query.getStyle();
+  const style2 = themeService.getStyles();
 
   const createPointContent = createPointTooltipContent({ models, rtl });
 

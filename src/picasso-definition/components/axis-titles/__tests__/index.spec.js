@@ -3,21 +3,23 @@ import KEYS from '../../../../constants/keys';
 
 describe('axis-titles', () => {
   let sandbox;
-  let dockModel;
+  let dockService;
   let layout;
-  let layoutModel;
-  let themeModel;
+  let layoutService;
+  let themeService;
   let axisTitles;
   let style;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    dockModel = {
-      x: {
-        dock: 'bottom',
-      },
-      y: {
-        dock: 'left',
+    dockService = {
+      meta: {
+        x: {
+          dock: 'bottom',
+        },
+        y: {
+          dock: 'left',
+        },
       },
     };
     layout = {
@@ -29,7 +31,7 @@ describe('axis-titles', () => {
         show: 'all',
       },
     };
-    layoutModel = {
+    layoutService = {
       getLayout: () => layout,
       getHyperCubeValue: sandbox.stub(),
     };
@@ -42,12 +44,8 @@ describe('axis-titles', () => {
         },
       },
     };
-    themeModel = {
-      query: {
-        getStyle: () => style,
-      },
-    };
-    axisTitles = createAxisTitles({ layoutModel, dockModel, themeModel });
+    themeService = { getStyles: () => style };
+    axisTitles = createAxisTitles({ layoutService, dockService, themeService });
   });
 
   afterEach(() => {
@@ -66,15 +64,15 @@ describe('axis-titles', () => {
   });
 
   it('should have correct text property', () => {
-    const xTitle = layoutModel.getHyperCubeValue('qMeasureInfo.0.qFallbackTitle');
+    const xTitle = layoutService.getHyperCubeValue('qMeasureInfo.0.qFallbackTitle');
     expect(axisTitles[0].text).to.equal(xTitle);
-    const yTitle = layoutModel.getHyperCubeValue('qMeasureInfo.1.qFallbackTitle');
+    const yTitle = layoutService.getHyperCubeValue('qMeasureInfo.1.qFallbackTitle');
     expect(axisTitles[1].text).to.equal(yTitle);
   });
 
   it('should have correct dock property', () => {
-    expect(axisTitles[0].dock).to.equal(dockModel.x.dock);
-    expect(axisTitles[1].dock).to.equal(dockModel.y.dock);
+    expect(axisTitles[0].dock).to.equal(dockService.meta.x.dock);
+    expect(axisTitles[1].dock).to.equal(dockService.meta.y.dock);
   });
 
   it('should have correct font size', () => {

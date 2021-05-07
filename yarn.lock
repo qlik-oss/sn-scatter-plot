@@ -2362,10 +2362,10 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
-"@qlik/chart-modules@0.5.0":
-  version "0.5.0"
-  resolved "https://qliktech.jfrog.io/qliktech/api/npm/npm-local/@qlik/chart-modules/-/@qlik/chart-modules-0.5.0.tgz#08433b838687ddc099130648dacb3b92d8caabc4"
-  integrity sha1-CEM7g4aH3cCZEwZI2ss7ktjKq8Q=
+"@qlik/chart-modules@0.10.0":
+  version "0.10.0"
+  resolved "https://qliktech.jfrog.io/qliktech/api/npm/npm-local/@qlik/chart-modules/-/@qlik/chart-modules-0.10.0.tgz#9e45cc4af328311166ba1fac64f9ad08e9c6ce21"
+  integrity sha1-nkXMSvMoMRFmuh+sZPmtCOnGziE=
 
 "@rollup/plugin-babel@5.2.3":
   version "5.2.3"
@@ -4640,7 +4640,7 @@ d3-collection@1:
   resolved "https://registry.yarnpkg.com/d3-collection/-/d3-collection-1.0.7.tgz#349bd2aa9977db071091c13144d5e4f16b5b310e"
   integrity sha512-ii0/r5f4sjKNTfh84Di+DpztYwqKhEyUlKoPrzUFfeSkWxjW49xU2QzO9qrPrNkpdI0XJkfzvmTu8V2Zylln6A==
 
-d3-color@1:
+d3-color@1, d3-color@1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.4.1.tgz#c52002bf8846ada4424d55d97982fef26eb3bc8a"
   integrity sha512-p2sTHSLCJI2QKunbGb7ocOh7DgTAn8IrLx21QRc/BSnodXM4sv6aLQlnfpvehFMLZEfBc6g9pH9SWQccFYfJ9Q==

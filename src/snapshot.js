@@ -10,12 +10,12 @@ const setupSnapshot = ({ core, models }) => {
       return undefined;
     }
 
-    const { layoutModel, dockModel, colorService, chartModel } = models;
+    const { layoutService, dockService, colorService, chartModel } = models;
     const viewState = chartModel.query.getViewState();
 
     // Update snapshot layout with data from the plot
-    extend(true, layout.qHyperCube.qDataPages[0], layoutModel.getDataPages()[0]);
-    const { width: w, height: h } = dockModel.chartSize;
+    extend(true, layout.qHyperCube.qDataPages[0], layoutService.getDataPages()[0]);
+    const { width: w, height: h } = dockService.meta.chart.size;
     layout.snapshotData = layout.snapshotData || {};
     layout.snapshotData.content = {
       size: { w, h },
@@ -25,7 +25,7 @@ const setupSnapshot = ({ core, models }) => {
      * If the layout we are working with already is a snapshot, there is no need to recreate the chartData.
      * This will for example occur when doing a free-resize in story telling.
      */
-    if (layoutModel.meta.isSnapshot) {
+    if (layoutService.meta.isSnapshot) {
       return Promise.resolve();
     }
 

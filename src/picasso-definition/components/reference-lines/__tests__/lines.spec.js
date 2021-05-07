@@ -3,13 +3,13 @@ import createRefLines from '../lines';
 
 describe('createRefLines', () => {
   let sandbox;
-  let layoutModel;
+  let layoutService;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     sandbox.stub(KEYS, 'SCALE').returns({ X: 'x', Y: 'y' });
-    layoutModel = { getLayoutValue: sandbox.stub() };
-    layoutModel.getLayoutValue.withArgs('refLine.refLinesX').returns([
+    layoutService = { getLayoutValue: sandbox.stub() };
+    layoutService.getLayoutValue.withArgs('refLine.refLinesX').returns([
       {
         show: true,
         label: 'X ref label',
@@ -22,7 +22,7 @@ describe('createRefLines', () => {
       },
     ]);
 
-    layoutModel.getLayoutValue.withArgs('refLine.refLinesY').returns([
+    layoutService.getLayoutValue.withArgs('refLine.refLinesY').returns([
       {
         show: true,
         label: 'Y ref label',
@@ -44,8 +44,8 @@ describe('createRefLines', () => {
     const scale = 'y';
     const key = 'reference-line-Y';
     const minimumLayoutMode = 'min-layout-mode';
-    layoutModel.getLayoutValue.withArgs('refLine.refLinesY').returns([]);
-    const result = createRefLines({ layoutModel, scale, key, minimumLayoutMode });
+    layoutService.getLayoutValue.withArgs('refLine.refLinesY').returns([]);
+    const result = createRefLines({ layoutService, scale, key, minimumLayoutMode });
     expect(result).to.deep.equal(false);
   });
 
@@ -53,7 +53,7 @@ describe('createRefLines', () => {
     const scale = 'x';
     const key = 'reference-line-X';
     const minimumLayoutMode = 'min-layout-mode';
-    const result = createRefLines({ layoutModel, scale, key, minimumLayoutMode });
+    const result = createRefLines({ layoutService, scale, key, minimumLayoutMode });
     expect(result).to.deep.equal({
       key: 'reference-line-X',
       type: 'ref-line',
@@ -85,13 +85,13 @@ describe('createRefLines', () => {
     const scale = 'x';
     const key = 'reference-line-X';
     const minimumLayoutMode = 'min-layout-mode';
-    layoutModel.getLayoutValue.withArgs('refLine.refLinesX').returns([
+    layoutService.getLayoutValue.withArgs('refLine.refLinesX').returns([
       {
         show: false,
         label: 'X ref label',
       },
     ]);
-    const result = createRefLines({ layoutModel, scale, key, minimumLayoutMode });
+    const result = createRefLines({ layoutService, scale, key, minimumLayoutMode });
     expect(result).to.deep.equal(false);
   });
 
@@ -99,7 +99,7 @@ describe('createRefLines', () => {
     const scale = 'y';
     const key = 'reference-line-Y';
     const minimumLayoutMode = 'min-layout-mode';
-    const result = createRefLines({ layoutModel, scale, key, minimumLayoutMode });
+    const result = createRefLines({ layoutService, scale, key, minimumLayoutMode });
     expect(result).to.deep.equal({
       key: 'reference-line-Y',
       type: 'ref-line',
@@ -131,13 +131,13 @@ describe('createRefLines', () => {
     const scale = 'y';
     const key = 'reference-line-Y';
     const minimumLayoutMode = 'min-layout-mode';
-    layoutModel.getLayoutValue.withArgs('refLine.refLinesY').returns([
+    layoutService.getLayoutValue.withArgs('refLine.refLinesY').returns([
       {
         show: false,
         label: 'Y ref label',
       },
     ]);
-    const result = createRefLines({ layoutModel, scale, key, minimumLayoutMode });
+    const result = createRefLines({ layoutService, scale, key, minimumLayoutMode });
     expect(result).to.deep.equal(false);
   });
 });

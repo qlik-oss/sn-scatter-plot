@@ -5,9 +5,9 @@
  * - default to: { x: 0, y: 0 }
  */
 
-export default function createViewState(layoutModel, viewStateOptions = {}, tickModel) {
-  const source = layoutModel.meta.isSnapshot
-    ? layoutModel.getLayoutValue('snapshotData.content.chartData', {})
+export default function createViewState(layoutService, viewStateOptions = {}, tickModel) {
+  const source = layoutService.meta.isSnapshot
+    ? layoutService.getLayoutValue('snapshotData.content.chartData', {})
     : viewStateOptions;
   const [xAxisMin, xAxisMax] = tickModel.query.getXMinMax();
   const [yAxisMin, yAxisMax] = tickModel.query.getYMinMax();

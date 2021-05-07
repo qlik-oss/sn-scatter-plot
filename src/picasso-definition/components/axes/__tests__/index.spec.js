@@ -3,11 +3,11 @@ import createAxes from '../index';
 describe('axes', () => {
   let sandbox;
   let layout;
-  let layoutModel;
-  let dockModel;
+  let layoutService;
+  let dockService;
   let axes;
   let gridLine;
-  let themeModel;
+  let themeService;
   const scales = {
     X: 'x',
     Y: 'y',
@@ -15,16 +15,20 @@ describe('axes', () => {
 
   before(() => {
     sandbox = sinon.createSandbox();
-    dockModel = {
-      chartSize: {
-        width: 700,
-        height: 600,
-      },
-      x: {
-        dock: 'bottom',
-      },
-      y: {
-        dock: 'left',
+    dockService = {
+      meta: {
+        chart: {
+          size: {
+            width: 700,
+            height: 600,
+          },
+        },
+        x: {
+          dock: 'bottom',
+        },
+        y: {
+          dock: 'left',
+        },
       },
     };
     layout = {
@@ -36,7 +40,7 @@ describe('axes', () => {
         show: 'all',
       },
     };
-    layoutModel = {
+    layoutService = {
       getLayout: () => layout,
       getLayoutValue: sandbox.stub(),
     };
@@ -44,7 +48,7 @@ describe('axes', () => {
       auto: true,
       spacing: 1,
     };
-    layoutModel.getLayoutValue.withArgs('gridLine', {}).returns(gridLine);
+    layoutService.getLayoutValue.withArgs('gridLine', {}).returns(gridLine);
     const style = {
       axis: {
         label: {
@@ -60,15 +64,11 @@ describe('axes', () => {
         },
       },
     };
-    themeModel = {
-      query: {
-        getStyle: () => style,
-      },
-    };
+    themeService = { getStyles: () => style };
   });
 
   it('should create two axes', () => {
-    axes = createAxes({ layoutModel, dockModel, themeModel });
+    axes = createAxes({ layoutService, dockService, themeService });
     expect(axes.length).to.equal(2);
     expect(axes[0].type).to.equal('axis');
     expect(axes[1].type).to.equal('axis');
@@ -80,8 +80,8 @@ describe('axes', () => {
   });
 
   it('should have correct layout', () => {
-    expect(axes[0].layout.dock).to.equal(dockModel.x.dock);
-    expect(axes[1].layout.dock).to.equal(dockModel.y.dock);
+    expect(axes[0].layout.dock).to.equal(dockService.meta.x.dock);
+    expect(axes[1].layout.dock).to.equal(dockService.meta.y.dock);
   });
 
   describe('settings', () => {
@@ -90,13 +90,13 @@ describe('axes', () => {
       expect(axes[1].settings.labels.show).to.equal(true);
       layout.yAxis.show = 'title';
       layout.xAxis.show = 'title';
-      axes = createAxes({ layoutModel, dockModel, themeModel });
+      axes = createAxes({ layoutService, dockService, themeService });
       expect(axes[0].settings.labels.show).to.equal(false);
       expect(axes[1].settings.labels.show).to.equal(false);
     });
 
     it('should have correct font size property for labels', () => {
-      const { fontSize } = themeModel.query.getStyle().axis.label.name;
+      const { fontSize } = themeService.getStyles().axis.label.name;
       expect(axes[0].settings.labels.fontSize).to.equal(fontSize);
     });
   });

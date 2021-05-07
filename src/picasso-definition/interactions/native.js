@@ -1,6 +1,8 @@
 import KEYS from '../../constants/keys';
 import { eventToComponentPoint } from '../../utils/event-utils';
 
+const ZOOM_SCALE = 2 ** (1 / 2);
+
 function transform(scale, start, end, factor) {
   const range = end - start;
   const value = start + range * scale;
@@ -14,7 +16,7 @@ function zoom(e, chart, pointComponent, zoomHandler) {
   const { width, height } = pointComponent.rect.computedPhysical;
 
   const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = zoomHandler.getZoom();
-  const zoomFactor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+  const zoomFactor = e.deltaY > 0 ? ZOOM_SCALE : 1 / ZOOM_SCALE;
   const [xMin, xMax] = transform(p.x / width, xAxisMin, xAxisMax, zoomFactor);
   const [yMax, yMin] = transform(p.y / height, yAxisMax, yAxisMin, zoomFactor);
 

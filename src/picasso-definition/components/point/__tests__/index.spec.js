@@ -4,7 +4,7 @@ import createSizeScale from '../../../scales/size';
 
 describe('point', () => {
   let sandbox;
-  let layoutModel;
+  let layoutService;
   let colorService;
   let create;
   let layoutValueStub;
@@ -36,7 +36,7 @@ describe('point', () => {
     layoutValueStub = sandbox.stub();
     hyperCubeValueStub = sandbox.stub();
     hyperCubeValueStub.withArgs('qMeasureInfo.2', {}).returns({ qMin: 1, qMax: 10 });
-    layoutModel = {
+    layoutService = {
       key: 'layout-model',
       getLayoutValue: layoutValueStub,
       getHyperCubeValue: hyperCubeValueStub,
@@ -44,7 +44,7 @@ describe('point', () => {
         hasSizeMeasure: true,
       },
     };
-    sizeScaleFn = createSizeScale(layoutModel);
+    sizeScaleFn = createSizeScale(layoutService);
     interactionInProgress = true;
     getZoomStub = sandbox.stub();
     getZoomStub.withArgs('zoom').returns({ x: 10, y: 10 });
@@ -82,8 +82,8 @@ describe('point', () => {
 
     create = () =>
       createPoint({
-        layoutModel,
         chartModel,
+        layoutService,
         colorService,
       });
   });

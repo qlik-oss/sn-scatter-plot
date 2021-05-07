@@ -4,8 +4,8 @@ import createZoomHandler from '../../zoom-handler';
 export default function createChartModel({
   chart,
   localeInfo,
-  layoutModel,
-  dockModel,
+  layoutService,
+  dockService,
   model,
   colorService,
   picasso,
@@ -23,7 +23,7 @@ export default function createChartModel({
 
   const mainConfig = {
     key: KEYS.DATA.MAIN,
-    data: layoutModel.getHyperCube(),
+    data: layoutService.getHyperCube(),
     config: {
       localeInfo,
     },
@@ -32,8 +32,8 @@ export default function createChartModel({
   const dataset = picasso.data('q')(mainConfig);
 
   const zoomHandler = createZoomHandler({
-    dockModel,
-    layoutModel,
+    dockService,
+    layoutService,
     model,
     viewState,
   });

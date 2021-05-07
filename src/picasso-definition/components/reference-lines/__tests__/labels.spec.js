@@ -3,13 +3,17 @@ import createRefLineLabels from '../labels';
 
 describe('createRefLineLabels', () => {
   let sandbox;
-  let layoutModel;
+  let models;
+  let layoutService;
+  let themeService;
+  let context;
+  let theme;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     sandbox.stub(KEYS, 'SCALE').returns({ X: 'x', Y: 'y' });
-    layoutModel = { getLayoutValue: sandbox.stub() };
-    layoutModel.getLayoutValue.withArgs('refLine.refLinesX').returns([
+    layoutService = { getLayoutValue: sandbox.stub() };
+    layoutService.getLayoutValue.withArgs('refLine.refLinesX').returns([
       {
         show: true,
         label: 'X ref label',
@@ -23,7 +27,7 @@ describe('createRefLineLabels', () => {
       },
     ]);
 
-    layoutModel.getLayoutValue.withArgs('refLine.refLinesY').returns([
+    layoutService.getLayoutValue.withArgs('refLine.refLinesY').returns([
       {
         show: true,
         label: 'Y ref label',
@@ -36,6 +40,15 @@ describe('createRefLineLabels', () => {
         },
       },
     ]);
+
+    theme = { getStyle: sandbox.stub().returns('#000000') };
+
+    themeService = {
+      getStyles: sandbox.stub().returns('theme'),
+      getTheme: sandbox.stub().returns(theme),
+    };
+    models = { layoutService, themeService };
+    context = { rtl: false, localeInfo: 'valid localeInfo' };
   });
 
   afterEach(() => {
@@ -43,14 +56,11 @@ describe('createRefLineLabels', () => {
   });
 
   it('should return false if there is no reference line to show', () => {
-    layoutModel.getLayoutValue.withArgs('refLine.refLinesY').returns([]);
+    layoutService.getLayoutValue.withArgs('refLine.refLinesY').returns([]);
     const dock = 'left';
     const scale = 'y';
-    const themeStyle = 'theme';
-    const rtl = false;
     const key = 'reference-line-Y';
-    const localeInfo = 'valid localeInfo';
-    const result = createRefLineLabels({ layoutModel, dock, scale, themeStyle, rtl, key, localeInfo });
+    const result = createRefLineLabels({ models, context, dock, scale, key });
     expect(result).to.deep.equal(false);
   });
 
@@ -63,10 +73,10 @@ describe('createRefLineLabels', () => {
         outOfBounds: { backgroundColor: '#111111', color: '#ffffff', fontFamily: 'oob font', fontSize: 'oob fontSize' },
       },
     };
-    const rtl = false;
+    themeService.getStyles = sandbox.stub().returns(themeStyle);
+
     const key = 'reference-line-labels-X';
-    const localeInfo = 'valid localeInfo';
-    const result = createRefLineLabels({ layoutModel, dock, scale, themeStyle, rtl, key, localeInfo });
+    const result = createRefLineLabels({ models, context, dock, scale, themeStyle, key });
     expect(result).to.deep.equal({
       key: 'reference-line-labels-X',
       type: 'reference-line-labels',
@@ -109,17 +119,14 @@ describe('createRefLineLabels', () => {
   it('should return false if x reference lines are selected but not enabled', () => {
     const dock = 'top';
     const scale = 'x';
-    const themeStyle = '';
-    const rtl = false;
     const key = 'reference-line-labels-X';
-    const localeInfo = 'valid localeInfo';
-    layoutModel.getLayoutValue.withArgs('refLine.refLinesX').returns([
+    layoutService.getLayoutValue.withArgs('refLine.refLinesX').returns([
       {
         show: false,
         label: 'X ref label',
       },
     ]);
-    const result = createRefLineLabels({ layoutModel, dock, scale, themeStyle, rtl, key, localeInfo });
+    const result = createRefLineLabels({ models, context, dock, scale, key });
     expect(result).to.deep.equal(false);
   });
 
@@ -132,10 +139,9 @@ describe('createRefLineLabels', () => {
         outOfBounds: { backgroundColor: '#111111', color: '#ffffff', fontFamily: 'oob font', fontSize: 'oob fontSize' },
       },
     };
-    const rtl = false;
+    themeService.getStyles = sandbox.stub().returns(themeStyle);
     const key = 'reference-line-labels-Y';
-    const localeInfo = 'valid localeInfo';
-    const result = createRefLineLabels({ layoutModel, dock, scale, themeStyle, rtl, key, localeInfo });
+    const result = createRefLineLabels({ models, context, dock, scale, key });
     expect(result).to.deep.equal({
       key: 'reference-line-labels-Y',
       type: 'reference-line-labels',
@@ -191,10 +197,10 @@ describe('createRefLineLabels', () => {
         outOfBounds: { color: '#ffffff', fontFamily: 'oob font' },
       },
     };
-    const rtl = true;
+    themeService.getStyles = sandbox.stub().returns(themeStyle);
+    context.rtl = true;
     const key = 'reference-line-labels-Y';
-    const localeInfo = 'valid localeInfo';
-    const result = createRefLineLabels({ layoutModel, dock, scale, themeStyle, rtl, key, localeInfo });
+    const result = createRefLineLabels({ models, context, dock, scale, themeStyle, key });
     expect(result).to.deep.equal({
       key: 'reference-line-labels-Y',
       type: 'reference-line-labels',

@@ -1,5 +1,6 @@
 import extend from 'extend';
 import KEYS from '../../../constants/keys';
+import getContrastColors from '../../../utils/color/get-contrast-colors';
 
 const defaultStyle = {
   referenceLine: {
@@ -18,9 +19,23 @@ const defaultStyle = {
   },
 };
 
-export default function createRefLineLabels({ layoutModel, dock, scale, themeStyle, rtl, key, localeInfo }) {
+const getOobColors = (style, theme) => {
+  const oobStyle = theme.getStyle('object', 'referenceLine', 'outOfBounds');
+  if (oobStyle) {
+    return style.referenceLine.outOfBounds;
+  }
+  const foreColor = theme.getStyle('object', '', 'color');
+  return getContrastColors(foreColor);
+};
+
+export default function createRefLineLabels({ models, context, dock, scale, key }) {
+  const { layoutService, themeService } = models;
+  const { rtl, localeInfo } = context;
+  const themeStyle = themeService.getStyles();
+  const theme = themeService.getTheme();
+
   const path = scale === KEYS.SCALE.X ? 'refLine.refLinesX' : 'refLine.refLinesY';
-  const refLineLabels = layoutModel
+  const refLineLabels = layoutService
     .getLayoutValue(path)
     .filter((refLine) => refLine.show !== false && refLine.show !== 0 && refLine.show !== '0');
 
@@ -37,6 +52,8 @@ export default function createRefLineLabels({ layoutModel, dock, scale, themeSty
   }));
 
   const style = extend(true, {}, defaultStyle, themeStyle);
+  const oobColors = getOobColors(style, theme);
+
   const refLineLabelsDef = {
     key,
     type: 'reference-line-labels',
@@ -61,13 +78,13 @@ export default function createRefLineLabels({ layoutModel, dock, scale, themeSty
       },
       oob: {
         size: 8,
-        fill: style.referenceLine.outOfBounds.backgroundColor,
+        fill: oobColors.backgroundColor,
         text: {
           fontFamily: style.referenceLine.outOfBounds.fontFamily,
           fontSize: style.referenceLine.outOfBounds.fontSize,
-          fill: style.referenceLine.outOfBounds.color,
+          fill: oobColors.color,
           background: {
-            fill: style.referenceLine.outOfBounds.backgroundColor,
+            fill: oobColors.backgroundColor,
           },
         },
       },
