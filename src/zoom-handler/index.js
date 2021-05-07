@@ -40,7 +40,7 @@ export default function createZoomHandler({ layoutService, model, viewState }) {
 
       // Update isHomeState
       const { xAxisMin: x, xAxisMax: X, yAxisMin: y, yAxisMax: Y } = z;
-      const { xAxisMin: x0, xAxisMax: X0, yAxisMin: y0, yAxisMax: Y0 } = meta.axisInfoAtHomeState;
+      const { xAxisMin: x0, xAxisMax: X0, yAxisMin: y0, yAxisMax: Y0 } = meta.zoomAtHomeState;
       const e = 0.01;
       if (meta.zoomLevel === 0 && areIntervalsEqual(x, X, x0, X0, e) && areIntervalsEqual(y, Y, y0, Y0, e)) {
         meta.isHomeState = true;

@@ -53,7 +53,7 @@ export function updateViewState(viewState, layoutService, viewStateOptions = {},
   const [yAxisMin, yAxisMax] = tickModel.query.getYMinMax();
   viewState.set('legendScrollOffset', source.legendScrollOffset || 0);
   viewState.set('zoom', { xAxisMin, xAxisMax, yAxisMin, yAxisMax });
-  if (zoomHandler.getMeta().isHomeState) zoomHandler.setMeta({ axisInfoAtHomeState: viewState.get('zoom') });
+  if (zoomHandler.getMeta().isHomeState) zoomHandler.setMeta({ zoomAtHomeState: viewState.get('zoom') });
 }
 
 export function initializeViewState(
