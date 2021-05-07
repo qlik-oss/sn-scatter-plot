@@ -1,3 +1,4 @@
+import extend from 'extend';
 import createDataFetcher from './data-fetcher';
 
 function areIntervalsEqual(min1, max1, min2, max2, e) {
@@ -10,6 +11,7 @@ function areIntervalsEqual(min1, max1, min2, max2, e) {
 
 export default function createZoomHandler({ layoutService, model, viewState }) {
   let dataFetcher;
+  const meta = {};
 
   const zoomHandler = {
     getZoom: () => viewState.get('zoom'),
@@ -28,27 +30,32 @@ export default function createZoomHandler({ layoutService, model, viewState }) {
 
       return dataFetcher.fetchData(dataRect);
     },
-    setZoom(newZoom, zoomChange = 0) {
+
+    setZoom(z) {
       // scrollUtil.getLimitedPixelOffsets(offsets);
       // relativePos.x = [limitedOffsets.x, limitedOffsets.x + 1];
       // relativePos.y = [limitedOffsets.y, limitedOffsets.y + 1];
-      const zoomLevel = viewState.get('zoomLevel');
-      const newZoomLevel = zoomLevel + zoomChange;
-      viewState.set('zoomLevel', newZoomLevel);
 
-      const { xAxisMin: x, xAxisMax: X, yAxisMin: y, yAxisMax: Y } = newZoom;
-      const { xAxisMin: x0, xAxisMax: X0, yAxisMin: y0, yAxisMax: Y0 } = viewState.get('axisInfoAtHomeState');
+      viewState.set('zoom', z);
+
+      // Update isHomeState
+      const { xAxisMin: x, xAxisMax: X, yAxisMin: y, yAxisMax: Y } = z;
+      const { xAxisMin: x0, xAxisMax: X0, yAxisMin: y0, yAxisMax: Y0 } = meta.axisInfoAtHomeState;
       const e = 0.01;
-      if (
-        viewState.get('zoomLevel') === 0 &&
-        areIntervalsEqual(x, X, x0, X0, e) &&
-        areIntervalsEqual(y, Y, y0, Y0, e)
-      ) {
-        viewState.set('isHomeState', true);
-        console.log('homestaet');
-      } else viewState.set('isHomeState', false);
+      if (meta.zoomLevel === 0 && areIntervalsEqual(x, X, x0, X0, e) && areIntervalsEqual(y, Y, y0, Y0, e)) {
+        meta.isHomeState = true;
+        console.log('homestate');
+      } else meta.isHomeState = false;
+    },
 
-      viewState.set('zoom', newZoom);
+    getMeta: () => meta,
+
+    setMeta(newMeta) {
+      extend(true, meta, newMeta);
+    },
+
+    changeZoomLevel(zoomChange = 0) {
+      meta.zoomLevel += zoomChange;
     },
   };
 

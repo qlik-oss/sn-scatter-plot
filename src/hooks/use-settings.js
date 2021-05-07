@@ -45,9 +45,9 @@ const useSettings = ({ core, models, flags }) => {
 
     const { layoutService, chartModel, colorService, tickModel, extremumModel } = models;
     const { viewState } = core;
-    initializeViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
     const zoomHandler = chartModel.query.getZoomHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
+    initializeViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
 
     return zoomHandler.fetchData().then((pages) => {
       layoutService.setDataPages(pages);
@@ -69,8 +69,10 @@ const useSettings = ({ core, models, flags }) => {
     const zoomHandler = chartModel.query.getZoomHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
     dockService.update(logicalSize || rect);
-    updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
     zoomHandler.update();
+
+    // It is important that the viewstate should be updated only after the dockService has updated the rect
+    updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
     zoomHandler.fetchData().then((pages) => {
       layoutService.setDataPages(pages);
       setSettings(getPicassoDef(logicalSize));

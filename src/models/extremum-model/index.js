@@ -93,9 +93,8 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
       getYExtrema: () => yExtrema,
     },
     command: {
-      updateExtrema: (viewState) => {
-        const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewState.get('zoom');
-        const isHomeState = viewState.get('isHomeState');
+      updateExtrema: (zoom, isHomeState) => {
+        const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = zoom;
         xExtrema.xAxisMin = xAxisMin;
         xExtrema.xAxisMax = xAxisMax;
         yExtrema.yAxisMin = yAxisMin;

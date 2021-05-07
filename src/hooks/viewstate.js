@@ -47,13 +47,13 @@ export function updateViewState(viewState, layoutService, viewStateOptions = {},
   };
   tickModel.command.updateFormatters(formatters);
 
-  if (viewState.get('isHomeState')) extremumModel.command.resetExtrema();
-
+  const zoomHandler = chartModel.query.getZoomHandler();
+  if (zoomHandler.getMeta().isHomeState) extremumModel.command.resetExtrema();
   const [xAxisMin, xAxisMax] = tickModel.query.getXMinMax();
   const [yAxisMin, yAxisMax] = tickModel.query.getYMinMax();
   viewState.set('legendScrollOffset', source.legendScrollOffset || 0);
   viewState.set('zoom', { xAxisMin, xAxisMax, yAxisMin, yAxisMax });
-  if (viewState.get('isHomeState')) viewState.set('axisInfoAtHomeState', viewState.get('zoom'));
+  if (zoomHandler.getMeta().isHomeState) zoomHandler.setMeta({ axisInfoAtHomeState: viewState.get('zoom') });
 }
 
 export function initializeViewState(
@@ -64,7 +64,7 @@ export function initializeViewState(
   chartModel,
   extremumModel
 ) {
-  viewState.set('zoomLevel', 0);
-  viewState.set('isHomeState', true);
+  const zoomHandler = chartModel.query.getZoomHandler();
+  zoomHandler.setMeta({ isHomeState: true, zoomLevel: 0 });
   updateViewState(viewState, layoutService, viewStateOptions, tickModel, chartModel, extremumModel);
 }
