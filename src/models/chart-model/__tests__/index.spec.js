@@ -19,7 +19,7 @@ describe('chart-model', () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     global.requestAnimationFrame = (cb) => setTimeout(cb, 20);
-    zoomHandler = {};
+    zoomHandler = { getMeta: sandbox.stub().returns('isHomeState') };
     viewState = {
       get() {
         return this.props;
