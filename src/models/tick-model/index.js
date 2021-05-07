@@ -62,6 +62,7 @@ export default function createTickModel({ layoutService, dockService, extremumMo
   }
 
   const formatters = {};
+
   function resolve(axis, prop) {
     const { min, max, explicitType, count, size, measure } = getChartProperties(axis);
     const scale = scaleLinear().domain([min, max]);
