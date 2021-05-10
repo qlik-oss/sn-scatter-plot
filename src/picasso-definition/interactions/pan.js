@@ -3,7 +3,7 @@ import KEYS from '../../constants/keys';
 const threshold = 10;
 const eventName = 'areaPan';
 
-const pan = ({ chart, actions, zoomHandler }) => ({
+const pan = ({ chart, actions, viewHandler }) => ({
   type: 'Pan',
   key: 'panorama',
   options: {
@@ -30,10 +30,10 @@ const pan = ({ chart, actions, zoomHandler }) => ({
     areaPanstart(e) {
       e.preventDefault();
       this.started = eventName;
-      const initialZoom = zoomHandler.getZoom();
+      const initialDataView = viewHandler.getDataView();
       this[eventName] = {
         componentSize: this.pointAreaPanned.rect,
-        ...initialZoom,
+        ...initialDataView,
       };
     },
     areaPanmove(e) {
@@ -43,15 +43,15 @@ const pan = ({ chart, actions, zoomHandler }) => ({
       const xDiff = (xAxisMax - xAxisMin) * (e.deltaX / componentSize.width);
       const yDiff = (yAxisMax - yAxisMin) * (e.deltaY / componentSize.height);
 
-      const zoom = {
+      const dataView = {
         xAxisMin: xAxisMin - xDiff,
         xAxisMax: xAxisMax - xDiff,
         yAxisMin: yAxisMin + yDiff,
         yAxisMax: yAxisMax + yDiff,
       };
 
-      zoomHandler.setZoom(zoom);
-      // zoomHandler.setZoom({
+      viewHandler.setDataView(dataView);
+      // viewHandler.setDataView({
       //   xAxisMin: xAxisMin - xDiff,
       //   xAxisMax: xAxisMax - xDiff,
       //   yAxisMin: yAxisMin + yDiff,

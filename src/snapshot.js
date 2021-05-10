@@ -31,7 +31,7 @@ const setupSnapshot = ({ core, models }) => {
 
     const legend = core.chart.component(KEYS.COMPONENT.LEGEND_CATEGORICAL);
     const legendScrollOffset = legend && legend._DO_NOT_USE_getInfo && legend._DO_NOT_USE_getInfo().offset;
-    const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewState.get('zoom');
+    const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewState.get('dataView');
     layout.snapshotData.content.chartData = {
       xAxisMin,
       xAxisMax,
@@ -60,7 +60,7 @@ const setupSnapshot = ({ core, models }) => {
         const legend = core.chart.component(KEYS.COMPONENT.LEGEND_CATEGORICAL);
         const legendScrollOffset = legend && legend._DO_NOT_USE_getInfo && legend._DO_NOT_USE_getInfo().offset;
         const viewState = models.chartModel.query.getViewState();
-        const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewState.get('zoom');
+        const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewState.get('dataView');
         return {
           xAxisMin,
           xAxisMax,

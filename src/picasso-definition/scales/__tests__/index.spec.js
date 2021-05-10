@@ -22,7 +22,7 @@ describe('scales', () => {
       },
     };
     viewState = {
-      get: sinon.stub().withArgs('zoom').returns({
+      get: sinon.stub().withArgs('dataView').returns({
         xAxisMin: 0,
         xAxisMax: 10,
         yAxisMin: 20,

@@ -11,7 +11,7 @@ describe('chart-model', () => {
   let picassoDataFn;
   let colorModelDataFn;
   let create;
-  let zoomHandler;
+  let viewHandler;
   let createChartModel;
   let viewState;
   let extremumModel;
@@ -19,7 +19,7 @@ describe('chart-model', () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     global.requestAnimationFrame = (cb) => setTimeout(cb, 20);
-    zoomHandler = { getMeta: sandbox.stub().returns('isHomeState') };
+    viewHandler = { getMeta: sandbox.stub().returns('isHomeState') };
     viewState = {
       get() {
         return this.props;
@@ -31,7 +31,7 @@ describe('chart-model', () => {
         this[key] = cb;
       },
     };
-    createChartModel = aw.mock([['**/src/zoom-handler/index.js', () => () => zoomHandler]], ['../index'])[0].default;
+    createChartModel = aw.mock([['**/src/view-handler/index.js', () => () => viewHandler]], ['../index'])[0].default;
     chart = {
       update: sandbox.stub(),
     };
@@ -110,11 +110,11 @@ describe('chart-model', () => {
     });
 
     describe('partial update', () => {
-      it('should trigger chart.update properly when zoom (viewState) change', async () => {
+      it('should trigger chart.update properly when dataView (viewState) change', async () => {
         sandbox.useFakeTimers();
         const { clock } = sandbox;
         create();
-        viewState.zoom();
+        viewState.dataView();
         await clock.tick(50);
         expect(extremumModel.command.updateExtrema).to.have.been.calledOnce;
         expect(

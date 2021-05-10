@@ -281,7 +281,7 @@ describe('createExtremumModel', () => {
     });
 
     it('should update extrema', () => {
-      const newZoom = {
+      const dataView = {
         xAxisMin: 1,
         xAxisMax: 8,
         yAxisMin: 2,
@@ -292,7 +292,7 @@ describe('createExtremumModel', () => {
       layoutService.meta.isSnapshot = false;
       viewStateOptions = {};
       extremumModel = create();
-      extremumModel.command.updateExtrema(newZoom);
+      extremumModel.command.updateExtrema(dataView);
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
         xAxisMin: 1,

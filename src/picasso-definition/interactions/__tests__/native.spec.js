@@ -8,7 +8,7 @@ describe('native', () => {
   let create;
   let e;
   let chart;
-  let zoomHandler;
+  let viewHandler;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -41,7 +41,7 @@ describe('native', () => {
       component: sandbox.stub(),
       componentsFromPoint: sandbox.stub(),
     };
-    zoomHandler = {
+    viewHandler = {
       xScrollEnabled: sandbox.stub().returns(true),
       yScrollEnabled: sandbox.stub().returns(true),
       getPxOffsets: sandbox.stub().returns({
@@ -68,7 +68,7 @@ describe('native', () => {
       createNative({
         chart,
         actions,
-        zoomHandler,
+        viewHandler,
       });
     e = {
       preventDefault: sandbox.spy(),

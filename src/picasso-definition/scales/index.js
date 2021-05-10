@@ -7,8 +7,8 @@ export default function createScales({ models, viewState }) {
       data: {
         field: KEYS.FIELDS.X,
       },
-      min: () => viewState.get('zoom').xAxisMin,
-      max: () => viewState.get('zoom').xAxisMax,
+      min: () => viewState.get('dataView').xAxisMin,
+      max: () => viewState.get('dataView').xAxisMax,
       ticks: {
         values: () => tickModel.query.getXTicks(),
       },
@@ -19,8 +19,8 @@ export default function createScales({ models, viewState }) {
           field: KEYS.FIELDS.Y,
         },
       },
-      min: () => viewState.get('zoom').yAxisMin,
-      max: () => viewState.get('zoom').yAxisMax,
+      min: () => viewState.get('dataView').yAxisMin,
+      max: () => viewState.get('dataView').yAxisMax,
       invert: true,
       ticks: {
         values: () => tickModel.query.getYTicks(),
