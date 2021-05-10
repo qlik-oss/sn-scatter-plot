@@ -64,11 +64,12 @@ const useSettings = ({ core, models, flags }) => {
       return;
     }
 
-    const { layoutService, chartModel, dockService, tickModel, extremumModel } = models;
+    const { layoutService, chartModel, dockService, tickModel, colorService, extremumModel } = models;
     const { viewState } = core;
     const zoomHandler = chartModel.query.getZoomHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
     dockService.update(logicalSize || rect);
+    colorService.custom.updateLegend();
     zoomHandler.update();
 
     // It is important that the viewstate should be updated only after the dockService has updated the rect
