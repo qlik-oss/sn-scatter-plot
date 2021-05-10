@@ -1,7 +1,11 @@
 import getMinorTicks from './minor';
 
-export default function getTicks({ scale, nicing, count, size, measure, formatter }) {
+export default function getTicks({ scale, explicitType, count, size, measure, formatter }) {
+  const [originalMin, originalMax] = scale.domain();
+  // 'Nice' if at least one end is implicit (extendable). You can't nice only one end with d3 scale
+  const nicing = explicitType !== 'minMax';
   let majorTicks = nicing ? scale.nice(count).ticks(count) : scale.ticks(count);
+  let [min, max] = nicing ? scale.nice(count).domain() : scale.domain();
 
   // Reduce the number of major ticks if the axis labels are too crowded
 
@@ -15,11 +19,12 @@ export default function getTicks({ scale, nicing, count, size, measure, formatte
     return fits(labels);
   };
 
-  for (let c = count - 1; c > 0; c--) {
+  for (let c = count - 1; c > 1; c--) {
     if (valid()) {
       break;
     }
     majorTicks = nicing ? scale.nice(c).ticks(c) : scale.ticks(c);
+    [min, max] = nicing ? scale.nice(c).domain() : scale.domain();
   }
 
   const minorTicks = getMinorTicks({
@@ -33,5 +38,10 @@ export default function getTicks({ scale, nicing, count, size, measure, formatte
     ...minorTicks.map((value) => ({ value, isMinor: true })),
   ].sort((a, b) => a.value - b.value);
 
-  return ticks;
+  // Post-processing min and max
+  if (explicitType === 'min') min = originalMin;
+  if (explicitType === 'max') max = originalMax;
+  const minMax = [min, max];
+
+  return { ticks, minMax };
 }

@@ -68,6 +68,7 @@ export default function createChartModel({
       getZoomHandler: () => zoomHandler,
       getLocaleInfo: () => localeInfo,
       isInteractionInProgess: () => interactionInProgess,
+      getFormatter: (fieldName) => dataset.field(fieldName).formatter(),
     },
     command: {
       update: ({ settings } = {}) => {

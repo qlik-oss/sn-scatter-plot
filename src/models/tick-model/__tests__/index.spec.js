@@ -54,28 +54,28 @@ describe('getCount', () => {
 
 describe('createTickModel', () => {
   let sandbox;
-  let resolveTicks;
+  let resolve;
   let layoutService;
   let extremumModel;
   let dockService;
   let create;
   let ticks;
   let themeService;
-  let chart;
+  // let chart;
   let linearScale;
   let renderer;
   let measureText;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    resolveTicks = sandbox.stub();
-    resolveTicks.returns('called');
+    resolve = sandbox.stub();
+    resolve.returns('called');
     layoutService = { getLayoutValue: sandbox.stub() };
     layoutService.getLayoutValue.withArgs('xAxis.spacing', 1).returns(0.5);
     layoutService.getLayoutValue.withArgs('yAxis.spacing', 1).returns(2);
     dockService = { meta: { chart: { size: { width: 500, height: 1000 } } } };
     extremumModel = {
-      query: { getXExtrema: sandbox.stub(), getYExtrema: sandbox.stub(), getIsHomeState: sandbox.stub().returns(true) },
+      query: { getXExtrema: sandbox.stub(), getYExtrema: sandbox.stub() },
     };
     sandbox
       .stub(KEYS, 'default')
@@ -86,11 +86,8 @@ describe('createTickModel', () => {
     measureText = sandbox.stub().returns({ width: 10, height: 20 });
     renderer = sandbox.stub().returns(measureText);
     sandbox.stub(picasso, 'renderer').returns(renderer);
-    chart = { formatter: sandbox.stub() };
-    chart.formatter.withArgs('x').returns('x-formatter');
-    chart.formatter.withArgs('y').returns('y-formatter');
     themeService = { getStyles: sandbox.stub().returns('theme') };
-    create = () => createTickModel({ layoutService, dockService, extremumModel, themeService, chart });
+    create = () => createTickModel({ layoutService, dockService, extremumModel, themeService });
   });
 
   afterEach(() => {
@@ -98,7 +95,7 @@ describe('createTickModel', () => {
   });
 
   it('should expose correct composition', () => {
-    expect(create()).to.have.all.keys(['query']);
+    expect(create()).to.have.all.keys(['query', 'command']);
   });
 
   describe('query', () => {
@@ -116,14 +113,16 @@ describe('createTickModel', () => {
         getTicks.default
           .withArgs({
             scale: 'correct scale',
-            nicing: true,
+            explicitType: 'minMax',
             count: 10,
             size: 500,
             measure: sinon.match.func,
             formatter: 'x-formatter',
           })
-          .returns('correct ticks');
-        ticks = create().query.getXTicks();
+          .returns({ ticks: 'correct ticks', minMax: 'correct minMax' });
+        const model = create();
+        model.command.updateFormatters({ x: 'x-formatter' });
+        ticks = model.query.getXTicks();
         expect(ticks).to.deep.equal('correct ticks');
       });
 
@@ -131,19 +130,21 @@ describe('createTickModel', () => {
         extremumModel.query.getXExtrema.returns({
           xAxisMin: 0,
           xAxisMax: 600,
-          xAxisExplicitType: 'minMax',
+          xAxisExplicitType: 'min',
         });
         getTicks.default
           .withArgs({
             scale: 'correct scale',
-            nicing: true,
+            explicitType: 'min',
             count: 10,
             size: 500,
             measure: sinon.match.func,
             formatter: 'x-formatter',
           })
-          .returns('correct ticks');
-        ticks = create().query.getXTicks();
+          .returns({ ticks: 'correct ticks', minMax: 'correct minMax' });
+        const model = create();
+        model.command.updateFormatters({ x: 'x-formatter' });
+        ticks = model.query.getXTicks();
         expect(ticks).to.deep.equal('correct ticks');
       });
 
@@ -151,19 +152,21 @@ describe('createTickModel', () => {
         extremumModel.query.getXExtrema.returns({
           xAxisMin: 0,
           xAxisMax: 600,
-          xAxisExplicitType: 'minMax',
+          xAxisExplicitType: 'max',
         });
         getTicks.default
           .withArgs({
             scale: 'correct scale',
-            nicing: true,
+            explicitType: 'max',
             count: 10,
             size: 500,
             measure: sinon.match.func,
             formatter: 'x-formatter',
           })
-          .returns('correct ticks');
-        ticks = create().query.getXTicks();
+          .returns({ ticks: 'correct ticks', minMax: 'correct minMax' });
+        const model = create();
+        model.command.updateFormatters({ x: 'x-formatter' });
+        ticks = model.query.getXTicks();
         expect(ticks).to.deep.equal('correct ticks');
       });
 
@@ -171,19 +174,21 @@ describe('createTickModel', () => {
         extremumModel.query.getXExtrema.returns({
           xAxisMin: 0,
           xAxisMax: 600,
-          xAxisExplicitType: 'minMax',
+          xAxisExplicitType: 'none',
         });
         getTicks.default
           .withArgs({
             scale: 'correct scale',
-            nicing: true,
+            explicitType: 'none',
             count: 10,
             size: 500,
             measure: sinon.match.func,
             formatter: 'x-formatter',
           })
-          .returns('correct ticks');
-        ticks = create().query.getXTicks();
+          .returns({ ticks: 'correct ticks', minMax: 'correct minMax' });
+        const model = create();
+        model.command.updateFormatters({ x: 'x-formatter' });
+        ticks = model.query.getXTicks();
         expect(ticks).to.deep.equal('correct ticks');
       });
     });
@@ -198,14 +203,16 @@ describe('createTickModel', () => {
         getTicks.default
           .withArgs({
             scale: 'correct scale',
-            nicing: true,
+            explicitType: 'minMax',
             count: 5,
             size: 1000,
             measure: sinon.match.func,
             formatter: 'y-formatter',
           })
-          .returns('correct ticks');
-        ticks = create().query.getYTicks();
+          .returns({ ticks: 'correct ticks', minMax: 'correct minMax' });
+        const model = create();
+        model.command.updateFormatters({ y: 'y-formatter' });
+        ticks = model.query.getYTicks();
         expect(ticks).to.deep.equal('correct ticks');
       });
 
@@ -213,19 +220,21 @@ describe('createTickModel', () => {
         extremumModel.query.getYExtrema.returns({
           yAxisMin: -100,
           yAxisMax: 500,
-          yAxisExplicitType: 'minMax',
+          yAxisExplicitType: 'min',
         });
         getTicks.default
           .withArgs({
             scale: 'correct scale',
-            nicing: true,
+            explicitType: 'min',
             count: 5,
             size: 1000,
             measure: sinon.match.func,
             formatter: 'y-formatter',
           })
-          .returns('correct ticks');
-        ticks = create().query.getYTicks();
+          .returns({ ticks: 'correct ticks', minMax: 'correct minMax' });
+        const model = create();
+        model.command.updateFormatters({ y: 'y-formatter' });
+        ticks = model.query.getYTicks();
         expect(ticks).to.deep.equal('correct ticks');
       });
 
@@ -233,19 +242,21 @@ describe('createTickModel', () => {
         extremumModel.query.getYExtrema.returns({
           yAxisMin: -100,
           yAxisMax: 500,
-          yAxisExplicitType: 'minMax',
+          yAxisExplicitType: 'max',
         });
         getTicks.default
           .withArgs({
             scale: 'correct scale',
-            nicing: true,
+            explicitType: 'max',
             count: 5,
             size: 1000,
             measure: sinon.match.func,
             formatter: 'y-formatter',
           })
-          .returns('correct ticks');
-        ticks = create().query.getYTicks();
+          .returns({ ticks: 'correct ticks', minMax: 'correct minMax' });
+        const model = create();
+        model.command.updateFormatters({ y: 'y-formatter' });
+        ticks = model.query.getYTicks();
         expect(ticks).to.deep.equal('correct ticks');
       });
 
@@ -253,19 +264,21 @@ describe('createTickModel', () => {
         extremumModel.query.getYExtrema.returns({
           yAxisMin: -100,
           yAxisMax: 500,
-          yAxisExplicitType: 'minMax',
+          yAxisExplicitType: 'none',
         });
         getTicks.default
           .withArgs({
             scale: 'correct scale',
-            nicing: true,
+            explicitType: 'none',
             count: 5,
             size: 1000,
             measure: sinon.match.func,
             formatter: 'y-formatter',
           })
-          .returns('correct ticks');
-        ticks = create().query.getYTicks();
+          .returns({ ticks: 'correct ticks', minMax: 'correct minMax' });
+        const model = create();
+        model.command.updateFormatters({ y: 'y-formatter' });
+        ticks = model.query.getYTicks();
         expect(ticks).to.deep.equal('correct ticks');
       });
     });
