@@ -65,6 +65,6 @@ export function initializeViewState(
   extremumModel
 ) {
   const zoomHandler = chartModel.query.getZoomHandler();
-  zoomHandler.setMeta({ isHomeState: true, zoomLevel: 0 });
+  zoomHandler.setMeta({ isHomeState: true });
   updateViewState(viewState, layoutService, viewStateOptions, tickModel, chartModel, extremumModel);
 }

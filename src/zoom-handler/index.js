@@ -42,9 +42,8 @@ export default function createZoomHandler({ layoutService, model, viewState }) {
       const { xAxisMin: x, xAxisMax: X, yAxisMin: y, yAxisMax: Y } = z;
       const { xAxisMin: x0, xAxisMax: X0, yAxisMin: y0, yAxisMax: Y0 } = meta.zoomAtHomeState;
       const e = 0.01;
-      if (meta.zoomLevel === 0 && areIntervalsEqual(x, X, x0, X0, e) && areIntervalsEqual(y, Y, y0, Y0, e)) {
+      if (areIntervalsEqual(x, X, x0, X0, e) && areIntervalsEqual(y, Y, y0, Y0, e)) {
         meta.isHomeState = true;
-        console.log('homestate');
       } else meta.isHomeState = false;
     },
 
@@ -52,10 +51,6 @@ export default function createZoomHandler({ layoutService, model, viewState }) {
 
     setMeta(newMeta) {
       extend(true, meta, newMeta);
-    },
-
-    changeZoomLevel(zoomChange = 0) {
-      meta.zoomLevel += zoomChange;
     },
   };
 
