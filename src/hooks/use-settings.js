@@ -64,13 +64,14 @@ const useSettings = ({ core, models, flags }) => {
       return;
     }
 
-    const { layoutService, chartModel, dockService, tickModel } = models;
+    const { layoutService, chartModel, dockService, tickModel, colorService } = models;
     const { viewState } = core;
     updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel);
     const zoomHandler = chartModel.query.getZoomHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
 
     dockService.update(logicalSize || rect);
+    colorService.custom.updateLegend();
     zoomHandler.update();
     zoomHandler.fetchData().then((pages) => {
       layoutService.setDataPages(pages);
