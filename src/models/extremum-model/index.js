@@ -84,20 +84,29 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
     };
   }
 
-  const xExtrema = resolveExtrema(KEYS.SCALE.X);
-  const yExtrema = resolveExtrema(KEYS.SCALE.Y);
+  let xExtrema = resolveExtrema(KEYS.SCALE.X);
+  let yExtrema = resolveExtrema(KEYS.SCALE.Y);
 
   const model = {
     query: {
       getXExtrema: () => xExtrema,
       getYExtrema: () => yExtrema,
-      updateExtrema: (newZoom) => {
-        xExtrema.xAxisMin = newZoom.xAxisMin;
-        xExtrema.xAxisMax = newZoom.xAxisMax;
-        xExtrema.xAxisExplicitType = 'minMax';
-        yExtrema.yAxisMin = newZoom.yAxisMin;
-        yExtrema.yAxisMax = newZoom.yAxisMax;
-        yExtrema.yAxisExplicitType = 'minMax';
+    },
+    command: {
+      updateExtrema: (zoom, isHomeState) => {
+        const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = zoom;
+        xExtrema.xAxisMin = xAxisMin;
+        xExtrema.xAxisMax = xAxisMax;
+        yExtrema.yAxisMin = yAxisMin;
+        yExtrema.yAxisMax = yAxisMax;
+        if (!isHomeState) {
+          xExtrema.xAxisExplicitType = 'minMax';
+          yExtrema.yAxisExplicitType = 'minMax';
+        }
+      },
+      resetExtrema: () => {
+        xExtrema = resolveExtrema(KEYS.SCALE.X);
+        yExtrema = resolveExtrema(KEYS.SCALE.Y);
       },
     },
   };

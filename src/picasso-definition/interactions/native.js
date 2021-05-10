@@ -19,7 +19,6 @@ function zoom(e, chart, pointComponent, zoomHandler) {
   const zoomFactor = e.deltaY > 0 ? ZOOM_SCALE : 1 / ZOOM_SCALE;
   const [xMin, xMax] = transform(p.x / width, xAxisMin, xAxisMax, zoomFactor);
   const [yMax, yMin] = transform(p.y / height, yAxisMax, yAxisMin, zoomFactor);
-
   zoomHandler.setZoom({
     xAxisMin: xMin,
     xAxisMax: xMax,

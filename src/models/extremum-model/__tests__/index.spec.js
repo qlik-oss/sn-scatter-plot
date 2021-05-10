@@ -292,7 +292,7 @@ describe('createExtremumModel', () => {
       layoutService.meta.isSnapshot = false;
       viewStateOptions = {};
       extremumModel = create();
-      extremumModel.query.updateExtrema(newZoom);
+      extremumModel.command.updateExtrema(newZoom);
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
         xAxisMin: 1,

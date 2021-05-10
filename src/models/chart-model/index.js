@@ -39,7 +39,9 @@ export default function createChartModel({
   });
 
   function updatePartial() {
-    extremumModel.query.updateExtrema(viewState.get('zoom'));
+    const zoom = viewState.get('zoom');
+    const { isHomeState } = zoomHandler.getMeta();
+    extremumModel.command.updateExtrema(zoom, isHomeState);
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???
       // const startTime = Date.now();
