@@ -1,16 +1,19 @@
 import { useElement, useEffect, useState, useOptions } from '@nebula.js/stardust';
 import useActions from './use-actions';
+import useViewState from './use-view-state';
 import configurePicasso from '../configure-picasso';
-import createViewState from './viewstate';
 
 const useCore = () => {
   const element = useElement();
   const options = useOptions();
   const actions = useActions();
+  const viewState = useViewState();
 
   const [core, setCore] = useState();
 
   useEffect(() => {
+    if (!viewState) return undefined;
+
     element.style.overflow = 'hidden';
     const picasso = configurePicasso();
     const picassoInstance = picasso({
@@ -23,7 +26,6 @@ const useCore = () => {
       settings: {},
     });
 
-    const viewState = createViewState();
     setCore({
       picassoInstance,
       chart,
@@ -34,7 +36,7 @@ const useCore = () => {
     return () => {
       chart.destroy();
     };
-  }, []);
+  }, [viewState]);
 
   return core;
 };

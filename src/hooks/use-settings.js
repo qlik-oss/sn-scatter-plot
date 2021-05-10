@@ -12,7 +12,7 @@ import {
 } from '@nebula.js/stardust';
 import createPicassoDefinition from '../picasso-definition';
 import getLogicalSize from '../logical-size';
-import { initializeViewState, updateViewState } from './viewstate';
+import { initializeViewState, updateViewState } from './view-state';
 
 const useSettings = ({ core, models, flags }) => {
   const rect = useRect();
@@ -66,18 +66,13 @@ const useSettings = ({ core, models, flags }) => {
 
     const { layoutService, chartModel, dockService, tickModel, colorService, extremumModel } = models;
     const { viewState } = core;
-    const viewHandler = chartModel.query.getViewHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
     dockService.update(logicalSize || rect);
     colorService.custom.updateLegend();
-    viewHandler.update();
 
     // It is important that the viewstate should be updated only after the dockService has updated the rect
     updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
-    viewHandler.fetchData().then((pages) => {
-      layoutService.setDataPages(pages);
-      setSettings(getPicassoDef(logicalSize));
-    });
+    setSettings(getPicassoDef(logicalSize || rect));
   }, [rect.width, rect.height]);
 
   return settings;
