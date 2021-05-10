@@ -1,5 +1,5 @@
 import KEYS from '../../constants/keys';
-import createZoomHandler from '../../zoom-handler';
+import createViewHandler from '../../view-handler';
 
 export default function createChartModel({
   chart,
@@ -31,7 +31,7 @@ export default function createChartModel({
 
   const dataset = picasso.data('q')(mainConfig);
 
-  const zoomHandler = createZoomHandler({
+  const viewHandler = createViewHandler({
     dockService,
     layoutService,
     model,
@@ -39,9 +39,9 @@ export default function createChartModel({
   });
 
   function updatePartial() {
-    const zoom = viewState.get('zoom');
-    const { isHomeState } = zoomHandler.getMeta();
-    extremumModel.command.updateExtrema(zoom, isHomeState);
+    const dataView = viewState.get('dataView');
+    const { isHomeState } = viewHandler.getMeta();
+    extremumModel.command.updateExtrema(dataView, isHomeState);
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???
       // const startTime = Date.now();
@@ -61,13 +61,13 @@ export default function createChartModel({
     });
   }
 
-  viewState.onChanged('zoom', updatePartial);
+  viewState.onChanged('dataView', updatePartial);
 
   return {
     query: {
       getDataset: () => dataset,
       getViewState: () => viewState,
-      getZoomHandler: () => zoomHandler,
+      getViewHandler: () => viewHandler,
       getLocaleInfo: () => localeInfo,
       isInteractionInProgess: () => interactionInProgess,
       getFormatter: (fieldName) => dataset.field(fieldName).formatter(),

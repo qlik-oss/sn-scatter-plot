@@ -7,7 +7,7 @@ describe('interactions', () => {
   let actions;
   let args;
   let chart;
-  let zoomHandler;
+  let viewHandler;
   let pan;
 
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe('interactions', () => {
       ['../index']
     )[0].default;
     chart = { key: 'chart' };
-    zoomHandler = {};
+    viewHandler = {};
     gestures = [
       { key: 'gesture-1', prio: 2 },
       { key: 'gesture-2', prio: 2 },
@@ -37,7 +37,7 @@ describe('interactions', () => {
     args = {
       chart,
       actions,
-      zoomHandler,
+      viewHandler,
       gestures,
       colorService,
     };
@@ -52,7 +52,7 @@ describe('interactions', () => {
     expect(createNative).calledWithExactly({
       chart,
       actions,
-      zoomHandler,
+      viewHandler,
     }).calledOnce;
   });
 

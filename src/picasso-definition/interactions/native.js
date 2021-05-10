@@ -11,15 +11,15 @@ function transform(scale, start, end, factor) {
   return [newStart, newEnd];
 }
 
-function zoom(e, chart, pointComponent, zoomHandler) {
+function zoom(e, chart, pointComponent, viewHandler) {
   const p = eventToComponentPoint(e, chart, pointComponent);
   const { width, height } = pointComponent.rect.computedPhysical;
 
-  const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = zoomHandler.getZoom();
+  const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getDataView();
   const zoomFactor = e.deltaY > 0 ? ZOOM_SCALE : 1 / ZOOM_SCALE;
   const [xMin, xMax] = transform(p.x / width, xAxisMin, xAxisMax, zoomFactor);
   const [yMax, yMin] = transform(p.y / height, yAxisMax, yAxisMin, zoomFactor);
-  zoomHandler.setZoom({
+  viewHandler.setDataView({
     xAxisMin: xMin,
     xAxisMax: xMax,
     yAxisMin: yMin,
@@ -27,7 +27,7 @@ function zoom(e, chart, pointComponent, zoomHandler) {
   });
 }
 
-export default function native({ chart, actions, zoomHandler }) {
+export default function native({ chart, actions, viewHandler }) {
   const getPointTooltip = () => chart.component(KEYS.COMPONENT.POINT_TOOLTIP);
   const getLegendTooltip = () => chart.component(KEYS.COMPONENT.LEGEND_CAT_TOOLTIP);
 
@@ -59,7 +59,7 @@ export default function native({ chart, actions, zoomHandler }) {
         if (actions.zoom.enabled()) {
           [target] = chart.componentsFromPoint(point).filter((c) => c.key === KEYS.COMPONENT.POINT);
           if (target) {
-            zoom(e, chart, target, zoomHandler);
+            zoom(e, chart, target, viewHandler);
             e.preventDefault();
           }
         }

@@ -45,11 +45,11 @@ const useSettings = ({ core, models, flags }) => {
 
     const { layoutService, chartModel, colorService, tickModel, extremumModel } = models;
     const { viewState } = core;
-    const zoomHandler = chartModel.query.getZoomHandler();
+    const viewHandler = chartModel.query.getViewHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
     initializeViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
 
-    return zoomHandler.fetchData().then((pages) => {
+    return viewHandler.fetchData().then((pages) => {
       layoutService.setDataPages(pages);
       return colorService.initialize().then(() => {
         colorService.custom.updateBrushAliases();
@@ -66,15 +66,15 @@ const useSettings = ({ core, models, flags }) => {
 
     const { layoutService, chartModel, dockService, tickModel, colorService, extremumModel } = models;
     const { viewState } = core;
-    const zoomHandler = chartModel.query.getZoomHandler();
+    const viewHandler = chartModel.query.getViewHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
     dockService.update(logicalSize || rect);
     colorService.custom.updateLegend();
-    zoomHandler.update();
+    viewHandler.update();
 
     // It is important that the viewstate should be updated only after the dockService has updated the rect
     updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
-    zoomHandler.fetchData().then((pages) => {
+    viewHandler.fetchData().then((pages) => {
       layoutService.setDataPages(pages);
       setSettings(getPicassoDef(logicalSize));
     });

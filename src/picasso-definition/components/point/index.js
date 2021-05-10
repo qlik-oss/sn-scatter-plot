@@ -15,7 +15,7 @@ export default function createPoint({ layoutService, chartModel, colorService })
     rendererSettings: {
       transform: () => {
         if (chartModel.query.isInteractionInProgess()) {
-          const { x, y } = chartModel.query.getViewState().get('zoom');
+          const { x, y } = chartModel.query.getViewState().get('dataView');
           return { a: 1, b: 0, c: 0, d: 1, e: x, f: y };
         }
         return false;

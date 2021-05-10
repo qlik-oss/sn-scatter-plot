@@ -9,18 +9,18 @@ function areIntervalsEqual(min1, max1, min2, max2, e) {
   return Math.abs(min2 - min1) <= d && Math.abs(max2 - max1) <= d;
 }
 
-export default function createZoomHandler({ layoutService, model, viewState }) {
+export default function createViewHandler({ layoutService, model, viewState }) {
   let dataFetcher;
   const meta = {};
 
-  const zoomHandler = {
-    getZoom: () => viewState.get('zoom'),
+  const viewHandler = {
+    getDataView: () => viewState.get('dataView'),
     // getPxOffsets: () => pixelOffsets,
     update() {
       dataFetcher = createDataFetcher({ layoutService, model });
     },
     fetchData() {
-      // Calc data window (based on zoom, chart size, data size, settings?)
+      // Calc data window (based on dataView, chart size, data size, settings?)
       const dataRect = {
         qTop: 0,
         qLeft: 0,
@@ -31,16 +31,16 @@ export default function createZoomHandler({ layoutService, model, viewState }) {
       return dataFetcher.fetchData(dataRect);
     },
 
-    setZoom(z) {
+    setDataView(dataView) {
       // scrollUtil.getLimitedPixelOffsets(offsets);
       // relativePos.x = [limitedOffsets.x, limitedOffsets.x + 1];
       // relativePos.y = [limitedOffsets.y, limitedOffsets.y + 1];
 
-      viewState.set('zoom', z);
+      viewState.set('dataView', dataView);
 
       // Update isHomeState
-      const { xAxisMin: x, xAxisMax: X, yAxisMin: y, yAxisMax: Y } = z;
-      const { xAxisMin: x0, xAxisMax: X0, yAxisMin: y0, yAxisMax: Y0 } = meta.zoomAtHomeState;
+      const { xAxisMin: x, xAxisMax: X, yAxisMin: y, yAxisMax: Y } = dataView;
+      const { xAxisMin: x0, xAxisMax: X0, yAxisMin: y0, yAxisMax: Y0 } = meta.homeStateDataView;
       const e = 0.01;
       if (areIntervalsEqual(x, X, x0, X0, e) && areIntervalsEqual(y, Y, y0, Y0, e)) {
         meta.isHomeState = true;
@@ -54,7 +54,7 @@ export default function createZoomHandler({ layoutService, model, viewState }) {
     },
   };
 
-  zoomHandler.update();
+  viewHandler.update();
 
-  return zoomHandler;
+  return viewHandler;
 }

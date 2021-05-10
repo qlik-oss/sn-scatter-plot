@@ -20,7 +20,7 @@ export default function createPicassoDefinition({
 }) {
   const { chart, actions } = core;
   const { chartModel, colorService } = models;
-  const zoomHandler = chartModel.query.getZoomHandler();
+  const viewHandler = chartModel.query.getViewHandler();
   const viewState = chartModel.query.getViewState();
   const localeInfo = chartModel.query.getLocaleInfo();
   const context = {
@@ -44,7 +44,7 @@ export default function createPicassoDefinition({
     interactions: createInteractions({
       chart,
       actions,
-      zoomHandler,
+      viewHandler,
       gestures: [...selectables.gestures],
       colorService,
     }),

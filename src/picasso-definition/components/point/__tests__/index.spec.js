@@ -12,7 +12,7 @@ describe('point', () => {
   let chartModel;
   let interactionInProgress;
   let viewStateStub;
-  let getZoomStub;
+  let getDataViewStub;
   let canvasBufferSizeStub;
   let sizeScaleFn;
   let d;
@@ -46,10 +46,10 @@ describe('point', () => {
     };
     sizeScaleFn = createSizeScale(layoutService);
     interactionInProgress = true;
-    getZoomStub = sandbox.stub();
-    getZoomStub.withArgs('zoom').returns({ x: 10, y: 10 });
+    getDataViewStub = sandbox.stub();
+    getDataViewStub.withArgs('dataView').returns({ x: 10, y: 10 });
     viewStateStub = {
-      get: getZoomStub,
+      get: getDataViewStub,
     };
     chartModel = {
       key: 'chart-model',
@@ -133,7 +133,7 @@ describe('point', () => {
         expect(create().rendererSettings.transform).to.be.a('function');
       });
       it('should return correct transform when interaction in progress', () => {
-        const { x, y } = chartModel.query.getViewState().get('zoom');
+        const { x, y } = chartModel.query.getViewState().get('dataView');
         expect(create().rendererSettings.transform()).to.deep.equal({ a: 1, b: 0, c: 0, d: 1, e: x, f: y });
       });
       it('should return false when interaction NOT in progress', () => {
