@@ -8,6 +8,8 @@ describe('axes', () => {
   let axes;
   let gridLine;
   let themeService;
+  let viewHandler;
+  let chartModel;
   const scales = {
     X: 'x',
     Y: 'y',
@@ -65,10 +67,20 @@ describe('axes', () => {
       },
     };
     themeService = { getStyles: () => style };
+    viewHandler = {
+      getMeta: () => {
+        true;
+      },
+    };
+    chartModel = {
+      query: {
+        getViewHandler: () => viewHandler,
+      },
+    };
   });
 
   it('should create two axes', () => {
-    axes = createAxes({ layoutService, dockService, themeService });
+    axes = createAxes({ layoutService, dockService, themeService, chartModel });
     expect(axes.length).to.equal(2);
     expect(axes[0].type).to.equal('axis');
     expect(axes[1].type).to.equal('axis');
@@ -90,7 +102,7 @@ describe('axes', () => {
       expect(axes[1].settings.labels.show).to.equal(true);
       layout.yAxis.show = 'title';
       layout.xAxis.show = 'title';
-      axes = createAxes({ layoutService, dockService, themeService });
+      axes = createAxes({ layoutService, dockService, themeService, chartModel });
       expect(axes[0].settings.labels.show).to.equal(false);
       expect(axes[1].settings.labels.show).to.equal(false);
     });

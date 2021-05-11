@@ -1,10 +1,11 @@
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 
-export default function createAxes({ layoutService, dockService, themeService }) {
+export default function createAxes({ layoutService, dockService, themeService, chartModel }) {
   const { xAxis, yAxis } = layoutService.getLayout();
 
   const style = themeService.getStyles();
+  const viewHandler = chartModel.query.getViewHandler();
 
   const xAxisDefinition =
     !xAxis || xAxis.show === 'none'
@@ -64,6 +65,7 @@ export default function createAxes({ layoutService, dockService, themeService })
             minorTicks: {
               stroke: style.axis.line.minor.color,
             },
+            paddingEnd: () => (viewHandler.getMeta().isHomeState !== false ? 20 : 0),
           },
         };
 
