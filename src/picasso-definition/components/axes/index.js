@@ -65,7 +65,7 @@ export default function createAxes({ layoutService, dockService, themeService, c
             minorTicks: {
               stroke: style.axis.line.minor.color,
             },
-            paddingEnd: () => (viewHandler.getMeta().isHomeState !== false ? 20 : 0),
+            paddingEnd: () => (viewHandler.getMeta().isHomeState !== false ? 24 : 0),
           },
         };
 

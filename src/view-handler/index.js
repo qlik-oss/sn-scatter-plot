@@ -11,7 +11,7 @@ function areIntervalsEqual(min1, max1, min2, max2, e) {
 
 export default function createViewHandler({ layoutService, model, viewState }) {
   let dataFetcher;
-  const meta = {};
+  const meta = { homeStateDataView: {}, scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1 };
 
   const viewHandler = {
     getDataView: () => viewState.get('dataView'),
@@ -41,7 +41,7 @@ export default function createViewHandler({ layoutService, model, viewState }) {
       // Update isHomeState
       const { xAxisMin: x, xAxisMax: X, yAxisMin: y, yAxisMax: Y } = dataView;
       const { xAxisMin: x0, xAxisMax: X0, yAxisMin: y0, yAxisMax: Y0 } = meta.homeStateDataView;
-      const e = 0.01;
+      const e = 1e-4;
       if (areIntervalsEqual(x, X, x0, X0, e) && areIntervalsEqual(y, Y, y0, Y0, e)) {
         meta.isHomeState = true;
       } else meta.isHomeState = false;
