@@ -73,7 +73,7 @@ const useSettings = ({ core, models, flags }) => {
     // It is important that the viewstate should be updated only after the dockService has updated the rect
     updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
     setSettings(getPicassoDef(logicalSize || rect));
-  }, [rect.width, rect.height]);
+  }, [rect.width, rect.height, constraints]);
 
   return settings;
 };
