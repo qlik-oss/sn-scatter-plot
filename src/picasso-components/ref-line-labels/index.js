@@ -28,23 +28,14 @@ export default {
 
   preferredSize() {
     const { scale } = this;
-    const { style } = this.settings;
+    const { style, localeInfo } = this.settings;
     const formatter = getFormatter(scale);
     const labels = labelHelper.resolveLabels(this.settings.labels);
-    labelHelper.addLabelTitles(labels, formatter);
-    const { numLowerOobs, numUpperOobs, filteredLabels } = labelHelper.filterOobLabels(labels, scale);
-    let preferredSize;
-    if (filteredLabels && filteredLabels.length) {
-      const labelStyle = getLabelStyle(style.label);
-      const { dock } = this.settings.layout;
-      labelHelper.addLabelWidth(filteredLabels, this.measureText);
-      preferredSize = getPreferredSize(filteredLabels, dock, labelStyle);
-      return preferredSize;
-    }
-    const circleSizes = oob.getOobSizes(this.measureText);
-    const maxCircleSize = numUpperOobs ? oob.getCircleSize(numUpperOobs, circleSizes) : 0;
-    const minCircleSize = numLowerOobs ? oob.getCircleSize(numLowerOobs, circleSizes) : 0;
-    preferredSize = Math.max(maxCircleSize, minCircleSize);
+    labelHelper.addLabelTitles(labels, formatter, localeInfo);
+    const labelStyle = getLabelStyle(style.label);
+    const { dock } = this.settings.layout;
+    labelHelper.addLabelWidth(labels, this.measureText);
+    const preferredSize = getPreferredSize(labels, dock, labelStyle);
     return preferredSize;
   },
 
