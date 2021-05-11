@@ -3,7 +3,6 @@ import {
   useState,
   useStaleLayout,
   useTheme,
-  useConstraints,
   useTranslator,
   useApp,
   useAppLayout,
@@ -32,7 +31,6 @@ const useModels = ({ core, flags }) => {
   const theme = useTheme();
   const model = useModel();
   const translator = useTranslator();
-  const constraints = useConstraints();
   const options = useOptions();
   const rect = useRect();
   const selections = useSelections();
@@ -124,17 +122,7 @@ const useModels = ({ core, flags }) => {
       colorService,
       extremumModel,
     });
-  }, [
-    model,
-    app,
-    selectionModel,
-    layout,
-    constraints,
-    theme.name(),
-    translator.language(),
-    options.direction,
-    options.viewState,
-  ]);
+  }, [model, app, selectionModel, layout, theme.name(), translator.language(), options.direction, options.viewState]);
 
   return models;
 };
