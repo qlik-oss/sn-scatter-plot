@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 function setInitialSort(handler) {
-  const meas = handler.getMeasures();
+  const meas = handler?.getMeasures() || [];
 
   if (meas.length === 2) {
     handler.setSorting([2, 1, 0]);
@@ -11,7 +11,7 @@ function setInitialSort(handler) {
 }
 
 function setColorVars(data, handler) {
-  const measures = handler.getMeasures();
+  const measures = handler?.getMeasures() || [];
   const { mode } = data.color;
   if (mode === 'byExpression' && measures.length === 0) {
     data.color.mode = 'primary';
