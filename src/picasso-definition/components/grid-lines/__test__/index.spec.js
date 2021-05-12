@@ -113,6 +113,13 @@ describe('grid-line', () => {
       expect(create().y.scale).to.equal('y');
     });
 
+    describe('preferredSize', () => {
+      it('should return correct edgeBleed', () => {
+        const result = create();
+        expect(result.preferredSize()).to.deep.equal({ edgeBleed: { left: 1, right: 1, top: 1, bottom: 1 } });
+      });
+    });
+
     describe('ticks', () => {
       it('should have correct properties', () => {
         expect(create().ticks).to.have.all.keys(['show', 'stroke', 'strokeWidth']);
