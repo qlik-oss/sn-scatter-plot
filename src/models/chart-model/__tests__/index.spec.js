@@ -53,7 +53,7 @@ describe('chart-model', () => {
     colorService = {
       getData: colorModelDataFn,
     };
-    picassoDataFn = sandbox.spy();
+    picassoDataFn = sandbox.stub().returns('correct dataset');
     picassoInstance = {
       data: () => picassoDataFn,
     };
@@ -92,6 +92,61 @@ describe('chart-model', () => {
     });
   });
 
+  describe('query', () => {
+    it('should have correct properties', () => {
+      expect(create().query).to.have.all.keys([
+        'getDataset',
+        'getViewState',
+        'getViewHandler',
+        'getLocaleInfo',
+        'isInteractionInProgess',
+        'getFormatter',
+      ]);
+    });
+
+    describe('getDataSet', () => {
+      it('should return correct data set', () => {
+        expect(create().query.getDataset()).to.deep.equal('correct dataset');
+      });
+    });
+
+    describe('getViewState', () => {
+      it('should return correct viewstate object', () => {
+        expect(create().query.getViewState()).to.have.all.keys(['get', 'set', 'onChanged', 'dataView']);
+      });
+    });
+
+    describe('getViewHandler', () => {
+      it('should return correct view handler object', () => {
+        expect(create().query.getViewHandler()).to.have.all.keys(['getMeta']);
+      });
+    });
+
+    describe('getLocaleInfo', () => {
+      it('should return correct locale info', () => {
+        expect(create().query.getLocaleInfo()).to.deep.equal({ key: 'locale-info' });
+      });
+    });
+
+    describe('isInteractionInProgess', () => {
+      it('should return correct isInteractionInProgess value', () => {
+        expect(create().query.isInteractionInProgess()).to.deep.equal(false);
+      });
+    });
+
+    describe('getFormatter', () => {
+      it('should return correct getFormatter value', () => {
+        picassoDataFn.returns({
+          field: sandbox
+            .stub()
+            .withArgs('x')
+            .returns({ formatter: sandbox.stub().returns('x-formatter') }),
+        });
+        expect(create().query.getFormatter('x')).to.deep.equal('x-formatter');
+      });
+    });
+  });
+
   describe('command', () => {
     it('should expose correct methods', () => {
       expect(create().command).to.have.all.keys(['update']);
@@ -106,6 +161,11 @@ describe('chart-model', () => {
         expect(argsObject.data).to.be.an('array');
         expect(argsObject.data[0].config.localeInfo).to.equal(localeInfo);
         expect(argsObject.settings).eql({ key: 'settings' });
+      });
+
+      it('should call update, when settings is implicit', () => {
+        create().command.update();
+        expect(chart.update).to.have.been.calledOnce;
       });
     });
 
