@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-function setInitialSort(handler) {
+export function setInitialSort(handler) {
   const meas = handler?.getMeasures() || [];
 
   if (meas.length === 2) {
@@ -10,7 +10,7 @@ function setInitialSort(handler) {
   }
 }
 
-function setColorVars(data, handler) {
+export function setColorVars(data, handler) {
   const measures = handler?.getMeasures() || [];
   const { mode } = data.color;
   if (mode === 'byExpression' && measures.length === 0) {
