@@ -1,30 +1,23 @@
 import * as KEYS from '../../../../constants/keys';
 import createPointLabels from '..';
 
-describe.skip('point-labels', () => {
+describe('point-labels', () => {
   let sandbox;
   let layoutService;
+  let themeService;
   let labels;
   let create;
-
-  before(() => {
-    sandbox = sinon.createSandbox();
-    layoutService = {
-      getLayoutValue: sandbox.stub(),
-    };
-    create = () =>
-      createPointLabels({
-        layoutService,
-      });
-  });
+  let component;
 
   beforeEach(() => {
-    sandbox.reset();
-    labels = {
-      mode: 1,
-    };
+    sandbox = sinon.createSandbox();
+    layoutService = { getLayoutValue: sandbox.stub() };
+    themeService = { getStyles: sandbox.stub() };
+    create = () => createPointLabels({ layoutService, themeService });
+    labels = { mode: 1 };
     layoutService.getLayoutValue.withArgs('labels').returns(labels);
-    sandbox.stub(KEYS, 'default').returns({
+    themeService.getStyles.returns({ label: { value: { fontFamily: 'Sans serif', fontSize: '1px', color: 'red' } } });
+    sandbox.stub(KEYS, 'default').value({
       COMPONENT: {
         POINT: 'point-component',
         POINT_LABELS: 'point-labels',
@@ -32,7 +25,7 @@ describe.skip('point-labels', () => {
     });
   });
 
-  after(() => {
+  afterEach(() => {
     sandbox.restore();
   });
   // No labels
@@ -51,97 +44,37 @@ describe.skip('point-labels', () => {
     expect(create()).to.be.an('object');
   });
 
+  it('should return a component if style is empty', () => {
+    labels.mode = 2;
+    themeService.getStyles.returns({});
+    expect(create()).to.be.an('object');
+  });
+
   describe('component', () => {
     it('should have correct key', () => {
       expect(create().key).to.equal('point-labels');
     });
 
     it('should have correct type', () => {
-      expect(create().type).to.equal('labels');
+      expect(create().type).to.equal('point-label');
     });
 
     describe('settings', () => {
       it('should have correct properties', () => {
-        expect(create().settings).to.have.all.keys(['sources']);
+        expect(create().settings).to.have.all.keys(['label', 'mode']);
       });
 
-      describe('sources', () => {
-        it('should have correct properties', () => {
-          expect(create().settings.sources[0]).to.have.all.keys(['component', 'selector', 'strategy']);
+      describe('label', () => {
+        it('should return correct node data label', () => {
+          component = create();
+          expect(component.settings.label({ data: { label: 'correct label' } })).to.deep.equal('correct label');
         });
-        it('should have correct component', () => {
-          expect(create().settings.sources[0].component).to.equal('point-component');
-        });
-        it('should have correct selector', () => {
-          expect(create().settings.sources[0].selector).to.equal('circle');
-        });
+      });
+    });
 
-        describe('strategy', () => {
-          it('should have correct properties', () => {
-            expect(create().settings.sources[0].strategy).to.have.all.keys(['type', 'settings']);
-          });
-          it('should have correct type', () => {
-            expect(create().settings.sources[0].strategy.type).to.equal('bar');
-          });
-
-          describe('settings', () => {
-            it('should have correct properties', () => {
-              expect(create().settings.sources[0].strategy.settings).to.have.all.keys(['direction', 'labels']);
-            });
-            it('should have correct direction', () => {
-              expect(create().settings.sources[0].strategy.settings.direction).to.equal('up');
-            });
-            describe('labels', () => {
-              it('should have correct properties', () => {
-                expect(create().settings.sources[0].strategy.settings.labels[0]).to.have.all.keys([
-                  'placements',
-                  'label',
-                ]);
-              });
-              describe('placements', () => {
-                it('should have correct properties', () => {
-                  expect(create().settings.sources[0].strategy.settings.labels[0].placements[0]).to.have.all.keys([
-                    'position',
-                    'justify',
-                    'align',
-                    'fill',
-                    'overflow',
-                  ]);
-                });
-                it('should have correct position', () => {
-                  expect(create().settings.sources[0].strategy.settings.labels[0].placements[0].position).to.equal(
-                    'outside'
-                  );
-                });
-                it('should have correct justify', () => {
-                  expect(create().settings.sources[0].strategy.settings.labels[0].placements[0].justify).to.equal(0);
-                });
-                it('should have correct align', () => {
-                  expect(create().settings.sources[0].strategy.settings.labels[0].placements[0].align).to.equal(0.5);
-                });
-                it('should have correct fill', () => {
-                  expect(create().settings.sources[0].strategy.settings.labels[0].placements[0].fill).to.equal('black');
-                });
-                it('should have correct overflow', () => {
-                  expect(create().settings.sources[0].strategy.settings.labels[0].placements[0].overflow).to.equal(
-                    true
-                  );
-                });
-              });
-
-              describe('label', () => {
-                it('should be a function if label mode is 1', () => {
-                  labels.mode = 1;
-                  expect(create().settings.sources[0].strategy.settings.labels[0].label).to.be.a('function');
-                });
-                it('should be a function if label mode is 2', () => {
-                  labels.mode = 2;
-                  expect(create().settings.sources[0].strategy.settings.labels[0].label).to.be.a('function');
-                });
-              });
-            });
-          });
-        });
+    describe('style', () => {
+      it('should have correct properties', () => {
+        expect(create().style).to.have.all.keys(['fontFamily', 'fontSize', 'fill', 'backgroundColor']);
       });
     });
   });

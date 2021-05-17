@@ -1,7 +1,5 @@
 import { getLabels, DISTANCE } from './get-labels';
 
-const DY = DISTANCE - 1;
-
 export default {
   require: ['chart', 'renderer'],
   defaultSettings: {
@@ -32,6 +30,7 @@ export default {
     };
   },
   render() {
+    const DY = DISTANCE - 1;
     const { settings } = this.settings;
     const { target, label, showLabel, mode, debugMode } = settings;
     const key = target.point;
