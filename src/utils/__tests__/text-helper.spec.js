@@ -1,5 +1,31 @@
 import textHelper from '../text-helper';
 
+describe('Text helper (for testing measureTextWidth)', () => {
+  let sandbox;
+  let element;
+  let context;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+    context = { measureText: () => ({ width: 100 }) };
+    element = {
+      getContext: () => context,
+    };
+    global.document = { createElement: () => element };
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+    delete global.document;
+  });
+
+  describe('measureTextWidth', () => {
+    it('should return correct text width', () => {
+      expect(textHelper.measureTextWidth('someText')).to.equal(100);
+    });
+  });
+});
+
 describe('Text helper', () => {
   let sandbox;
   let element;
@@ -118,6 +144,18 @@ describe('Text helper', () => {
       expect(lines.length).to.equal(2);
       expect(lines).to.deep.equal(['More', 'than one word']);
     });
+
+    it('should return correct result when text has more lines than maxNumLines', () => {
+      const lines = textHelper.lineWrap('More than\n one line', 1, '12px QlikView Sans, sans-serif', 1);
+      expect(lines.length).to.equal(1);
+      expect(lines).to.deep.equal(['More than']);
+    });
+
+    it('should return correct result when font is undefined', () => {
+      const lines = textHelper.lineWrap('A few wooords', 79, undefined, 3);
+      expect(lines.length).to.equal(1);
+      expect(lines).to.deep.equal(['A few wooords']);
+    });
   });
 
   describe('truncate', () => {
@@ -134,8 +172,8 @@ describe('Text helper', () => {
     });
 
     it('should not truncate if text if shorter than specified width', () => {
-      const t = textHelper.truncate('Some very long stuff goes here');
-      expect(t.text).to.equal('Some very long stuff goes here', 200);
+      const t = textHelper.truncate('Some very long stuff goes here', 2000);
+      expect(t.text).to.equal('Some very long stuff goes here');
       expect(t.rest).to.be.undefined;
     });
 
@@ -195,6 +233,18 @@ describe('Text helper', () => {
       expect(lines).to.deep.equal(['A', 'f', 'e', 'w', 'b']);
     });
 
+    it('should not generate more lines than there are letters, maxNumLines specified', () => {
+      const lines = textHelper.wordWrap(['A', 'few', 'b'], 1, '12px QlikView Sans, sans-serif', 10);
+      expect(lines).to.deep.equal(['A', 'f', 'e', 'w', 'b']);
+    });
+
+    it('should not generate more lines than maxNumLines', () => {
+      const lines = textHelper.wordWrap(['A', 'few', 'b'], 1, '12px QlikView Sans, sans-serif', 2);
+      expect(lines).to.deep.equal(['A', '…']);
+    });
+  });
+
+  describe('wrapText', () => {
     it('should not generate more lines than the limit', () => {
       const lines = textHelper.wrapText('A few words', 35, '12px QlikView Sans, sans-serif', 2);
       expect(lines).to.deep.equal(['A few', 'words']);
@@ -214,6 +264,100 @@ describe('Text helper', () => {
     it('should not add uneccesary hyphens', () => {
       const lines = textHelper.wrapText('MMMM MM MMMMMM MMM', 32, '12px QlikView Sans');
       expect(lines).to.deep.equal(['MM-', 'MM', 'MM', 'MM-', 'MM-', 'MM', 'MMM']);
+    });
+
+    it('should return input text if maxWidth is undefined', () => {
+      const lines = textHelper.wrapText('MMMM MM MMMMMM MMM', undefined, '12px QlikView Sans');
+      expect(lines).to.deep.equal(['MMMM MM MMMMMM MMM']);
+    });
+  });
+
+  describe('getFontHeight', () => {
+    it('should return correct font height, when font is specified', () => {
+      expect(textHelper.getFontHeight('font')).to.equal(9);
+    });
+
+    it('should return correct font height, when font is not specified', () => {
+      expect(textHelper.getFontHeight()).to.equal(9);
+    });
+  });
+
+  describe('tokenize', () => {
+    it('should return empty string if the max height is less than font height (not enough space for even one line of text)', () => {
+      expect(textHelper.tokenize('A few wooords', 'font', '...', 10, 50, 8, 1)).to.deep.equal([]);
+    });
+
+    it('should return empty string if the max height is less than font height (not enough space for even one line of text), font is not specified', () => {
+      expect(textHelper.tokenize('A few wooords', '', '...', 10, 50, 8, 1)).to.deep.equal([]);
+    });
+
+    it('should return empty string if the max height is less than font height (not enough space for even one line of text), lineHeightMultiplicator is not specified', () => {
+      expect(textHelper.tokenize('A few wooords', '', '...', 10, 50, 8)).to.deep.equal([]);
+    });
+
+    it('should return correct result, when text and maxNumLines are not arrays', () => {
+      sandbox.stub(textHelper, 'wrapText');
+      textHelper.wrapText.withArgs('A few wooords', 50, 'font', 1, '...').returns(['A few', 'wooords']);
+      expect(textHelper.tokenize('A few wooords', 'font', '...', 10, 50, 10, 1)).to.deep.equal(['A few', 'wooords']);
+    });
+
+    it('should return correct result, when text and maxNumLines are not arrays, and lineHeightMultiplicator and maxHeight are not specified', () => {
+      sandbox.stub(textHelper, 'wrapText');
+      textHelper.wrapText.withArgs('A few wooords', 50, 'font', 10, '...').returns(['A few', 'wooords']);
+      expect(textHelper.tokenize('A few wooords', 'font', '...', 10, 50)).to.deep.equal(['A few', 'wooords']);
+    });
+
+    it('should return correct result, when text and maxNumLines are not arrays, and lineHeightMultiplicator and maxHeight are not specified, and maxNumLines is an empty string', () => {
+      sandbox.stub(textHelper, 'wrapText');
+      textHelper.wrapText.withArgs('A few wooords', 50, 'font', 1, '...').returns(['A few', 'wooords']);
+      expect(textHelper.tokenize('A few wooords', 'font', '...', '', 50)).to.deep.equal(['A few', 'wooords']);
+    });
+
+    it('should return correct result, when maxNumLines is an array', () => {
+      sandbox.stub(textHelper, 'wrapText');
+      textHelper.wrapText.withArgs('A few wooords', 50, 'font', 1).returns(['A few']);
+      textHelper.wrapText.withArgs('Other text', 50, 'font', 2).returns(['Other', 'text']);
+      expect(textHelper.tokenize(['A few wooords', 'Other text'], 'font', '...', [1, 2], 50, 90, 1)).to.deep.equal([
+        'A few',
+        'Other',
+        'text',
+      ]);
+    });
+
+    it('should return correct result, when maxNumLines is an array, and some of the elements are negative', () => {
+      sandbox.stub(textHelper, 'wrapText');
+      textHelper.wrapText.withArgs('A few wooords', 50, 'font', 1).returns(['A few']);
+      textHelper.wrapText.withArgs('Other text', 50, 'font', 7).returns(['Other', 'text']);
+      textHelper.wrapText.withArgs('Yet other text', 50, 'font', 7).returns(['Yet other', 'text']);
+      textHelper.wrapText.withArgs('The last text', 50, 'font', 2).returns(['The last', 'text']);
+      expect(
+        textHelper.tokenize(
+          ['A few wooords', 'Other text', 'Yet other text', 'The last text'],
+          'font',
+          '...',
+          [1, -1, -1, 2],
+          50,
+          90,
+          1
+        )
+      ).to.deep.equal(['A few', 'Other', 'text', 'Yet other', 'text', 'The last', 'text']);
+    });
+
+    it('should return correct result, when maxNumLines is an array, and some of the elements are negative, and the total of lines exceed maxAllowedLines', () => {
+      sandbox.stub(textHelper, 'wrapText');
+      textHelper.wrapText.withArgs('A few wooords', 50, 'font', 1).returns(['A few']);
+      textHelper.wrapText.withArgs('Other text', 50, 'font', 2).returns(['Other', 'text']);
+      expect(
+        textHelper.tokenize(
+          ['A few wooords', 'Other text', 'Yet other text', 'The last text'],
+          'font',
+          '...',
+          [1, -1, -1, 0],
+          50,
+          27,
+          1
+        )
+      ).to.deep.equal(['A few', 'Other', 'text']);
     });
   });
 });

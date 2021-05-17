@@ -40,7 +40,7 @@ const textHelper = {
     }
 
     for (r = 0; r < textLines.length; r++) {
-      textLine = textLines[r] || '';
+      textLine = textLines[r];
       words = textLine.split(/\s+/);
       [line] = words;
       remainder = '';
@@ -63,7 +63,7 @@ const textHelper = {
       if (typeof maxNumLines !== 'number' || lines.length < maxNumLines) {
         lines.push(line);
       } else {
-        lines[Math.max(0, lines.length - 1)] = `${lines[Math.max(0, lines.length - 1)] || ''} ${line} ${remainder}`;
+        lines[Math.max(0, lines.length - 1)] = `${lines[Math.max(0, lines.length - 1)]} ${line} ${remainder}`;
       }
     }
 
@@ -96,33 +96,31 @@ const textHelper = {
     for (i = 0; i < cLines.length; i++) {
       line = cLines[i];
       remainder = null;
-      if (line) {
-        if (line.length <= 1 || textHelper.measureTextWidth(line) <= width) {
-          result.push(line);
+      if (line.length <= 1 || textHelper.measureTextWidth(line) <= width) {
+        result.push(line);
+      } else {
+        exploded = textHelper.splitWord(line, width, undefined, maxNumLines - result.length);
+        if (exploded.length <= 1) {
+          // could not shorten current line -> add it to results
+          result.push(exploded[0]);
         } else {
-          exploded = textHelper.splitWord(line, width, undefined, maxNumLines - result.length);
-          if (exploded.length <= 1) {
-            // could not shorten current line -> add it to results
-            result.push(exploded[0]);
-          } else {
-            remainder = exploded.pop(); // last element could be longer than width limit
-            result = result.concat(exploded);
+          remainder = exploded.pop(); // last element could be longer than width limit
+          result = result.concat(exploded);
 
-            if (cLines[i + 1]) {
-              // add remainder to next line
-              if (
-                textHelper.measureTextWidth(`${remainder} ${cLines[i + 1]}`) > width &&
-                result.length + cLines.length - i <= maxNumLines
-              ) {
-                // If adding to the next line will force that to break as well and we are not close to the max limit, then create a new line inbetween instead
-                cLines.splice(i + 1, 0, remainder);
-              } else {
-                cLines[i + 1] = `${remainder} ${cLines[i + 1]}`;
-              }
+          if (cLines[i + 1]) {
+            // add remainder to next line
+            if (
+              textHelper.measureTextWidth(`${remainder} ${cLines[i + 1]}`) > width &&
+              result.length + cLines.length - i <= maxNumLines
+            ) {
+              // If adding to the next line will force that to break as well and we are not close to the max limit, then create a new line inbetween instead
+              cLines.splice(i + 1, 0, remainder);
             } else {
-              // TODO - safeguard against endless loop (mek)
-              cLines.push(remainder);
+              cLines[i + 1] = `${remainder} ${cLines[i + 1]}`;
             }
+          } else {
+            // TODO - safeguard against endless loop (mek)
+            cLines.push(remainder);
           }
         }
       }
@@ -130,7 +128,7 @@ const textHelper = {
 
     result.forEach((s, k, arr) => {
       // eslint-disable-next-line no-param-reassign
-      arr[k] = s ? s.trim() : s;
+      arr[k] = s.trim();
     });
 
     if (result.length > maxNumLines) {
@@ -263,7 +261,7 @@ const textHelper = {
 
   wrapText(text, maxWidth, font, maxNumLines, ellipsis) {
     let lines;
-    if (Number.isNaN(maxWidth)) {
+    if (Number.isNaN(maxWidth) || !maxWidth) {
       return [text];
     }
     lines = maxNumLines > 1 ? textHelper.lineWrap(text, maxWidth, font, maxNumLines) : [text];
@@ -279,6 +277,16 @@ const textHelper = {
     return textHelper.measureTextWidth('m') * 1.5;
   },
 
+  /**
+   * TOKENIZING means breaking text into lines whose width does not exceed certain max width.
+   * @param {string} text - The text to be tokenized. Can be an array.
+   * @param {string} font
+   * @param {string} ellipsis - String of symbols to add to the end of a line if it is truncated
+   * @param {number} maxNumLines - Max number of lines allowed. If the input is undefined, false, NaN, or empty string, then it is set to 1. Can be an array.
+   * @param {number} maxWidth - Max width in pixel allowed for each line
+   * @param {number} maxHeight - Max height in pixel allowed for the tokenized text
+   * @param {number} lineHeightMultiplicator - The ratio between the space allowed for a line height and the font height, usually 1
+   */
   tokenize(text, font, ellipsis, maxNumLines, maxWidth, maxHeight, lineHeightMultiplicator = 1) {
     setDummyContext();
     if (font) {
@@ -299,15 +307,17 @@ const textHelper = {
 
     if (Array.isArray(maxNumLines)) {
       maxNumLines.forEach((v) => {
-        totalMaxNumLines += Number.isNaN(v) || v <= 0 ? 0 : v;
+        totalMaxNumLines += Number.isNaN(v) || v <= 0 || !v ? 0 : v;
       });
 
       maxNumLines.forEach((v) => {
-        maxLines.push(Number.isNaN(v) || v <= 0 ? maxAllowedLines - totalMaxNumLines : v); // if v < 0 then use the number of lines that are available
+        maxLines.push(Number.isNaN(v) || v <= 0 || !v ? maxAllowedLines - totalMaxNumLines : v); // if v < 0 then use the number of lines that are available
       });
     } else {
       maxLines = [
-        Number.isNaN(maxNumLines) || maxNumLines <= 0 ? maxAllowedLines : Math.min(maxAllowedLines, maxNumLines),
+        Number.isNaN(maxNumLines) || maxNumLines <= 0 || !maxNumLines
+          ? maxAllowedLines
+          : Math.min(maxAllowedLines, maxNumLines),
       ];
     }
 
