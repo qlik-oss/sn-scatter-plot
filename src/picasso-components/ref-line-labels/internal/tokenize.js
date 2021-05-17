@@ -17,7 +17,7 @@ export function tokenizeLabels(labels, font, maxLabelWidth, defaultMaxNumLines) 
   }
 }
 
-export function retokenizeLabels(labels, font, maxLabelWidth = 70) {
+export function retokenizeLabels(labels, font, maxLabelWidth) {
   for (let i = 0; i < labels.length; i++) {
     const label = labels[i];
     if (label.lines.length > label.maxNumLines) {

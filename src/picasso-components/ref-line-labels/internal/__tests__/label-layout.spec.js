@@ -14,6 +14,13 @@ describe('getGap', () => {
     const result = labelLayout.getGap(segment1, segment2);
     expect(result).to.deep.equal(-20);
   });
+
+  it('should get correct gap, case 3: segment 1 position is larger than segment 2 position', () => {
+    const segment1 = { position: 400, radius: 100 };
+    const segment2 = { position: 300, radius: 70 };
+    const result = labelLayout.getGap(segment1, segment2);
+    expect(result).to.deep.equal(-70);
+  });
 });
 
 describe('findSegmentPositionMeetMaxThenMin', () => {
@@ -54,14 +61,15 @@ describe('layoutPositionFromMin', () => {
   const areaMin = 30;
   const areaMax = 400;
   const gap = 8;
-  const segments = [
-    { position: 10, radius: 20 },
-    { position: 200, radius: 30 },
-    { position: 310, radius: 15 },
-  ];
+  let segments;
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     sandbox.stub(labelLayout, 'findSegmentPositionMeetMaxThenMin').returns(100);
+    segments = [
+      { position: 10, radius: 20 },
+      { position: 200, radius: 30 },
+      { position: 310, radius: 15 },
+    ];
   });
 
   afterEach(() => {
@@ -74,6 +82,14 @@ describe('layoutPositionFromMin', () => {
     expect(labelLayout.findSegmentPositionMeetMaxThenMin.getCall(0).args).to.deep.equal([segments[0], 30, 101]);
     expect(labelLayout.findSegmentPositionMeetMaxThenMin.getCall(1).args).to.deep.equal([segments[1], 128, 251]);
     expect(labelLayout.findSegmentPositionMeetMaxThenMin.getCall(2).args).to.deep.equal([segments[2], 138, 400]);
+  });
+
+  it('should calculate correct values in every loop, when gap is implicit (zero)', () => {
+    labelLayout.layoutPositionFromMin(segments, areaMin, areaMax);
+    expect(labelLayout.findSegmentPositionMeetMaxThenMin).to.have.been.calledThrice;
+    expect(labelLayout.findSegmentPositionMeetMaxThenMin.getCall(0).args).to.deep.equal([segments[0], 30, 105]);
+    expect(labelLayout.findSegmentPositionMeetMaxThenMin.getCall(1).args).to.deep.equal([segments[1], 120, 255]);
+    expect(labelLayout.findSegmentPositionMeetMaxThenMin.getCall(2).args).to.deep.equal([segments[2], 130, 400]);
   });
 });
 
@@ -88,6 +104,22 @@ describe('adjustPositionFromMax', () => {
       { position: 310, radius: 15 },
     ];
     labelLayout.adjustPositionFromMax(segments, min, max, gap);
+    expect(segments).to.deep.equal([
+      { position: 50, radius: 20 },
+      { position: 200, radius: 30 },
+      { position: 310, radius: 15 },
+    ]);
+  });
+
+  it('should not modify segments if max of the last segment is smaller than max, when gap is implicit (zero)', () => {
+    const min = 30;
+    const max = 400;
+    const segments = [
+      { position: 50, radius: 20 },
+      { position: 200, radius: 30 },
+      { position: 310, radius: 15 },
+    ];
+    labelLayout.adjustPositionFromMax(segments, min, max);
     expect(segments).to.deep.equal([
       { position: 50, radius: 20 },
       { position: 200, radius: 30 },
@@ -183,9 +215,17 @@ describe('createLayout', () => {
     sandbox.restore();
   });
 
-  it('should not call any helper function if this is no label', () => {
+  it('should not call any helper function if there is no label', () => {
     labels = [];
     labelLayout.createLayout(labels, min, max, gap);
+    expect(labelLayout.findSegmentPositionMeetMaxThenMin).to.not.have.been.called;
+    expect(labelLayout.layoutPositionFromMin).to.not.have.been.called;
+    expect(labelLayout.adjustPositionFromMax).to.not.have.been.called;
+  });
+
+  it('should not call any helper function if there is no label, when gap is implicit (zero)', () => {
+    labels = [];
+    labelLayout.createLayout(labels, min, max);
     expect(labelLayout.findSegmentPositionMeetMaxThenMin).to.not.have.been.called;
     expect(labelLayout.layoutPositionFromMin).to.not.have.been.called;
     expect(labelLayout.adjustPositionFromMax).to.not.have.been.called;

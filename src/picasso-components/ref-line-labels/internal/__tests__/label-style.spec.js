@@ -52,15 +52,7 @@ describe('getLabelStyle', () => {
     labelStyle = {
       fontFamily: "'font 1', 'font 2', 'font type'",
       fontSize: '100px',
-      gap: 10,
-      // maxWidth: 100,
-      maxNumLines: 7,
-      padding: {
-        top: 2,
-        // bottom: 4,
-        left: 6,
-        right: 7,
-      },
+      padding: {},
     };
 
     textHelper.getFontHeight.returns(150);
@@ -70,14 +62,14 @@ describe('getLabelStyle', () => {
       fontSize: '100px',
       font: "normal 100px 'font 1', 'font 2', 'font type'",
       lineHeight: 150,
-      gap: 10,
+      gap: 12,
       maxLabelWidth: 75,
-      maxNumLines: 7,
+      maxNumLines: 1,
       padding: {
-        top: 2,
+        top: 0,
         bottom: 0,
-        left: 6,
-        right: 7,
+        left: 0,
+        right: 0,
       },
     });
   });

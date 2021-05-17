@@ -4,6 +4,7 @@ const labelLayout = {
     const maxSegment = segment1.position < segment2.position ? segment2 : segment1;
     return maxSegment.position - maxSegment.radius - (minSegment.position + minSegment.radius);
   },
+
   findSegmentPositionMeetMaxThenMin(segment, min, max) {
     // Push the segment back in, in case its max exceeds max
     const sMax = segment.position + segment.radius;

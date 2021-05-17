@@ -1,5 +1,4 @@
 import labelHelper from '../label-helper';
-import * as oob from '../oob';
 
 const {
   addLabelPositions,
@@ -8,7 +7,6 @@ const {
   addLabelSegments,
   addLabelTitles,
   hasEngineFormat,
-  filterOobLabels,
   reduceMaxNumLines,
   resolveLabels,
 } = labelHelper;
@@ -190,33 +188,6 @@ describe('addLabelTitles', () => {
   });
 });
 
-describe('filterOobLabels', () => {
-  const labels = [{ value: 100 }, { value: 600 }, { value: 300 }, { value: 0 }, { value: 500 }];
-  it('should filter out-of-bound labels', () => {
-    const scale = { domain: sinon.stub() };
-    scale.domain.returns([150, 450]);
-    sinon.stub(oob, 'filterOobLabels');
-    oob.filterOobLabels
-      .withArgs([{ value: 100 }, { value: 600 }, { value: 300 }, { value: 0 }, { value: 500 }], 150, 450)
-      .returns({
-        filteredLabels: { value: 300 },
-        lowerOobs: [{ value: 100 }, { value: 0 }],
-        upperOobs: [{ value: 600 }, { value: 500 }],
-        numLowerOobs: 2,
-        numUpperOobs: 2,
-      });
-    const result = filterOobLabels(labels, scale);
-    expect(result).to.deep.equal({
-      filteredLabels: { value: 300 },
-      lowerOobs: [{ value: 100 }, { value: 0 }],
-      upperOobs: [{ value: 600 }, { value: 500 }],
-      numLowerOobs: 2,
-      numUpperOobs: 2,
-    });
-    sinon.reset();
-  });
-});
-
 describe('hasEngineFormat', () => {
   let value;
   let valueLabel;
@@ -252,6 +223,14 @@ describe('hasEngineFormat', () => {
     localeInfo = { qDecimalSep: '$', qThousandSep: '*' };
     const result = hasEngineFormat(value, valueLabel, localeInfo);
     expect(result).to.deep.equal(false);
+  });
+
+  it('should return true, if value and valueLabel are defined and are not the same, decimal and thousand separator are undefined, labelValue contains special characters', () => {
+    value = 1234;
+    valueLabel = '1*234$567e6';
+    localeInfo = { qDecimalSep: undefined, qThousandSep: undefined };
+    const result = hasEngineFormat(value, valueLabel, localeInfo);
+    expect(result).to.deep.equal(true);
   });
 });
 

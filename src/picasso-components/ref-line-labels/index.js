@@ -2,10 +2,10 @@ import labelLayout from './internal/label-layout';
 import labelHelper from './internal/label-helper';
 import getFormatter from './internal/formatter';
 import { createArea, getPreferredSize } from './internal/area';
-import getLabelTooltip from './internal/tooltip';
+import tooltip from './internal/tooltip';
 import getLabelStyle from './internal/label-style';
 import { tokenizeLabels, retokenizeLabels } from './internal/tokenize';
-import * as oob from './internal/oob';
+import oob from './internal/oob';
 
 const ellipsis = '…';
 
@@ -102,7 +102,7 @@ export default {
           fontFamily,
           type: 'text',
           text: line,
-          title: getLabelTooltip({
+          title: tooltip.getLabelTooltip({
             title: label.title,
             font,
             ellipsis: `${ellipsis} ${label.valueString}`,

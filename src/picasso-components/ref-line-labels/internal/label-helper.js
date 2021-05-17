@@ -1,5 +1,3 @@
-import * as oob from './oob';
-
 const labelHelper = {
   addLabelPositions(labels, scale, size) {
     for (let i = 0; i < labels.length; i++) {
@@ -55,11 +53,6 @@ const labelHelper = {
     }
   },
 
-  filterOobLabels(labels, scale) {
-    const [qMin, qMax] = scale.domain();
-    return oob.filterOobLabels(labels, qMin, qMax);
-  },
-
   hasEngineFormat(value, valueLabel, localeInfo) {
     if (value === undefined || valueLabel === undefined || value.toString() === valueLabel) {
       return false;
@@ -84,7 +77,7 @@ const labelHelper = {
   },
 
   // Reduce max num lines of a label if the vertical space is not enough
-  reduceMaxNumLines({ labels, min, max, gap = 0, lineHeight, epsilon = 0 }) {
+  reduceMaxNumLines({ labels, min, max, gap, lineHeight, epsilon }) {
     const n = labels.length - 1;
     if (n < 0) return;
     let thisLabel;
