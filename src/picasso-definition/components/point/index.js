@@ -2,7 +2,7 @@ import KEYS from '../../../constants/keys';
 import createSizeScale from '../../scales/size';
 import createBrush from '../../brush';
 
-export default function createPoint({ layoutService, chartModel, colorService }) {
+export default function createPoint({ layoutService, colorService }) {
   let windowSizeMultiplier;
   const sizeScaleFn = createSizeScale(layoutService);
   return {
@@ -12,19 +12,6 @@ export default function createPoint({ layoutService, chartModel, colorService })
       collection: KEYS.COLLECTION.MAIN,
     },
     brush: createBrush(),
-    rendererSettings: {
-      transform: () => {
-        if (chartModel.query.isInteractionInProgess()) {
-          const { x, y } = chartModel.query.getViewState().get('dataView');
-          return { a: 1, b: 0, c: 0, d: 1, e: x, f: y };
-        }
-        return false;
-      },
-      canvasBufferSize: (rect) => ({
-        width: rect.computedPhysical.width + 100,
-        height: rect.computedPhysical.height + 0,
-      }),
-    },
     settings: {
       x: {
         scale: KEYS.SCALE.X,

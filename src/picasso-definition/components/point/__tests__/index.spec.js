@@ -101,15 +101,7 @@ describe('point', () => {
     });
 
     it('should have correct properties', () => {
-      expect(create()).to.have.all.keys([
-        'key',
-        'type',
-        'data',
-        'brush',
-        'rendererSettings',
-        'settings',
-        'beforeRender',
-      ]);
+      expect(create()).to.have.all.keys(['key', 'type', 'data', 'brush', 'settings', 'beforeRender']);
     });
 
     it('should have correct key', () => {
@@ -119,39 +111,6 @@ describe('point', () => {
     describe('data', () => {
       it('should be correct', () => {
         expect(create().data).to.deep.equal({ collection: 'mainCollectionKey' });
-      });
-    });
-  });
-
-  describe('rendererSettings', () => {
-    it('should have correct properties', () => {
-      expect(create().rendererSettings).to.have.all.keys(['transform', 'canvasBufferSize']);
-    });
-
-    describe('transform', () => {
-      it('should be set with a function', () => {
-        expect(create().rendererSettings.transform).to.be.a('function');
-      });
-      it('should return correct transform when interaction in progress', () => {
-        const { x, y } = chartModel.query.getViewState().get('dataView');
-        expect(create().rendererSettings.transform()).to.deep.equal({ a: 1, b: 0, c: 0, d: 1, e: x, f: y });
-      });
-      it('should return false when interaction NOT in progress', () => {
-        interactionInProgress = false;
-        expect(create().rendererSettings.transform()).to.equal(false);
-      });
-    });
-
-    describe('canvasBufferSize', () => {
-      it('should be set with a function', () => {
-        expect(create().rendererSettings.canvasBufferSize).to.be.a('function');
-      });
-      it('should return correct size value', () => {
-        create().rendererSettings.canvasBufferSize = canvasBufferSizeStub(rect);
-        expect(create().rendererSettings.canvasBufferSize(rect)).to.deep.equal({
-          width: 100 + 100,
-          height: 100,
-        });
       });
     });
   });
