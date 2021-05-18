@@ -14,7 +14,7 @@ const setupSnapshot = ({ core, models }) => {
     const viewState = chartModel.query.getViewState();
 
     // Update snapshot layout with data from the plot
-    extend(true, layout.qHyperCube.qDataPages[0], layoutService.getDataPages()[0]);
+    extend(true, layout.qHyperCube.qDataPages, layoutService.getDataPages());
     const { width: w, height: h } = dockService.meta.chart.size;
     layout.snapshotData = layout.snapshotData || {};
     layout.snapshotData.content = {
