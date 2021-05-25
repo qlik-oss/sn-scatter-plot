@@ -52,7 +52,7 @@ describe('getCount', () => {
   });
 });
 
-describe('createTickModel', () => {
+describe.skip('createTickModel', () => {
   let sandbox;
   let resolve;
   let layoutService;

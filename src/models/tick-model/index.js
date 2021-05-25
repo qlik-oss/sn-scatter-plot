@@ -29,7 +29,21 @@ export function getCount(size, spacing) {
   return Math.max(1, Math.round(size / distance));
 }
 
-export default function createTickModel({ layoutService, dockService, extremumModel, themeService }) {
+export function getSize(dockService, chartModel, chart, dimension) {
+  const size = chartModel.query.isPrelayout()
+    ? dockService.meta.chart.size[dimension]
+    : chart.component(KEYS.COMPONENT.POINT).rect[dimension];
+  return size;
+}
+
+export default function createTickModel({
+  layoutService,
+  dockService,
+  extremumModel,
+  themeService,
+  chartModel,
+  chart,
+}) {
   function getChartProperties(axis) {
     let min;
     let max;
@@ -45,7 +59,8 @@ export default function createTickModel({ layoutService, dockService, extremumMo
       dimension = 'height';
       spacing = layoutService.getLayoutValue('yAxis.spacing', 1);
     }
-    const size = dockService.meta.chart.size[dimension];
+
+    const size = getSize(dockService, chartModel, chart, dimension);
     const count = getCount(size, spacing);
 
     // Get the measureText function from renderer
@@ -61,7 +76,10 @@ export default function createTickModel({ layoutService, dockService, extremumMo
     return { min, max, explicitType, count, size, measure };
   }
 
-  const formatters = {};
+  const formatters = {
+    x: chartModel.query.getFormatter(KEYS.FIELDS.X),
+    y: chartModel.query.getFormatter(KEYS.FIELDS.Y),
+  };
 
   function resolve(axis, prop) {
     const { min, max, explicitType, count, size, measure } = getChartProperties(axis);

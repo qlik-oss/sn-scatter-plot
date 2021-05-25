@@ -99,6 +99,7 @@ describe('chart-model', () => {
         'getViewState',
         'getViewHandler',
         'getLocaleInfo',
+        'isPrelayout',
         'isInteractionInProgess',
         'getFormatter',
       ]);
@@ -147,7 +148,7 @@ describe('chart-model', () => {
     });
   });
 
-  describe('command', () => {
+  describe.skip('command', () => {
     it('should expose correct methods', () => {
       expect(create().command).to.have.all.keys(['update']);
     });

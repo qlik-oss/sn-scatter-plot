@@ -63,6 +63,8 @@ export default function createChartModel({
 
   viewState.onChanged('dataView', updatePartial);
 
+  const state = { isPrelayout: true };
+
   return {
     query: {
       getDataset: () => dataset,
@@ -71,8 +73,22 @@ export default function createChartModel({
       getLocaleInfo: () => localeInfo,
       isInteractionInProgess: () => interactionInProgess,
       getFormatter: (fieldName) => dataset.field(fieldName).formatter(),
+      isPrelayout: () => state.isPrelayout,
     },
     command: {
+      layoutComponents: ({ settings } = {}) => {
+        chart.layoutComponents({
+          data: [
+            {
+              type: 'q',
+              ...mainConfig,
+            },
+            ...colorService.getData(),
+          ],
+          settings,
+        });
+        state.isPrelayout = false;
+      },
       update: ({ settings } = {}) => {
         chart.update({
           data: [

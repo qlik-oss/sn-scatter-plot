@@ -47,14 +47,16 @@ const useSettings = ({ core, models, flags }) => {
     const { viewState } = core;
     const viewHandler = chartModel.query.getViewHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
-    initializeViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
 
     return viewHandler.fetchData().then((pages) => {
       layoutService.setDataPages(pages);
       return colorService.initialize().then(() => {
         colorService.custom.updateBrushAliases();
         colorService.custom.updateLegend();
-        setSettings(getPicassoDef(logicalSize));
+        const newSettings = getPicassoDef(logicalSize);
+        chartModel.command.layoutComponents({ settings: newSettings });
+        initializeViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
+        setSettings(newSettings);
       });
     });
   }, [models]);

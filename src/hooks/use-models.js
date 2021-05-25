@@ -80,7 +80,6 @@ const useModels = ({ core, flags }) => {
     });
     const themeService = createThemeService({ theme, styleMatrix: themeStyleMatrix });
     const extremumModel = createExtremumModel(layoutService, options.viewState);
-    const tickModel = createTickModel({ layoutService, dockService, extremumModel, themeService, chart });
     const colorService = createColorService({
       actions,
       localeInfo,
@@ -107,6 +106,8 @@ const useModels = ({ core, flags }) => {
       colorService,
       extremumModel,
     });
+
+    const tickModel = createTickModel({ layoutService, dockService, extremumModel, themeService, chartModel, chart });
 
     const disclaimerModel = createDisclaimerModel({ layoutService, flags });
 
