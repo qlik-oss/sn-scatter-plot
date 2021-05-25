@@ -15,6 +15,8 @@ export default function createGridLines(models) {
     return false;
   }
 
+  const { line } = themeService.getStyles().grid;
+
   const gridLinesDef = {
     key: KEYS.COMPONENT.GRID_LINES,
     type: 'grid-line',
@@ -40,12 +42,12 @@ export default function createGridLines(models) {
     ticks: {
       // internal trick with Picasso: passing "(d, i) => i % 2 === 0" to display every second major tick
       show: !auto && spacing === SPACINGS.WIDE ? (d, i) => i % 2 === 0 : true,
-      stroke: themeService.getStyles().grid.line.major.color,
+      stroke: (d) => (d?.datum?.value === 0 ? line.highContrast.color : line.major.color),
       strokeWidth: 1,
     },
     minorTicks: {
       show: !auto && spacing === SPACINGS.NARROW,
-      stroke: themeService.getStyles().grid.line.minor.color,
+      stroke: line.minor.color,
       strokeWidth: 1,
     },
   };
