@@ -61,13 +61,13 @@ export default function createAxes({ layoutService, dockService, themeService, c
             },
             ticks: {
               stroke: style.axis.line.major.color,
+              show: yAxis.show !== 'title',
             },
             minorTicks: {
               stroke: style.axis.line.minor.color,
             },
-            paddingEnd: () => (viewHandler.getMeta().isHomeState !== false ? 24 : 0),
+            paddingEnd: () => (yAxis.show === 'title' || viewHandler.getMeta().isHomeState === false ? 0 : 24),
           },
         };
-
   return [xAxisDefinition, yAxisDefinition];
 }
