@@ -26,7 +26,7 @@ describe('createReferenceLines', () => {
         REFERENCE_LINE_LABELS_Y: 'ref-line-labels-y',
       },
     });
-    sandbox.stub(MODES, 'REFERENCE_LINE').value('XSMALL');
+    sandbox.stub(MODES, 'REFERENCE_LINES').value('XSMALL');
     sandbox.stub(createLines, 'default');
     sandbox.stub(createLabels, 'default');
     models = { layoutService, dockService, themeService };
@@ -65,6 +65,7 @@ describe('createReferenceLines', () => {
         scale: 'X',
         key: 'ref-line-labels-x',
         dock: 'top',
+        minimumLayoutMode: 'XSMALL',
       })
     ).to.have.been.calledOnce;
     expect(
@@ -74,6 +75,7 @@ describe('createReferenceLines', () => {
         scale: 'Y',
         key: 'ref-line-labels-y',
         dock: 'right',
+        minimumLayoutMode: 'XSMALL',
       })
     ).to.have.been.calledOnce;
   });

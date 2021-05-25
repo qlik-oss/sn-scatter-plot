@@ -1,4 +1,5 @@
 import KEYS from '../../../constants/keys';
+import MODES from '../../../constants/modes';
 
 const SPACINGS = {
   NO_LINES: 0,
@@ -22,6 +23,9 @@ export default function createGridLines(models) {
     },
     y: {
       scale: KEYS.SCALE.Y,
+    },
+    layout: {
+      minimumLayoutMode: MODES.GRID_LINES,
     },
     preferredSize() {
       return {

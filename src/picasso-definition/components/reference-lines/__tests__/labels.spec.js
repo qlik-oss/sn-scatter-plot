@@ -82,6 +82,7 @@ describe('createRefLineLabels', () => {
 
   it('should return correct x reference lables when show is enabled', () => {
     const dock = 'top';
+    const minimumLayoutMode = 'XSMALL';
     const scale = 'x';
     const themeStyle = {
       referenceLine: {
@@ -92,7 +93,7 @@ describe('createRefLineLabels', () => {
     themeService.getStyles = sandbox.stub().returns(themeStyle);
 
     const key = 'reference-line-labels-X';
-    const result = createRefLineLabels({ models, context, dock, scale, themeStyle, key });
+    const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
     expect(result).to.deep.equal({
       key: 'reference-line-labels-X',
       type: 'reference-line-labels',
@@ -108,7 +109,7 @@ describe('createRefLineLabels', () => {
       ],
       scale: 'x',
       localeInfo: 'valid localeInfo',
-      layout: { dock: 'top', rtl: false },
+      layout: { dock: 'top', minimumLayoutMode: 'XSMALL', rtl: false },
       style: {
         label: {
           fontFamily: '"font1", "font2", "fontType"',
@@ -134,6 +135,7 @@ describe('createRefLineLabels', () => {
 
   it('should return correct x reference lables when show is enabled and theme does not have oob style', () => {
     const dock = 'top';
+    const minimumLayoutMode = 'XSMALL';
     const scale = 'x';
     theme = { getStyle: sandbox.stub().returns(false) };
     themeService.getTheme = sandbox.stub().returns(theme);
@@ -147,7 +149,7 @@ describe('createRefLineLabels', () => {
     themeService.getStyles = sandbox.stub().returns(themeStyle);
 
     const key = 'reference-line-labels-X';
-    const result = createRefLineLabels({ models, context, dock, scale, themeStyle, key });
+    const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
     expect(result).to.deep.equal({
       key: 'reference-line-labels-X',
       type: 'reference-line-labels',
@@ -163,7 +165,7 @@ describe('createRefLineLabels', () => {
       ],
       scale: 'x',
       localeInfo: 'valid localeInfo',
-      layout: { dock: 'top', rtl: false },
+      layout: { dock: 'top', minimumLayoutMode: 'XSMALL', rtl: false },
       style: {
         label: {
           fontFamily: '"font1", "font2", "fontType"',
@@ -189,6 +191,7 @@ describe('createRefLineLabels', () => {
 
   it('should return correct y reference lables when show is enabled', () => {
     const dock = 'right';
+    const minimumLayoutMode = 'SMALL';
     const scale = 'y';
     const themeStyle = {
       referenceLine: {
@@ -198,7 +201,7 @@ describe('createRefLineLabels', () => {
     };
     themeService.getStyles = sandbox.stub().returns(themeStyle);
     const key = 'reference-line-labels-Y';
-    const result = createRefLineLabels({ models, context, dock, scale, key });
+    const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
     expect(result).to.deep.equal({
       key: 'reference-line-labels-Y',
       type: 'reference-line-labels',
@@ -214,7 +217,7 @@ describe('createRefLineLabels', () => {
       ],
       scale: 'y',
       localeInfo: 'valid localeInfo',
-      layout: { dock: 'right', rtl: false },
+      layout: { dock: 'right', minimumLayoutMode: 'SMALL', rtl: false },
       style: {
         label: {
           fontFamily: '"font1", "font2", "fontType"',
@@ -247,6 +250,7 @@ describe('createRefLineLabels', () => {
 
   it('should return correct y reference lables when show is enabled, rtl is true, and some layout properties are missing', () => {
     const dock = 'left';
+    const minimumLayoutMode = 'SMALL';
     const scale = 'y';
     const themeStyle = {
       referenceLine: {
@@ -257,7 +261,7 @@ describe('createRefLineLabels', () => {
     themeService.getStyles = sandbox.stub().returns(themeStyle);
     context.rtl = true;
     const key = 'reference-line-labels-Y';
-    const result = createRefLineLabels({ models, context, dock, scale, themeStyle, key });
+    const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
     expect(result).to.deep.equal({
       key: 'reference-line-labels-Y',
       type: 'reference-line-labels',
@@ -273,7 +277,7 @@ describe('createRefLineLabels', () => {
       ],
       scale: 'y',
       localeInfo: 'valid localeInfo',
-      layout: { dock: 'left', rtl: true },
+      layout: { dock: 'left', minimumLayoutMode: 'SMALL', rtl: true },
       style: {
         label: {
           fontFamily: 'Source Sans Pro, sans-serif',

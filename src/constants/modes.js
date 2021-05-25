@@ -1,17 +1,14 @@
 export default {
   AXIS: {
-    X: {
-      width: 'XSMALL',
-      height: 'SMALL',
-    },
+    X: 'SMALL',
     Y: 'XSMALL',
   },
   AXIS_TITLE: {
-    X: {
-      width: 'XSMALL',
-      height: 'MEDIUM',
-    },
+    X: 'SMALL',
     Y: 'SMALL',
   },
-  REFERENCE_LINE: 'XSMALL',
+  POINT_LABELS: 'XSMALL',
+  GRID_LINES: 'XSMALL',
+  REFERENCE_LINES: 'SPARK',
+  REFERENCE_LINE_LABELS: 'XSMALL',
 };

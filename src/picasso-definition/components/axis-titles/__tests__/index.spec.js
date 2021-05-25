@@ -71,8 +71,8 @@ describe('axis-titles', () => {
   });
 
   it('should have correct dock property', () => {
-    expect(axisTitles[0].dock).to.equal(dockService.meta.x.dock);
-    expect(axisTitles[1].dock).to.equal(dockService.meta.y.dock);
+    expect(axisTitles[0].layout.dock).to.equal(dockService.meta.x.dock);
+    expect(axisTitles[1].layout.dock).to.equal(dockService.meta.y.dock);
   });
 
   it('should have correct font size', () => {

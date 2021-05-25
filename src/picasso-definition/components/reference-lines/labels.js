@@ -28,7 +28,7 @@ const getOobColors = (style, theme) => {
   return getContrastColors(foreColor);
 };
 
-export default function createRefLineLabels({ models, context, dock, scale, key }) {
+export default function createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode }) {
   const { layoutService, themeService } = models;
   const { rtl, localeInfo } = context;
   const themeStyle = themeService.getStyles();
@@ -61,7 +61,7 @@ export default function createRefLineLabels({ models, context, dock, scale, key 
     labels,
     scale,
     localeInfo,
-    layout: { dock, rtl },
+    layout: { dock, minimumLayoutMode, rtl },
     style: {
       label: {
         fontFamily: style.referenceLine.label.name.fontFamily,
