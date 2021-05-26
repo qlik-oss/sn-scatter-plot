@@ -1,6 +1,6 @@
 import KEYS from '../../constants/keys';
 
-export default function createScales({ models, viewState }) {
+export default function createScales({ models, viewState, options }) {
   const { tickModel, colorService } = models;
   return {
     x: {
@@ -9,6 +9,7 @@ export default function createScales({ models, viewState }) {
       },
       min: () => viewState.get('dataView').xAxisMin,
       max: () => viewState.get('dataView').xAxisMax,
+      invert: options.direction === 'rtl',
       ticks: {
         values: () => tickModel.query.getXTicks(),
       },

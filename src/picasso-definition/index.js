@@ -33,7 +33,7 @@ export default function createPicassoDefinition({
     localeInfo,
   };
 
-  const scales = createScales({ models, viewState });
+  const scales = createScales({ models, viewState, options });
 
   const collections = createCollections(models);
 
