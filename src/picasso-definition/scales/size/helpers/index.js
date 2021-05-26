@@ -24,9 +24,9 @@ export default {
   },
   getDotMeasureSize({ sizeDataMin, minDotSize, sizeDataMax, maxDotSize, value, windowSizeMultiplier }) {
     const radius = this.getDotRadius({ sizeDataMin, minDotSize, sizeDataMax, maxDotSize, value });
-    return `${radius * windowSizeMultiplier * DIAMETER_OVER_RADIUS}px`;
+    return `${Math.ceil(radius * windowSizeMultiplier * DIAMETER_OVER_RADIUS)}px`;
   },
   getDotSize({ dotSize, windowSizeMultiplier }) {
-    return `${dotSize * windowSizeMultiplier * DIAMETER_OVER_RADIUS}px`;
+    return `${Math.ceil(dotSize * windowSizeMultiplier * DIAMETER_OVER_RADIUS)}px`;
   },
 };
