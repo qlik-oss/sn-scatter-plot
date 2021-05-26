@@ -72,9 +72,10 @@ const useSettings = ({ core, models, flags }) => {
     dockService.update(logicalSize || rect);
     colorService.custom.updateLegend();
 
-    // It is important that the viewstate should be updated only after the dockService has updated the rect
+    const newSettings = getPicassoDef(logicalSize || rect);
+    chartModel.command.layoutComponents({ settings: newSettings });
     updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
-    setSettings(getPicassoDef(logicalSize || rect));
+    setSettings(newSettings);
   }, [rect.width, rect.height, constraints]);
 
   return settings;
