@@ -1,3 +1,5 @@
+import { getValue, setValue } from '@qlik/chart-modules';
+
 /*
 const COMPORESSION_THRESHOLD = 1000;
 function showCompressionResolution(layout) {
@@ -12,6 +14,21 @@ const nonCompProp = {
   },
 };
 */
+
+const useDimValColShowFunc = (data) => {
+  // If we have an old chart where this property is never set to its default value, set it to false
+  if (getValue(data, 'color.useDimColVal') === undefined) {
+    setValue(data, 'color.useDimColVal', false);
+  }
+  return (
+    !getValue(data, 'color.auto') &&
+    getValue(data, 'color.mode') === 'byDimension' &&
+    getValue(data, 'color.byDimDef.type') === 'libraryItem'
+  );
+};
+
+const persistentColorsShowFunc = (data) =>
+  !getValue(data, 'color.auto') && getValue(data, 'color.mode') === 'byDimension';
 
 export default function propertyDefinition(env) {
   const settings = {
@@ -196,7 +213,15 @@ export default function propertyDefinition(env) {
         items: {
           colors: {
             items: {
-              persistentColors: null,
+              persistentColors: {
+                show(data) {
+                  if (useDimValColShowFunc(data)) {
+                    // If we allow dim value colors, then only show persistence settings if it is off
+                    return persistentColorsShowFunc(data) && !getValue(data, 'color.useDimColVal');
+                  }
+                  return persistentColorsShowFunc(data);
+                },
+              },
               colorMode: {
                 options(data) {
                   const colorOptions = [
