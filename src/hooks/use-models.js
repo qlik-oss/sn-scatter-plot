@@ -10,11 +10,13 @@ import {
   useOptions,
   useRect,
   useSelections,
+  usePlugins,
 } from '@nebula.js/stardust';
 import {
   layoutService as createLayoutService,
   themeService as createThemeService,
   dockService as createDockService,
+  pluginService as createPluginService,
 } from '@qlik/chart-modules';
 import themeStyleMatrix from '../services/theme-service/theme-style-matrix';
 import layoutServiceMeta from '../services/layout-service/meta';
@@ -36,6 +38,7 @@ const useModels = ({ core, flags }) => {
   const selections = useSelections();
   const app = useApp();
   const { qLocaleInfo: localeInfo } = useAppLayout();
+  const plugins = usePlugins();
   const [selectionModel, setSelectionModel] = useState();
   const [models, setModels] = useState();
 
@@ -79,6 +82,7 @@ const useModels = ({ core, flags }) => {
       },
     });
     const themeService = createThemeService({ theme, styleMatrix: themeStyleMatrix });
+    const pluginService = createPluginService({ picassoInstance, layout, plugins });
     const extremumModel = createExtremumModel(layoutService, options.viewState);
     const colorService = createColorService({
       actions,
@@ -119,6 +123,7 @@ const useModels = ({ core, flags }) => {
       dockService,
       selectionModel,
       themeService,
+      pluginService,
       disclaimerModel,
       colorService,
       extremumModel,

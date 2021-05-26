@@ -20,7 +20,7 @@ export default function createPicassoDefinition({
   flags,
 }) {
   const { chart, actions } = core;
-  const { chartModel, colorService } = models;
+  const { chartModel, colorService, pluginService } = models;
   const viewHandler = chartModel.query.getViewHandler();
   const viewState = chartModel.query.getViewState();
   const localeInfo = chartModel.query.getLocaleInfo();
@@ -41,6 +41,8 @@ export default function createPicassoDefinition({
 
   const selectables = createSelectables({ models, actions, scales, flags });
 
+  const componentDefinitions = [...components, ...selectables.components];
+
   return {
     interactions: createInteractions({
       chart,
@@ -50,7 +52,7 @@ export default function createPicassoDefinition({
       colorService,
     }),
     scales,
-    components: [...components, ...selectables.components],
+    components: pluginService.extendComponents(componentDefinitions),
     collections,
     palettes: colorService.getPalettes(),
     strategy: {
