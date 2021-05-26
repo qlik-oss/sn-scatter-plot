@@ -3,25 +3,27 @@ import KEYS from '../../constants/keys';
 export default function createExtremumModel(layoutService, viewStateOptions = {}) {
   function resolveExtrema(scaleName) {
     // Choose between data min/max and explicit min/max. Explicit values have higher priority
-    let holder = scaleName === KEYS.SCALE.X ? 'qMeasureInfo.0' : 'qMeasureInfo.1';
-    let minFromLayout = layoutService.getHyperCubeValue(`${holder}.qMin`, 0);
-    let maxFromLayout = layoutService.getHyperCubeValue(`${holder}.qMax`, 1);
+    const measurePath = scaleName === KEYS.SCALE.X ? 'qMeasureInfo.0' : 'qMeasureInfo.1';
+    let minFromLayout = layoutService.getHyperCubeValue(`${measurePath}.qMin`, 0);
+    let maxFromLayout = layoutService.getHyperCubeValue(`${measurePath}.qMax`, 1);
     let explicitType = 'none';
 
-    holder = scaleName === KEYS.SCALE.X ? 'xAxis' : 'yAxis';
-    const { autoMinMax, minMax, min, max } = layoutService.getLayoutValue(holder);
+    const axis = scaleName === KEYS.SCALE.X ? 'xAxis' : 'yAxis';
+    const { autoMinMax, minMax, min, max } = layoutService.getLayoutValue(axis);
     if (!autoMinMax) {
       explicitType = minMax;
       switch (minMax) {
         case 'min':
           minFromLayout = min;
+          maxFromLayout = Math.max(minFromLayout, maxFromLayout);
           break;
         case 'max':
           maxFromLayout = max;
+          minFromLayout = Math.min(minFromLayout, maxFromLayout);
           break;
         default:
-          minFromLayout = min;
-          maxFromLayout = max;
+          minFromLayout = Math.min(min, max);
+          maxFromLayout = Math.max(min, max);
           break;
       }
     }
@@ -29,13 +31,11 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
     const source = layoutService.meta.isSnapshot
       ? layoutService.getLayoutValue('snapshotData.content.chartData', {})
       : viewStateOptions;
-    holder = scaleName === KEYS.SCALE.X ? 'xAxis' : 'yAxis';
-    let axisMin = typeof source[`${holder}Min`] === 'number' ? source[`${holder}Min`] : minFromLayout;
-    let axisMax = typeof source[`${holder}Max`] === 'number' ? source[`${holder}Max`] : maxFromLayout;
+    let axisMin = typeof source[`${axis}Min`] === 'number' ? source[`${axis}Min`] : minFromLayout;
+    let axisMax = typeof source[`${axis}Max`] === 'number' ? source[`${axis}Max`] : maxFromLayout;
 
-    if (typeof source[`${holder}Min`] === 'number' && typeof source[`${holder}Max`] === 'number')
-      explicitType = 'minMax';
-    else if (typeof source[`${holder}Min`] === 'number') {
+    if (typeof source[`${axis}Min`] === 'number' && typeof source[`${axis}Max`] === 'number') explicitType = 'minMax';
+    else if (typeof source[`${axis}Min`] === 'number') {
       // Updating explicit type: merging the new explicit info. with the old one.
       switch (explicitType) {
         case 'max':
@@ -46,7 +46,7 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
           explicitType = 'min';
           break;
       }
-    } else if (typeof source[`${holder}Max`] === 'number') {
+    } else if (typeof source[`${axis}Max`] === 'number') {
       switch (explicitType) {
         case 'min':
         case 'minMax':
@@ -78,9 +78,9 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
     }
 
     return {
-      [`${holder}Min`]: axisMin,
-      [`${holder}Max`]: axisMax,
-      [`${holder}ExplicitType`]: explicitType,
+      [`${axis}Min`]: axisMin,
+      [`${axis}Max`]: axisMax,
+      [`${axis}ExplicitType`]: explicitType,
     };
   }
 
