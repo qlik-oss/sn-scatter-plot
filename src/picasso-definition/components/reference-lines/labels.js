@@ -1,5 +1,6 @@
 import extend from 'extend';
 import KEYS from '../../../constants/keys';
+import NUMBERS from '../../../constants/numbers';
 import getContrastColors from '../../../utils/color/get-contrast-colors';
 
 const defaultStyle = {
@@ -67,17 +68,17 @@ export default function createRefLineLabels({ models, context, scale, key, dock,
         fontFamily: style.referenceLine.label.name.fontFamily,
         fontSize: style.referenceLine.label.name.fontSize,
         padding: {
-          top: 2,
-          bottom: 2,
-          left: rtl ? 2 : 4,
-          right: rtl ? 4 : 2,
+          top: NUMBERS.REF_LABELS.PADDING.TOP,
+          bottom: NUMBERS.REF_LABELS.PADDING.BOTTOM,
+          left: rtl ? NUMBERS.REF_LABELS.PADDING.END : NUMBERS.REF_LABELS.PADDING.START,
+          right: rtl ? NUMBERS.REF_LABELS.PADDING.START : NUMBERS.REF_LABELS.PADDING.END,
         },
-        maxWidth: dock === 'left' || dock === 'right' ? 70 : 100,
-        maxNumLines: 3,
-        gap: dock === 'left' || dock === 'right' ? 10 : 16,
+        maxWidth: dock === 'left' || dock === 'right' ? NUMBERS.REF_LABELS.MAX_WIDTH.Y : NUMBERS.REF_LABELS.MAX_WIDTH.X,
+        maxNumLines: NUMBERS.REF_LABELS.MAX_NUM_LINES,
+        gap: dock === 'left' || dock === 'right' ? NUMBERS.REF_LABELS.GAP.Y : NUMBERS.REF_LABELS.GAP.X,
       },
       oob: {
-        size: 8,
+        size: NUMBERS.REF_LABELS.OOB.SIZE,
         fill: oobColors.backgroundColor,
         text: {
           fontFamily: style.referenceLine.outOfBounds.fontFamily,

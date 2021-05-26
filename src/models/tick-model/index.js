@@ -2,29 +2,23 @@ import { scaleLinear } from 'd3-scale';
 import extend from 'extend';
 import picasso from 'picasso.js';
 import KEYS from '../../constants/keys';
+import NUMBERS from '../../constants/numbers';
 import getTicks from './ticks';
-
-const DISTANCE = {
-  NARROW: 50,
-  MEDIUM: 100,
-  WIDE: 200,
-  FALLBACK: 100,
-};
 
 export function getCount(size, spacing) {
   let distance;
   switch (spacing) {
     case 0.5:
-      distance = DISTANCE.NARROW;
+      distance = NUMBERS.GRID_DISTANCE.NARROW;
       break;
     case 1:
-      distance = DISTANCE.MEDIUM;
+      distance = NUMBERS.GRID_DISTANCE.MEDIUM;
       break;
     case 2:
-      distance = DISTANCE.WIDE;
+      distance = NUMBERS.GRID_DISTANCE.WIDE;
       break;
     default:
-      distance = DISTANCE.FALLBACK;
+      distance = NUMBERS.GRID_DISTANCE.FALLBACK;
   }
   return Math.max(1, Math.round(size / distance));
 }

@@ -1,5 +1,6 @@
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
+import NUMBERS from '../../../constants/numbers';
 
 export default function createAxes({ layoutService, dockService, themeService, chartModel }) {
   const { xAxis, yAxis } = layoutService.getLayout();
@@ -34,7 +35,7 @@ export default function createAxes({ layoutService, dockService, themeService, c
             minorTicks: {
               stroke: style.axis.line.minor.color,
             },
-            paddingEnd: 4,
+            paddingEnd: NUMBERS.AXIS.X.PADDING.END,
           },
         };
 
@@ -66,8 +67,10 @@ export default function createAxes({ layoutService, dockService, themeService, c
             minorTicks: {
               stroke: style.axis.line.minor.color,
             },
-            paddingEnd: () => (yAxis.show === 'title' || viewHandler.getMeta().isHomeState === false ? 0 : 24),
+            paddingEnd: () =>
+              yAxis.show === 'title' || viewHandler.getMeta().isHomeState === false ? 0 : NUMBERS.AXIS.Y.PADDING.END,
           },
         };
+
   return [xAxisDefinition, yAxisDefinition];
 }

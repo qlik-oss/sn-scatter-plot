@@ -1,3 +1,5 @@
+import NUMBERS from '../../../constants/numbers';
+
 export default function createSettings({ colorService }) {
   const { type: colorType } = colorService.getSettings();
 
@@ -9,7 +11,7 @@ export default function createSettings({ colorService }) {
     item: {
       shape: {
         type: 'circle',
-        size: 10,
+        size: NUMBERS.LEGEND_CAT.SYMBOL.SIZE,
       },
     },
   };

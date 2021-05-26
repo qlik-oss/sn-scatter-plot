@@ -1,5 +1,6 @@
 // import { dockLayout as createDockLayout } from '@qlik/chart-commons';
 
+import NUMBERS from '../constants/numbers';
 import createCollections from './collections';
 import createComponents from './components';
 import createScales from './scales';
@@ -53,14 +54,7 @@ export default function createPicassoDefinition({
     collections,
     palettes: colorService.getPalettes(),
     strategy: {
-      // TODO: use a common module for this or a proper implementation
-      layoutModes: {
-        FULL: { width: 550, height: 450 },
-        MEDIUM: { width: 400, height: 220 },
-        SMALL: { width: 300, height: 150 },
-        XSMALL: { width: 150, height: 75 },
-        SPARK: { width: 0, height: 0 },
-      },
+      layoutModes: NUMBERS.LAYOUT_MODES,
       center: {
         minWidthRatio: 0,
         minHeightRatio: 0,
