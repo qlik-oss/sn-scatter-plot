@@ -23,7 +23,7 @@ export function updateViewState(viewState, layoutService, viewStateOptions = {},
   const [xAxisMin, xAxisMax] = tickModel.query.getXMinMax();
   const [yAxisMin, yAxisMax] = tickModel.query.getYMinMax();
   viewState.preventSet('legendScrollOffset', source.legendScrollOffset || 0);
-  viewState.set('dataView', { xAxisMin, xAxisMax, yAxisMin, yAxisMax });
+  viewState.preventSet('dataView', { xAxisMin, xAxisMax, yAxisMin, yAxisMax });
   if (viewHandler.getMeta().isHomeState) viewHandler.setMeta({ homeStateDataView: viewState.get('dataView') });
 }
 

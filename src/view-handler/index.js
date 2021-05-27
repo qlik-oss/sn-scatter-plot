@@ -39,10 +39,10 @@ export default function createViewHandler({ layoutService, model, viewState }) {
       viewState.set('dataView', dataView);
 
       // Update isHomeState
-      const { xAxisMin: x, xAxisMax: X, yAxisMin: y, yAxisMax: Y } = dataView;
-      const { xAxisMin: x0, xAxisMax: X0, yAxisMin: y0, yAxisMax: Y0 } = meta.homeStateDataView;
+      const { xAxisMin: xMin1, xAxisMax: xMax1, yAxisMin: yMin1, yAxisMax: yMax1 } = dataView;
+      const { xAxisMin: xMin2, xAxisMax: xMax2, yAxisMin: yMin2, yAxisMax: yMax2 } = meta.homeStateDataView;
       const e = 1e-4;
-      if (areIntervalsEqual(x, X, x0, X0, e) && areIntervalsEqual(y, Y, y0, Y0, e)) {
+      if (areIntervalsEqual(xMin1, xMax1, xMin2, xMax2, e) && areIntervalsEqual(yMin1, yMax1, yMin2, yMax2, e)) {
         meta.isHomeState = true;
       } else meta.isHomeState = false;
     },
