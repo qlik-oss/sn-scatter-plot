@@ -1,3 +1,5 @@
+import createChartModel from '..';
+
 describe('chart-model', () => {
   let sandbox;
   let chart;
@@ -12,9 +14,9 @@ describe('chart-model', () => {
   let colorModelDataFn;
   let create;
   let viewHandler;
-  let createChartModel;
   let viewState;
   let extremumModel;
+  let getViewHandlerFn;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -31,7 +33,6 @@ describe('chart-model', () => {
         this[key] = cb;
       },
     };
-    createChartModel = aw.mock([['**/src/view-handler/index.js', () => () => viewHandler]], ['../index'])[0].default;
     chart = {
       update: sandbox.stub(),
     };
@@ -71,6 +72,7 @@ describe('chart-model', () => {
         viewState,
         extremumModel,
       });
+    getViewHandlerFn = sandbox.stub(create().query, 'getViewHandler').returns(viewHandler);
   });
 
   afterEach(() => {
@@ -119,7 +121,7 @@ describe('chart-model', () => {
 
     describe('getViewHandler', () => {
       it('should return correct view handler object', () => {
-        expect(create().query.getViewHandler()).to.have.all.keys(['getMeta']);
+        expect(getViewHandlerFn()).to.have.all.keys(['getMeta']);
       });
     });
 

@@ -1,6 +1,8 @@
+import * as KEYS from '../../../constants/keys';
+import native from '../native';
+
 describe('native', () => {
   let sandbox;
-  let createNative;
   let pointTooltip;
   let legendTooltip;
   let actions;
@@ -12,22 +14,14 @@ describe('native', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    createNative = aw.mock(
-      [
-        [
-          '**/src/constants/keys.js',
-          () => ({
-            COMPONENT: {
-              POINT_TOOLTIP: 'tooltip',
-              POINT: 'point-component',
-              LEGEND_CATEGORICAL: 'legend-categorical',
-              LEGEND_CAT_TOOLTIP: 'legend-cat-tooltip',
-            },
-          }),
-        ],
-      ],
-      ['../native']
-    )[0].default;
+    sandbox.stub(KEYS, 'default').value({
+      COMPONENT: {
+        POINT_TOOLTIP: 'tooltip',
+        POINT: 'point-component',
+        LEGEND_CATEGORICAL: 'legend-categorical',
+        LEGEND_CAT_TOOLTIP: 'legend-cat-tooltip',
+      },
+    });
     legend = { key: 'legend-categorical', emit: sandbox.spy() };
     pointTooltip = {
       show: true,
@@ -65,7 +59,7 @@ describe('native', () => {
       },
     };
     create = () =>
-      createNative({
+      native({
         chart,
         actions,
         viewHandler,
