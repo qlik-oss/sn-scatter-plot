@@ -455,60 +455,6 @@ const objectDefinition = () => {
 export default objectDefinition;
 
 /**
- * Extends `NxInlineDimensionDef`, see Engine API: `NxInlineDimensionDef`.
- * @typedef {object} InlineDimensionDef
- * @extends NxInlineDimensionDef
- * @property {boolean=} autoSort Set to automatically sort the dimension.
- * @property {string=} cId ID used by the Qlik Sense. Must be unique within the current chart.
- * @property {string|StringExpression} othersLabel
- */
-
-/**
- * Extends `NxInlineMeasureDef`, see Engine API: `NxInlineMeasureDef`.
- * @typedef {object} InlineMeasureDef
- * @extends NxInlineMeasureDef
- * @property {boolean=} autoSort Set to automatically sort the measure.
- * @property {string=} cId ID used by the Qlik Sense. Must be unique within the current chart.
- * @property {boolean} isCustomFormatted Set to true to toggle off the default client formatting.
- * @property {boolean} numFormatFromTemplate=true When enabled, the number format to use can be selected from multiple predefined formats based on the desired type (number, date).
- * @property {string|StringExpression} othersLabel
- */
-
-/**
- * Extends `NxAttrDimDef`, see Engine API: `NxAttrDimDef`.
- * @typedef {object} AttributeDimensionProperties
- * @extends NxAttrDimDef
- * @property {string} id - One of: `colorByAlternative`: colors the chart using different dimensions (can be used together with color.mode="byDimension") or `colorByExpression` together with color.mode="byExpression".
- */
-
-/**
- * Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.
- * @typedef {object} ColorAttributes
- * @extends NxAttrExprDef
- * @property {string} id - One of: `colorByAlternative`: colors the chart using different dimensions (can be used together with color.mode="byDimension") or `colorByExpression` together with color.mode="byExpression".
- */
-
-/**
- * @typedef {ColorAttributes} AttributeExpressionProperties
- */
-
-/**
- * Extends `NxDimension`, see Engine API: `NxDimension`.
- * @typedef {object} DimensionProperties
- * @extends NxDimension
- * @property {AttributeDimensionProperties[]} qAttributeDimensions
- * @property {InlineDimensionDef} qDef
- */
-
-/**
- * Extends `NxMeasure`, see Engine API: `NxMeasure`.
- * @typedef {object} MeasureProperties
- * @extends NxMeasure
- * @property {AttributeExpressionProperties[]} qAttributeExpressions
- * @property {InlineMeasureDef} qDef
- */
-
-/**
  * Color information structure. Holds the actual color and index in palette.
  * @typedef {object} paletteColor
  * @property {string} color - Color as hex string (mandatory if index: -1)
