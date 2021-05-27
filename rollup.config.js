@@ -32,7 +32,7 @@ export default {
   input: './src/index.js',
   output: {
     file: path.resolve(__dirname, 'dist', 'sn-scatter-plot.js'),
-    name: 'Scatterplot',
+    name: 'sn-scatter-plot',
     format: 'umd',
     exports: 'default',
     sourcemap: true,
