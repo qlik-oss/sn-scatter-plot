@@ -57,11 +57,11 @@ export default {
       });
     const labelHeight = measureText('M').height - 2;
 
-    const { topLabels, bottomLabels } = getLabels({ measureText, mode, nodes, label, labelHeight });
+    const { topLabels, bottomLabels } = getLabels({ measureText, mode, nodes, label, labelHeight, component });
 
     const labels1 = topLabels.map((node) => ({
       type: 'text',
-      text: node.text,
+      text: node.ellipsed,
       x: node.cx,
       y: node.topRect.y2,
       fontSize,
@@ -77,7 +77,7 @@ export default {
             type: 'rect',
             x: node.topRect.x1,
             y: node.topRect.y1,
-            width: node.labelWidth,
+            width: node.textWidth,
             height: labelHeight,
             fill: backgroundColor,
           }));
@@ -92,7 +92,7 @@ export default {
     }));
     const labels2 = bottomLabels.map((node) => ({
       type: 'text',
-      text: node.text,
+      text: node.ellipsed,
       x: node.cx,
       y: node.bottomRect.y1,
       fontSize,
@@ -108,7 +108,7 @@ export default {
             type: 'rect',
             x: node.bottomRect.x1,
             y: node.bottomRect.y1,
-            width: node.labelWidth,
+            width: node.textWidth,
             height: labelHeight,
             fill: backgroundColor,
           }));
