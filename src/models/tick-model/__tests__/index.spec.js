@@ -2,53 +2,49 @@ import * as d3Scale from 'd3-scale';
 import picasso from 'picasso.js';
 
 import * as KEYS from '../../../constants/keys';
+import NUMBERS from '../../../constants/numbers';
 import * as getTicks from '../ticks';
 import * as tickModel from '..';
 
 import createTickModel from '..';
 
-describe('getCount', () => {
-  let size;
+describe('getDistance', () => {
   let spacing;
-  const get = () => tickModel.getCount(size, spacing);
+  let sandbox;
+  const get = () => tickModel.getDistance(spacing);
+
   beforeEach(() => {
-    size = 748;
+    sandbox = sinon.createSandbox();
+    sandbox.stub(NUMBERS, 'GRID_DISTANCE').value({
+      NARROW: 50,
+      MEDIUM: 100,
+      WIDE: 200,
+      FALLBACK: 100,
+    });
   });
 
-  it('should return correct count with spacing = 0.5', () => {
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('should return correct distance with spacing = 0.5', () => {
     spacing = 0.5;
-
-    // round(748/50) == 15
-    expect(get()).to.equal(15);
+    expect(get()).to.equal(50);
   });
 
-  it('should return correct count with spacing = 1', () => {
+  it('should return correct distance with spacing = 1', () => {
     spacing = 1;
-
-    // round(748/100) == 7
-    expect(get()).to.equal(7);
+    expect(get()).to.equal(100);
   });
 
-  it('should return correct count with spacing = 2', () => {
+  it('should return correct distance with spacing = 2', () => {
     spacing = 2;
-
-    // round(748/200) == 4
-    expect(get()).to.equal(4);
+    expect(get()).to.equal(200);
   });
 
-  it('should return correct count with spacing = 3', () => {
+  it('should return correct distance with spacing = 3', () => {
     spacing = 3;
-
-    // round(748/100) == 7
-    expect(get()).to.equal(7);
-  });
-
-  it('should fall back to 1 when size/distance is below 1', () => {
-    size = 100;
-    spacing = 2;
-
-    // max(1, round(100/200)) == 1
-    expect(get()).to.equal(1);
+    expect(get()).to.equal(100);
   });
 });
 

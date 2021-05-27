@@ -1,38 +1,24 @@
 import getMinorTicks from './minor';
+import tickHelper from './tick-helper';
 
-export default function getTicks({ scale, explicitType, count, size, measure, formatter }) {
+export default function getTicks({ scale, explicitType, distance, size, measure, formatter }) {
   const [originalMin, originalMax] = scale.domain();
+
   // 'Nice' if at least one end is implicit (extendable). You can't nice only one end with d3 scale
   const nicing = explicitType !== 'minMax';
-  let majorTicks = nicing ? scale.nice(count).ticks(count) : scale.ticks(count);
-  let [min, max] = nicing ? scale.nice(count).domain() : scale.domain();
+  const count = Math.max(1, Math.round(size / distance));
 
-  // Reduce the number of major ticks if the axis labels are too crowded
-
-  const fits = (labels) => {
-    const available = size / majorTicks.length;
-    return Math.max(...labels.map(measure)) <= available;
-  };
-
-  const valid = () => {
-    const labels = majorTicks.map(formatter);
-    return fits(labels);
-  };
-
-  for (let c = count - 1; c > 1; c--) {
-    if (valid()) {
+  let { ticks: majorTicks, min, max } = tickHelper.getTicksAndMinMax(scale, nicing, count, originalMin, originalMax);
+  for (let c = count - 1; c > 0; c--) {
+    if (tickHelper.valid({ scale, ticks: majorTicks, distance, size, measure, formatter })) {
       break;
     }
-    majorTicks = nicing ? scale.nice(c).ticks(c) : scale.ticks(c);
-    [min, max] = nicing ? scale.nice(c).domain() : scale.domain();
+    ({ ticks: majorTicks, min, max } = tickHelper.getTicksAndMinMax(scale, nicing, c, originalMin, originalMax));
   }
 
-  const minorTicks = getMinorTicks({
-    majorTicks,
-    count: 1,
-  });
+  const minorTicks = getMinorTicks({ majorTicks, count: 1 });
 
-  // generate an array of tick objects following the format defined by picasso
+  // Generate an array of tick objects following the format defined by picasso
   const ticks = [
     ...majorTicks.map((value) => ({ value, isMinor: false })),
     ...minorTicks.map((value) => ({ value, isMinor: true })),

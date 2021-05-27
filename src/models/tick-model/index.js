@@ -5,22 +5,17 @@ import KEYS from '../../constants/keys';
 import NUMBERS from '../../constants/numbers';
 import getTicks from './ticks';
 
-export function getCount(size, spacing) {
-  let distance;
+export function getDistance(spacing) {
   switch (spacing) {
     case 0.5:
-      distance = NUMBERS.GRID_DISTANCE.NARROW;
-      break;
+      return NUMBERS.GRID_DISTANCE.NARROW;
     case 1:
-      distance = NUMBERS.GRID_DISTANCE.MEDIUM;
-      break;
+      return NUMBERS.GRID_DISTANCE.MEDIUM;
     case 2:
-      distance = NUMBERS.GRID_DISTANCE.WIDE;
-      break;
+      return NUMBERS.GRID_DISTANCE.WIDE;
     default:
-      distance = NUMBERS.GRID_DISTANCE.FALLBACK;
+      return NUMBERS.GRID_DISTANCE.FALLBACK;
   }
-  return Math.max(1, Math.round(size / distance));
 }
 
 export function getSize(dockService, chartModel, chart, dimension) {
@@ -55,7 +50,7 @@ export default function createTickModel({
     }
 
     const size = getSize(dockService, chartModel, chart, dimension);
-    const count = getCount(size, spacing);
+    const distance = getDistance(spacing);
 
     // Get the measureText function from renderer
     const { measureText } = picasso.renderer('svg')();
@@ -67,7 +62,7 @@ export default function createTickModel({
         fontSize: style.axis.label.name.fontSize,
       })[dimension];
 
-    return { min, max, explicitType, count, size, measure };
+    return { min, max, explicitType, distance, size, measure };
   }
 
   const formatters = {
@@ -76,10 +71,10 @@ export default function createTickModel({
   };
 
   function resolve(axis, prop) {
-    const { min, max, explicitType, count, size, measure } = getChartProperties(axis);
+    const { min, max, explicitType, distance, size, measure } = getChartProperties(axis);
     const scale = scaleLinear().domain([min, max]);
     const formatter = axis === KEYS.SCALE.X ? formatters.x : formatters.y;
-    const tickObject = getTicks({ scale, explicitType, count, size, measure, formatter });
+    const tickObject = getTicks({ scale, explicitType, distance, size, measure, formatter });
     return prop === 'ticks' ? tickObject.ticks : tickObject.minMax;
   }
 
