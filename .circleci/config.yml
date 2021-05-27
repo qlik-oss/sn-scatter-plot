@@ -138,6 +138,7 @@ workflows:
       - install:
           context: deploy-secrets
       - build:
+          context: deploy-secrets
           requires:
             - install
       - publish-dev:
