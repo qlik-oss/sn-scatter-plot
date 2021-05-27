@@ -69,7 +69,7 @@ jobs:
               else
                 echo "Updating API specs";
                 git commit -am "docs: update api specs [skip ci]";
-                git push -q https://$AUTO_MERGER_ACCESS_TOKEN@github.com/qlik-trial/sn-scatter-plot.git main;
+                git push -q https://$GH_ACCESS_TOKEN@github.com/qlik-trial/sn-scatter-plot.git main;
               fi;
             fi
       - run:
