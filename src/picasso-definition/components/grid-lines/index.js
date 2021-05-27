@@ -41,7 +41,7 @@ export default function createGridLines(models) {
     },
     ticks: {
       // internal trick with Picasso: passing "(d, i) => i % 2 === 0" to display every second major tick
-      show: !auto && spacing === SPACINGS.WIDE ? (d, i) => i % 2 === 0 : true,
+      show: !auto && spacing === SPACINGS.WIDE ? (d, i) => d?.datum?.value === 0 || i % 2 === 0 : true,
       stroke: (d) => (d?.datum?.value === 0 ? line.highContrast.color : line.major.color),
       strokeWidth: 1,
     },
