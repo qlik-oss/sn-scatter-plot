@@ -71,8 +71,8 @@ describe('createExtremumModel', () => {
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
         xAxisMin: 0,
-        xAxisMax: 660,
-        yAxisMin: -380,
+        xAxisMax: 630,
+        yAxisMin: -340,
         yAxisMax: 500,
         xAxisExplicitType: 'min',
         yAxisExplicitType: 'max',
@@ -121,7 +121,7 @@ describe('createExtremumModel', () => {
         xAxisMin: 0.2,
         xAxisMax: 2,
         yAxisMin: 3,
-        yAxisMax: 4.1,
+        yAxisMax: 4.05,
         xAxisExplicitType: 'minMax',
         yAxisExplicitType: 'min',
       });
@@ -146,10 +146,10 @@ describe('createExtremumModel', () => {
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
-        xAxisMin: 0.03,
+        xAxisMin: 0.065,
         xAxisMax: 0.8,
         yAxisMin: 3,
-        yAxisMax: 4.1,
+        yAxisMax: 4.05,
         xAxisExplicitType: 'max',
         yAxisExplicitType: 'min',
       });
@@ -177,7 +177,7 @@ describe('createExtremumModel', () => {
         xAxisMin: 0,
         xAxisMax: 0.8,
         yAxisMin: 3,
-        yAxisMax: 4.1,
+        yAxisMax: 4.05,
         xAxisExplicitType: 'minMax',
         yAxisExplicitType: 'min',
       });
@@ -197,10 +197,10 @@ describe('createExtremumModel', () => {
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
-        xAxisMin: -59.9,
-        xAxisMax: 660.1,
-        yAxisMin: -330,
-        yAxisMax: 30,
+        xAxisMin: -29.9,
+        xAxisMax: 630.1,
+        yAxisMin: -315,
+        yAxisMax: 15,
         xAxisExplicitType: 'none',
         yAxisExplicitType: 'none',
       });
@@ -220,10 +220,10 @@ describe('createExtremumModel', () => {
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
-        xAxisMin: -59.8,
-        xAxisMax: 660.2,
+        xAxisMin: -29.8,
+        xAxisMax: 630.2,
         yAxisMin: 0.2,
-        yAxisMax: 1.3,
+        yAxisMax: 1.25,
         xAxisExplicitType: 'none',
         yAxisExplicitType: 'min',
       });
@@ -243,10 +243,10 @@ describe('createExtremumModel', () => {
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
-        xAxisMin: 0.14,
+        xAxisMin: 0.17,
         xAxisMax: 0.8,
-        yAxisMin: -330,
-        yAxisMax: 30,
+        yAxisMin: -315,
+        yAxisMax: 15,
         xAxisExplicitType: 'max',
         yAxisExplicitType: 'none',
       });
@@ -268,7 +268,7 @@ describe('createExtremumModel', () => {
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
-        xAxisMin: 0.03,
+        xAxisMin: 0.065,
         xAxisMax: 0.8,
         yAxisMin: 0.2,
         yAxisMax: 0.8,

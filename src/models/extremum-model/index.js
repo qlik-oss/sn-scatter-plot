@@ -59,7 +59,7 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
     }
 
     // Add 10% padding to the ends that are not explicit.
-    let padding = (axisMax - axisMin) / 10;
+    let padding = (axisMax - axisMin) / 20;
     // Special case: padding === 0 because data has only one point and min/max are non-explicit
     if (padding === 0) padding = Math.abs(axisMin) / 10;
     switch (explicitType) {
