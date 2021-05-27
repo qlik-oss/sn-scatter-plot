@@ -21,12 +21,12 @@ module.exports = {
   parse: {
     types: {
       HyperCubeDef: {},
-      NxDimension: {},
-      NxMeasure: {},
-      NxInlineDimensionDef: {},
-      NxInlineMeasureDef: {},
       NxAttrDimDef: {},
       NxAttrExprDef: {},
+      NxDimension: {},
+      NxInlineDimensionDef: {},
+      NxInlineMeasureDef: {},
+      NxMeasure: {},
       StringExpression: {},
       ValueExpression: {},
     },
