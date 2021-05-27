@@ -359,13 +359,13 @@
             "qDimensions": {
               "kind": "array",
               "items": {
-                "type": "DimensionProperties"
+                "type": "#/definitions/DimensionProperties"
               }
             },
             "qMeasures": {
               "kind": "array",
               "items": {
-                "type": "MeasureProperties"
+                "type": "#/definitions/MeasureProperties"
               }
             },
             "qSuppressMissing": {
@@ -469,14 +469,6 @@
               "description": "Toggle for hiding basic information from custom tooltip",
               "defaultValue": false,
               "type": "boolean"
-            },
-            "imageComponents": {
-              "description": "The imageComponents objects are used to define the images displayed by the custom tooltip.",
-              "defaultValue": "undefined",
-              "kind": "array",
-              "items": {
-                "type": "ImageComponent"
-              }
             },
             "title": {
               "description": "Custom tooltip title.",
@@ -711,6 +703,154 @@
     }
   },
   "definitions": {
+    "AttributeDimensionProperties": {
+      "description": "Extends `NxAttrDimDef`, see Engine API: `NxAttrDimDef`.",
+      "extends": [
+        {
+          "type": "NxAttrDimDef"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "id": {
+          "description": "One of: `colorByAlternative`: colors the chart using different dimensions (can be used together with color.mode=\"byDimension\") or `colorByExpression` together with color.mode=\"byExpression\".",
+          "type": "string"
+        }
+      }
+    },
+    "AttributeExpressionProperties": {
+      "type": "#/definitions/ColorAttributes"
+    },
+    "ColorAttributes": {
+      "description": "Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.",
+      "extends": [
+        {
+          "type": "NxAttrExprDef"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "id": {
+          "description": "One of: `colorByAlternative`: colors the chart using different dimensions (can be used together with color.mode=\"byDimension\") or `colorByExpression` together with color.mode=\"byExpression\".",
+          "type": "string"
+        }
+      }
+    },
+    "DimensionProperties": {
+      "description": "Extends `NxDimension`, see Engine API: `NxDimension`.",
+      "extends": [
+        {
+          "type": "NxDimension"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "qAttributeDimensions": {
+          "kind": "array",
+          "items": {
+            "type": "#/definitions/AttributeDimensionProperties"
+          }
+        },
+        "qDef": {
+          "type": "#/definitions/InlineDimensionDef"
+        }
+      }
+    },
+    "InlineDimensionDef": {
+      "description": "Extends `NxInlineDimensionDef`, see Engine API: `NxInlineDimensionDef`.",
+      "extends": [
+        {
+          "type": "NxInlineDimensionDef"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "autoSort": {
+          "description": "Set to automatically sort the dimension.",
+          "optional": true,
+          "type": "boolean"
+        },
+        "cId": {
+          "description": "ID used by the Qlik Sense. Must be unique within the current chart.",
+          "optional": true,
+          "type": "string"
+        },
+        "othersLabel": {
+          "kind": "union",
+          "items": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "StringExpression"
+            }
+          ],
+          "type": "any"
+        }
+      }
+    },
+    "InlineMeasureDef": {
+      "description": "Extends `NxInlineMeasureDef`, see Engine API: `NxInlineMeasureDef`.",
+      "extends": [
+        {
+          "type": "NxInlineMeasureDef"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "autoSort": {
+          "description": "Set to automatically sort the measure.",
+          "optional": true,
+          "type": "boolean"
+        },
+        "cId": {
+          "description": "ID used by the Qlik Sense. Must be unique within the current chart.",
+          "optional": true,
+          "type": "string"
+        },
+        "isCustomFormatted": {
+          "description": "Set to true to toggle off the default client formatting.",
+          "type": "boolean"
+        },
+        "numFormatFromTemplate": {
+          "description": "When enabled, the number format to use can be selected from multiple predefined formats based on the desired type (number, date).",
+          "defaultValue": true,
+          "type": "boolean"
+        },
+        "othersLabel": {
+          "kind": "union",
+          "items": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "StringExpression"
+            }
+          ],
+          "type": "any"
+        }
+      }
+    },
+    "MeasureProperties": {
+      "description": "Extends `NxMeasure`, see Engine API: `NxMeasure`.",
+      "extends": [
+        {
+          "type": "NxMeasure"
+        }
+      ],
+      "kind": "object",
+      "entries": {
+        "qAttributeExpressions": {
+          "kind": "array",
+          "items": {
+            "type": "#/definitions/AttributeExpressionProperties"
+          }
+        },
+        "qDef": {
+          "type": "#/definitions/InlineMeasureDef"
+        }
+      }
+    },
     "paletteColor": {
       "description": "Color information structure. Holds the actual color and index in palette.",
       "kind": "object",
