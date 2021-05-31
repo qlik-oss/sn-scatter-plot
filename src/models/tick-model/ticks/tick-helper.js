@@ -1,13 +1,17 @@
+import KEYS from '../../../constants/keys';
+import NUMBERS from '../../../constants/numbers';
+
 const tickHelper = {
   getTicksAndMinMax(scale, nicing, count, originalMin, originalMax) {
-    if (nicing) scale.nice(count);
+    if (nicing) scale.nice(count).nice(count);
     let ticks = scale.ticks(count);
-    const [min, max] = scale.domain();
+    let [min, max] = scale.domain();
 
     // Corner case: nicing is true and there is only one tick generated. We then have to make it two.
     if (nicing && ticks.length === 1) {
-      scale.domain([originalMin, originalMax]).nice(2);
-      ticks = scale.domain();
+      scale.domain([originalMin, originalMax]).nice(2).nice(2);
+      [min, max] = scale.domain();
+      ticks = [min, max];
     }
     return { ticks, min, max };
   },
@@ -22,6 +26,26 @@ const tickHelper = {
     const labels = ticks.map(formatter);
     const available = size / ticks.length;
     return Math.max(...labels.map(measure)) <= available;
+  },
+
+  getDistance(spacing) {
+    switch (spacing) {
+      case 0.5:
+        return NUMBERS.GRID_DISTANCE.NARROW;
+      case 1:
+        return NUMBERS.GRID_DISTANCE.MEDIUM;
+      case 2:
+        return NUMBERS.GRID_DISTANCE.WIDE;
+      default:
+        return NUMBERS.GRID_DISTANCE.FALLBACK;
+    }
+  },
+
+  getSize(dockService, chartModel, chart, dimension) {
+    const size = chartModel.query.isPrelayout()
+      ? dockService.meta.chart.size[dimension]
+      : chart.component(KEYS.COMPONENT.POINT).rect[dimension];
+    return size;
   },
 };
 

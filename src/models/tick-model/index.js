@@ -2,28 +2,8 @@ import { scaleLinear } from 'd3-scale';
 import extend from 'extend';
 import picasso from 'picasso.js';
 import KEYS from '../../constants/keys';
-import NUMBERS from '../../constants/numbers';
 import getTicks from './ticks';
-
-export function getDistance(spacing) {
-  switch (spacing) {
-    case 0.5:
-      return NUMBERS.GRID_DISTANCE.NARROW;
-    case 1:
-      return NUMBERS.GRID_DISTANCE.MEDIUM;
-    case 2:
-      return NUMBERS.GRID_DISTANCE.WIDE;
-    default:
-      return NUMBERS.GRID_DISTANCE.FALLBACK;
-  }
-}
-
-export function getSize(dockService, chartModel, chart, dimension) {
-  const size = chartModel.query.isPrelayout()
-    ? dockService.meta.chart.size[dimension]
-    : chart.component(KEYS.COMPONENT.POINT).rect[dimension];
-  return size;
-}
+import tickHelper from './ticks/tick-helper';
 
 export default function createTickModel({
   layoutService,
@@ -49,8 +29,8 @@ export default function createTickModel({
       spacing = layoutService.getLayoutValue('yAxis.spacing', 1);
     }
 
-    const size = getSize(dockService, chartModel, chart, dimension);
-    const distance = getDistance(spacing);
+    const size = tickHelper.getSize(dockService, chartModel, chart, dimension);
+    const distance = tickHelper.getDistance(spacing);
 
     // Get the measureText function from renderer
     const { measureText } = picasso.renderer('svg')();
