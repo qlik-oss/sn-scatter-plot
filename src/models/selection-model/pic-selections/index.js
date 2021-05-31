@@ -85,7 +85,13 @@ export default function ({ selections, brush, majorScale, actions, picassoQ } = 
         brush.clear([]);
       }
     });
-    return added.filter((t) => t.value !== -2);
+
+    const res = added.filter((t) => t.value !== -2);
+    if (res.length) {
+      const isSingleSelection = layout?.qHyperCube?.qDimensionInfo?.[0]?.qIsOneAndOnlyOne;
+      if (isSingleSelection) res.length = 1;
+    }
+    return res;
   };
 
   const rangeInterceptor = (a) => {
