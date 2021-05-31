@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-const propertiesObject = {
+const chartProperties = {
   qInfo: {
     qId: 'XXCtEU',
     qType: 'scatterplot',
