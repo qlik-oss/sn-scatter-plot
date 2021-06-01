@@ -2,24 +2,31 @@ import * as testRectRect from '../../../utils/math/collision/rect-rect';
 import * as testRectCircle from '../../../utils/math/collision/rect-circle';
 import { getLabels } from '../get-labels';
 
-describe.skip('getLabels', () => {
+describe('getLabels', () => {
   let sandbox;
   let measureText;
   let mode;
   let nodes;
   let label;
   let labelHeight;
+  let component;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     measureText = sandbox.stub().returns({ width: 2 });
     nodes = [
-      { localBounds: { x: 1, y: 2, width: 3, height: 2 } },
-      { localBounds: { x: 4, y: 5, width: 6, height: 2 } },
+      { localBounds: { x: 313, y: 230, width: 25, height: 25 } },
+      { localBounds: { x: 267, y: 279, width: 24, height: 24 } },
     ];
     label = sandbox.stub().returns('correct label');
     sandbox.stub(testRectRect, 'default');
     sandbox.stub(testRectCircle, 'default');
+    component = {
+      rect: {
+        width: 558,
+        height: 582,
+      },
+    };
   });
 
   afterEach(() => {
@@ -28,11 +35,11 @@ describe.skip('getLabels', () => {
 
   it('should return correct topLabels and no bottomLabels if mode is ALL', () => {
     mode = 2;
-    const result = getLabels({ measureText, mode, nodes, label, labelHeight });
+    const result = getLabels({ measureText, mode, nodes, label, labelHeight, component });
     expect(result).to.deep.equal({
       topLabels: [
-        { text: 'correct label', cx: 2.5, topRect: { y2: -4 } },
-        { text: 'correct label', cx: 7, topRect: { y2: -1 } },
+        { text: 'correct label', cx: 325.5, topRect: { y2: 224 } },
+        { text: 'correct label', cx: 279, topRect: { y2: 273 } },
       ],
       bottomLabels: [],
     });
@@ -48,43 +55,32 @@ describe.skip('getLabels', () => {
     testRectRect.default.onCall(1).returns(false);
     testRectCircle.default.onCall(4).returns(false);
     testRectCircle.default.onCall(5).returns(false);
-    const result = getLabels({ measureText, mode, nodes, label, labelHeight: 1 });
-    // const geoNodes = [
-    //   {
-    //     text: 'correct label',
-    //     cx: 2.5,
-    //     topRect: { x1: 1.5, y1: -5, x2: 3.5, y2: -4 },
-    //     textWidth: 2,
-    //     circle: { x: 2.5, y: 3, r: 1, height: 2 },
-    //   },
-    //   {
-    //     text: 'correct label',
-    //     cx: 7,
-    //     topRect: { x1: 6, y1: -2, x2: 8, y2: -1 },
-    //     textWidth: 2,
-    //     circle: { x: 7, y: 6, r: 1, height: 2 },
-    //   },
-    // ];
+    const result = getLabels({ measureText, mode, nodes, label, labelHeight: 1, component });
 
     expect(result).to.deep.equal({
       topLabels: [
         {
           text: 'correct label',
-          cx: 2.5,
-          topRect: { x1: 1.5, y1: -5, x2: 3.5, y2: -4 },
+          cx: 325.5,
+          topRect: { x1: 324.5, y1: 223, x2: 326.5, y2: 224 },
           textWidth: 2,
-          circle: { x: 2.5, y: 3, r: 1, height: 2 },
+          circle: { x: 325.5, y: 242.5, r: 12.5, height: 25 },
+          ellipsed: 'correct label',
+          isEllipsisChar: false,
+          maxWidth: 465,
         },
       ],
       bottomLabels: [
         {
           text: 'correct label',
-          cx: 7,
-          topRect: { x1: 6, y1: -2, x2: 8, y2: -1 },
-          // dy = 2 + 12 + 1 = 15
-          bottomRect: { x1: 6, y1: 13, x2: 8, y2: 14 },
+          cx: 279,
+          topRect: { x1: 278, y1: 272, x2: 280, y2: 273 },
+          bottomRect: { x1: 278, y1: 309, x2: 280, y2: 310 },
           textWidth: 2,
-          circle: { x: 7, y: 6, r: 1, height: 2 },
+          circle: { x: 279, y: 291, r: 12, height: 24 },
+          ellipsed: 'correct label',
+          isEllipsisChar: false,
+          maxWidth: 558,
         },
       ],
     });
@@ -97,35 +93,21 @@ describe.skip('getLabels', () => {
     testRectCircle.default.onCall(2).returns(false);
     testRectCircle.default.onCall(3).returns(false);
     testRectRect.default.onCall(0).returns(true);
-    const result = getLabels({ measureText, mode, nodes, label, labelHeight: 1 });
-    // const geoNodes = [
-    //   {
-    //     text: 'correct label',
-    //     cx: 2.5,
-    //     topRect: { x1: 1.5, y1: -5, x2: 3.5, y2: -4 },
-    //     textWidth: 2,
-    //     circle: { x: 2.5, y: 3, r: 1, height: 2 },
-    //   },
-    //   {
-    //     text: 'correct label',
-    //     cx: 7,
-    //     topRect: { x1: 6, y1: -2, x2: 8, y2: -1 },
-    //     textWidth: 2,
-    //     circle: { x: 7, y: 6, r: 1, height: 2 },
-    //   },
-    // ];
+    const result = getLabels({ measureText, mode, nodes, label, labelHeight: 1, component });
 
     expect(result).to.deep.equal({
       topLabels: [],
       bottomLabels: [
         {
           text: 'correct label',
-          cx: 2.5,
-          topRect: { x1: 1.5, y1: -5, x2: 3.5, y2: -4 },
-          // dy = 2 + 12 + 1 = 15
-          bottomRect: { x1: 1.5, y1: 10, x2: 3.5, y2: 11 },
+          cx: 325.5,
+          topRect: { x1: 324.5, y1: 223, x2: 326.5, y2: 224 },
+          bottomRect: { x1: 324.5, y1: 261, x2: 326.5, y2: 262 },
           textWidth: 2,
-          circle: { x: 2.5, y: 3, r: 1, height: 2 },
+          circle: { x: 325.5, y: 242.5, r: 12.5, height: 25 },
+          ellipsed: 'correct label',
+          isEllipsisChar: false,
+          maxWidth: 465,
         },
       ],
     });
