@@ -1,4 +1,5 @@
 import * as KEYS from '../../../constants/keys';
+import * as zoom from '../../../utils/math/zoom';
 import native from '../native';
 
 describe('native', () => {
@@ -58,6 +59,7 @@ describe('native', () => {
         enabled: sandbox.stub().returns(true),
       },
     };
+    sandbox.stub(zoom, 'default');
     create = () =>
       native({
         chart,
@@ -97,10 +99,37 @@ describe('native', () => {
           expect(chart.componentsFromPoint.withArgs({ x: 50, y: 100 })).to.have.been.called;
         });
 
-        it('should emit on legend if interact is enabled', () => {
+        it('should emit on zoom if zoom is enabled', () => {
+          chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'point-component' }]);
+          create().events.wheel(e);
+          expect(zoom.default).to.have.been.calledOnce;
+        });
+
+        it('should not emit on zoom if zoom is not enabled', () => {
+          chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'point-component' }]);
+          actions.zoom.enabled.returns(false);
+          create().events.wheel(e);
+          expect(zoom.default).not.to.have.been.called;
+        });
+
+        it('should emit on legend if interact is enabled, case 1: scroll to next', () => {
           chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([legend]);
           create().events.wheel(e);
-          expect(legend.emit).to.have.been.calledOnce;
+          expect(legend.emit.withArgs('next')).to.have.been.calledOnce;
+        });
+
+        it('should emit on legend if interact is enabled, case 2: scroll to previous', () => {
+          chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([legend]);
+          e.deltaY = -100;
+          create().events.wheel(e);
+          expect(legend.emit.withArgs('prev')).to.have.been.calledOnce;
+        });
+
+        it('should emit on legend if interact is enabled, case 3: scroll to previous in X direction', () => {
+          chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([legend]);
+          e.deltaX = -200;
+          create().events.wheel(e);
+          expect(legend.emit.withArgs('prev')).to.have.been.calledOnce;
         });
 
         it('should not emit on legend if interact is not enabled', () => {
@@ -168,13 +197,20 @@ describe('native', () => {
           expect(pointTooltip.emit).not.to.have.been.called;
         });
 
-        it('should not show nor hide legend tooltip if no point tooltip component', () => {
+        it('should show point tooltip if target is point component', () => {
+          pointTooltip.show = true;
+          chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'point-component' }]);
+          create().events.mousemove(e);
+          expect(pointTooltip.emit.withArgs('show', e)).to.have.been.called;
+        });
+
+        it('should not show nor hide legend tooltip if no legend tooltip component', () => {
           chart.component.withArgs('legend-cat-tooltip').returns(undefined);
           create().events.mousemove(e);
           expect(legendTooltip.emit).not.to.have.been.called;
         });
 
-        it('should not show nor hide legend tooltip if point tooltip show is false', () => {
+        it('should not show nor hide legend tooltip if legend tooltip show is false', () => {
           legendTooltip.show = false;
           create().events.mousemove(e);
           expect(legendTooltip.emit).not.to.have.been.called;
@@ -192,6 +228,13 @@ describe('native', () => {
           create().events.mouseup(e);
           expect(pointTooltip.emit).not.to.have.been.called;
           expect(legendTooltip.emit).not.to.have.been.called;
+        });
+
+        it('should call mouseup when event equals to 2', () => {
+          e.button = 2;
+          create().events.mouseup(e);
+          expect(pointTooltip.emit).to.have.been.called;
+          expect(legendTooltip.emit).to.have.been.called;
         });
       });
 

@@ -75,4 +75,32 @@ describe('interactions', () => {
       },
     ]);
   });
+
+  it('should still work if gestures have no prio attribute', () => {
+    gestures = [{ key: 'gesture-1' }, { key: 'gesture-2' }, { key: 'gesture-3' }];
+    args = {
+      chart,
+      actions,
+      viewHandler,
+      gestures,
+      colorService,
+    };
+    expect(create(args)).to.deep.equal([
+      {
+        key: 'native',
+      },
+      {
+        type: 'hammer',
+        enable: true,
+        gestures: [
+          'legend-i1',
+          'legend-i2',
+          { key: 'gesture-1' },
+          { key: 'gesture-2' },
+          { key: 'gesture-3' },
+          { key: 'panorama' },
+        ],
+      },
+    ]);
+  });
 });
