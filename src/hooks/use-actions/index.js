@@ -2,7 +2,7 @@ import { useConstraints, useState, useEffect } from '@nebula.js/stardust';
 import useLasso from './use-lasso';
 import useSelect from './use-select';
 
-export default function useActions() {
+export default function useActions({ flags }) {
   const constraints = useConstraints();
   const [zoom, setZoom] = useState(false);
   const [scroll, setScroll] = useState(false);
@@ -10,12 +10,13 @@ export default function useActions() {
   const [tooltip, setTooltip] = useState(false);
   const select = useSelect();
   const lasso = useLasso();
+  const enabledPanZoom = flags.isEnabled('panZoom');
 
   useEffect(() => {
     if (!constraints) {
       return;
     }
-    setZoom(!constraints.active);
+    setZoom(enabledPanZoom && !constraints.active);
     setScroll(!constraints.active);
     setInteract(!constraints.active);
     setTooltip(!constraints.passive);

@@ -10,6 +10,8 @@ describe('axes', () => {
   let themeService;
   let viewHandler;
   let chartModel;
+  let models;
+  let flags;
   const scales = {
     X: 'x',
     Y: 'y',
@@ -77,10 +79,12 @@ describe('axes', () => {
         getViewHandler: () => viewHandler,
       },
     };
+    models = { layoutService, dockService, themeService, chartModel };
+    flags = { isEnabled: sandbox.stub().returns(true) };
   });
 
   it('should create two axes', () => {
-    axes = createAxes({ layoutService, dockService, themeService, chartModel });
+    axes = createAxes({ models, flags });
     expect(axes.length).to.equal(2);
     expect(axes[0].type).to.equal('axis');
     expect(axes[1].type).to.equal('axis');
@@ -102,7 +106,7 @@ describe('axes', () => {
       expect(axes[1].settings.labels.show).to.equal(true);
       layout.yAxis.show = 'title';
       layout.xAxis.show = 'title';
-      axes = createAxes({ layoutService, dockService, themeService, chartModel });
+      axes = createAxes({ models, flags });
       expect(axes[0].settings.labels.show).to.equal(false);
       expect(axes[1].settings.labels.show).to.equal(false);
     });

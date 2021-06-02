@@ -2133,10 +2133,10 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@nebula.js/cli-build@1.2.0", "@nebula.js/cli-build@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-build/-/cli-build-1.2.0.tgz#17ca526f44d272f89432d5cd74623f09c0492c67"
-  integrity sha512-9Us4JRdvRDqup83nHyT/F+vVX3zYLJdUj9ViKB52wrs53y7TrEbtrIWX/t1qW+wHVl5LK3vcg5yBNQYMSQnfbw==
+"@nebula.js/cli-build@1.3.0", "@nebula.js/cli-build@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-build/-/cli-build-1.3.0.tgz#0ce4f033c5eafbc2fbe804b7f09dd2c6553f4f52"
+  integrity sha512-R2crDhOQu7EZs2LuK6FALi5mkI5w3w5WoUzyod7D0ylRxD0uG47rElIclHcn7iby8u3kPEKcP+YrOUvqTNwJ0w==
   dependencies:
     "@babel/cli" "7.13.16"
     "@babel/core" "7.14.0"
@@ -2183,12 +2183,12 @@
     rollup-plugin-terser "7.0.2"
     yargs "16.2.0"
 
-"@nebula.js/cli-serve@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-serve/-/cli-serve-1.2.0.tgz#d8a53306e49cda2d678c0cf552d24f8c8d08354b"
-  integrity sha512-IUBKUj5F1QMqX3S6H0AfstDOaoJLsmpM+FdGfPKHF9XzR5ubPF7OMJd56Nu0Is+Q8QW7ASjWW327txmk2Epj2A==
+"@nebula.js/cli-serve@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-serve/-/cli-serve-1.3.0.tgz#0abe8097ce7c157448c524eb087b0007c85d5e49"
+  integrity sha512-ye9ZPP+6+TgSmT8QAzM78m3ejLWcCyXGFd+qF/5Rebjt9g9qcBiAQcoxbZgjEZagbYuMK8nf+oopBNRvrRmdZA==
   dependencies:
-    "@nebula.js/cli-build" "^1.2.0"
+    "@nebula.js/cli-build" "^1.3.0"
     body-parser "1.19.0"
     chalk "4.1.1"
     chokidar "3.5.1"

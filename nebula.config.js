@@ -14,5 +14,8 @@ const renderConfigs = fs.readdirSync('test/rendering/data').map((file) => ({
 module.exports = {
   serve: {
     renderConfigs,
+    flags: {
+      panZoom: true,
+    },
   },
 };

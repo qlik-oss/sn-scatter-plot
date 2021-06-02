@@ -3,10 +3,10 @@ import useActions from './use-actions';
 import useViewState from './use-view-state';
 import configurePicasso from '../configure-picasso';
 
-const useCore = () => {
+const useCore = ({ flags }) => {
   const element = useElement();
   const options = useOptions();
-  const actions = useActions();
+  const actions = useActions({ flags });
   const viewState = useViewState();
 
   const [core, setCore] = useState();

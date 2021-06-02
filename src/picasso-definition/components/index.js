@@ -8,7 +8,7 @@ import createPointLabels from './point-labels';
 import createTooltips from './tooltips';
 import createDisclaimer from './disclaimer';
 
-export default function createComponents({ context, models }) {
+export default function createComponents({ context, models, flags }) {
   const { colorService, disclaimerModel } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context });
 
@@ -20,7 +20,7 @@ export default function createComponents({ context, models }) {
     createGridLines(models),
     ...createReferenceLines({ models, context }),
     createPoint(models),
-    ...createAxes(models),
+    ...createAxes({ models, flags }),
     ...createAxisTitles(models),
     createPointLabels(models),
     ...colorService.custom.legendComponents(),
