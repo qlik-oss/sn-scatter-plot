@@ -1,8 +1,8 @@
 import { range } from '../../../interactive';
 import KEYS from '../../../constants/keys';
 
-export default function createYRange({ actions, selectionModel, dockService }) {
-  if (selectionModel.query.getIsDimensionLocked()) {
+export default function createYRange({ actions, selectionService, dockService }) {
+  if (selectionService.getIsDimensionLocked()) {
     return false;
   }
 

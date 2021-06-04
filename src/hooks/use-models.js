@@ -22,7 +22,7 @@ import themeStyleMatrix from '../services/theme-service/theme-style-matrix';
 import layoutServiceMeta from '../services/layout-service/meta';
 import createChartModel from '../models/chart-model';
 import createTickModel from '../models/tick-model';
-import createSelectionModel from '../models/selection-model';
+import createSelectionService from '../services/selection-service';
 import createColorService from '../services/color-service';
 import getLogicalSize from '../logical-size';
 import createExtremumModel from '../models/extremum-model';
@@ -39,7 +39,7 @@ const useModels = ({ core, flags }) => {
   const app = useApp();
   const { qLocaleInfo: localeInfo } = useAppLayout();
   const plugins = usePlugins();
-  const [selectionModel, setSelectionModel] = useState();
+  const [selectionService, setSelectionService] = useState();
   const [models, setModels] = useState();
 
   useEffect(() => {
@@ -48,22 +48,22 @@ const useModels = ({ core, flags }) => {
     }
 
     const { chart, actions } = core;
-    const sm = createSelectionModel({
+    const localSelectionService = createSelectionService({
       chart,
       actions,
       selections,
       document,
     });
 
-    setSelectionModel(sm);
+    setSelectionService(localSelectionService);
 
     return () => {
-      sm.command.destroy();
+      localSelectionService.destroy();
     };
   }, [core]);
 
   useEffect(() => {
-    if (!layout || !selectionModel) {
+    if (!layout || !selectionService) {
       return;
     }
 
@@ -115,20 +115,20 @@ const useModels = ({ core, flags }) => {
 
     const disclaimerModel = createDisclaimerModel({ layoutService, flags });
 
-    selectionModel.command.setLayout({ layout });
+    selectionService.setLayout(layout);
     setModels({
       layoutService,
       tickModel,
       chartModel,
       dockService,
-      selectionModel,
+      selectionService,
       themeService,
       pluginService,
       disclaimerModel,
       colorService,
       extremumModel,
     });
-  }, [model, app, selectionModel, layout, theme.name(), translator.language(), options.direction, options.viewState]);
+  }, [model, app, selectionService, layout, theme.name(), translator.language(), options.direction, options.viewState]);
 
   return models;
 };

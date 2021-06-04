@@ -1,6 +1,6 @@
 import { range } from '../../../interactive';
 
-export default function createLegendRange({ actions, selectionModel, scales, legend }) {
+export default function createLegendRange({ actions, selectionService, scales, legend }) {
   const [legendComponent] = legend || [];
 
   if (!legendComponent) {
@@ -11,7 +11,7 @@ export default function createLegendRange({ actions, selectionModel, scales, leg
   const { colorRange } = scales;
 
   if (
-    selectionModel.query.getIsDimensionLocked() ||
+    selectionService.getIsDimensionLocked() ||
     type !== 'legend-seq' ||
     !colorRange ||
     colorRange.min >= colorRange.max
