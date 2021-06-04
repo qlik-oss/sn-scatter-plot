@@ -4,9 +4,9 @@ import clearBrushes from './clear';
 export default function createService({ chart, actions, selections, document }) {
   const allowSimultaneous = [...Array(15)].map((d, i) => `qHyperCube/qMeasureInfo/${i}`);
 
-  const start = ({ name }) => {
+  const start = ({ event }) => {
     clearBrushes({
-      current: name,
+      current: event,
       chart,
       document,
     });
