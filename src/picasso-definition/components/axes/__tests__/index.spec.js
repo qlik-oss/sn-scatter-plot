@@ -1,4 +1,5 @@
 import createAxes from '../index';
+import NUMBERS from '../../../../constants/numbers';
 
 describe('axes', () => {
   let sandbox;
@@ -9,6 +10,7 @@ describe('axes', () => {
   let gridLine;
   let themeService;
   let viewHandler;
+  let isHomeState;
   let chartModel;
   let models;
   let flags;
@@ -17,7 +19,7 @@ describe('axes', () => {
     Y: 'y',
   };
 
-  before(() => {
+  beforeEach(() => {
     sandbox = sinon.createSandbox();
     dockService = {
       meta: {
@@ -69,11 +71,8 @@ describe('axes', () => {
       },
     };
     themeService = { getStyles: () => style };
-    viewHandler = {
-      getMeta: () => {
-        true;
-      },
-    };
+    isHomeState = false;
+    viewHandler = { getMeta: sandbox.stub().returns(isHomeState) };
     chartModel = {
       query: {
         getViewHandler: () => viewHandler,
@@ -81,23 +80,43 @@ describe('axes', () => {
     };
     models = { layoutService, dockService, themeService, chartModel };
     flags = { isEnabled: sandbox.stub().returns(true) };
-  });
-
-  it('should create two axes', () => {
     axes = createAxes({ models, flags });
-    expect(axes.length).to.equal(2);
-    expect(axes[0].type).to.equal('axis');
-    expect(axes[1].type).to.equal('axis');
   });
 
-  it('should have correct scale', () => {
-    expect(axes[0].scale).to.equal(scales.X);
-    expect(axes[1].scale).to.equal(scales.Y);
+  afterEach(() => {
+    sandbox.restore();
   });
 
-  it('should have correct layout', () => {
-    expect(axes[0].layout.dock).to.equal(dockService.meta.x.dock);
-    expect(axes[1].layout.dock).to.equal(dockService.meta.y.dock);
+  describe('component', () => {
+    it('should create two axes', () => {
+      expect(axes.length).to.equal(2);
+      expect(axes[0].type).to.equal('axis');
+      expect(axes[1].type).to.equal('axis');
+    });
+
+    it('should have axis definition false when layout axis undefined', () => {
+      layout.xAxis = undefined;
+      layout.yAxis = undefined;
+      axes = createAxes({ models, flags });
+      expect(axes).to.deep.equal([false, false]);
+    });
+
+    it('should have axis definition false when axis show is none', () => {
+      layout.xAxis.show = 'none';
+      layout.yAxis.show = 'none';
+      axes = createAxes({ models, flags });
+      expect(axes).to.deep.equal([false, false]);
+    });
+
+    it('should have correct scale', () => {
+      expect(axes[0].scale).to.equal(scales.X);
+      expect(axes[1].scale).to.equal(scales.Y);
+    });
+
+    it('should have correct layout', () => {
+      expect(axes[0].layout.dock).to.equal(dockService.meta.x.dock);
+      expect(axes[1].layout.dock).to.equal(dockService.meta.y.dock);
+    });
   });
 
   describe('settings', () => {
@@ -114,6 +133,15 @@ describe('axes', () => {
     it('should have correct font size property for labels', () => {
       const { fontSize } = themeService.getStyles().axis.label.name;
       expect(axes[0].settings.labels.fontSize).to.equal(fontSize);
+    });
+
+    it('should have correct paddingEnd', () => {
+      layout.yAxis.show = 'title';
+      expect(axes[1].settings.paddingEnd()).to.equal(0);
+      layout.yAxis.show = 'all';
+      isHomeState = true;
+      const yAxis = createAxes({ models, flags })[1];
+      expect(yAxis.settings.paddingEnd()).to.equal(NUMBERS.AXIS.Y.PADDING.END);
     });
   });
 });
