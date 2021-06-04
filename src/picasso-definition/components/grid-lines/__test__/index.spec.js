@@ -33,6 +33,7 @@ describe('grid-line', () => {
         line: {
           major: { color: 'major-style' },
           minor: { color: 'minor-style' },
+          highContrast: { color: '#e6e6e6' },
         },
       },
     });
@@ -191,8 +192,15 @@ describe('grid-line', () => {
         });
       });
 
-      it.skip('should have correct stroke', () => {
-        expect(create().ticks.stroke).to.equal('major-style' || '#cccccc');
+      it('should have correct stroke', () => {
+        const d = {
+          datum: {
+            value: 5,
+          },
+        };
+        expect(create().ticks.stroke(d)).to.equal('major-style' || '#cccccc');
+        d.datum.value = 0;
+        expect(create().ticks.stroke(d)).to.equal('#e6e6e6');
       });
     });
 
