@@ -1,7 +1,11 @@
 import KEYS from '../../constants/keys';
 
 export default function createScales({ models, viewState, options }) {
-  const { tickModel, colorService } = models;
+  const { tickModel, colorService, disclaimerModel } = models;
+  if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
+    return {};
+  }
+
   return {
     x: {
       data: {

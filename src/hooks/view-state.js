@@ -7,7 +7,8 @@ import KEYS from '../constants/keys';
  * - default to: { x: 0, y: 0 }
  */
 
-export function updateViewState(viewState, layoutService, viewStateOptions = {}, tickModel, chartModel, extremumModel) {
+export function updateViewState({ viewState, viewStateOptions = {}, models }) {
+  const { layoutService, tickModel, chartModel, extremumModel } = models;
   const source = layoutService.meta.isSnapshot
     ? layoutService.getLayoutValue('snapshotData.content.chartData', {})
     : viewStateOptions;
@@ -27,15 +28,12 @@ export function updateViewState(viewState, layoutService, viewStateOptions = {},
   if (viewHandler.getMeta().isHomeState) viewHandler.setMeta({ homeStateDataView: viewState.get('dataView') });
 }
 
-export function initializeViewState(
-  viewState,
-  layoutService,
-  viewStateOptions = {},
-  tickModel,
-  chartModel,
-  extremumModel
-) {
+export function initializeViewState({ viewState, viewStateOptions = {}, models }) {
+  const { disclaimerModel, chartModel } = models;
+  if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
+    return;
+  }
   const viewHandler = chartModel.query.getViewHandler();
   viewHandler.setMeta({ isHomeState: true });
-  updateViewState(viewState, layoutService, viewStateOptions, tickModel, chartModel, extremumModel);
+  updateViewState({ viewState, viewStateOptions, models });
 }

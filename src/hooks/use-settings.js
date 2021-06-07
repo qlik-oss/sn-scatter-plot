@@ -43,7 +43,7 @@ const useSettings = ({ core, models, flags }) => {
       return Promise.resolve();
     }
 
-    const { layoutService, chartModel, colorService, tickModel, extremumModel, pluginService } = models;
+    const { layoutService, chartModel, colorService, pluginService } = models;
     const { viewState } = core;
     const viewHandler = chartModel.query.getViewHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
@@ -56,7 +56,7 @@ const useSettings = ({ core, models, flags }) => {
           colorService.custom.updateLegend();
           const newSettings = getPicassoDef(logicalSize);
           chartModel.command.layoutComponents({ settings: newSettings });
-          initializeViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
+          initializeViewState({ viewState, viewStateOptions: options.viewState, models });
           setSettings(newSettings);
         })
       );
@@ -68,7 +68,7 @@ const useSettings = ({ core, models, flags }) => {
       return;
     }
 
-    const { layoutService, chartModel, dockService, tickModel, colorService, extremumModel } = models;
+    const { layoutService, chartModel, dockService, colorService } = models;
     const { viewState } = core;
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
     dockService.update(logicalSize || rect);
@@ -76,7 +76,7 @@ const useSettings = ({ core, models, flags }) => {
 
     const newSettings = getPicassoDef(logicalSize || rect);
     chartModel.command.layoutComponents({ settings: newSettings });
-    updateViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
+    updateViewState({ viewState, viewStateOptions: options.viewState, models });
     setSettings(newSettings);
   }, [rect.width, rect.height, constraints]);
 

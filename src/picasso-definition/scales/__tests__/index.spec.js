@@ -3,6 +3,7 @@ import * as KEYS from '../../../constants/keys';
 
 describe('scales', () => {
   let create;
+  let disclaimerModel;
   let tickModel;
   let viewState;
   let colorService;
@@ -14,7 +15,11 @@ describe('scales', () => {
     sandbox
       .stub(KEYS, 'default')
       .value({ FIELDS: { X: 'qDimensionInfo/0', Y: 'qDimensionInfo/1', SIZE: 'qMeasureInfo/0' } });
-
+    disclaimerModel = {
+      query: {
+        getHasSuppressingDisclaimer: sinon.stub().returns(false),
+      },
+    };
     tickModel = {
       query: {
         getXTicks: sinon.stub().returns(['x1', 'x2']),
@@ -32,7 +37,7 @@ describe('scales', () => {
     colorService = {
       getScales: sinon.stub().returns({ s1: 's1', s2: 's2' }),
     };
-    models = { tickModel, colorService };
+    models = { tickModel, colorService, disclaimerModel };
     const options = { direction: 'rtl' };
     create = () => createScales({ models, viewState, options });
   });

@@ -8,6 +8,14 @@ export default [
     },
   },
   {
+    key: 'OnlyNanData',
+    alignment: 'center',
+    condition: ({ layoutService }) => {
+      const measures = layoutService.getHyperCubeValue('qMeasureInfo');
+      return measures.slice(0, 2).some((measure) => measure.qMax < measure.qMin || measure.qMax === 'NaN');
+    },
+  },
+  {
     key: 'LimitedData',
     alignment: 'bottom',
     condition: ({ layoutService, flags }) => {
