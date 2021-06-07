@@ -17,6 +17,11 @@ export default function useLasso() {
     setEnabled(!constraints.select && !constraints.active);
   }, [constraints]);
 
+  const action = (on) => {
+    const newState = typeof on === 'boolean' ? on : !active;
+    setActive(newState);
+  };
+
   useAction(
     () => ({
       key: 'lasso',
@@ -24,17 +29,13 @@ export default function useLasso() {
       icon: lassoIcon,
       hidden: !enabled || !isInSelections || isSingleSelection,
       active,
-      action() {
-        setActive((a) => !a);
-      },
+      action,
     }),
     [isInSelections, isSingleSelection, active, enabled]
   );
 
   return {
-    action() {
-      setActive((a) => !a);
-    },
+    action,
     enabled: () => enabled,
     active: () => active,
   };
