@@ -192,11 +192,6 @@
             }
           }
         },
-        "compressionResolution": {
-          "description": "Set resolution level for compressed data.",
-          "defaultValue": 5,
-          "type": "number"
-        },
         "dataPoint": {
           "description": "Data points settings.",
           "kind": "object",

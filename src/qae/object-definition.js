@@ -160,12 +160,6 @@ const objectDefinition = () => {
       measureMax: 10,
     },
     /**
-     * Set resolution level for compressed data.
-     * @type {number}
-     * @default 5
-     */
-    compressionResolution: 5,
-    /**
      * Data points settings.
      * @type {object}
      */

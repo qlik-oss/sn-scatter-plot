@@ -15,7 +15,6 @@ describe('object-definition', () => {
     expect(definition).to.have.all.keys([
       'version',
       'color',
-      'compressionResolution',
       'dataPoint',
       'disableNavMenu',
       'footnote',
