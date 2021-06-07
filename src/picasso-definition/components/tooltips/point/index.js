@@ -47,7 +47,7 @@ export default function createPointTooltip({ models, context }) {
       style: { 'text-align': rtl ? 'right' : 'left', direction: measure.labelDirection },
     },
     {
-      content: measure.value,
+      content: measure.value === '' || measure.value === 'NaN' ? '-' : measure.value,
       style: { 'text-align': rtl ? 'left' : 'right', 'vertical-align': 'middle', direction: measure.valueDirection },
     },
   ];
