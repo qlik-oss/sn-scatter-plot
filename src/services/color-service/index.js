@@ -22,6 +22,11 @@ export default function createService({
     legendInteractions: undefined,
   };
 
+  const hasBase = (i) => i.baseColor || (i.coloring && i.coloring.baseColor);
+  const hc = layoutService.getHyperCube();
+  const hasDimensionBase = hc.qDimensionInfo.some(hasBase);
+  const dimension = hasDimensionBase ? 'dimension' : undefined;
+
   const updateLegend = () => {
     const { components, interactions, scales } = createLegend({
       viewState,
@@ -52,9 +57,11 @@ export default function createService({
       theme,
       colorProps: {
         measureOverrides,
+        useBaseColors:
+          layoutService.getLayoutValue('color.useBaseColors') === 'dimension' && hasDimensionBase ? 'dimension' : 'off',
       },
       legendProps: layoutService.getLayoutValue('legend'),
-      hc: layoutService.getHyperCube(),
+      hc,
       key: KEYS.SCALE.COLOR,
     };
     return settings;
@@ -69,6 +76,11 @@ export default function createService({
     createConfig,
     config: {
       localeInfo,
+      auto: () => ({
+        mode: 'primary',
+        useBaseColors: dimension ?? 'off',
+        paletteColor: null,
+      }),
     },
     custom: {
       wrappedScales: () => state.wrappedScales,
