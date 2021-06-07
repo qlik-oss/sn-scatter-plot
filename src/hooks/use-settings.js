@@ -43,21 +43,23 @@ const useSettings = ({ core, models, flags }) => {
       return Promise.resolve();
     }
 
-    const { layoutService, chartModel, colorService, tickModel, extremumModel } = models;
+    const { layoutService, chartModel, colorService, tickModel, extremumModel, pluginService } = models;
     const { viewState } = core;
     const viewHandler = chartModel.query.getViewHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
 
     return viewHandler.fetchData().then((pages) => {
       layoutService.setDataPages(pages);
-      return colorService.initialize().then(() => {
-        colorService.custom.updateBrushAliases();
-        colorService.custom.updateLegend();
-        const newSettings = getPicassoDef(logicalSize);
-        chartModel.command.layoutComponents({ settings: newSettings });
-        initializeViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
-        setSettings(newSettings);
-      });
+      return pluginService.initialize().then(() =>
+        colorService.initialize().then(() => {
+          colorService.custom.updateBrushAliases();
+          colorService.custom.updateLegend();
+          const newSettings = getPicassoDef(logicalSize);
+          chartModel.command.layoutComponents({ settings: newSettings });
+          initializeViewState(viewState, layoutService, options.viewState, tickModel, chartModel, extremumModel);
+          setSettings(newSettings);
+        })
+      );
     });
   }, [models]);
 

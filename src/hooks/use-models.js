@@ -82,7 +82,7 @@ const useModels = ({ core, flags }) => {
       },
     });
     const themeService = createThemeService({ theme, styleMatrix: themeStyleMatrix });
-    const pluginService = createPluginService({ picassoInstance, layout, plugins });
+    const pluginService = createPluginService({ picassoInstance, layout: layoutService.getLayout(), plugins });
     const extremumModel = createExtremumModel(layoutService, options.viewState);
     const colorService = createColorService({
       actions,
