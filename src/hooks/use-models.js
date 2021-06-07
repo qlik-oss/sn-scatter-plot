@@ -24,6 +24,7 @@ import createChartModel from '../models/chart-model';
 import createTickModel from '../models/tick-model';
 import createSelectionService from '../services/selection-service';
 import createColorService from '../services/color-service';
+import getPluginArgs from '../services/plugin-service/plugin-args';
 import getLogicalSize from '../logical-size';
 import createExtremumModel from '../models/extremum-model';
 import createDisclaimerModel from '../models/disclaimer-model';
@@ -82,7 +83,8 @@ const useModels = ({ core, flags }) => {
       },
     });
     const themeService = createThemeService({ theme, styleMatrix: themeStyleMatrix });
-    const pluginService = createPluginService({ picassoInstance, layout: layoutService.getLayout(), plugins });
+    const pluginArgs = getPluginArgs(layoutService);
+    const pluginService = createPluginService({ picassoInstance, plugins, pluginArgs });
     const extremumModel = createExtremumModel(layoutService, options.viewState);
     const colorService = createColorService({
       actions,
