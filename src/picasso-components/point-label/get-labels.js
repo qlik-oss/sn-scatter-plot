@@ -5,15 +5,20 @@ import { ELLIPSIS_CHAR, ellipsText } from './text-ellipsis';
 
 export const DISTANCE = 6;
 
-function getAllTopLabels({ nodes, label }) {
+function getAllTopLabels({ measureText, nodes, label, component }) {
+  const { width: compWidth } = component.rect;
+
   return nodes.map((node) => {
     const text = label(node);
+    const textWidth = measureText(text).width;
     const { localBounds } = node;
     const { x, y, width } = localBounds;
     const cx = x + width / 2;
+    const maxWidth = Math.min(cx, compWidth - cx) * 2;
     const y2 = y - DISTANCE;
+    const ellipsed = ellipsText({ text, textWidth, maxWidth, measureText });
     return {
-      text,
+      ellipsed,
       cx,
       topRect: { y2 },
     };
@@ -23,7 +28,7 @@ function getAllTopLabels({ nodes, label }) {
 export function getLabels({ measureText, mode, nodes, label, labelHeight: textHeight, component }) {
   if (mode === 2) {
     return {
-      topLabels: getAllTopLabels({ nodes, label }),
+      topLabels: getAllTopLabels({ measureText, nodes, label, component }),
       bottomLabels: [],
     };
   }

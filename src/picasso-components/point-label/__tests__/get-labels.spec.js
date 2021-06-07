@@ -38,8 +38,8 @@ describe('getLabels', () => {
     const result = getLabels({ measureText, mode, nodes, label, labelHeight, component });
     expect(result).to.deep.equal({
       topLabels: [
-        { text: 'correct label', cx: 325.5, topRect: { y2: 224 } },
-        { text: 'correct label', cx: 279, topRect: { y2: 273 } },
+        { ellipsed: 'correct label', cx: 325.5, topRect: { y2: 224 } },
+        { ellipsed: 'correct label', cx: 279, topRect: { y2: 273 } },
       ],
       bottomLabels: [],
     });
