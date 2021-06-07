@@ -36,7 +36,7 @@ export default {
     const key = target.point;
     const component = this.chart.component(key);
 
-    if (!component) {
+    if (!component || mode === 0) {
       return [];
     }
 
