@@ -8,7 +8,7 @@ async function takeScreenshot(elm) {
   return page.screenshot({ clip: await elm.boundingBox() });
 }
 
-describe('rendering', () => {
+describe('rendering lines plugin example', () => {
   const content = '.njs-viz[data-render-count="1"]';
   it('should render lines plugin correctly', async function run() {
     const absolutePath = resolve(__dirname, '../../../examples/plugins/lines/index.html');
