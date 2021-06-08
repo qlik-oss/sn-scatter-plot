@@ -4,7 +4,7 @@ const linePlugin = {
     name: 'line-plugin',
     type: 'component-definition',
   },
-  fn: () => {
+  fn: ({ keys }) => {
     const componentDefinition = {
       key: 'new-linecomp',
       type: 'line',
@@ -21,11 +21,11 @@ const linePlugin = {
       settings: {
         coordinates: {
           minor: {
-            scale: 'y',
+            scale: keys.scales.y,
             ref: 'y',
           },
           major: {
-            scale: 'x',
+            scale: keys.scales.x,
             ref: 'x',
           },
         },

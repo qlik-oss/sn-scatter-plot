@@ -36,7 +36,7 @@
     "sense": "nebula sense",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
     "test:unit": "aw -c aw.config.js",
-    "test:rendering": "aw puppet --glob 'test/rendering/**/*.spec.js'",
+    "test:rendering": "aw puppet --glob 'test/**/*.spec.js'",
     "version": "yarn spec && git add **/*/api-specifications"
   },
   "husky": {
