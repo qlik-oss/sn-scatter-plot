@@ -5,6 +5,7 @@ import { Mui, classGenerator } from './mui';
 const classNameGenerator = classGenerator();
 
 export default function r() {
+  const isNotNumber = (x) => typeof x !== 'number' || Number.isNaN(x);
   function createRendererBox({ x, y, width, height, scaleRatio, margin } = {}) {
     const box = {
       x: 0,
@@ -21,17 +22,17 @@ export default function r() {
       },
     };
 
-    box.x = Number.isNaN(x) ? box.x : x;
-    box.y = Number.isNaN(y) ? box.y : y;
-    box.width = Number.isNaN(width) ? box.width : width;
-    box.height = Number.isNaN(height) ? box.height : height;
+    box.x = isNotNumber(x) ? box.x : x;
+    box.y = isNotNumber(y) ? box.y : y;
+    box.width = isNotNumber(width) ? box.width : width;
+    box.height = isNotNumber(height) ? box.height : height;
     if (typeof scaleRatio !== 'undefined') {
-      box.scaleRatio.x = Number.isNaN(scaleRatio.x) ? box.scaleRatio.x : scaleRatio.x;
-      box.scaleRatio.y = Number.isNaN(scaleRatio.y) ? box.scaleRatio.y : scaleRatio.y;
+      box.scaleRatio.x = isNotNumber(scaleRatio.x) ? box.scaleRatio.x : scaleRatio.x;
+      box.scaleRatio.y = isNotNumber(scaleRatio.y) ? box.scaleRatio.y : scaleRatio.y;
     }
     if (typeof margin !== 'undefined') {
-      box.margin.left = Number.isNaN(margin.left) ? 0 : margin.left;
-      box.margin.top = Number.isNaN(margin.top) ? 0 : margin.top;
+      box.margin.left = isNotNumber(margin.left) ? 0 : margin.left;
+      box.margin.top = isNotNumber(margin.top) ? 0 : margin.top;
     }
 
     return box;
@@ -73,7 +74,6 @@ export default function r() {
         el.style.height = `${Math.round(rect.height)}px`;
         el.style.transform = `scale(${scaleX}, ${scaleY})`;
         el.style.transformOrigin = 'top left';
-
         ReactDOM.render(Mui(nodes, classNameGenerator), el);
 
         return true;
