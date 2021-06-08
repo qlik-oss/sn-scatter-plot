@@ -9,6 +9,8 @@ export default function getPluginArgs(layoutService) {
         y: KEYS.SCALE.Y,
       },
       components: {
+        'x-axis': KEYS.COMPONENT.X_AXIS,
+        'y-axis': KEYS.COMPONENT.Y_AXIS,
         point: KEYS.COMPONENT.POINT,
       },
     },

@@ -18,7 +18,6 @@ The properties used in the `configurable` and `lines` examples.
 | -------------------- | ---------------- | ------- | ------- | ----- |
 | Scale key            | "x"              |         |         | x     |
 | Scale key            | "y"              |         |         | x     |
-| Scale key            | "size"           |         |         |       |
 | Component key        | "x-axis"         |         | x       |       |
 | Component key        | "y-axis"         |         | x       |       |
 | Component key        | "point"          | x       |         |       |
