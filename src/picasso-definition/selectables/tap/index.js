@@ -1,5 +1,5 @@
+import { debouncer } from '@qlik/chart-modules';
 import { tap } from '../../../interactive';
-import debouncer from '../../../utils/debouncer';
 import KEYS from '../../../constants/keys';
 import createIsLocked from './is-locked';
 
