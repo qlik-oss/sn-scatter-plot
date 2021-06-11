@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
+const defaultTheme = require('@qlik/sense-themes-default/dist/sense/theme.json');
 
 const sourcePath = [__dirname, 'test', 'rendering', 'data'];
 const source = path.resolve(...sourcePath);
@@ -17,5 +18,6 @@ module.exports = {
     flags: {
       panZoom: true,
     },
+    themes: [{ id: 'sense', theme: defaultTheme }],
   },
 };

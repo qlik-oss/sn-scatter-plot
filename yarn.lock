@@ -2267,6 +2267,11 @@
   resolved "https://qliktech.jfrog.io/qliktech/api/npm/npm-local/@qlik/chart-modules/-/@qlik/chart-modules-0.13.0.tgz#a97212db456f2e35d057cd4aec9c1975a538e690"
   integrity sha1-qXIS20VvLjXQV81K7JwZdaU45pA=
 
+"@qlik/sense-themes-default@1.13.0":
+  version "1.13.0"
+  resolved "https://qliktech.jfrog.io/qliktech/api/npm/npm-local/@qlik/sense-themes-default/-/@qlik/sense-themes-default-1.13.0.tgz#7a336cf037365a32cc81c8bbbcb62ea7309672f6"
+  integrity sha1-ejNs8Dc2WjLMgci7vLYupzCWcvY=
+
 "@rollup/plugin-babel@5.2.3":
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.2.3.tgz#ee8fffbaa62a6c9ccd41b1bfca32e81f847700ee"
