@@ -2,9 +2,12 @@ import { useCore, useModels, useSettings, useRender } from './hooks';
 import createQae from './qae';
 import ext from './ext/ext';
 import setupSnapshot from './snapshot';
+import locale from './locale';
 
 export default function scatterplot(env) {
   const { flags } = env;
+  locale(env.translator);
+
   return {
     qae: createQae(env),
     ext: ext(env),
