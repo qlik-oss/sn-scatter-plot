@@ -1,0 +1,63 @@
+{
+  "scriptappy": "1.0.0",
+  "info": {
+    "name": "@qlik/sn-scatter-plot:plugins",
+    "description": "Scatter plot plugins API definitions",
+    "version": "0.2.0",
+    "license": "MIT",
+    "stability": "experimental",
+    "x-qlik-visibility": "public"
+  },
+  "entries": {
+    "pluginArguments": {
+      "description": "The arguments that are passed to the fn function of the plugin definition.\nFor example, the layout and keys in the following plugin:\n       const pointPlugin = {\n        info: {\n          name: 'point-plugin',\n          type: 'component-definition',\n        },\n        fn: ({ layout, keys }) => {\n          const componentDefinition = {\n            key: keys.components.point,\n            type: 'point',\n            settings: {\n              // Some new settings that make use of\n              // the data in layout and keys\n            },\n          };\n          return componentDefinition;\n        },\n       ;",
+      "kind": "namespace",
+      "entries": {
+        "keys": {
+          "description": "The keys (references) to different types of chart internals",
+          "kind": "object",
+          "entries": {
+            "components": {
+              "description": "The unique keys of the existing components available in the chart.\nThey are useful if you want to extend or override the existing components.",
+              "kind": "object",
+              "entries": {
+                "\"x-axis\"": {
+                  "description": "The x-axis component",
+                  "type": "string"
+                },
+                "\"y-axis\"": {
+                  "description": "The y-axis component",
+                  "type": "string"
+                },
+                "point": {
+                  "description": "The point component",
+                  "type": "string"
+                }
+              }
+            },
+            "scales": {
+              "description": "The scales associated with the measures.\nThey are useful if you want to, via plugin, add a new component that\nuses the same scale as one of the measures.",
+              "kind": "object",
+              "entries": {
+                "x": {
+                  "description": "The scale used for positioning items along the x axis",
+                  "type": "string"
+                },
+                "y": {
+                  "description": "The scale used for positioning items along the y axis",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "layout": {
+          "description": "The layout from the enigma model.",
+          "kind": "object",
+          "entries": {}
+        }
+      }
+    }
+  },
+  "definitions": {}
+}

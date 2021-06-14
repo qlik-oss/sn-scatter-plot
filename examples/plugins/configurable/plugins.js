@@ -3,7 +3,7 @@
 
 const pointPlugin = {
   info: {
-    name: 'poin-plugin',
+    name: 'point-plugin',
     type: 'component-definition',
   },
   fn: ({ layout, keys }) => {

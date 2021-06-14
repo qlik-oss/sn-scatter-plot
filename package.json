@@ -34,7 +34,7 @@
     "lint": "eslint src",
     "start": "nebula serve --build false  --type scatterplot",
     "sense": "nebula sense",
-    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js",
+    "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js && scriptappy-from-jsdoc -c ./spec-configs/plugins.conf.js",
     "test:unit": "aw -c aw.config.js",
     "test:rendering": "aw puppet --glob 'test/**/*.spec.js'",
     "version": "yarn spec && git add **/*/api-specifications"
