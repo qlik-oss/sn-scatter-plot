@@ -1,4 +1,4 @@
-import all from './all';
+import all from './all.json';
 
 export default function autoRegister(translator) {
   if (translator && translator.get && translator.add) {

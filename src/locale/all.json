@@ -1,0 +1,502 @@
+{
+  "properties_dataPoints_labelmode_share": {
+    "id": "properties.dataPoints.labelmode.share",
+    "locale": {
+      "en-US": "Share",
+      "zh-TW": "佔有率",
+      "zh-CN": "份额",
+      "tr-TR": "Pay",
+      "sv-SE": "Andel",
+      "it-IT": "Percentuale",
+      "es-ES": "Cuota",
+      "de-DE": "Anteil",
+      "pl-PL": "Udział",
+      "nl-NL": "Aandeel",
+      "ko-KR": "공유",
+      "pt-BR": "Percentual",
+      "fr-FR": "Part",
+      "ja-JP": "割合",
+      "ru-RU": "Доля"
+    }
+  },
+  "Tooltip_selections_locked": {
+    "id": "Tooltip.selections.locked",
+    "locale": {
+      "en-US": "Selections on this dimension are locked",
+      "zh-TW": "已鎖定此維度上的選項",
+      "zh-CN": "相关维度的选择已锁定",
+      "tr-TR": "Bu boyuttaki seçimler kilitli",
+      "sv-SE": "Urval i den här dimensionen är låsta",
+      "it-IT": "Le selezioni in questa dimensione sono bloccate",
+      "es-ES": "Las selecciones de esta dimensión están bloqueadas.",
+      "de-DE": "Auswahlen sind für diese Dimension gesperrt",
+      "pl-PL": "Selekcje dotyczące tego wymiaru są zablokowane",
+      "nl-NL": "Selecties voor deze dimensie zijn vergrendeld",
+      "ko-KR": "이 차원의 선택은 잠겨 있습니다.",
+      "pt-BR": "Seleções estão bloqueadas nesta dimensão",
+      "fr-FR": "Sélections verrouillées pour cette dimension",
+      "ja-JP": "この軸での選択はロックされています",
+      "ru-RU": "Выборки для данного измерения заблокированы"
+    }
+  },
+  "Tooltip_dimensions_drilldown": {
+    "id": "Tooltip.dimensions.drilldown",
+    "locale": {
+      "en-US": "Drill-down dimension",
+      "zh-TW": "向下探查維度",
+      "zh-CN": "下钻维度",
+      "tr-TR": "Detaya inme boyutu",
+      "sv-SE": "Hierarkisk dimension",
+      "it-IT": "Dimensione di drill-down",
+      "es-ES": "Dimensión jerárquica",
+      "de-DE": "Drilldown-Dimension:",
+      "pl-PL": "Wymiar hierarchiczny",
+      "nl-NL": "Drill-downdimensie",
+      "ko-KR": "드릴다운 차원",
+      "pt-BR": "Dimensão da hierarquia",
+      "fr-FR": "Descendre dans la hiérarchie de la dimension",
+      "ja-JP": "軸のドリルダウン",
+      "ru-RU": "Измерение с детализацией"
+    }
+  },
+  "Object_ErrorMessage_MissingDimension": {
+    "id": "Object.ErrorMessage.MissingDimension",
+    "locale": {
+      "en-US": "Dimension not found",
+      "zh-TW": "找不到維度",
+      "zh-CN": "未找到维度",
+      "tr-TR": "Boyut bulunamadı",
+      "sv-SE": "Dimensionen hittades inte",
+      "it-IT": "Dimensione non trovata",
+      "es-ES": "No se ha encontrado la dimensión",
+      "de-DE": "Dimension nicht gefunden",
+      "pl-PL": "Wymiar nie został znaleziony",
+      "nl-NL": "Dimensie niet gevonden",
+      "ko-KR": "차원을 찾지 못했습니다.",
+      "pt-BR": "Dimensão não encontrada",
+      "fr-FR": "Dimension introuvable",
+      "ja-JP": "軸が見つかりません",
+      "ru-RU": "Измерение не найдено"
+    }
+  },
+  "Object_ErrorMessage_MissingMeasure": {
+    "id": "Object.ErrorMessage.MissingMeasure",
+    "locale": {
+      "en-US": "Measure not found",
+      "zh-TW": "找不到量值",
+      "zh-CN": "未找到度量",
+      "tr-TR": "Hesaplama bulunamadı",
+      "sv-SE": "Måttet hittades inte",
+      "it-IT": "Misura non trovata",
+      "es-ES": "No se ha encontrado la medida",
+      "de-DE": "Kennzahl nicht gefunden",
+      "pl-PL": "Miara nie została znaleziona",
+      "nl-NL": "Meting niet gevonden",
+      "ko-KR": "측정값을 찾지 못했습니다.",
+      "pt-BR": "Medida não encontrada",
+      "fr-FR": "Mesure introuvable",
+      "ja-JP": "メジャーが見つかりません",
+      "ru-RU": "Мера не найдена"
+    }
+  },
+  "Object_Disclaimer_LimitedData": {
+    "id": "Object.Disclaimer.LimitedData",
+    "locale": {
+      "en-US": "Currently showing a limited data set.",
+      "zh-TW": "目前顯示的是有限的資料集。",
+      "zh-CN": "当前正显示有限的数据集。",
+      "tr-TR": "Şu anda sınırlı bir veri kümesi gösteriliyor.",
+      "sv-SE": "Just nu visas en begränsad uppsättning data.",
+      "it-IT": "Attualmente viene visualizzata una serie di dati limitata.",
+      "es-ES": "Mostrando actualmente un conjunto limitado de datos.",
+      "de-DE": "Zurzeit wird nur ein beschränkter Datensatz angezeigt.",
+      "pl-PL": "Aktualnie przedstawiany jest ograniczony zestaw danych.",
+      "nl-NL": "Momenteel wordt een beperkte gegevensverzameling getoond.",
+      "ko-KR": "현재 제한된 데이터 집합을 표시하고 있습니다.",
+      "pt-BR": "Mostrando um conjunto de dados limitado.",
+      "fr-FR": "Affichage d'un ensemble de données limité pour l'instant.",
+      "ja-JP": "現在、限定的なデータ セットを表示しています。",
+      "ru-RU": "В настоящее время отображается ограниченный набор данных."
+    }
+  },
+  "Object_Disclaimer_OnlyNegativeOrZeroValues": {
+    "id": "Object.Disclaimer.OnlyNegativeOrZeroValues",
+    "locale": {
+      "en-US": "The chart is not displayed because it contains only negative or zero values.",
+      "zh-TW": "系統不會顯示圖表，因為該圖表僅包含負值或零值。",
+      "zh-CN": "未显示图表，因为它仅包含负值或零值。",
+      "tr-TR": "Yalnızca negatif veya sıfır değerlerini içermesi nedeniyle grafik görüntülenmiyor.",
+      "sv-SE": "Diagrammet visas inte eftersom det enbart innehåller negativa eller nollvärden",
+      "it-IT": "Il grafico non viene visualizzato poiché contiene solo valori negativi o uguali a zero.",
+      "es-ES": "El gráfico no se muestra porque sólo contiene valores negativos o valores cero.",
+      "de-DE": "Das Diagramm wird nicht angezeigt, da es nur negative oder 0-Werte enthält.",
+      "pl-PL": "Wykres nie jest wyświetlany, ponieważ zawiera wartości ujemne lub zerowe.",
+      "nl-NL": "De grafiek wordt niet weergegeven omdat het alleen negatieve waarden of nulwaarden bevat.",
+      "ko-KR": "음수 또는 zero 값만 포함되어 있으므로 차트가 표시되지 않습니다.",
+      "pt-BR": "O gráfico não foi exibido, porque contém apenas valores negativos ou zero.",
+      "fr-FR": "Le graphique n'est pas affiché, car il contient uniquement des valeurs négatives ou égales à zéro.",
+      "ja-JP": "チャートは負の値またはゼロ値しか含まれていないため、表示されていません。",
+      "ru-RU": "Диаграмма не отображается, поскольку она содержит только отрицательные или нулевые значения."
+    }
+  },
+  "Object_Disclaimer_NegativeOrZeroValues": {
+    "id": "Object.Disclaimer.NegativeOrZeroValues",
+    "locale": {
+      "en-US": "The data set contains negative or zero values that cannot be shown in this chart.",
+      "zh-TW": "資料集包含無法在此圖表中顯示的負值或零值。",
+      "zh-CN": "数据集中包含无法在此图表中显示的负值或零值。",
+      "tr-TR": "Veri kümesi, bu grafikte gösterilemeyen negatif veya sıfır değerlerini içeriyor.",
+      "sv-SE": "Datauppsättningen innehåller negativa värden eller nollvärden som inte kan visas i detta diagram.",
+      "it-IT": "La serie di dati contiene valori negativi o uguali a zero che non possono essere visualizzati in questo grafico.",
+      "es-ES": "El conjunto de datos contiene valores negativos o cero que no se pueden mostrar en este gráfico.",
+      "de-DE": "Die in den Datensätzen enthaltenen negativen oder 0-Werte können nicht in diesem Diagramm dargestellt werden.",
+      "pl-PL": "Zestaw danych zawiera wartości ujemne lub zerowe, których nie można przedstawić w tym wykresie.",
+      "nl-NL": "De gegevensverzameling bevat negatieve waarden of nulwaarden die niet kunnen worden weergegeven in deze grafiek.",
+      "ko-KR": "데이터 집합에 해당 차트에 표시할 수 없는 음수 값 또는 zero 값이 포함되어 있습니다.",
+      "pt-BR": "O conjunto de dados contém valores negativos ou iguais a zero que não podem ser mostrados neste gráfico.",
+      "fr-FR": "L'ensemble de données contient des valeurs négatives ou égales à zéro impossibles à afficher dans ce graphique.",
+      "ja-JP": "データ セットには、本チャートに表示できない負の値またはゼロ値が含まれています。",
+      "ru-RU": "Набор данных содержит отрицательные или нулевые значения, которые невозможно показать в этой диаграмме."
+    }
+  },
+  "Object_Disclaimer_DataRangeIncludingZero": {
+    "id": "Object.Disclaimer.DataRangeIncludingZero",
+    "locale": {
+      "en-US": "The logarithmic scale has been replaced by a linear scale because the data range includes zero.",
+      "zh-TW": "對數刻度已遭線性刻度取代，因為資料範圍包含零。",
+      "zh-CN": "对数刻度已替换为线性刻度，因为该数据范围包括零。",
+      "tr-TR": "Veri aralığı sıfır değerini içerdiğinden, logaritmik ölçek yerine doğrusal ölçek kullanıldı.",
+      "sv-SE": "Den logaritmiska skalan har ersatts av en linjär skala eftersom dataintervallet innehåller värdet noll.",
+      "it-IT": "La scala logaritmica è stata sostituita da una scala lineare perché l'intervallo di dati include zero.",
+      "es-ES": "La escala logarítmica ha sido reemplazada por una escala lineal porque el rango de datos incluye cero.",
+      "de-DE": "Die logarithmische Skala wurde durch die lineare Skala ersetzt, weil der Datenbereich NULL enthält.",
+      "pl-PL": "Skala logarytmiczna została zastąpiona liniową, ponieważ zakres danych zawiera zero.",
+      "nl-NL": "De logaritmische schaal is vervangen door een lineaire schaal omdat het gegevensbereik nullen bevat.",
+      "ko-KR": "데이터 범위에 0이 포함되어 있으므로 로그 눈금이 선형 눈금으로 바뀌었습니다.",
+      "pt-BR": "A escala logarítmica foi substituída por uma escala linear, pois o intervalo de dados inclui zero.",
+      "fr-FR": "L'échelle logarithmique a été remplacée par une échelle linéaire, car la plage de données comprend la valeur zéro.",
+      "ja-JP": "データ範囲にゼロが含まれるため、Log スケールは Linear スケールで置換されています。",
+      "ru-RU": "Логарифмический масштаб заменен линейным масштабом, поскольку диапазон данных включает ноль."
+    }
+  },
+  "Object_Disclaimer_NoDataExist": {
+    "id": "Object.Disclaimer.NoDataExist",
+    "locale": {
+      "en-US": "The selections generated no data for this chart.",
+      "zh-TW": "此選項無法產生任何適用於此圖表的資料。",
+      "zh-CN": "选择未生成此图表的数据。",
+      "tr-TR": "Seçimler bu grafik için hiç veri oluşturmadı.",
+      "sv-SE": "Urvalen genererade inga data för detta diagram.",
+      "it-IT": "Le selezioni non hanno generato dati per questo grafico.",
+      "es-ES": "Las selecciones no han generado datos para este gráfico.",
+      "de-DE": "Die Auswahlen haben für dieses Diagramm keine Daten generiert.",
+      "pl-PL": "Selekcje nie spowodowały wygenerowania danych dla tego wykresu.",
+      "nl-NL": "De selecties hebben geen gegevens voor de grafiek gegenereerd.",
+      "ko-KR": "선택 내용으로 해당 차트에 대한 데이터가 생성되지 않았습니다.",
+      "pt-BR": "As seleções não geraram dados para este gráfico.",
+      "fr-FR": "Les sélections n'ont pas généré de données pour ce graphique.",
+      "ja-JP": "このチャートには選択からデータが生成されませんでした。",
+      "ru-RU": "В результате выборок данные для этой диаграммы не созданы."
+    }
+  },
+  "Object_Disclaimer_OnlyNanData": {
+    "id": "Object.Disclaimer.OnlyNanData",
+    "locale": {
+      "en-US": "The chart is not displayed because it contains only undefined values.",
+      "zh-TW": "系統不會顯示圖表，因為該圖表僅包含未定義的值。",
+      "zh-CN": "未显示图表，因为它仅包含未定义的值。",
+      "tr-TR": "Yalnızca tanımsız değerleri içermesi nedeniyle grafik görüntülenmiyor.",
+      "sv-SE": "Diagrammet visas inte eftersom det enbart innehåller odefinierade värden.",
+      "it-IT": "Il grafico non è visualizzato poiché contiene solo valori non definiti.",
+      "es-ES": "El gráfico no se muestra porque solo contiene valores indefinidos.",
+      "de-DE": "Das Diagramm wird nicht angezeigt, da es nur nicht definierte Werte enthält.",
+      "pl-PL": "Wykres nie jest wyświetlany, ponieważ zawiera wartości niezdefiniowane.",
+      "nl-NL": "De grafiek wordt niet weergegeven omdat deze alleen ongedefinieerde waarden bevat.",
+      "ko-KR": "정의되지 않은 값만 포함되어 있으므로 차트가 표시되지 않습니다.",
+      "pt-BR": "O gráfico não foi exibido, porque contém apenas valores não definidos.",
+      "fr-FR": "Le graphique n'est pas affiché, car il contient uniquement des valeurs non définies.",
+      "ja-JP": "未定義の値しか含まれていないため、チャートは表示されていません。",
+      "ru-RU": "Диаграмма не отображается, поскольку она содержит только неопределенные значения."
+    }
+  },
+  "Object_ChartTooltip_NMore": {
+    "id": "Object.ChartTooltip.NMore",
+    "locale": {
+      "en-US": "+{0} more",
+      "zh-TW": "再加 {0} 個",
+      "zh-CN": "+{0} 个",
+      "tr-TR": "+{0} öğe daha",
+      "sv-SE": "+{0} till",
+      "it-IT": "Altre +{0}",
+      "es-ES": "+{0} más",
+      "de-DE": "+{0} mehr",
+      "pl-PL": "+ {0} więcej",
+      "nl-NL": "+ {0} meer",
+      "ko-KR": "+추가 {0}개",
+      "pt-BR": "+{0} mais",
+      "fr-FR": "+ {0} de plus",
+      "ja-JP": "さらに {0}",
+      "ru-RU": "+ дополнительно: {0}"
+    }
+  },
+  "Object_ChartTooltip_sumOfPositives": {
+    "id": "Object.ChartTooltip.sumOfPositives",
+    "locale": {
+      "en-US": "Sum of positives",
+      "zh-TW": "正數總和",
+      "zh-CN": "正值总和",
+      "tr-TR": "Pozitif değerlerin toplamı",
+      "sv-SE": "Summan av positiva",
+      "it-IT": "Somma valori positivi",
+      "es-ES": "Suma de positivos",
+      "de-DE": "Summe positiver Werte",
+      "pl-PL": "Suma dodatnich",
+      "nl-NL": "Som positieven",
+      "ko-KR": "양수 합계",
+      "pt-BR": "Soma de positivos",
+      "fr-FR": "Sommes des valeurs positives",
+      "ja-JP": "正の合計",
+      "ru-RU": "Сумма положительных значений"
+    }
+  },
+  "Object_ChartTooltip_sumOfNegatives": {
+    "id": "Object.ChartTooltip.sumOfNegatives",
+    "locale": {
+      "en-US": "Sum of negatives",
+      "zh-TW": "負數總和",
+      "zh-CN": "负值总和",
+      "tr-TR": "Negatif değerlerin toplamı",
+      "sv-SE": "Summan av negativa",
+      "it-IT": "Somma valori negativi",
+      "es-ES": "Suma de negativos",
+      "de-DE": "Summe negativer Werte",
+      "pl-PL": "Suma ujemnych",
+      "nl-NL": "Som negatieven",
+      "ko-KR": "음수 합계",
+      "pt-BR": "Soma de negativos",
+      "fr-FR": "Somme des valeurs négatives",
+      "ja-JP": "負の合計",
+      "ru-RU": "Сумма отрицательных значений"
+    }
+  },
+  "Object_ChartTooltip_ColorExpression": {
+    "id": "Object.ChartTooltip.ColorExpression",
+    "locale": {
+      "en-US": "Color expression",
+      "zh-TW": "色彩運算式",
+      "zh-CN": "颜色表达式",
+      "tr-TR": "Renk ifadesi",
+      "sv-SE": "Färguttryck",
+      "it-IT": "Espressione colore",
+      "es-ES": "Expresión de color",
+      "de-DE": "Farbformel",
+      "pl-PL": "Wyrażenie koloru",
+      "nl-NL": "Kleuruitdrukking",
+      "ko-KR": "색상 표현식",
+      "pt-BR": "Expressão de cor",
+      "fr-FR": "Expression de couleur",
+      "ja-JP": "カラー表現",
+      "ru-RU": "Выражение для цвета"
+    }
+  },
+  "Object_Disclaimer_OnlyNanColor": {
+    "id": "Object.Disclaimer.OnlyNanColor",
+    "locale": {
+      "en-US": "The data used to color this visualization only contains undefined values.",
+      "zh-TW": "用以定義此視覺化的色彩的資料只包含未定義的值。",
+      "zh-CN": "用于将该可视化着色的数据仅包含未定义的值。",
+      "tr-TR": "Bu görselleştirmeyi renklendirmek için kullanılan veriler yalnızca tanımlanmamış değerler içeriyor.",
+      "sv-SE": "Data som används för att färgsätta denna visualisering innehåller enbart odefinierade värden.",
+      "it-IT": "I dati utilizzati per colorare questa visualizzazione contengono solo valori non definiti.",
+      "es-ES": "Los datos utilizados para colorear esta visualización solo contienen valores indefinidos.",
+      "de-DE": "Die verwendeten Daten für die Farbgebung dieser Visualisierung enthalten undefinierte Werte.",
+      "pl-PL": "Dane używane do kolorowania tej wizualizacji zawierają wyłącznie niezdefiniowane wartości.",
+      "nl-NL": "De gegevens die worden gebruikt om deze visualisatie kleur te geven bevatten uitsluitend ongedefinieerde waarden.",
+      "ko-KR": "이 시각화에 색을 지정하는 데 사용된 데이터에는 정의되지 않은 값만 포함되어 있습니다.",
+      "pt-BR": "Os dados usados para colorir esse visualização contém somente valores indefinidos.",
+      "fr-FR": "Les données utilisées pour colorer cette visualisation ne comportent que des valeurs non définies.",
+      "ja-JP": "このビジュアライゼーションの色の割り当てに使用したデータには、未定義の値が含まれています。",
+      "ru-RU": "Данные, используемые для выбора цвета визуализации, содержат только неопределенные значения."
+    }
+  },
+  "properties_trendlines_types_average": {
+    "id": "properties.trendlines.types.average",
+    "locale": {
+      "en-US": "Average",
+      "zh-TW": "平均值",
+      "zh-CN": "平均值",
+      "tr-TR": "Ortalama",
+      "sv-SE": "Medel",
+      "it-IT": "Media",
+      "es-ES": "Media",
+      "de-DE": "Durchschnitt",
+      "pl-PL": "Średnia",
+      "nl-NL": "Gemiddelde",
+      "ko-KR": "평균",
+      "pt-BR": "Média",
+      "fr-FR": "Moyenne",
+      "ja-JP": "平均値",
+      "ru-RU": "Среднее"
+    }
+  },
+  "properties_trendlines_types_linear": {
+    "id": "properties.trendlines.types.linear",
+    "locale": {
+      "en-US": "Linear",
+      "zh-TW": "線性",
+      "zh-CN": "线性",
+      "tr-TR": "Doğrusal",
+      "sv-SE": "Linjär",
+      "it-IT": "Lineare",
+      "es-ES": "Lineal",
+      "de-DE": "Linear",
+      "pl-PL": "Liniowa",
+      "nl-NL": "Lineair",
+      "ko-KR": "선형",
+      "pt-BR": "Linear",
+      "fr-FR": "Linéaire",
+      "ja-JP": "線形",
+      "ru-RU": "Линейный"
+    }
+  },
+  "properties_trendlines_types_polynomial2": {
+    "id": "properties.trendlines.types.polynomial2",
+    "locale": {
+      "en-US": "Second degree polynomial",
+      "zh-TW": "第二度多項式",
+      "zh-CN": "二次多项式",
+      "tr-TR": "İkinci derece polinom",
+      "sv-SE": "Polynomial, andra graden",
+      "it-IT": "Polinomio di secondo grado",
+      "es-ES": "Polinómica de segundo grado",
+      "de-DE": "Polynom zweiten Grades",
+      "pl-PL": "Wielomianowa drugiego stopnia",
+      "nl-NL": "Tweedegraadspolynoom",
+      "ko-KR": "2차 다항식",
+      "pt-BR": "Polinômio de segundo grau",
+      "fr-FR": "Polynomial du 2ème degré",
+      "ja-JP": "2 番目の角度の多項式近似",
+      "ru-RU": "Полиномиальный второй степени"
+    }
+  },
+  "properties_trendlines_types_polynomial3": {
+    "id": "properties.trendlines.types.polynomial3",
+    "locale": {
+      "en-US": "Third degree polynomial",
+      "zh-TW": "第三度多項式",
+      "zh-CN": "三次多项式",
+      "tr-TR": "Üçüncü derece polinom",
+      "sv-SE": "Polynomial, tredje graden",
+      "it-IT": "Polinomio di terzo grado",
+      "es-ES": "Polinómica de tercer grado",
+      "de-DE": "Polynom dritten Grades",
+      "pl-PL": "Wielomianowa trzeciego stopnia",
+      "nl-NL": "Derdegraadspolynoom",
+      "ko-KR": "3차 다항식",
+      "pt-BR": "Polinômio de terceiro grau",
+      "fr-FR": "Polynomial du 3ème degré",
+      "ja-JP": "3 番目の角度の多項式近似",
+      "ru-RU": "Полиномиальный третьей степени"
+    }
+  },
+  "properties_trendlines_types_polynomial4": {
+    "id": "properties.trendlines.types.polynomial4",
+    "locale": {
+      "en-US": "Fourth degree polynomial",
+      "zh-TW": "第四度多項式",
+      "zh-CN": "四次多项式",
+      "tr-TR": "Dördüncü derece polinom",
+      "sv-SE": "Polynomial, fjärde graden",
+      "it-IT": "Polinomio di quarto grado",
+      "es-ES": "Polinómica de cuarto grado",
+      "de-DE": "Polynom vierten Grades",
+      "pl-PL": "Wielomianowa czwartego stopnia",
+      "nl-NL": "Vierdegraadspolynoom",
+      "ko-KR": "4차 다항식",
+      "pt-BR": "Polinômio de quarto grau",
+      "fr-FR": "Polynomial du 4ème degré",
+      "ja-JP": "4 番目の角度の多項式近似",
+      "ru-RU": "Полиномиальный четвертой степени"
+    }
+  },
+  "properties_trendlines_types_exponential": {
+    "id": "properties.trendlines.types.exponential",
+    "locale": {
+      "en-US": "Exponential",
+      "zh-TW": "指數",
+      "zh-CN": "指数",
+      "tr-TR": "Üstel",
+      "sv-SE": "Exponentiell",
+      "it-IT": "Esponenziale",
+      "es-ES": "Exponencial",
+      "de-DE": "Exponentiell",
+      "pl-PL": "Wykładnicze",
+      "nl-NL": "Exponentieel",
+      "ko-KR": "지수",
+      "pt-BR": "Exponencial",
+      "fr-FR": "Exponentiel",
+      "ja-JP": "指数",
+      "ru-RU": "Экспоненциальный"
+    }
+  },
+  "properties_trendlines_types_logarithmic": {
+    "id": "properties.trendlines.types.logarithmic",
+    "locale": {
+      "en-US": "Logarithmic",
+      "zh-TW": "對數",
+      "zh-CN": "对数",
+      "tr-TR": "Logaritmik",
+      "sv-SE": "Logaritmisk",
+      "it-IT": "Logaritmica",
+      "es-ES": "Logarítmica",
+      "de-DE": "Logarithmisch",
+      "pl-PL": "Logarytmiczna",
+      "nl-NL": "Logaritmisch",
+      "ko-KR": "로그",
+      "pt-BR": "Logarítmico",
+      "fr-FR": "Logarithmique",
+      "ja-JP": "対数",
+      "ru-RU": "Логарифмический"
+    }
+  },
+  "properties_trendlines_types_power": {
+    "id": "properties.trendlines.types.power",
+    "locale": {
+      "en-US": "Power",
+      "zh-TW": "乘冪",
+      "zh-CN": "幂",
+      "tr-TR": "Üs",
+      "sv-SE": "Potens",
+      "it-IT": "Potenza",
+      "es-ES": "Potencia",
+      "de-DE": "Potenz",
+      "pl-PL": "Potęgowa",
+      "nl-NL": "Macht",
+      "ko-KR": "거듭제곱",
+      "pt-BR": "Potência",
+      "fr-FR": "Puissance",
+      "ja-JP": "累乗",
+      "ru-RU": "Силовой"
+    }
+  },
+  "Common_Measures": {
+    "id": "Common.Measures",
+    "locale": {
+      "en-US": "Measures",
+      "de-DE": "Kennzahlen",
+      "fr-FR": "Mesures",
+      "it-IT": "Misure",
+      "ja-JP": "メジャー",
+      "ko-KR": "측정값",
+      "es-ES": "Medidas",
+      "nl-NL": "Metingen",
+      "pl-PL": "Miary",
+      "pt-BR": "Medidas",
+      "sv-SE": "Mått",
+      "tr-TR": "Hesaplamalar",
+      "zh-CN": "度量",
+      "zh-TW": "量值",
+      "ru-RU": "Меры"
+    }
+  }
+}
