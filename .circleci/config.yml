@@ -47,27 +47,14 @@ jobs:
       - attach_workspace:
           at: ~/scatter
       - run:
-          name: Update specs
-          command: |
-            if [ "$CIRCLE_BRANCH" = "main" ]; then
-              yarn run spec
-              set +e
-              git diff --exit-code --quiet;
-              exitstat=$?; set -e;
-              if [ $exitstat -eq 0 ]; then
-                echo "Specs are up to date";
-              else
-                echo "Updating API specs";
-                git commit -am "docs: update api specs [skip ci]";
-                git push -q https://$GH_ACCESS_TOKEN@github.com/qlik-oss/sn-scatter-plot.git main;
-              fi;
-            fi
-      - run:
           name: Build
           command: yarn run build
       - run:
           name: Lint
           command: yarn run lint
+      - run:
+          name: Update spec
+          command: yarn run spec
       - run:
           name: Run unit tests and publish to codeclimate
           command: |
@@ -102,6 +89,12 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/scatter
+      - run:
+          name: Setup npm
+          command: |
+            set -eo pipefail
+            # Amend auth token for access to public npm registry for @nebula.js packages
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
       - run:
           name: Publish
           command: |
