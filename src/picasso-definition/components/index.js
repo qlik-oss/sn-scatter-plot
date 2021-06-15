@@ -1,4 +1,3 @@
-// import { setDisplayOrder } from '@qlik/chart-commons';
 import createGridLines from './grid-lines';
 import createAxes from './axes';
 import createAxisTitles from './axis-titles';

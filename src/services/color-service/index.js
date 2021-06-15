@@ -1,4 +1,4 @@
-import { colorService as createColorService } from '@qlik/chart-modules';
+import { colorService as createColorService } from 'qlik-chart-modules';
 import KEYS from '../../constants/keys';
 import createLegend from './legend';
 

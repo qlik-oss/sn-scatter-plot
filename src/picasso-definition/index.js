@@ -1,5 +1,3 @@
-// import { dockLayout as createDockLayout } from '@qlik/chart-commons';
-
 import NUMBERS from '../constants/numbers';
 import createCollections from './collections';
 import createComponents from './components';

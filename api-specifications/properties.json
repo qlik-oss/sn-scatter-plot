@@ -1,7 +1,7 @@
 {
   "scriptappy": "1.0.0",
   "info": {
-    "name": "@qlik/sn-scatter-plot:properties",
+    "name": "@nebula.js/sn-scatter-plot:properties",
     "description": "Scatter plot generic object definition",
     "version": "0.2.0",
     "license": "MIT",
