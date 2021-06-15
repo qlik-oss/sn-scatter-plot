@@ -47,11 +47,6 @@ jobs:
       - attach_workspace:
           at: ~/scatter
       - run:
-          name: Setup git user
-          command: |
-            git config user.email "auto-merger@qlik.com"
-            git config user.name $GIT_USER
-      - run:
           name: Update specs
           command: |
             if [ "$CIRCLE_BRANCH" = "main" ]; then
