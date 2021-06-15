@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/qlik-trial/sn-scatter-plot.git"
+    "url": "https://github.com/qlik-oss/sn-scatter-plot.git"
   },
   "files": [
     "assets",
