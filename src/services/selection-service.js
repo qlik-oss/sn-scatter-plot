@@ -1,4 +1,4 @@
-import { selectionService as createSelectionService } from '@qlik/chart-modules';
+import { selectionService as createSelectionService } from 'qlik-chart-modules';
 
 export default function createService({ chart, actions, selections }) {
   const allowSimultaneous = [...Array(15)].map((d, i) => `qHyperCube/qMeasureInfo/${i}`);

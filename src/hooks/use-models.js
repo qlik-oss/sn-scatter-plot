@@ -17,7 +17,7 @@ import {
   themeService as createThemeService,
   dockService as createDockService,
   pluginService as createPluginService,
-} from '@qlik/chart-modules';
+} from 'qlik-chart-modules';
 import themeStyleMatrix from '../services/theme-service/theme-style-matrix';
 import layoutServiceMeta from '../services/layout-service/meta';
 import createChartModel from '../models/chart-model';

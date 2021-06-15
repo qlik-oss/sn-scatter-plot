@@ -4,7 +4,7 @@
 1. Transpile code: `yarn build` (or `yarn build:watch`)
 1. Link to Sense Desktop (locally on your computer):
    1. In this repo: `yarn link`
-   1. In sense-client repo: `yarn link "@qlik/sn-scatter-plot"`
+   1. In sense-client repo: `yarn link "@nebula.js/sn-scatter-plot"`
 1. Or, run it using nebula with `yarn start`
 
 ## Testing

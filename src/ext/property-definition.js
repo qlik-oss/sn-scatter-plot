@@ -1,4 +1,4 @@
-import { getValue, setValue } from '@qlik/chart-modules';
+import { getValue, setValue } from 'qlik-chart-modules';
 
 /*
 const COMPORESSION_THRESHOLD = 1000;

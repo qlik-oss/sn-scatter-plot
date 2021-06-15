@@ -2262,16 +2262,6 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
-"@qlik/chart-modules@0.13.0":
-  version "0.13.0"
-  resolved "https://qliktech.jfrog.io/qliktech/api/npm/npm-local/@qlik/chart-modules/-/@qlik/chart-modules-0.13.0.tgz#a97212db456f2e35d057cd4aec9c1975a538e690"
-  integrity sha1-qXIS20VvLjXQV81K7JwZdaU45pA=
-
-"@qlik/sense-themes-default@1.13.0":
-  version "1.13.0"
-  resolved "https://qliktech.jfrog.io/qliktech/api/npm/npm-local/@qlik/sense-themes-default/-/@qlik/sense-themes-default-1.13.0.tgz#7a336cf037365a32cc81c8bbbcb62ea7309672f6"
-  integrity sha1-ejNs8Dc2WjLMgci7vLYupzCWcvY=
-
 "@rollup/plugin-babel@5.2.3":
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.2.3.tgz#ee8fffbaa62a6c9ccd41b1bfca32e81f847700ee"
@@ -9879,6 +9869,11 @@ q@^1.1.2, q@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
+
+qlik-chart-modules@0.13.3:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.13.3.tgz#6330910bba29334e9af9d84f79a06015ed08dda9"
+  integrity sha512-V6HsIiPFb9crAZEjGCNLc5qNxupe3FWBEiSytmeP4/uGtR9KDPp8yoMw3eAQ6Lt5YOPKuNNqRp28MtT7a+qXZQ==
 
 qs@6.7.0:
   version "6.7.0"

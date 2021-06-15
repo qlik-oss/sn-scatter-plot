@@ -1,6 +1,12 @@
 const path = require('path');
 const fs = require('fs-extra');
-const defaultTheme = require('@qlik/sense-themes-default/dist/sense/theme.json');
+
+let defaultTheme;
+try {
+  // eslint-disable-next-line global-require, import/no-extraneous-dependencies, import/no-unresolved
+  defaultTheme = require('@qlik/sense-themes-default/dist/sense/theme.json');
+  // eslint-disable-next-line no-empty
+} catch (err) {}
 
 const sourcePath = [__dirname, 'test', 'rendering', 'data'];
 const source = path.resolve(...sourcePath);
@@ -18,6 +24,6 @@ module.exports = {
     flags: {
       panZoom: true,
     },
-    themes: [{ id: 'sense', theme: defaultTheme }],
+    themes: defaultTheme ? [{ id: 'sense', theme: defaultTheme }] : undefined,
   },
 };

@@ -1,4 +1,4 @@
-import { getValue } from '@qlik/chart-modules';
+import { getValue } from 'qlik-chart-modules';
 
 export default function layoutServiceMeta({ layout }) {
   const isSnapshot = !!layout.snapshotData;
