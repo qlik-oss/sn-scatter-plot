@@ -21,8 +21,8 @@ export default function createLegend({ viewState, chart, options, colorService, 
   const range = scales[`${KEYS.SCALE.COLOR}Range`];
   const [legendComponent] = components;
   const dock = legendComponent && legendComponent.layout.dock;
-  if (range && (dock === 'right' || dock === 'left')) {
-    range.invert = true;
+  if (range) {
+    range.invert = dock === 'right' || dock === 'left';
   }
 
   return {
