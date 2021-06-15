@@ -40,9 +40,9 @@ jobs:
     <<: *defaults
     docker:
       - image: circleci/node:10.19.0
-      - image: qlikcore/engine:12.887.0
+      - image: qlikcore/engine:12.961.0
         command: -S AcceptEULA=yes
-      - image: browserless/chrome:1.44.0-puppeteer-1.20.0
+      - image: browserless/chrome:1.45.1-puppeteer-1.20.0
     steps:
       - attach_workspace:
           at: ~/scatter
@@ -124,10 +124,8 @@ workflows:
   version: 2
   build-all:
     jobs:
-      - install:
-          context: deploy-secrets
+      - install
       - build:
-          context: deploy-secrets
           requires:
             - install
       - publish-dev:
@@ -136,7 +134,6 @@ workflows:
       - publish:
           requires:
             - build
-          context: deploy-secrets
           filters:
             branches:
               only:
