@@ -5,8 +5,8 @@ scatterplot supernova for nebula.js
 ### Status
 
 [![CircleCI](https://circleci.com/gh/qlik-oss/sn-scatter-plot.svg?style=shield)](https://circleci.com/gh/qlik-oss/sn-scatter-plot)
-[![Maintainability](https://api.codeclimate.com/v1/badges/2bed186589e2fbfe3cdc/maintainability)](https://codeclimate.com/repos/607d3d3f2d22cb014c008787/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/2bed186589e2fbfe3cdc/test_coverage)](https://codeclimate.com/repos/607d3d3f2d22cb014c008787/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/da3b3287eeb33acd72c9/maintainability)](https://codeclimate.com/github/qlik-oss/sn-scatter-plot/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/da3b3287eeb33acd72c9/test_coverage)](https://codeclimate.com/github/qlik-oss/sn-scatter-plot/test_coverage)
 
 ## Usage
 
