@@ -2,13 +2,15 @@ import KEYS from '../../../constants/keys';
 import settings from './settings';
 
 export default function createLegend({ viewState, chart, options, colorService, actions }) {
+  const rtl = options.direction === 'rtl';
+
   const config = {
     eventName: 'legend-c',
     key: KEYS.COMPONENT.LEGEND,
     viewState,
     chart,
     styleReference: 'object.scatterPlot',
-    rtl: options.direction === 'rtl',
+    rtl,
     settings: settings({ colorService }),
   };
 
@@ -22,7 +24,7 @@ export default function createLegend({ viewState, chart, options, colorService, 
   const [legendComponent] = components;
   const dock = legendComponent && legendComponent.layout.dock;
   if (range) {
-    range.invert = dock === 'right' || dock === 'left';
+    range.invert = dock === 'right' || dock === 'left' || rtl;
   }
 
   return {
