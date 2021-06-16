@@ -138,7 +138,6 @@ workflows:
           requires:
             - install
       - api-governance:
-          context: DOCKERHUB
           filters:
             branches:
               # Forked pull requests have CIRCLE_BRANCH set to pull/XXX
