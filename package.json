@@ -12,7 +12,7 @@
     "scatterplot"
   ],
   "publishConfig": {
-    "registry": "https://qliktech.jfrog.io/qliktech/api/npm/npm-local/"
+    "access": "public"
   },
   "repository": {
     "type": "git",
