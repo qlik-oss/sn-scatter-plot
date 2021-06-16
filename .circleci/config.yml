@@ -107,7 +107,28 @@ jobs:
               echo "Running >> npm publish"
               npm publish
             fi
-
+  api-governance:
+    machine: true
+    working_directory: ~/project
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Login for Docker
+          command: docker login -u "$GH_USER" -p "$GH_ACCESS_TOKEN" ghcr.io/qlik-trial
+      - run:
+          name: API Governance Compliance
+          command: |
+            docker pull ghcr.io/qlik-trial/asmquery:latest
+            docker create -v /specs --name specs alpine:3.4 /bin/true
+            docker cp ./api-specifications/properties.json specs:/specs
+            docker run --volumes-from specs \
+            -e target=Colony \
+            -e runMode=failBuild \
+            -e apiId=0395aa3a-3d13-439f-a0a6-3d47e0462a8f \
+            -e specPath='/specs/properties.json' \
+            -e commit="$CIRCLE_SHA1" ghcr.io/qlik-trial/asmquery:latest
 workflows:
   version: 2
   build-all:
