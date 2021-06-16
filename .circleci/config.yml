@@ -116,7 +116,7 @@ jobs:
           at: ~/project
       - run:
           name: Login for Docker
-          command: docker login -u "$GH_USER" -p "$GH_ACCESS_TOKEN" ghcr.io/qlik-trial
+          command: echo $GH_ACCESS_TOKEN | docker login -u "$GH_USER" --password-stdin ghcr.io/qlik-trial
       - run:
           name: API Governance Compliance
           command: |
