@@ -116,7 +116,7 @@ jobs:
           at: ~/project
       - run:
           name: Login for Docker
-          command: echo $GH_ACCESS_TOKEN | docker login -u "$GH_USER" --password-stdin ghcr.io/qlik-trial
+          command: echo $DOCKERHUB_TOKEN | docker login -u "$DOCKERHUB_USER" --password-stdin ghcr.io/qlik-trial
       - run:
           name: API Governance Compliance
           command: |
@@ -138,6 +138,7 @@ workflows:
           requires:
             - install
       - api-governance:
+          context: DOCKERHUB
           filters:
             branches:
               # Forked pull requests have CIRCLE_BRANCH set to pull/XXX
