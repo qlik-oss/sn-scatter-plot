@@ -133,13 +133,13 @@ jobs:
           name: API Governance Scatter Plot Plugins
           command: |
             docker pull ghcr.io/qlik-trial/asmquery:latest
-            docker create -v /specs --name specs alpine:3.4 /bin/true
-            docker cp ./api-specifications/plugins.json specs:/specs
-            docker run --volumes-from specs \
+            docker create -v /specs2 --name specs2 alpine:3.4 /bin/true
+            docker cp ./api-specifications/plugins.json specs2:/specs2
+            docker run --volumes-from specs2 \
             -e target=Colony \
             -e runMode=failBuild \
             -e apiId=86d3d254-a759-433c-b235-c14b479b4521 \
-            -e specPath='/specs/plugins.json' \
+            -e specPath='/specs2/plugins.json' \
             -e commit="$CIRCLE_SHA1" ghcr.io/qlik-trial/asmquery:latest
 workflows:
   version: 2
