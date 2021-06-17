@@ -16,10 +16,13 @@ import scatterplot from '@scatterplot/sn-scatter-plot';
 
 // 'app' is an enigma app model
 const nuked = embed(app, {
-  types: [{ // register the scatterplot
-    name: 'scatterplot',
-    load: () => Promise.resolve(scatterplot);
-  }]
+  types: [
+    {
+      // register the scatterplot
+      name: 'scatterplot',
+      load: () => Promise.resolve(scatterplot),
+    },
+  ],
 });
 
 nuked.render({
