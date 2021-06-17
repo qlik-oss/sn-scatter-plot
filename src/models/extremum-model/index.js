@@ -1,9 +1,11 @@
 import KEYS from '../../constants/keys';
+import getDelta from './delta';
 
 export default function createExtremumModel(layoutService, viewStateOptions = {}) {
   function resolveExtrema(scaleName) {
     // Choose between data min/max and explicit min/max. Explicit values have higher priority
     const measurePath = scaleName === KEYS.SCALE.X ? 'qMeasureInfo.0' : 'qMeasureInfo.1';
+    const measureIndex = scaleName === KEYS.SCALE.X ? 0 : 1;
     let minFromLayout = layoutService.getHyperCubeValue(`${measurePath}.qMin`, 0);
     let maxFromLayout = layoutService.getHyperCubeValue(`${measurePath}.qMax`, 1);
     let explicitType = 'none';
@@ -58,11 +60,18 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
       }
     }
 
-    // Add 10% padding to the ends that are not explicit.
+    // Add 5% padding to the ends that are not explicit.
     let padding = (axisMax - axisMin) / 20;
     // Special case: padding === 0 because data has only one point and min/max are non-explicit
     if (padding === 0) padding = Math.abs(axisMin) > 0 ? Math.abs(axisMin) / 10 : 10;
     switch (explicitType) {
+      case 'minMax':
+        if (axisMin === axisMax) {
+          padding = getDelta({ layoutService, value: axisMin, measureIndex });
+          axisMin -= padding;
+          axisMax += padding;
+        }
+        break;
       case 'min':
         axisMax += padding;
         break;

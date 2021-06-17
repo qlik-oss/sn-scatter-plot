@@ -285,18 +285,17 @@ describe('createExtremumModel', () => {
       layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
       layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
       layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
-      layoutService.getLayoutValue
-        .withArgs('xAxis')
-        .returns({ autoMinMax: false, minMax: 'minMax', min: 0.2, max: 0.2 });
+      layoutService.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'minMax', min: 20, max: 20 });
       layoutService.getLayoutValue
         .withArgs('yAxis')
         .returns({ autoMinMax: false, minMax: 'minMax', min: 0.2, max: 0.8 });
+      layoutService.getHyperCubeValue.withArgs('qDataPages.0.qMatrix', []).returns([]);
 
       extremumModel = create();
       result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
       expect(result).to.deep.equal({
-        xAxisMin: 0.2,
-        xAxisMax: 0.2,
+        xAxisMin: 18,
+        xAxisMax: 22,
         yAxisMin: 0.2,
         yAxisMax: 0.8,
         xAxisExplicitType: 'minMax',
