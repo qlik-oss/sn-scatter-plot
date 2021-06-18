@@ -118,7 +118,7 @@ jobs:
           name: Login for Docker
           command: echo $GH_ACCESS_TOKEN | docker login -u "$GH_USER" --password-stdin ghcr.io/qlik-trial
       - run:
-          name: API Governance Compliance
+          name: API Governance Scatter Plot Properties
           command: |
             docker pull ghcr.io/qlik-trial/asmquery:latest
             docker create -v /specs --name specs alpine:3.4 /bin/true
@@ -128,6 +128,16 @@ jobs:
             -e runMode=failBuild \
             -e apiId=0395aa3a-3d13-439f-a0a6-3d47e0462a8f \
             -e specPath='/specs/properties.json' \
+            -e commit="$CIRCLE_SHA1" ghcr.io/qlik-trial/asmquery:latest
+      - run:
+          name: API Governance Scatter Plot Plugins
+          command: |
+            docker cp ./api-specifications/plugins.json specs:/specs
+            docker run --volumes-from specs \
+            -e target=Colony \
+            -e runMode=failBuild \
+            -e apiId=86d3d254-a759-433c-b235-c14b479b4521 \
+            -e specPath='/specs/plugins.json' \
             -e commit="$CIRCLE_SHA1" ghcr.io/qlik-trial/asmquery:latest
 workflows:
   version: 2
