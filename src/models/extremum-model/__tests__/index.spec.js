@@ -1,3 +1,4 @@
+import * as getDelta from '../delta';
 import createExtremumModel from '..';
 
 describe('createExtremumModel', () => {
@@ -296,6 +297,34 @@ describe('createExtremumModel', () => {
       expect(result).to.deep.equal({
         xAxisMin: 18,
         xAxisMax: 22,
+        yAxisMin: 0.2,
+        yAxisMax: 0.8,
+        xAxisExplicitType: 'minMax',
+        yAxisExplicitType: 'minMax',
+      });
+    });
+
+    it('should return correct extrema when xAxisMin and xAxisMax are equal zero', () => {
+      layoutService.meta.isSnapshot = true;
+      layoutService.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({});
+
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
+      layoutService.getLayoutValue.withArgs('xAxis').returns({ autoMinMax: false, minMax: 'minMax', min: 0, max: 0 });
+      layoutService.getLayoutValue
+        .withArgs('yAxis')
+        .returns({ autoMinMax: false, minMax: 'minMax', min: 0.2, max: 0.8 });
+      layoutService.getHyperCubeValue.withArgs('qDataPages.0.qMatrix', []).returns([]);
+      sandbox.stub(getDelta, 'default');
+      getDelta.default.returns(3);
+
+      extremumModel = create();
+      result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
+      expect(result).to.deep.equal({
+        xAxisMin: -3,
+        xAxisMax: 3,
         yAxisMin: 0.2,
         yAxisMax: 0.8,
         xAxisExplicitType: 'minMax',
