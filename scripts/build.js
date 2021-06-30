@@ -1,9 +1,10 @@
 #! /usr/bin/env node
 /* eslint-disable no-console */
 
-const cp = require('child_process');
 const fs = require('fs-extra');
 const path = require('path');
+const build = require('@nebula.js/cli-build');
+const sense = require('@nebula.js/cli-sense');
 const copyExt = require('./copy-ext');
 
 const args = process.argv.slice(2);
@@ -16,37 +17,28 @@ const watch = args[args.indexOf('-w')];
 fs.removeSync(path.resolve(process.cwd(), 'dist'));
 fs.removeSync(path.resolve(process.cwd(), 'core/esm'));
 
-function exec(cmd, stdio = 'inherit') {
-  try {
-    cp.execSync(cmd, {
-      stdio,
-    });
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-let BUILD_SN_CMD = 'npx nebula build';
+const buildArgs = {};
 if (buildCore) {
-  BUILD_SN_CMD += ' --core core';
+  buildArgs.core = 'core';
 }
 
 if (mode === 'production') {
-  BUILD_SN_CMD += ' --mode production --sourcemap false';
+  buildArgs.mode = 'production';
+  buildArgs.sourcemap = false;
 }
 
 if (watch) {
   // NOTE: building as extension and copy into extensions while watching is not supported with current build setup!
-  BUILD_SN_CMD += ' -w';
+  buildArgs.watch = true;
 }
 
 console.log('---> BUILDING SUPERNOVA');
-exec(BUILD_SN_CMD);
-
-if (buildExt) {
-  const BUILD_EXT_CMD = 'nebula sense --partial';
-  console.log('---> BUILDING EXTENSION');
-  exec(BUILD_EXT_CMD);
-  console.log('---> COPYING EXTENSION');
-  copyExt();
-}
+build(buildArgs).then(() => {
+  if (buildExt) {
+    console.log('---> BUILDING EXTENSION');
+    sense({ partial: true }).then(() => {
+      console.log('---> COPYING EXTENSION');
+      copyExt();
+    });
+  }
+});

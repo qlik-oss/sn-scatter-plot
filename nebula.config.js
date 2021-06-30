@@ -14,11 +14,7 @@ const renderConfigs = fs.readdirSync('test/rendering/data').map((file) => ({
 
 const { name, version } = require(path.resolve(__dirname, './package.json')); // eslint-disable-line
 
-const versionHash = crypto
-  .createHash('md5')
-  .update(`${name}@${version}`) // TODO - consider using the commit sha since all charts from the same commit could have the same style
-  .digest('hex')
-  .slice(0, 4);
+const versionHash = crypto.createHash('md5').update(`${name}@${version}`).digest('hex').slice(0, 4);
 
 const replacementStrings = {
   'process.env.VERSION_HASH': JSON.stringify(versionHash),
