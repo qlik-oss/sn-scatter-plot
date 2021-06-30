@@ -31,7 +31,7 @@
   "main": "dist/sn-scatter-plot.js",
   "scripts": {
     "build": "node ./scripts/build.js --core --ext",
-    "build:watch": "node ./scripts/build.js --mode development -w",
+    "build:watch": "node ./scripts/build.js --ext --mode development -w",
     "copy:ext": "node ./scripts/copy-ext.js",
     "lint": "eslint src",
     "start": "nebula serve --type scatterplot",

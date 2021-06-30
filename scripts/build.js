@@ -28,17 +28,29 @@ if (mode === 'production') {
 }
 
 if (watch) {
-  // NOTE: building as extension and copy into extensions while watching is not supported with current build setup!
   buildArgs.watch = true;
 }
 
-console.log('---> BUILDING SUPERNOVA');
-build(buildArgs).then(() => {
+const buildExtension = async () => {
+  console.log('---> BUILDING EXTENSION');
+  await sense({ partial: true });
+  console.log('---> COPYING EXTENSION');
+  copyExt();
+};
+
+const main = async () => {
+  console.log('---> BUILDING SUPERNOVA');
+  const watcher = await build(buildArgs);
   if (buildExt) {
-    console.log('---> BUILDING EXTENSION');
-    sense({ partial: true }).then(() => {
-      console.log('---> COPYING EXTENSION');
-      copyExt();
-    });
+    buildExtension();
+    if (watch) {
+      watcher.on('event', (event) => {
+        if (event.code === 'BUNDLE_END') {
+          buildExtension();
+        }
+      });
+    }
   }
-});
+};
+
+main();
