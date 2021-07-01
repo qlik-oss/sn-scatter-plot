@@ -33,7 +33,7 @@ if (watch) {
 
 const buildExtension = async () => {
   console.log('---> BUILDING EXTENSION');
-  await sense({ partial: true });
+  await sense({ partial: true, output: 'sn-scatter-plot-ext' });
   console.log('---> COPYING EXTENSION');
   copyExt();
 };

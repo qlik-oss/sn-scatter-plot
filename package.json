@@ -22,8 +22,7 @@
     "api-specifications",
     "dist",
     "core",
-    "sn-scatter-plot.js",
-    "sn-scatter-plot.qext"
+    "sn-scatter-plot-ext"
   ],
   "engines": {
     "node": ">=8"
