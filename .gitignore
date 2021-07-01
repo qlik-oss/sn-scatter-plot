@@ -5,8 +5,10 @@
 .idea
 .vscode
 .npmrc
-stats.html
+sn-scatter-plot.js
+sn-scatter-plot.qext
 
 node_modules
 coverage
 dist/
+core/esm/

@@ -1,9 +1,0 @@
-{
-  "name": "sn-scatter-plot",
-  "version": "process.env.PACKAGE_VERSION",
-  "description": "A scatterplot",
-  "author": "QlikTech International AB",
-  "icon": "extension",
-  "type": "visualization",
-  "supernova": true
-}
