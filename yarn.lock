@@ -2500,10 +2500,10 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@nebula.js/cli-build@1.4.0", "@nebula.js/cli-build@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-build/-/cli-build-1.4.0.tgz#ed5366dd63f43fc241a94f089510808d8d8499eb"
-  integrity sha512-OsZr9SyIWYsC+/D2Eypuxlo0zeqS4jHwrcxC/19DOsMkfYllR7YOsxth/mTZ1cBHjs2F+xGVwaOJvm28bGPZtA==
+"@nebula.js/cli-build@1.5.0", "@nebula.js/cli-build@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-build/-/cli-build-1.5.0.tgz#337ff599963442b0cef6e793206ccafaccdac93c"
+  integrity sha512-4pg+il/7+LPKjnIcdGAe0fVLCWjvQbTddrIRRrlJSw2nvwCR3WprMZHg3zSgDK2zaIW/3bOiPo2zfTRK6QB+vA==
   dependencies:
     "@babel/cli" "7.14.3"
     "@babel/core" "7.14.3"
@@ -2533,10 +2533,10 @@
     fs-extra "10.0.0"
     inquirer "8.1.0"
 
-"@nebula.js/cli-sense@1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-sense/-/cli-sense-1.4.0.tgz#a99ed7e8b149254f6db30de2813598b4f6e7f995"
-  integrity sha512-lAVITTOCi51IHNDKZjmbBTOIVEpFmeSs69XwNRHJF8lbcqgCax+pKfQJbcnGfk7qHrfAB6XhKkTude42DTzPpQ==
+"@nebula.js/cli-sense@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-sense/-/cli-sense-1.5.0.tgz#46223246dd0f1bdee77dfa23eda9d8ce23416a1a"
+  integrity sha512-FdqfTkjKyANBBjtZxOenuLLFv5MMmzSv95yoais/fHsdNqOwtGU/xIjEjt+7DcvtwD+2Cb7wBAE+tIJv68Hpog==
   dependencies:
     "@babel/cli" "7.14.3"
     "@babel/core" "7.14.3"
@@ -2552,12 +2552,12 @@
     rollup-plugin-terser "7.0.2"
     yargs "17.0.1"
 
-"@nebula.js/cli-serve@1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-serve/-/cli-serve-1.4.0.tgz#2c2e64448363af13a9b716ab8fbba60318f85cdb"
-  integrity sha512-RwfBDC7Sa7g47xfX9bWeJ6vp6R8y35mkGU3DYGLGLls6ZwUrNxgfX24KuRk4lJHPUoyhSmcTmZXXnhYI1UmFzA==
+"@nebula.js/cli-serve@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-serve/-/cli-serve-1.5.0.tgz#aaacb0e9ad84d8ccf1396fd2417319a2cf2d3d6a"
+  integrity sha512-gOEWSTAFgLBtvtO6QJTXNj/KdmKTYOWSHP4zwwbzptdc6J1qIo1M9LT3tEZZQUmCyeBQ3OGlntSIu0M4NZhoXQ==
   dependencies:
-    "@nebula.js/cli-build" "^1.4.0"
+    "@nebula.js/cli-build" "^1.5.0"
     body-parser "1.19.0"
     chalk "4.1.1"
     chokidar "3.5.1"
