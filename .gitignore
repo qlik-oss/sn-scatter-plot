@@ -5,8 +5,7 @@
 .idea
 .vscode
 .npmrc
-sn-scatter-plot.js
-sn-scatter-plot.qext
+sn-scatter-plot-ext
 
 node_modules
 coverage
