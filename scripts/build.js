@@ -1,17 +1,20 @@
 #! /usr/bin/env node
 /* eslint-disable no-console */
 
+const yargs = require('yargs');
 const fs = require('fs-extra');
 const path = require('path');
 const build = require('@nebula.js/cli-build');
 const sense = require('@nebula.js/cli-sense');
 const copyExt = require('./copy-ext');
 
-const args = process.argv.slice(2);
-const buildExt = args.indexOf('--ext') !== -1;
-const buildCore = args.indexOf('--core') !== -1;
-const mode = args[args.indexOf('--mode')] || 'production';
-const watch = args[args.indexOf('-w')];
+const args = yargs(process.argv.slice(2)).argv;
+const buildExt = args.ext;
+const buildCore = args.core;
+const mode = args.mode || 'production';
+const watch = args.w;
+
+const sourcemap = mode !== 'production';
 
 // cleanup old build
 fs.removeSync(path.resolve(process.cwd(), 'dist'));
@@ -33,7 +36,7 @@ if (watch) {
 
 const buildExtension = async () => {
   console.log('---> BUILDING EXTENSION');
-  await sense({ partial: true, output: 'sn-scatter-plot-ext' });
+  await sense({ partial: true, output: 'sn-scatter-plot-ext', sourcemap });
   console.log('---> COPYING EXTENSION');
   copyExt();
 };
