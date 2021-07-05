@@ -1,6 +1,7 @@
 # Plugin examples
 
 Demonstrating creating new `component-definition` or overriding/extending `component-definition` that are already available in `sn-scatter-plot`.
+
 ![Plugin examples](examples.png)
 
 ## Setup
