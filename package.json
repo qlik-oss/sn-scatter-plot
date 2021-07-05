@@ -30,6 +30,7 @@
   "main": "dist/sn-scatter-plot.js",
   "scripts": {
     "build": "node ./scripts/build.js --core --ext",
+    "build:dev": "node ./scripts/build.js --core --ext --mode development",
     "build:watch": "node ./scripts/build.js --ext --mode development -w",
     "copy:ext": "node ./scripts/copy-ext.js",
     "lint": "eslint src",
@@ -94,7 +95,8 @@
     "qlik-chart-modules": "0.13.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "scriptappy-from-jsdoc": "0.7.0"
+    "scriptappy-from-jsdoc": "0.7.0",
+    "yargs": "17.0.1"
   },
   "peerDependencies": {
     "@nebula.js/stardust": ">=1.2.0"
