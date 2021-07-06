@@ -2,6 +2,8 @@
 
 Demonstrating creating new `component-definition` or overriding/extending `component-definition` that are already available in `sn-scatter-plot`.
 
+![Plugin examples](examples.png)
+
 ## Setup
 
 Copy the `Executive_Dashboard.qvf` app from the repo's `data/apps` to your local apps folder (`Qlik/Sense/Apps`).
