@@ -67,13 +67,13 @@ describe('use-core hook', () => {
   });
 
   it('should call useEffect', () => {
-    const core = useCore({ flags });
-    expect(core).toBeUndefined();
+    useCore({ flags });
     expect(useEffect).toHaveBeenCalled();
   });
 
-  it('should set core with correct parameters', () => {
-    useCore({ flags });
+  it('should set expected core', () => {
+    const core = useCore({ flags });
+    expect(core).toBeUndefined();
     expect(coreMockSetter).toHaveBeenCalledWith({
       viewState: 'viewState',
       chart: 'chart',
