@@ -124,23 +124,11 @@ jobs:
           command: |
             docker pull ghcr.io/qlik-trial/asmquery:latest
             docker create -v /specs --name specs alpine:3.4 /bin/true
-            docker cp ./api-specifications/properties.json specs:/specs
-            docker run --volumes-from specs \
-            -e target=Colony \
-            -e runMode=failBuild \
-            -e apiId=0395aa3a-3d13-439f-a0a6-3d47e0462a8f \
-            -e specPath='/specs/properties.json' \
-            -e commit="$CIRCLE_SHA1" ghcr.io/qlik-trial/asmquery:latest
+            ./.circleci/api-gov.sh ./api-specifications/properties.json '/specs/properties.json' 0395aa3a-3d13-439f-a0a6-3d47e0462a8f
       - run:
           name: API Governance Scatter Plot Plugins
           command: |
-            docker cp ./api-specifications/plugins.json specs:/specs
-            docker run --volumes-from specs \
-            -e target=Colony \
-            -e runMode=failBuild \
-            -e apiId=86d3d254-a759-433c-b235-c14b479b4521 \
-            -e specPath='/specs/plugins.json' \
-            -e commit="$CIRCLE_SHA1" ghcr.io/qlik-trial/asmquery:latest
+            ./.circleci/api-gov.sh ./api-specifications/plugins.json '/specs/plugins.json' 86d3d254-a759-433c-b235-c14b479b4521
 workflows:
   version: 2
   build-all:
