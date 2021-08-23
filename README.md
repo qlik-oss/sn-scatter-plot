@@ -84,7 +84,7 @@ const pointPlugin = {
 };
 
 // Step 2: passing the plugin definition into the render function
-embed.render({
+nuked.render({
   type: 'scatterplot',
   element: document.querySelector('.scatterplot'),
   properties: chartProperties,
