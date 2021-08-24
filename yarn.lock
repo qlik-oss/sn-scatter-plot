@@ -9067,20 +9067,20 @@ phin@^2.9.1:
   resolved "https://registry.yarnpkg.com/phin/-/phin-2.9.3.tgz#f9b6ac10a035636fb65dfc576aaaa17b8743125c"
   integrity sha512-CzFr90qM24ju5f88quFC/6qohjC144rehe5n6DH900lgXmUe86+xCKc10ev56gRKC4/BkHUoG4uSiQgBiIXwDA==
 
-picasso-plugin-hammer@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/picasso-plugin-hammer/-/picasso-plugin-hammer-1.2.0.tgz#224ed107e3743f95e5ec26c5a3d12fa38e768b2b"
-  integrity sha512-8/fjo0LhYA6g3ucfcApwyxTZ5ai8av5n2Pk5JY/j6MZkMdLepIVxYfX0S8KEQoXaScKvIJz69xAPAN+nkz6rAw==
+picasso-plugin-hammer@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/picasso-plugin-hammer/-/picasso-plugin-hammer-1.2.2.tgz#06e9c36cf3d4d0f4b6d0c032e1822d68378db4ee"
+  integrity sha512-liHyUtJntqzmk8DSFooWjURYeGSZxbfiI8VejmmTGlxnupXdkKs1VxaZeRzcBV4sY/4uzprYrJfnyUsKui8n7A==
 
-picasso-plugin-q@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/picasso-plugin-q/-/picasso-plugin-q-1.2.0.tgz#416c9997815bfe247ed899b24a03759175bc1b6d"
-  integrity sha512-1K05EsURNJQvY+HoV++1f7n0nUA5BGij2Lm3RbwetHAGQj0sy6Eriw++Oi6Zu/CjPodJErV7p6wirhnrl8dQbA==
+picasso-plugin-q@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/picasso-plugin-q/-/picasso-plugin-q-1.2.2.tgz#acfc6a6bdf8e57b9f653a5a7ff54d665340eed0d"
+  integrity sha512-uqNPi0PyayJ3oMEP5XV3Rv8VPYl1pP0iv3+yyJnKq7X+uqsVQLSO1PVM/eNTKjklRSOEzNUMMWlj5hJvPfyS7w==
 
-picasso.js@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/picasso.js/-/picasso.js-1.2.0.tgz#582e254e949dbbf020cc9d51e79055db98ac8cfe"
-  integrity sha512-YsgVqHlOA8C6X3QQHjz9I2whjIcnVLxCklmNQHll6CgqujuAb7O3dJyVClws+ORbM2HALZKG/TVhzAjXoJwYqA==
+picasso.js@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/picasso.js/-/picasso.js-1.2.2.tgz#b05ab0ac152e1c1403f9c2a82f52a252692fa3ba"
+  integrity sha512-jPhiGYTKT1JjepvdH5RwiLFAHuCEviLMVvtC64ArYH5wN5N+swD0Q3sWtXpHYJFi7DfPDpHe03l2PSxmurdD7A==
 
 picomatch@^2.0.4, picomatch@^2.0.5, picomatch@^2.0.7, picomatch@^2.2.1, picomatch@^2.2.2:
   version "2.2.2"
