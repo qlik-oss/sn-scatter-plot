@@ -12,7 +12,7 @@ The scatter plot uses bubbles or dots to represent values of two or three measur
 
 ## Requirements
 
-Requires `@nebula.js/stardust` version `1.2.0` or later.
+Requires `@nebula.js/stardust` version `1.2.0` or later. You can also load through the script tag directly from [https://unpkg.com](https://unpkg.com/@nebula.js/sn-scatter-plot).
 
 ## Installing
 
