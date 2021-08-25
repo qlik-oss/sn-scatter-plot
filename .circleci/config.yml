@@ -70,8 +70,7 @@ jobs:
       - persist_to_workspace:
           root: ~/scatter
           paths:
-            - dist
-            - package.json
+            - .
 
   publish-dev:
     <<: *defaults
@@ -80,9 +79,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/scatter
-      - run: mv ./dist sn-scatter-plot && zip -r "sn-scatter-plot.zip" "./sn-scatter-plot"
+      - run: zip -r "sn-scatter-plot-ext.zip" "./sn-scatter-plot-ext"
       - store_artifacts:
-          path: ./sn-scatter-plot.zip
+          path: ./sn-scatter-plot-ext.zip
 
   publish:
     <<: *defaults
