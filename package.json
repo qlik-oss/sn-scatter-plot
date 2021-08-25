@@ -39,6 +39,7 @@
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js && scriptappy-from-jsdoc -c ./spec-configs/plugins.conf.js",
     "test:unit": "aw -c aw.config.js",
     "test:rendering": "aw puppet --glob 'test/**/*.spec.js'",
+    "prepublishOnly": "rm -rf dist && yarn run build",
     "version": "yarn spec && git add api-specifications"
   },
   "husky": {
