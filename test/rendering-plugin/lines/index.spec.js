@@ -17,7 +17,7 @@ describe('rendering lines plugin example', () => {
     const elm = await page.waitForSelector(content, {
       timeout: 5000,
     });
-    this.timeout(5000);
+    this.timeout(20000);
     const img = await takeScreenshot(elm);
     return expect(img).to.matchImageOf('lines_plugin', OPTS, 0.0005);
   });

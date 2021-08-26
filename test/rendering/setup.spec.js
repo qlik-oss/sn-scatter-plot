@@ -3,7 +3,7 @@ const serve = require('@nebula.js/cli-serve'); // eslint-disable-line
 if (!process.env.BASE_URL) {
   let s;
   before(async function run() {
-    this.timeout(20000);
+    this.timeout(10000);
     s = await serve({
       build: false,
       open: false,

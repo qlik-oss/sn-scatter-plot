@@ -17,7 +17,7 @@ describe('rendering configurable plugin examples', () => {
     const elm = await page.waitForSelector(content, {
       timeout: 5000,
     });
-    this.timeout(5000);
+    this.timeout(20000);
     const img = await takeScreenshot(elm);
     return expect(img).to.matchImageOf('config1', OPTS, 0.0005);
   });
@@ -29,7 +29,7 @@ describe('rendering configurable plugin examples', () => {
     const elm = await page.waitForSelector(content, {
       timeout: 5000,
     });
-    this.timeout(5000);
+    this.timeout(20000);
     const img = await takeScreenshot(elm);
     return expect(img).to.matchImageOf('config2', OPTS, 0.0005);
   });
