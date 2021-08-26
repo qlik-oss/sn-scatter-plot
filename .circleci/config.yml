@@ -65,6 +65,13 @@ jobs:
               yarn test:unit -- --mocha.bail false
               ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
             fi
+
+      - run:
+          name: Rendering tests
+          command: |
+            DocId=$(curl -s --data-binary @data/apps/Executive_Dashboard.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id')
+            APP_ID=$DocId yarn run test:rendering --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
+
       - store_artifacts:
           path: coverage
       - persist_to_workspace:
