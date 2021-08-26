@@ -82,7 +82,7 @@ jobs:
   publish-dev:
     <<: *defaults
     docker:
-      - image: circleci/node:12.15.0
+      - image: circleci/node:12.16.3
     steps:
       - attach_workspace:
           at: ~/scatter
@@ -93,7 +93,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:12.15.0
+      - image: circleci/node:12.16.3
     steps:
       - attach_workspace:
           at: ~/scatter

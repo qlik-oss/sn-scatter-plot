@@ -15,9 +15,8 @@ describe('rendering', () => {
     const name = file.replace('.json', '');
     it(name, async function run() {
       await page.goto(`${process.env.BASE_URL}/render/?app=${app}&render-config=${name}`);
-      const elm = await page.waitForSelector(content, {
-        timeout: 5000,
-      });
+      await page.waitForSelector(content, { visible: true, timeout: 5000 });
+      const elm = await page.$(content);
       this.timeout(20000);
       const img = await takeScreenshot(elm);
       return expect(img).to.matchImageOf(name, OPTS, 0.0005);

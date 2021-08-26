@@ -14,7 +14,7 @@ describe('rendering lines plugin example', () => {
     const absolutePath = resolve(__dirname, '../../../examples/plugins/lines/index.html');
     const localURL = `file://${absolutePath}`;
     await page.goto(localURL);
-    await page.waitForSelector(content, { visible: true });
+    await page.waitForSelector(content, { visible: true, timeout: 2000 });
     const elm = await page.$(content);
     this.timeout(20000);
     const img = await takeScreenshot(elm);
