@@ -48,6 +48,7 @@ describe('rendering', () => {
   fs.readdirSync('test/rendering/data').forEach((file) => {
     const name = file.replace('.json', '');
     it(name, async () => {
+      console.log(await myPage.browser().version());
       await myPage.goto(`${process.env.BASE_URL}/render/?app=${app}&render-config=${name}`);
       // this.timeout(10000);
       const elm = await myPage.waitForSelector(content, { visible: true, timeout: 5000 });
