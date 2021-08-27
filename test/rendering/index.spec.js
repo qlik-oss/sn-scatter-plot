@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+
 // const { resolve } = require('path');
 
 const OPTS = {
@@ -6,20 +7,50 @@ const OPTS = {
 };
 const content = '.njs-viz[data-render-count="1"]';
 
-async function takeScreenshot(elm) {
-  return page.screenshot({ clip: await elm.boundingBox() });
-}
-
 describe('rendering', () => {
+  let myBrowser;
+  let myPage;
+
+  const serve = require('@nebula.js/cli-serve'); // eslint-disable-line
+
+  if (!process.env.BASE_URL) {
+    let s;
+    before(async function run() {
+      this.timeout(10000);
+      s = await serve({
+        build: false,
+        open: false,
+      });
+
+      process.env.BASE_URL = s.url;
+
+      // eslint-disable-next-line global-require
+      const puppeteer = require('puppeteer');
+      myBrowser = await puppeteer.launch({ headless: true });
+      // myBrowser = await puppeteer.connect({ browserWSEndpoint: 'ws://localhost:3000' });
+      myPage = await myBrowser.newPage();
+
+      myPage.on('pageerror', (e) => {
+        console.log('Error:', e.message, e.stack);
+      });
+    });
+
+    after(() => {
+      s.close();
+    });
+  }
+
   const app = encodeURIComponent(process.env.APP_ID || '/apps/Executive_Dashboard.qvf');
+  async function takeScreenshot(elm) {
+    return myPage.screenshot({ clip: await elm.boundingBox() });
+  }
+
   fs.readdirSync('test/rendering/data').forEach((file) => {
     const name = file.replace('.json', '');
-    it(name, async function run() {
-      await page.goto(`${process.env.BASE_URL}/render/?app=${app}&render-config=${name}`);
-      const elm = await page.waitForSelector(content, {
-        timeout: 5000,
-      });
-      this.timeout(10000);
+    it(name, async () => {
+      await myPage.goto(`${process.env.BASE_URL}/render/?app=${app}&render-config=${name}`);
+      // this.timeout(10000);
+      const elm = await myPage.waitForSelector(content, { visible: true, timeout: 5000 });
       const img = await takeScreenshot(elm);
       return expect(img).to.matchImageOf(name, OPTS, 0.0005);
     });
