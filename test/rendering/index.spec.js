@@ -55,39 +55,56 @@ describe('rendering', () => {
     });
   });
 
-  it('should render lines plugin correctly', async function run() {
-    const absolutePath = resolve(__dirname, '../../examples/plugins/lines/index.html');
-    const localURL = `file://${absolutePath}`;
-    await myPage.goto(localURL);
-    const elm = await myPage.waitForSelector(content, {
-      timeout: 5000,
+  const plugins = ['lines', 'config1', 'config2'];
+  const pluginPaths = ['lines/index.html', 'configurable/config1.html', 'configurable/config2.html'];
+
+  plugins.forEach((plugin, index) => {
+    it(`should render ${plugin} plugin correctly`, async function run() {
+      const absolutePath = resolve(__dirname, `../../examples/plugins/${pluginPaths[index]}`);
+      const localURL = `file://${absolutePath}`;
+      await myPage.goto(localURL);
+      const elm = await myPage.waitForSelector(content, {
+        timeout: 5000,
+      });
+      this.timeout(5000);
+      const img = await takeScreenshot(elm);
+      return expect(img).to.matchImageOf(`plugin_${plugin}`, OPTS, 0.0005);
     });
-    this.timeout(5000);
-    const img = await takeScreenshot(elm);
-    return expect(img).to.matchImageOf('lines_plugin', OPTS, 0.0005);
   });
 
-  it('should render config1 correctly', async function run() {
-    const absolutePath = resolve(__dirname, '../../examples/plugins/configurable/config1.html');
-    const localURL = `file://${absolutePath}`;
-    await myPage.goto(localURL);
-    const elm = await myPage.waitForSelector(content, {
-      timeout: 5000,
-    });
-    this.timeout(5000);
-    const img = await takeScreenshot(elm);
-    return expect(img).to.matchImageOf('config1', OPTS, 0.0005);
-  });
+  //   it('should render lines plugin correctly', async function run() {
+  //     const absolutePath = resolve(__dirname, '../../examples/plugins/lines/index.html');
+  //     const localURL = `file://${absolutePath}`;
+  //     await myPage.goto(localURL);
+  //     const elm = await myPage.waitForSelector(content, {
+  //       timeout: 5000,
+  //     });
+  //     this.timeout(5000);
+  //     const img = await takeScreenshot(elm);
+  //     return expect(img).to.matchImageOf('lines_plugin', OPTS, 0.0005);
+  //   });
 
-  it('should render config2 correctly', async function run() {
-    const absolutePath = resolve(__dirname, '../../examples/plugins/configurable/config2.html');
-    const localURL = `file://${absolutePath}`;
-    await myPage.goto(localURL);
-    const elm = await myPage.waitForSelector(content, {
-      timeout: 5000,
-    });
-    this.timeout(5000);
-    const img = await takeScreenshot(elm);
-    return expect(img).to.matchImageOf('config2', OPTS, 0.0005);
-  });
+  //   it('should render config1 correctly', async function run() {
+  //     const absolutePath = resolve(__dirname, '../../examples/plugins/configurable/config1.html');
+  //     const localURL = `file://${absolutePath}`;
+  //     await myPage.goto(localURL);
+  //     const elm = await myPage.waitForSelector(content, {
+  //       timeout: 5000,
+  //     });
+  //     this.timeout(5000);
+  //     const img = await takeScreenshot(elm);
+  //     return expect(img).to.matchImageOf('config1', OPTS, 0.0005);
+  //   });
+
+  //   it('should render config2 correctly', async function run() {
+  //     const absolutePath = resolve(__dirname, '../../examples/plugins/configurable/config2.html');
+  //     const localURL = `file://${absolutePath}`;
+  //     await myPage.goto(localURL);
+  //     const elm = await myPage.waitForSelector(content, {
+  //       timeout: 5000,
+  //     });
+  //     this.timeout(5000);
+  //     const img = await takeScreenshot(elm);
+  //     return expect(img).to.matchImageOf('config2', OPTS, 0.0005);
+  //   });
 });
