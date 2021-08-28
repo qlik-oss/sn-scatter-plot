@@ -38,7 +38,7 @@
     "sense": "nebula sense",
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js && scriptappy-from-jsdoc -c ./spec-configs/plugins.conf.js",
     "test:unit": "aw -c aw.config.js",
-    "test:rendering": "aw puppet --glob 'test/**/*.spec.js'  --mocha.bail false",
+    "test:rendering": "aw puppet --glob 'test/**/*.spec.js'  --mocha.bail false --mocha.timeout 10000",
     "prepublishOnly": "rm -rf dist && yarn run build",
     "version": "yarn spec && git add api-specifications"
   },
