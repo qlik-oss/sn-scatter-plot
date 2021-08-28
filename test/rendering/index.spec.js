@@ -62,12 +62,11 @@ describe('rendering', () => {
     });
   });
 
-  const plugins = ['lines', 'config1', 'config2'];
-  const pluginPaths = ['lines/index.html', 'configurable/config1.html', 'configurable/config2.html'];
+  const plugins = ['plugin_line', 'plugin_point', 'plugin_axes'];
 
-  plugins.forEach((plugin, index) => {
-    it(`should render ${plugin} plugin correctly`, async function run() {
-      const absolutePath = resolve(__dirname, `../../examples/plugins/${pluginPaths[index]}`);
+  plugins.forEach((plugin) => {
+    it(`should render ${plugin} correctly`, async function run() {
+      const absolutePath = resolve(__dirname, `../../examples/plugins/${plugin}.html`);
       const localURL = `file://${absolutePath}`;
       console.log(localURL);
       await myPage.goto(localURL, {
@@ -76,7 +75,7 @@ describe('rendering', () => {
       const elm = await myPage.waitForSelector(content, { visible: true, timeout: 5000 });
       this.timeout(5000);
       const img = await takeScreenshot(elm);
-      return expect(img).to.matchImageOf(`plugin_${plugin}`, OPTS, 0.0005);
+      return expect(img).to.matchImageOf(`${plugin}`, OPTS, 0.0005);
     });
   });
 });
