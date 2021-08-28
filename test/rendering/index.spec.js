@@ -4,7 +4,7 @@ const { resolve } = require('path');
 const OPTS = {
   artifactsPath: 'test/rendering/__artifacts__',
 };
-const content = '.njs-viz[data-render-count="1"]';
+const content = '.njs-viz';
 
 describe('rendering', () => {
   let myBrowser;
@@ -50,10 +50,12 @@ describe('rendering', () => {
 
   fs.readdirSync('test/rendering/data').forEach((file) => {
     const name = file.replace('.json', '');
-    it(name, async () => {
-      await myPage.goto(`${process.env.BASE_URL}/render/?app=${app}&render-config=${name}`);
+    it(name, async function run() {
+      await myPage.goto(`${process.env.BASE_URL}/render/?app=${app}&render-config=${name}`, {
+        waitUntil: 'networkidle0',
+      });
       console.log(`${process.env.BASE_URL}/render/?app=${app}&render-config=${name}`);
-      // this.timeout(10000);
+      this.timeout(5000);
       const elm = await myPage.waitForSelector(content, { visible: true, timeout: 5000 });
       const img = await takeScreenshot(elm);
       return expect(img).to.matchImageOf(name, OPTS, 0.0005);
@@ -68,7 +70,9 @@ describe('rendering', () => {
       const absolutePath = resolve(__dirname, `../../examples/plugins/${pluginPaths[index]}`);
       const localURL = `file://${absolutePath}`;
       console.log(localURL);
-      await myPage.goto(localURL);
+      await myPage.goto(localURL, {
+        waitUntil: 'networkidle0',
+      });
       const elm = await myPage.waitForSelector(content, { visible: true, timeout: 5000 });
       this.timeout(5000);
       const img = await takeScreenshot(elm);
