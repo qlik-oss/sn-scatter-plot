@@ -19,7 +19,7 @@
     return openDoc;
   }
 
-  connect()('/apps/Executive_Dashboard.qvf').then((app) => {
+  connect()('Executive_Dashboard.qvf').then((app) => {
     // configure nucleus
     const nuked = window.stardust.embed(app, {
       context: { theme: 'light' },
