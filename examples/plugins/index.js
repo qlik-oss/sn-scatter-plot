@@ -4,7 +4,6 @@ function run() {
   function connect() {
     const loadSchema = () =>
       fetch('https://unpkg.com/enigma.js/schemas/12.34.11.json').then((response) => response.json());
-
     const createConnection = () =>
       loadSchema().then((schema) =>
         window.enigma
@@ -15,14 +14,11 @@ function run() {
           .open()
           .then((qix) => qix.createSessionApp())
       );
-
     return createConnection().then((app) =>
       app
         .setScript(
-          `
-          Set dataManagerTables = '','Table';
+          `Set dataManagerTables = '','Table';
           //This block renames script tables from non generated section which conflict with the names of managed tables
-
           For each name in $(dataManagerTables) 
               Let index = 0;
               Let currentName = name; 
@@ -39,10 +35,7 @@ function run() {
               EndIf; 
           Next; 
           Set dataManagerTables = ;
-
-
           Unqualify *;
-
           [Table]:
           LOAD * INLINE 
           [
@@ -53,8 +46,7 @@ function run() {
             Asia,6,419
             Africa,8,399
             Middle East,1,30
-          ](delimiter is ',');
-          `
+          ](delimiter is ',');`
         )
         .then(() => app.doReload().then(() => app))
     );
@@ -71,10 +63,8 @@ function run() {
         },
       ],
     });
-
     nuked.selections().then((s) => s.mount(document.querySelector('.toolbar')));
 
-    // create a session object
     nuked.render({
       element: document.getElementById('object'),
       type: 'scatter',

@@ -21,57 +21,33 @@ const pointPlugin = {
   },
 };
 
-const xAxisPlugin = {
-  info: {
-    name: 'x-axis-plugin',
-    type: 'component-definition',
-  },
-  fn: () => {
-    const componentDefinition = {
-      type: 'axis',
-      key: 'x-axis',
-      layout: {
-        dock: 'top',
-      },
-      settings: {
-        labels: {
-          fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif',
-          fontSize: '15px',
-          fill: 'red',
+function createAxisPlugin(axisName) {
+  return {
+    info: {
+      name: `${axisName}-plugin`,
+      type: 'component-definition',
+    },
+    fn: ({ keys }) => {
+      const componentDefinition = {
+        type: 'axis',
+        key: keys.components[axisName],
+        layout: {
+          dock: axisName === 'x-axis' ? 'top' : 'right',
         },
-        line: { stroke: 'green', strokeWidth: 2 },
-        ticks: { stroke: 'blue', strokeWidth: 2 },
-      },
-    };
-    return componentDefinition;
-  },
-};
-
-const yAxisPlugin = {
-  info: {
-    name: 'y-axis-plugin',
-    type: 'component-definition',
-  },
-  fn: () => {
-    const componentDefinition = {
-      type: 'axis',
-      key: 'y-axis',
-      layout: {
-        dock: 'right',
-      },
-      settings: {
-        labels: {
-          fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif',
-          fontSize: '15px',
-          fill: 'red',
+        settings: {
+          labels: {
+            fontFamily: 'Cambria, Cochin, Georgia, Times, "Times New Roman", serif',
+            fontSize: '15px',
+            fill: 'red',
+          },
+          line: { stroke: 'green', strokeWidth: 2 },
+          ticks: { stroke: 'blue', strokeWidth: 2 },
         },
-        line: { stroke: 'green', strokeWidth: 2 },
-        ticks: { stroke: 'blue', strokeWidth: 2 },
-      },
-    };
-    return componentDefinition;
-  },
-};
+      };
+      return componentDefinition;
+    },
+  };
+}
 
 const linePlugin = {
   info: {
@@ -117,5 +93,5 @@ const linePlugin = {
 };
 
 const pluginSet1 = [pointPlugin];
-const pluginSet2 = [xAxisPlugin, yAxisPlugin];
+const pluginSet2 = [createAxisPlugin('x-axis'), createAxisPlugin('y-axis')];
 const pluginSet3 = [linePlugin];
