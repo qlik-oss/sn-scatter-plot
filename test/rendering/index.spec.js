@@ -39,6 +39,10 @@ describe('rendering', () => {
     });
   }
 
+  after(async () => {
+    await myBrowser.close();
+  });
+
   const app = encodeURIComponent(process.env.APP_ID || '/apps/Executive_Dashboard.qvf');
   async function takeScreenshot(elm) {
     return myPage.screenshot({ clip: await elm.boundingBox() });

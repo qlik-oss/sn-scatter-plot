@@ -1,7 +1,9 @@
 /* eslint-disable no-unused-vars */
 (function run() {
   function connect() {
-    const schemaPromise = fetch('https://unpkg.com/enigma.js/schemas/3.2.json').then((response) => response.json());
+    const schemaPromise = fetch('https://unpkg.com/enigma.js/schemas/12.170.2.json').then((response) =>
+      response.json()
+    );
 
     const openDoc = (appId) =>
       schemaPromise.then((schema) =>
