@@ -69,9 +69,7 @@ describe('rendering', () => {
       const localURL = `file://${absolutePath}`;
       console.log(localURL);
       await myPage.goto(localURL);
-      const elm = await myPage.waitForSelector(content, {
-        timeout: 5000,
-      });
+      const elm = await myPage.waitForSelector(content, { visible: true, timeout: 5000 });
       this.timeout(5000);
       const img = await takeScreenshot(elm);
       return expect(img).to.matchImageOf(`plugin_${plugin}`, OPTS, 0.0005);
