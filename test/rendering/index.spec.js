@@ -49,10 +49,12 @@ describe('rendering', () => {
 
   const app = encodeURIComponent(process.env.APP_ID || '/apps/Executive_Dashboard.qvf');
 
-  console.log('myvar1');
-  console.log(process.env.MY_VAR_1);
-  console.log('myvar2');
-  console.log(process.env.MY_VAR_2);
+  console.log('process.env.CIRCLE_BRANCH');
+  console.log(process.env.CIRCLE_BRANCH);
+  console.log('process.env.CIRCLECI');
+  console.log(process.env.CIRCLECI);
+  console.log('process.env.CI');
+  console.log(process.env.CI);
 
   async function takeScreenshot(elm) {
     return myPage.screenshot({ clip: await elm.boundingBox() });
