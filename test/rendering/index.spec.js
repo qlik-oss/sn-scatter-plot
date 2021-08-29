@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const { resolve } = require('path');
 
 const OPTS = {
-  artifactsPath: 'test/rendering/__artifacts__',
+  artifactsPath: process.env.CI ? 'test/rendering/artifacts-CI' : 'test/rendering/artifacts',
 };
 const content = '.njs-viz';
 
@@ -25,11 +25,7 @@ describe('rendering', () => {
 
       // eslint-disable-next-line global-require
       const puppeteer = require('puppeteer');
-      myBrowser = await puppeteer.launch({
-        headless: true,
-        args: ['--font-render-hinting=none'],
-        defaultViewport: { width: 1920, height: 1080 },
-      });
+      myBrowser = await puppeteer.launch({});
       // myBrowser = await puppeteer.connect({ browserWSEndpoint: 'ws://localhost:3000' });
       myPage = await myBrowser.newPage();
 
@@ -48,6 +44,7 @@ describe('rendering', () => {
   });
 
   const app = encodeURIComponent(process.env.APP_ID || '/apps/Executive_Dashboard.qvf');
+
   async function takeScreenshot(elm) {
     return myPage.screenshot({ clip: await elm.boundingBox() });
   }
