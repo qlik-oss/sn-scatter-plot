@@ -70,6 +70,7 @@ jobs:
       - run:
           name: Rendering tests
           command: |
+            MY_VAR_1="hello" MY_VAR_2=$"hello"
             DocId=$(curl -s --data-binary @data/apps/Executive_Dashboard.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id')
             APP_ID=$DocId yarn run test:rendering --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
 
