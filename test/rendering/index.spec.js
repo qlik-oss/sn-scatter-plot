@@ -55,8 +55,8 @@ describe('rendering', () => {
         waitUntil: 'networkidle0',
       });
       console.log(`${process.env.BASE_URL}/render/?app=${app}&render-config=${name}`);
-      this.timeout(9999);
-      const elm = await myPage.waitForSelector(content, { visible: true, timeout: 9998 });
+      this.timeout(10000);
+      const elm = await myPage.waitForSelector(content, { visible: true, timeout: 10000 });
       const img = await takeScreenshot(elm);
       return expect(img).to.matchImageOf(name, OPTS, 0.0005);
     });
@@ -72,8 +72,8 @@ describe('rendering', () => {
       await myPage.goto(localURL, {
         waitUntil: 'networkidle0',
       });
-      const elm = await myPage.waitForSelector(content, { visible: true, timeout: 9997 });
-      this.timeout(9996);
+      const elm = await myPage.waitForSelector(content, { visible: true, timeout: 10000 });
+      this.timeout(10000);
       const img = await takeScreenshot(elm);
       return expect(img).to.matchImageOf(`${plugin}`, OPTS, 0.0005);
     });
