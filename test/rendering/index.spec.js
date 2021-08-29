@@ -25,7 +25,10 @@ describe('rendering', () => {
 
       // eslint-disable-next-line global-require
       const puppeteer = require('puppeteer');
-      myBrowser = await puppeteer.launch({ headless: true, args: ['--disable-gpu', '--font-render-hinting=none'] });
+      myBrowser = await puppeteer.launch({
+        headless: true,
+        args: ['--enable-font-antialiasing', '--font-render-hinting=none'],
+      });
       // myBrowser = await puppeteer.connect({ browserWSEndpoint: 'ws://localhost:3000' });
       myPage = await myBrowser.newPage();
 
