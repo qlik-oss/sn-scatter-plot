@@ -21,7 +21,7 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: circleci/node:12.15.0
+      - image: circleci/node:16.7-browsers
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
@@ -39,10 +39,11 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:12.15.0
-      - image: qlikcore/engine:12.961.0
+      - image: circleci/node:16.7-browsers
+      - image: qlikcore/engine:12.1070.0
         command: -S AcceptEULA=yes
       - image: browserless/chrome:1.45.1-puppeteer-1.20.0
+
     steps:
       - attach_workspace:
           at: ~/scatter
@@ -65,8 +66,15 @@ jobs:
               yarn test:unit -- --mocha.bail false
               ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
             fi
+
+      - run:
+          name: Rendering tests
+          command: |
+            DocId=$(curl -s --data-binary @data/apps/Executive_Dashboard.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id')
+            APP_ID=$DocId yarn run test:rendering --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
+
       - store_artifacts:
-          path: coverage
+          path: ./test/rendering/__artifacts__
       - persist_to_workspace:
           root: ~/scatter
           paths:
@@ -75,7 +83,7 @@ jobs:
   publish-dev:
     <<: *defaults
     docker:
-      - image: circleci/node:12.15.0
+      - image: circleci/node:16.7-browsers
     steps:
       - attach_workspace:
           at: ~/scatter
@@ -86,7 +94,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:12.15.0
+      - image: circleci/node:16.7-browsers
     steps:
       - attach_workspace:
           at: ~/scatter
