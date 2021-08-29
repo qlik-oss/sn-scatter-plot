@@ -54,9 +54,8 @@ describe('rendering', () => {
       await myPage.goto(`${process.env.BASE_URL}/render/?app=${app}&render-config=${name}`, {
         waitUntil: 'networkidle0',
       });
-      console.log(`${process.env.BASE_URL}/render/?app=${app}&render-config=${name}`);
-      this.timeout(10000);
       const elm = await myPage.waitForSelector(content, { visible: true, timeout: 10000 });
+      this.timeout(10000);
       const img = await takeScreenshot(elm);
       return expect(img).to.matchImageOf(name, OPTS, 0.0005);
     });
@@ -68,7 +67,6 @@ describe('rendering', () => {
     it(`should render ${plugin} correctly`, async function run() {
       const absolutePath = resolve(__dirname, `../../examples/plugins/${plugin}.html`);
       const localURL = `file://${absolutePath}`;
-      console.log(localURL);
       await myPage.goto(localURL, {
         waitUntil: 'networkidle0',
       });
