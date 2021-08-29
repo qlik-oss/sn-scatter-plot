@@ -25,11 +25,7 @@ describe('rendering', () => {
 
       // eslint-disable-next-line global-require
       const puppeteer = require('puppeteer');
-      myBrowser = await puppeteer.launch({
-        headless: true,
-        args: ['--font-render-hinting=none'],
-        defaultViewport: { width: 1920, height: 1080 },
-      });
+      myBrowser = await puppeteer.launch({});
       // myBrowser = await puppeteer.connect({ browserWSEndpoint: 'ws://localhost:3000' });
       myPage = await myBrowser.newPage();
 
