@@ -6,7 +6,7 @@ Demonstrating creating new `component-definition` or overriding/extending `compo
 
 ## Run
 
-Simple copy path of the `*.html` file and paste it to your browser.
+Copy path of one the `*.html` files and paste it to your browser.
 
 ## Chart internals testing
 
