@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const { resolve } = require('path');
 
 const OPTS = {
-  artifactsPath: 'test/rendering/__artifacts__',
+  artifactsPath: process.env.CI ? 'test/rendering/artifacts-CI' : 'test/rendering/artifacts',
 };
 const content = '.njs-viz';
 
@@ -48,13 +48,6 @@ describe('rendering', () => {
   });
 
   const app = encodeURIComponent(process.env.APP_ID || '/apps/Executive_Dashboard.qvf');
-
-  console.log('process.env.CIRCLE_BRANCH');
-  console.log(process.env.CIRCLE_BRANCH);
-  console.log('process.env.CIRCLECI');
-  console.log(process.env.CIRCLECI);
-  console.log('process.env.CI');
-  console.log(process.env.CI);
 
   async function takeScreenshot(elm) {
     return myPage.screenshot({ clip: await elm.boundingBox() });
