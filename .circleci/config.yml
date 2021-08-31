@@ -74,7 +74,7 @@ jobs:
             APP_ID=$DocId yarn run test:rendering --chrome.browserWSEndpoint "ws://localhost:3000" --no-launch
 
       - store_artifacts:
-          path: ./test/rendering/artifacts-CI
+          path: ./test/rendering/artifacts
       - persist_to_workspace:
           root: ~/scatter
           paths:
