@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const { resolve } = require('path');
 
 const OPTS = {
-  artifactsPath: process.env.CI ? 'test/rendering/artifacts-CI' : 'test/rendering/artifacts',
+  artifactsPath: 'test/rendering/artifacts',
 };
 const content = '.njs-viz';
 
@@ -25,8 +25,7 @@ describe('rendering', () => {
 
       // eslint-disable-next-line global-require
       const puppeteer = require('puppeteer');
-      myBrowser = await puppeteer.launch({});
-      // myBrowser = await puppeteer.connect({ browserWSEndpoint: 'ws://localhost:3000' });
+      myBrowser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
       myPage = await myBrowser.newPage();
 
       myPage.on('pageerror', (e) => {
