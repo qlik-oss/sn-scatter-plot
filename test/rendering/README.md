@@ -16,3 +16,8 @@ Here is how you do it:
   (This will spin up the Docker containers for rendering tests, run the test,
   and copy the newly generated artifacts images from Docker to the host
   artifacts folder.)
+
+When you run the Docker rendering tests for the first time, it can take time
+to download and install all the neccessary images. But from the second time,
+thanks to Docker caching, only the build and the tests are run, which take
+between 1-2 minutes.
