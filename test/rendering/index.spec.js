@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const { resolve } = require('path');
 
 const OPTS = {
-  artifactsPath: process.env.CI ? 'test/rendering/artifacts-CI' : 'test/rendering/artifacts',
+  artifactsPath: 'test/rendering/artifacts',
 };
 const content = '.njs-viz';
 
