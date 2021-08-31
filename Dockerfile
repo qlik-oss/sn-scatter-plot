@@ -18,7 +18,7 @@ COPY . .
 
 RUN sudo yarn build
 
-CMD ["sh","-c","DocId=$(curl -s --data-binary @data/apps/Executive_Dashboard.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id') && APP_ID=$DocId && sudo npx aw puppet --glob 'test/**/*.spec.js'  --mocha.bail false --mocha.timeout 10000"]
+CMD ["sh","-c","DocId=$(curl -s --data-binary @data/apps/Executive_Dashboard.qvf http://localhost:9076/v1/apps/import | jq -r '.attributes.id') && APP_ID=$DocId && sudo npx aw puppet --glob 'test/**/*.spec.js' --mocha.bail false --mocha.timeout 10000"]
 
 
 
