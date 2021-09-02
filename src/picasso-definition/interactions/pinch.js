@@ -1,6 +1,16 @@
 import KEYS from '../../constants/keys';
+import { pinchZoom } from '../../utils/math/zoom';
 
 const EVENT_NAME = 'zoom';
+
+const state = {
+  last: 0,
+  diff: 0,
+};
+
+function isWithinThreshold(diff) {
+  return Math.abs(diff) > 0.01;
+}
 
 const pinch = ({ chart, actions, viewHandler }) => ({
   type: 'Pinch',
@@ -25,40 +35,27 @@ const pinch = ({ chart, actions, viewHandler }) => ({
     },
   },
   events: {
-    zoomstart(e) {
-      console.log('start');
+    zoomstart(e, data) {
+      state.last = 1;
+      console.log('start', e.scale);
+      console.log('start data', data);
       e.preventDefault();
-      this.started = EVENT_NAME;
-      const initialDataView = viewHandler.getDataView();
-      this[EVENT_NAME] = {
-        componentSize: this.pointAreaPinched.rect,
-        ...initialDataView,
-      };
     },
-    zoommove(e) {
-      console.log('move');
-      e.preventDefault();
-      const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin } = this[EVENT_NAME];
+    zoommove(e, data) {
+      const diff = e.scale - state.last;
 
-      const xDiff = (xAxisMax - xAxisMin) * (e.deltaX / componentSize.width);
-      const yDiff = (yAxisMax - yAxisMin) * (e.deltaY / componentSize.height);
-
-      const dataView = {
-        xAxisMin: xAxisMin - xDiff,
-        xAxisMax: xAxisMax - xDiff,
-        yAxisMin: yAxisMin + yDiff,
-        yAxisMax: yAxisMax + yDiff,
-      };
-
-      viewHandler.setDataView(dataView);
-    },
-    zoomend(e) {
+      console.log(e);
+      console.log('move data', data);
+      if (isWithinThreshold(diff)) {
+        pinchZoom({
+          center: e.center,
+          newScale: e.scale / state.last,
+          pointComponent: this.pointAreaPinched,
+          viewHandler,
+        });
+        state.last = e.scale;
+      }
       e.preventDefault();
-      this.started = false;
-    },
-    zoomcancel(e) {
-      e.preventDefault();
-      this.started = false;
     },
   },
 });

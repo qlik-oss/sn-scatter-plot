@@ -10,7 +10,7 @@ function transform(scale, start, end, factor) {
   return [newStart, newEnd];
 }
 
-export default function zoom(e, chart, pointComponent, viewHandler) {
+export function zoom(e, chart, pointComponent, viewHandler) {
   const zoomFactor = e.deltaY > 0 ? ZOOM_SCALE : 1 / ZOOM_SCALE;
   const { scale, maxScale, minScale } = viewHandler.getMeta();
   const newScale = zoomFactor * scale;
@@ -29,4 +29,26 @@ export default function zoom(e, chart, pointComponent, viewHandler) {
     yAxisMax: yMax,
   });
   viewHandler.setMeta({ scale: newScale });
+}
+
+export function pinchZoom({ center, newScale, pointComponent, viewHandler }) {
+  const { scale, maxScale, minScale } = viewHandler.getMeta();
+  const zoomScale = scale * newScale;
+  // console.log('newscale:', newScale);
+  // console.log('scale:', scale);
+  // console.log('zoomScale:', zoomScale);
+  if (zoomScale > maxScale || zoomScale < minScale) {
+    return;
+  }
+  const { width, height } = pointComponent.rect;
+  const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getDataView();
+  const [xMin, xMax] = transform(center.x / width, xAxisMin, xAxisMax, 1 / newScale);
+  const [yMax, yMin] = transform(center.y / height, yAxisMax, yAxisMin, 1 / newScale);
+  viewHandler.setDataView({
+    xAxisMin: xMin,
+    xAxisMax: xMax,
+    yAxisMin: yMin,
+    yAxisMax: yMax,
+  });
+  viewHandler.setMeta({ scale: zoomScale });
 }

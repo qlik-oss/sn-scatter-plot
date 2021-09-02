@@ -1,5 +1,5 @@
 import KEYS from '../../constants/keys';
-import zoom from '../../utils/math/zoom';
+import { zoom } from '../../utils/math/zoom';
 
 export default function native({ chart, actions, viewHandler }) {
   const getPointTooltip = () => chart.component(KEYS.COMPONENT.POINT_TOOLTIP);
