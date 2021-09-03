@@ -35,20 +35,17 @@ const pinch = ({ chart, actions, viewHandler }) => ({
     },
   },
   events: {
-    zoomstart(e, data) {
+    zoomstart(e) {
       state.last = 1;
-      console.log('start', e.scale);
-      console.log('start data', data);
       e.preventDefault();
     },
-    zoommove(e, data) {
+    zoommove(e) {
       const diff = e.scale - state.last;
 
-      console.log(e);
-      console.log('move data', data);
       if (isWithinThreshold(diff)) {
         pinchZoom({
           center: e.center,
+          chart,
           newScale: e.scale / state.last,
           pointComponent: this.pointAreaPinched,
           viewHandler,
