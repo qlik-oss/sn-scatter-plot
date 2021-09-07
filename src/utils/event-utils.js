@@ -1,5 +1,11 @@
 export function eventToChartPoint(event, chart) {
   const bounds = chart.element.getBoundingClientRect();
+  if (event.center) {
+    return {
+      x: event.center.x - bounds.left,
+      y: event.center.y - bounds.top,
+    };
+  }
   return {
     x: event.clientX - bounds.left,
     y: event.clientY - bounds.top,

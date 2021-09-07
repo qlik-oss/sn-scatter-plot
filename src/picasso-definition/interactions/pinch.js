@@ -46,12 +46,13 @@ const pinch = ({ chart, actions, viewHandler }) => ({
         pinchZoom({
           center: e.center,
           chart,
-          newScale: e.scale / state.last,
+          zoomFactor: state.last / e.scale,
           pointComponent: this.pointAreaPinched,
           viewHandler,
         });
         state.last = e.scale;
       }
+
       e.preventDefault();
     },
   },

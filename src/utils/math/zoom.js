@@ -31,18 +31,17 @@ export function zoom(e, chart, pointComponent, viewHandler) {
   viewHandler.setMeta({ scale: newScale });
 }
 
-export function pinchZoom({ center, chart, newScale, pointComponent, viewHandler }) {
+export function pinchZoom({ center, chart, zoomFactor, pointComponent, viewHandler }) {
   const { scale, maxScale, minScale } = viewHandler.getMeta();
-  const zoomScale = scale * newScale;
-  if (zoomScale > maxScale || zoomScale < minScale) {
+  const newScale = zoomFactor * scale;
+  if (newScale > maxScale || newScale < minScale) {
     return;
   }
+  const p = eventToComponentPoint({ center }, chart, pointComponent);
   const { width, height } = pointComponent.rect.computedPhysical;
-  const offsetX = chart.element.getBoundingClientRect().width - width;
-  const offsetY = chart.element.getBoundingClientRect().height - height;
   const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getDataView();
-  const [xMin, xMax] = transform((center.x - offsetX) / width, xAxisMin, xAxisMax, 1 / newScale);
-  const [yMax, yMin] = transform((center.y - offsetY) / height, yAxisMax, yAxisMin, 1 / newScale);
+  const [xMin, xMax] = transform(p.x / width, xAxisMin, xAxisMax, zoomFactor);
+  const [yMax, yMin] = transform(p.y / height, yAxisMax, yAxisMin, zoomFactor);
   viewHandler.setDataView({
     xAxisMin: xMin,
     xAxisMax: xMax,
