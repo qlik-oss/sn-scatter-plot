@@ -3,11 +3,11 @@ version: '3.1'
 services:
   engine:
     image: qlikcore/engine:12.1070.0
-    command: -S AcceptEULA=yes
+    command: -S AcceptEULA=yes -S DocumentDirectory=/apps -S DisableWSOriginCheck=1
     ports:
       - 9076:9076
     volumes:
-      - ${APPS_PATH:-./data/apps}:/apps
+      - '${APPS_PATH:-./data/apps}:/apps:ro'
 
     # Hide output from engine container
     logging:
