@@ -1,12 +1,9 @@
 import KEYS from '../../constants/keys';
-import { pinchZoom } from '../../utils/math/zoom';
+import zoom from '../../utils/math/zoom';
 
 const EVENT_NAME = 'zoom';
 
-const state = {
-  last: 0,
-  diff: 0,
-};
+let lastScale = 0;
 
 function isWithinThreshold(diff) {
   return Math.abs(diff) > 0.01;
@@ -20,7 +17,7 @@ const pinch = ({ chart, actions, viewHandler }) => ({
     pointers: 2,
     threshold: 0,
     enable(r, e) {
-      if (this.started === EVENT_NAME || !e) {
+      if (!e) {
         return true;
       }
       if (!actions.zoom.enabled()) {
@@ -36,21 +33,15 @@ const pinch = ({ chart, actions, viewHandler }) => ({
   },
   events: {
     zoomstart(e) {
-      state.last = 1;
+      lastScale = e.scale;
       e.preventDefault();
     },
     zoommove(e) {
-      const diff = e.scale - state.last;
+      const diff = e.scale - lastScale;
 
       if (isWithinThreshold(diff)) {
-        pinchZoom({
-          center: e.center,
-          chart,
-          zoomFactor: state.last / e.scale,
-          pointComponent: this.pointAreaPinched,
-          viewHandler,
-        });
-        state.last = e.scale;
+        zoom(e, chart, this.pointAreaPinched, viewHandler, lastScale / e.scale);
+        lastScale = e.scale;
       }
 
       e.preventDefault();

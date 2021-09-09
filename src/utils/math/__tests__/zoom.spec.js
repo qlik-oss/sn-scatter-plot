@@ -10,6 +10,7 @@ describe('zoom', () => {
   let pointComponent;
   let viewHandler;
   let dataView;
+  let pinchZoomFactor;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -17,7 +18,7 @@ describe('zoom', () => {
     viewHandler.getMeta.returns({ scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1 });
     sandbox.stub(eventUtils, 'eventToComponentPoint');
     pointComponent = { rect: { computedPhysical: { width: 100, height: 100 } } };
-    create = () => zoom(e, chart, pointComponent, viewHandler);
+    create = () => zoom(e, chart, pointComponent, viewHandler, pinchZoomFactor);
   });
 
   afterEach(() => {
@@ -75,6 +76,7 @@ describe('zoom', () => {
       yAxisMax: 2000,
     });
   });
+
   it('should update correct dataView for viewHandler, when we zoom in but reach the minScale limit', () => {
     e = { deltaY: -1 };
     eventUtils.eventToComponentPoint.returns({ x: 50, y: 50 });
@@ -90,6 +92,23 @@ describe('zoom', () => {
       xAxisMax: 1000,
       yAxisMin: 0,
       yAxisMax: 2000,
+    });
+  });
+
+  it('should update correct dataView for pinch zoom', () => {
+    pinchZoomFactor = 0.6;
+    eventUtils.eventToComponentPoint.returns({ x: 50, y: 50 });
+    dataView = { xAxisMin: -1000, xAxisMax: 1000, yAxisMin: 0, yAxisMax: 2000 };
+    viewHandler.getDataView.returns(dataView);
+    viewHandler.setDataView = (newDataView) => {
+      extend(true, dataView, newDataView);
+    };
+    create();
+    expect(dataView).to.deep.equal({
+      xAxisMin: -600,
+      xAxisMax: 600,
+      yAxisMin: 400,
+      yAxisMax: 1600,
     });
   });
 });
