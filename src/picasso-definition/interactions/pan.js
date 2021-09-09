@@ -1,14 +1,20 @@
 import KEYS from '../../constants/keys';
+import zoom from '../../utils/math/zoom';
 
-const threshold = 10;
+const threshold = 5;
 const eventName = 'areaPan';
+let lastScale = 0;
+
+function isWithinThreshold(diff) {
+  return Math.abs(diff) > 0.01;
+}
 
 const pan = ({ chart, actions, viewHandler }) => ({
   type: 'Pan',
   key: 'panorama',
   options: {
     event: eventName,
-    pointers: 1,
+    pointers: 0,
     threshold,
     enable(r, e) {
       if (this.started === eventName || !e) {
@@ -29,6 +35,7 @@ const pan = ({ chart, actions, viewHandler }) => ({
   events: {
     areaPanstart(e) {
       e.preventDefault();
+      lastScale = e.scale;
       this.started = eventName;
       const initialDataView = viewHandler.getDataView();
       this[eventName] = {
@@ -38,25 +45,31 @@ const pan = ({ chart, actions, viewHandler }) => ({
     },
     areaPanmove(e) {
       e.preventDefault();
-      const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin } = this[eventName];
+      // pinch zoom
+      if (e.scale > 1.2 || e.scale < 0.8) {
+        const diff = e.scale - lastScale;
 
-      const xDiff = (xAxisMax - xAxisMin) * (e.deltaX / componentSize.width);
-      const yDiff = (yAxisMax - yAxisMin) * (e.deltaY / componentSize.height);
+        if (isWithinThreshold(diff)) {
+          zoom(e, chart, this.pointAreaPanned, viewHandler, lastScale / e.scale);
+          lastScale = e.scale;
+        }
+      }
+      // Pan
+      else {
+        const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin } = this[eventName];
 
-      const dataView = {
-        xAxisMin: xAxisMin - xDiff,
-        xAxisMax: xAxisMax - xDiff,
-        yAxisMin: yAxisMin + yDiff,
-        yAxisMax: yAxisMax + yDiff,
-      };
+        const xDiff = (xAxisMax - xAxisMin) * (e.deltaX / componentSize.width);
+        const yDiff = (yAxisMax - yAxisMin) * (e.deltaY / componentSize.height);
 
-      viewHandler.setDataView(dataView);
-      // viewHandler.setDataView({
-      //   xAxisMin: xAxisMin - xDiff,
-      //   xAxisMax: xAxisMax - xDiff,
-      //   yAxisMin: yAxisMin + yDiff,
-      //   yAxisMax: yAxisMax + yDiff,
-      // });
+        const dataView = {
+          xAxisMin: xAxisMin - xDiff,
+          xAxisMax: xAxisMax - xDiff,
+          yAxisMin: yAxisMin + yDiff,
+          yAxisMax: yAxisMax + yDiff,
+        };
+
+        viewHandler.setDataView(dataView);
+      }
     },
     areaPanend(e) {
       e.preventDefault();

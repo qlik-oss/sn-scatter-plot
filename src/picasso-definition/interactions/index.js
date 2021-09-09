@@ -1,6 +1,6 @@
 import native from './native';
 import pan from './pan';
-import pinch from './pinch';
+// import pinch from './pinch';
 
 export default function create({ chart, actions, viewHandler, gestures, colorService }) {
   const hammer = {
@@ -11,7 +11,7 @@ export default function create({ chart, actions, viewHandler, gestures, colorSer
       ...colorService.custom.legendInteractions(), // need higher priority than the tap in selectables.gestures
       ...[...gestures].sort((a, b) => (b.prio || 0) - (a.prio || 0)),
       pan({ chart, actions, viewHandler }),
-      pinch({ chart, actions, viewHandler }),
+      // pinch({ chart, actions, viewHandler }),
     ],
   };
   const interactions = [native({ chart, actions, viewHandler }), hammer];
