@@ -1,11 +1,11 @@
 import KEYS from '../../../constants/keys';
-import isOutOfBounds from './oob-helper';
+
+const OOB_SPACE = 12;
 
 export default function createOutOfBounds({ colorService, tickModel }) {
   const [xMin, xMax] = tickModel.query.getXMinMax();
   const [yMin, yMax] = tickModel.query.getYMinMax();
 
-  const oobSpace = 10;
   const oobPositions = {
     xMin: -0.005,
     xMax: 1.005,
@@ -13,12 +13,12 @@ export default function createOutOfBounds({ colorService, tickModel }) {
     yMax: -0.005,
   };
 
-  return {
+  const oobDefinition = {
     key: KEYS.COMPONENT.OUT_OF_BOUNDS,
     type: 'point',
     data: {
       collection: KEYS.COLLECTION.MAIN,
-      filter: (d) => isOutOfBounds(d.x.value, xMin, xMax) || isOutOfBounds(d.y.value, yMin, yMax),
+      filter: (d) => d.x.value < xMin || d.x.value > xMax || d.y.value < yMin || d.y.value > yMax,
     },
     settings: {
       x: {
@@ -46,17 +46,19 @@ export default function createOutOfBounds({ colorService, tickModel }) {
     },
     preferredSize: () => ({
       edgeBleed: {
-        top: oobSpace,
-        bottom: oobSpace,
-        left: oobSpace,
-        right: oobSpace,
+        top: OOB_SPACE,
+        bottom: OOB_SPACE,
+        left: OOB_SPACE,
+        right: OOB_SPACE,
       },
     }),
     beforeRender: ({ size }) => {
-      oobPositions.xMin = -oobSpace / (2 * size.width);
+      oobPositions.xMin = -OOB_SPACE / (2 * size.width);
       oobPositions.xMax = 1 - oobPositions.xMin;
-      oobPositions.yMax = -oobSpace / (2 * size.height);
+      oobPositions.yMax = -OOB_SPACE / (2 * size.height);
       oobPositions.yMin = 1 - oobPositions.yMax;
     },
   };
+
+  return oobDefinition;
 }
