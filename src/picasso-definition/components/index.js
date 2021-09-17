@@ -23,7 +23,7 @@ export default function createComponents({ context, models, flags }) {
     ...createAxes({ models, flags }),
     ...createAxisTitles(models),
     createPointLabels(models),
-    createOutOfBounds(models),
+    createOutOfBounds({ models, context }),
     ...colorService.custom.legendComponents(),
     disclaimer,
     ...createTooltips({ models, context }),

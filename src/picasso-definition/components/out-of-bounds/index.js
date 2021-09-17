@@ -2,10 +2,11 @@ import KEYS from '../../../constants/keys';
 
 const OOB_SPACE = 12;
 
-export default function createOutOfBounds({ colorService, tickModel }) {
+export default function createOutOfBounds({ models, context }) {
+  const { tickModel, colorService } = models;
   const [xMin, xMax] = tickModel.query.getXMinMax();
   const [yMin, yMax] = tickModel.query.getYMinMax();
-
+  const { rtl } = context;
   const oobPositions = {
     xMin: -0.005,
     xMax: 1.005,
@@ -24,9 +25,9 @@ export default function createOutOfBounds({ colorService, tickModel }) {
       x: {
         scale: KEYS.SCALE.X,
         fn: ({ datum }) => {
-          if (datum.x.value < xMin) return oobPositions.xMin;
-          if (datum.x.value > xMax) return oobPositions.xMax;
-          return (datum.x.value - xMin) / (xMax - xMin);
+          if (datum.x.value < xMin) return rtl ? oobPositions.xMax : oobPositions.xMin;
+          if (datum.x.value > xMax) return rtl ? oobPositions.xMin : oobPositions.xMax;
+          return rtl ? (datum.x.value - xMax) / (xMin - xMax) : (datum.x.value - xMin) / (xMax - xMin);
         },
       },
       y: {
