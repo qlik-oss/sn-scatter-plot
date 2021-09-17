@@ -9,15 +9,18 @@ describe('interactions', () => {
   let chart;
   let viewHandler;
   let pan;
+  let pinch;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     createNative = sandbox.stub().returns({ key: 'native' });
     pan = sandbox.stub().returns({ key: 'panorama' });
+    pinch = sandbox.stub().returns({ key: 'pinchZoom' });
     create = aw.mock(
       [
         ['**/src/picasso-definition/interactions/native.js', () => createNative],
         ['**/src/picasso-definition/interactions/pan.js', () => pan],
+        ['**/src/picasso-definition/interactions/pinch.js', () => pinch],
       ],
       ['../index']
     )[0].default;
@@ -71,6 +74,7 @@ describe('interactions', () => {
           { key: 'gesture-2', prio: 2 },
           { key: 'gesture-3', prio: 1 },
           { key: 'panorama' },
+          { key: 'pinchZoom' },
         ],
       },
     ]);
@@ -99,6 +103,7 @@ describe('interactions', () => {
           { key: 'gesture-2' },
           { key: 'gesture-3' },
           { key: 'panorama' },
+          { key: 'pinchZoom' },
         ],
       },
     ]);
