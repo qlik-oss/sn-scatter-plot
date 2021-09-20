@@ -2,7 +2,9 @@ import KEYS from '../../../constants/keys';
 import createSizeScale from '../../scales/size';
 import createBrush from '../../brush';
 
-export default function createPoint({ layoutService, colorService }) {
+export default function createPoint({ layoutService, colorService, tickModel }) {
+  const [xMin, xMax] = tickModel.query.getXMinMax();
+  const [yMin, yMax] = tickModel.query.getYMinMax();
   let windowSizeMultiplier;
   const sizeScaleFn = createSizeScale(layoutService);
   return {
@@ -10,6 +12,8 @@ export default function createPoint({ layoutService, colorService }) {
     type: 'point',
     data: {
       collection: KEYS.COLLECTION.MAIN,
+      // filter out oob values
+      filter: (d) => d.x.value >= xMin && d.x.value <= xMax && d.y.value >= yMin && d.y.value <= yMax,
     },
     brush: createBrush(),
     settings: {
