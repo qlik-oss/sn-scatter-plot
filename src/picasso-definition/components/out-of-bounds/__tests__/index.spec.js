@@ -39,8 +39,8 @@ describe('out of bounds', () => {
         Y: 'y',
       },
     }));
-
-    create = () => createOutOfBounds({ colorService, tickModel });
+    const models = { colorService, tickModel };
+    create = () => createOutOfBounds({ models, context });
   });
 
   afterEach(() => sandbox.restore());
