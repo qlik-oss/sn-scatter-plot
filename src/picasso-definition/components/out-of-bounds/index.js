@@ -1,11 +1,10 @@
 import KEYS from '../../../constants/keys';
 
-const OOB_SPACE = 12;
+const OOB_SPACE = 10;
 
 export default function createOutOfBounds({ models, context }) {
-  const { tickModel, colorService } = models;
-  const [xMin, xMax] = tickModel.query.getXMinMax();
-  const [yMin, yMax] = tickModel.query.getYMinMax();
+  const { chartModel, colorService } = models;
+  const viewHandler = chartModel.query.getViewHandler();
   const { rtl } = context;
   const oobPositions = {
     xMin: -0.005,
@@ -19,23 +18,31 @@ export default function createOutOfBounds({ models, context }) {
     type: 'point',
     data: {
       collection: KEYS.COLLECTION.MAIN,
-      filter: (d) => d.x.value < xMin || d.x.value > xMax || d.y.value < yMin || d.y.value > yMax,
+      filter: (d) => {
+        // getting axis min/max from viewHandler, refactor to not call it many times (?)
+        const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getDataView();
+        return d.x.value < xAxisMin || d.x.value > xAxisMax || d.y.value < yAxisMin || d.y.value > yAxisMax;
+      },
     },
     settings: {
       x: {
         scale: KEYS.SCALE.X,
         fn: ({ datum }) => {
-          if (datum.x.value < xMin) return rtl ? oobPositions.xMax : oobPositions.xMin;
-          if (datum.x.value > xMax) return rtl ? oobPositions.xMin : oobPositions.xMax;
-          return rtl ? (datum.x.value - xMax) / (xMin - xMax) : (datum.x.value - xMin) / (xMax - xMin);
+          const { xAxisMin, xAxisMax } = viewHandler.getDataView();
+          if (datum.x.value < xAxisMin) return rtl ? oobPositions.xMax : oobPositions.xMin;
+          if (datum.x.value > xAxisMax) return rtl ? oobPositions.xMin : oobPositions.xMax;
+          return rtl
+            ? (datum.x.value - xAxisMax) / (xAxisMin - xAxisMax)
+            : (datum.x.value - xAxisMin) / (xAxisMax - xAxisMin);
         },
       },
       y: {
         scale: KEYS.SCALE.Y,
         fn: ({ datum }) => {
-          if (datum.y.value < yMin) return oobPositions.yMin;
-          if (datum.y.value > yMax) return oobPositions.yMax;
-          return 1 - (datum.y.value - yMin) / (yMax - yMin);
+          const { yAxisMin, yAxisMax } = viewHandler.getDataView();
+          if (datum.y.value < yAxisMin) return oobPositions.yMin;
+          if (datum.y.value > yAxisMax) return oobPositions.yMax;
+          return 1 - (datum.y.value - yAxisMin) / (yAxisMax - yAxisMin);
         },
       },
       size: {
