@@ -62,6 +62,23 @@ describe('pinch', () => {
       expect(pinchObject.events).to.have.all.keys(['zoomstart', 'zoommove', 'zoomend', 'zoomcancel']);
     });
 
+    describe('zoomstart', () => {
+      it('should add correct zoom object to events', () => {
+        viewHandler.getDataView.returns({ xAxisMin: 1, xAxisMax: 2, yAxisMin: 3, yAxisMax: 4 });
+        pinchObject.events.pointArea = { rect: { width: 1, height: 2 } };
+        e = { preventDefault: sandbox.stub() };
+        pinchObject.events.zoomstart(e);
+        expect(pinchObject.events.started).to.equal('zoom');
+        expect(pinchObject.events.zoom).to.deep.equal({
+          componentSize: { width: 1, height: 2 },
+          xAxisMin: 1,
+          xAxisMax: 2,
+          yAxisMin: 3,
+          yAxisMax: 4,
+        });
+      });
+    });
+
     describe('zoommove', () => {
       describe('pan', () => {
         it('should modify myDataView correctly', () => {
@@ -100,6 +117,22 @@ describe('pinch', () => {
           pinchObject.events.zoommove(e);
           expect(zoom.default).to.have.been.calledOnce;
         });
+      });
+    });
+
+    describe('zoomend', () => {
+      it('should set events.started to false', () => {
+        e = { preventDefault: sandbox.stub() };
+        pinchObject.events.zoomend(e);
+        expect(pinchObject.events.started).to.equal(false);
+      });
+    });
+
+    describe('zoomcancel', () => {
+      it('should set events.started to false', () => {
+        e = { preventDefault: sandbox.stub() };
+        pinchObject.events.zoomcancel(e);
+        expect(pinchObject.events.started).to.equal(false);
       });
     });
   });
