@@ -15,7 +15,7 @@ const pinch = ({ chart, actions, viewHandler }) => ({
   options: {
     event: EVENT_NAME,
     pointers: 2,
-    threshold: 5,
+    threshold: 0,
     enable(r, e) {
       if (this.started === EVENT_NAME || !e) {
         return true;
