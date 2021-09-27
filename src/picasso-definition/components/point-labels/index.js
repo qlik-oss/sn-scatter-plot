@@ -20,19 +20,32 @@ export default function createPointLabels({ layoutService, themeService }) {
   const pointLabelsComponent = {
     type: 'point-label',
     key: KEYS.COMPONENT.POINT_LABELS,
+    data: {
+      collection: KEYS.COLLECTION.MAIN,
+    },
     layout: {
       minimumLayoutMode: MODES.POINT_LABELS,
     },
     settings: {
       label: (node) => node.data.label,
       mode: labels.mode,
-      // debugMode: true,
+      debugMode: true,
     },
     style: {
       fontFamily,
       fontSize,
       fill: color,
-      backgroundColor: style.backgroundColor,
+      backgroundColor: '#ffc0cb',
+    },
+    animations: {
+      enabled: true,
+      trackBy: (node) => {
+        let id;
+        if (node.type === 'text') id = `label: ${node.pointValue}`;
+        else if (node.type === 'line') id = `line: ${node.pointValue}`;
+        else id = `rect: ${node.pointValue}`;
+        return id;
+      },
     },
   };
 

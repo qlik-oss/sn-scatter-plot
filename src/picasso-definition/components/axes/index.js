@@ -10,6 +10,9 @@ export default function createAxes({ models, flags }) {
   const style = themeService.getStyles();
   const viewHandler = chartModel.query.getViewHandler();
 
+  const xTickLabels = [];
+  const yTickLabels = [];
+
   const xAxisDefinition =
     !xAxis || xAxis.show === 'none'
       ? false
@@ -30,6 +33,7 @@ export default function createAxes({ models, flags }) {
             },
             line: {
               stroke: style.axis.line.major.color,
+              strokeWidth: 5,
             },
             ticks: {
               stroke: style.axis.line.major.color,
@@ -38,6 +42,19 @@ export default function createAxes({ models, flags }) {
               stroke: style.axis.line.minor.color,
             },
             paddingEnd: NUMBERS.AXIS.X.PADDING.END,
+          },
+          animations: {
+            enabled: true,
+            trackBy: (node, i) => {
+              if (i === 0) return 'axis';
+              if (node.type === 'text') {
+                xTickLabels.push(node.text);
+                return `label: ${node.text}`;
+              }
+              const id = `mark: ${xTickLabels[i - 1 - xTickLabels.length]}`;
+              if (i === 2 * xTickLabels.length) xTickLabels.length = 0; // empty the array
+              return id;
+            },
           },
         };
 
@@ -61,6 +78,7 @@ export default function createAxes({ models, flags }) {
             },
             line: {
               stroke: style.axis.line.major.color,
+              strokeWidth: 20,
             },
             ticks: {
               stroke: style.axis.line.major.color,
@@ -75,6 +93,19 @@ export default function createAxes({ models, flags }) {
                   yAxis.show === 'title' || viewHandler.getMeta().isHomeState === false
                     ? 0
                     : NUMBERS.AXIS.Y.PADDING.END,
+          },
+          animations: {
+            enabled: true,
+            trackBy: (node, i) => {
+              if (i === 0) return 'axis';
+              if (node.type === 'text') {
+                yTickLabels.push(node.text);
+                return `label: ${node.text}`;
+              }
+              const id = `mark: ${yTickLabels[i - 1 - yTickLabels.length]}`;
+              if (i === 2 * yTickLabels.length) yTickLabels.length = 0; // empty the array
+              return id;
+            },
           },
         };
 

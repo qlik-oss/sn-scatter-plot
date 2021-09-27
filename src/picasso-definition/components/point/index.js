@@ -29,5 +29,6 @@ export default function createPoint({ layoutService, colorService }) {
     beforeRender: ({ size }) => {
       windowSizeMultiplier = Math.min(size.height, size.width) / 300;
     },
+    animations: { enabled: true },
   };
 }
