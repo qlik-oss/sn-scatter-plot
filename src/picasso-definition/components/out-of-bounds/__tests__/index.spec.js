@@ -3,27 +3,22 @@ import * as KEYS from '../../../../constants/keys';
 
 describe('out of bounds', () => {
   let sandbox;
-  let xMin;
-  let xMax;
-  let yMin;
-  let yMax;
   let colorService;
-  let tickModel;
+  let chartModel;
   let create;
+  let viewHandler;
 
   beforeEach(() => {
-    xMin = 2;
-    xMax = 14;
-    yMin = 0;
-    yMax = 10;
     sandbox = sinon.createSandbox();
     colorService = {
       getColor: sandbox.stub(),
     };
-    tickModel = {
+    viewHandler = {
+      getDataView: sandbox.stub(),
+    };
+    chartModel = {
       query: {
-        getXMinMax: () => [xMin, xMax],
-        getYMinMax: () => [yMin, yMax],
+        getViewHandler: () => viewHandler,
       },
     };
 
@@ -39,7 +34,7 @@ describe('out of bounds', () => {
         Y: 'y',
       },
     }));
-    const models = { colorService, tickModel };
+    const models = { colorService, chartModel };
     create = () => createOutOfBounds({ models, context });
   });
 
@@ -69,7 +64,7 @@ describe('out of bounds', () => {
 
   describe('settings', () => {
     it('should have correct properties', () => {
-      expect(create().settings).to.have.all.keys(['x', 'y', 'size', 'strokeWidth', 'stroke', 'fill']);
+      expect(create().settings).to.have.all.keys(['x', 'y', 'size', 'fill']);
     });
   });
 
