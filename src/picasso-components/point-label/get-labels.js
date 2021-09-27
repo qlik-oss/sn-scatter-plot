@@ -42,7 +42,12 @@ export function getLabels({ measureText, mode, nodes, label, labelHeight: textHe
   const geoNodes = nodes.map((node) => {
     const text = label(node);
     const textWidth = measureText(text).width;
-    const { localBounds } = node;
+    const localBounds = node.localBounds || {
+      x: node.cx - node.r,
+      y: node.cy - node.r,
+      width: node.r * 2,
+      height: node.r * 2,
+    };
     const { x, y, width, height } = localBounds;
     const cx = x + width / 2;
     const maxWidth = Math.min(cx, compWidth - cx) * 2;

@@ -41,9 +41,21 @@ export default {
     if (!component || mode === 0) {
       return [];
     }
-    const nodeFilter = (node) =>
-      node.key === key && showLabel(node) && component.data.items.map((item) => item.value).includes(node.data.value);
-    const nodes = [...this.chart.findShapes('circle'), ...this.chart.findShapes('path')].filter(nodeFilter);
+
+    let nodes;
+
+    if (component.animations?.enabled) {
+      const tobeRenderedPoints = (this.chart.getToBeRenderedNodes() || []).filter((node) =>
+        ['circle', 'path'].includes(node.type)
+      );
+      const nodeFilter = (node) =>
+        showLabel(node) && component.data.items.map((item) => item.value).includes(node.data.value);
+      nodes = tobeRenderedPoints.filter(nodeFilter);
+    } else {
+      const nodeFilter = (node) =>
+        node.key === key && showLabel(node) && component.data.items.map((item) => item.value).includes(node.data.value);
+      nodes = [...this.chart.findShapes('circle'), ...this.chart.findShapes('path')].filter(nodeFilter);
+    }
 
     if (!nodes.length) {
       return [];
