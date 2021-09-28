@@ -102,18 +102,18 @@ describe('pinch', () => {
       describe('pinch zoom', () => {
         it('should not call zoom when scale diff is smalller than 0.01', () => {
           pinchObject.events.pointArea = { rect: { width: 1, height: 2 } };
-          e = { preventDefault: sandbox.stub(), scale: 0.792 };
+          e = { preventDefault: sandbox.stub(), scale: 0.892 };
           pinchObject.events.zoomstart(e);
-          e = { preventDefault: sandbox.stub(), scale: 0.791 };
+          e = { preventDefault: sandbox.stub(), scale: 0.891 };
           pinchObject.events.zoommove(e);
           expect(zoom.default).not.to.have.been.called;
         });
 
         it('should call zoom when scale diff is larger than 0.01', () => {
           pinchObject.events.pointArea = { rect: { width: 1, height: 2 } };
-          e = { preventDefault: sandbox.stub(), scale: 1.21 };
+          e = { preventDefault: sandbox.stub(), scale: 1.11 };
           pinchObject.events.zoomstart(e);
-          e = { preventDefault: sandbox.stub(), scale: 1.23 };
+          e = { preventDefault: sandbox.stub(), scale: 1.13 };
           pinchObject.events.zoommove(e);
           expect(zoom.default).to.have.been.calledOnce;
         });

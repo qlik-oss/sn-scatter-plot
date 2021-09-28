@@ -45,7 +45,7 @@ const pinch = ({ chart, actions, viewHandler }) => ({
     zoommove(e) {
       e.preventDefault();
       // Pinch zoom
-      if (e.scale > 1.2 || e.scale < 0.8) {
+      if (e.scale > 1.1 || e.scale < 0.9) {
         const diff = e.scale - lastScale;
 
         if (isWithinThreshold(diff)) {
