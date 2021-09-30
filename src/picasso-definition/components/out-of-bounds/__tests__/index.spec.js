@@ -5,6 +5,7 @@ describe('out of bounds', () => {
   let sandbox;
   let colorService;
   let chartModel;
+  let layoutService;
   let create;
   let viewHandler;
   const xAxisMin = 55;
@@ -17,8 +18,12 @@ describe('out of bounds', () => {
     yAxisMin,
     yAxisMax,
   };
-
-  // TODO test zoom
+  const hyperCube = {
+    qSize: {
+      qcx: 3,
+      qcy: 100,
+    },
+  };
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -34,6 +39,10 @@ describe('out of bounds', () => {
       },
     };
 
+    layoutService = {
+      getHyperCube: () => hyperCube,
+    };
+
     sandbox.stub(KEYS, 'default').get(() => ({
       COMPONENT: {
         OUT_OF_BOUNDS: 'oobComponentKey',
@@ -46,7 +55,7 @@ describe('out of bounds', () => {
         Y: 'y',
       },
     }));
-    const models = { colorService, chartModel };
+    const models = { colorService, chartModel, layoutService };
     create = () => createOutOfBounds({ models, context });
   });
 
