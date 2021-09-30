@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   engine:
-    image: qlikcore/engine:12.1070.0
+    image: qlikcore/engine:12.1126.0
     command: -S AcceptEULA=yes -S DocumentDirectory=/apps -S DisableWSOriginCheck=1
     ports:
       - 9076:9076
@@ -11,7 +11,7 @@ services:
 
     # Hide output from engine container
     logging:
-      driver: "none"
+      driver: 'none'
 
   rendering-test-runner:
     build: .
@@ -22,4 +22,3 @@ services:
     # Map artifact folders between host and Docker
     volumes:
       - ./test/rendering/artifacts:/test/rendering/artifacts
-
