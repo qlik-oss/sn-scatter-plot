@@ -7,6 +7,18 @@ describe('out of bounds', () => {
   let chartModel;
   let create;
   let viewHandler;
+  const xAxisMin = 55;
+  const xAxisMax = 95;
+  const yAxisMin = 55;
+  const yAxisMax = 70;
+  const dataView = {
+    xAxisMax,
+    xAxisMin,
+    yAxisMin,
+    yAxisMax,
+  };
+
+  // TODO test zoom
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -14,7 +26,7 @@ describe('out of bounds', () => {
       getColor: sandbox.stub(),
     };
     viewHandler = {
-      getDataView: sandbox.stub(),
+      getDataView: () => dataView,
     };
     chartModel = {
       query: {
@@ -60,6 +72,31 @@ describe('out of bounds', () => {
     it('should have correct data', () => {
       expect(create().data.collection).to.equal('mainCollectionKey');
     });
+
+    it('should filter oob values', () => {
+      const d = {
+        x: { value: 56 },
+        y: { value: 70 },
+      };
+      expect(create().data.filter(d)).to.equal(false);
+      // y > yAxisMax
+      d.y.value = 80;
+      expect(create().data.filter(d)).to.equal(true);
+      // x < xAxisMin
+      d.x.value = 30;
+      d.y.value = 60;
+      expect(create().data.filter(d)).to.equal(true);
+      // x < xAxisMin and y > XAxisMax
+      d.y.value = 80;
+      expect(create().data.filter(d)).to.equal(true);
+      // y < yAxisMin
+      d.y.value = 50;
+      d.x.value = 60;
+      expect(create().data.filter(d)).to.equal(true);
+      // x > xAxisMax
+      d.x.value = 100;
+      expect(create().data.filter(d)).to.equal(true);
+    });
   });
 
   describe('settings', () => {
@@ -71,6 +108,21 @@ describe('out of bounds', () => {
   describe('beforeRender', () => {
     it('should be set with a function', () => {
       expect(create().beforeRender).to.be.a('function');
+    });
+  });
+
+  describe('dataView', () => {
+    it('should filter correct values when dataView changes', () => {
+      const d = {
+        x: { value: 56 },
+        y: { value: 70 },
+      };
+      expect(create().data.filter(d)).to.equal(false);
+      dataView.xAxisMax = 70;
+      dataView.xAxisMin = 60;
+      dataView.yAxisMin = 80;
+      dataView.yAxisMax = 95;
+      expect(create().data.filter(d)).to.equal(true);
     });
   });
 });
