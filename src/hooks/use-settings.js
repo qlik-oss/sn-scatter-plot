@@ -9,6 +9,7 @@ import {
   useSelections,
   useEffect,
   useRect,
+  useApp,
 } from '@nebula.js/stardust';
 import createPicassoDefinition from '../picasso-definition';
 import getLogicalSize from '../logical-size';
@@ -23,6 +24,7 @@ const useSettings = ({ core, models, flags }) => {
   const constraints = useConstraints();
   const translator = useTranslator();
   const selections = useSelections();
+  const app = useApp();
 
   const getPicassoDef = (logicalSize) =>
     createPicassoDefinition({
@@ -36,6 +38,7 @@ const useSettings = ({ core, models, flags }) => {
       translator,
       logicalSize,
       flags,
+      app,
     });
 
   usePromise(() => {

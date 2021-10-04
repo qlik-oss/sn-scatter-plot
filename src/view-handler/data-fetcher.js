@@ -1,3 +1,6 @@
+// import { debouncedUpdateLayout } from '../utils/binning-utils';
+// import isBigData from '../utils/is-big-data';
+
 export default function createDataFetcher({ layoutService, model }) {
   let lastDataWindow;
   let requestInProgress;
@@ -25,6 +28,11 @@ export default function createDataFetcher({ layoutService, model }) {
       }
 
       lastDataWindow = dataWindow;
+
+      // const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
+
+      // isBigData(qcy, app.layout, flags)
+      //   ? debouncedUpdateLayout({ app, flags, layoutService, viewHandler, model })
 
       requestInProgress = model.getHyperCubeData('/qHyperCubeDef', [dataRect]).then((pages) => {
         requestInProgress = null;

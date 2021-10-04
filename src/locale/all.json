@@ -119,6 +119,26 @@
       "ru-RU": "В настоящее время отображается ограниченный набор данных."
     }
   },
+  "properties.compression.providingOverviewOf": {
+    "id": "properties.compression.providingOverviewOf",
+    "locale": {
+      "en-US": "Providing overview of {0} dimension values.",
+      "zh-TW": "正在提供 {0} 個維度值的概述。",
+      "zh-CN": "提供 {0} 维度值的概述。",
+      "tr-TR": "{0} boyut değerine genel bakış sağlanıyor.",
+      "sv-SE": "Ger en översikt av {0} dimensionsvärden.",
+      "it-IT": "Fornita panoramica di {0} valori di dimensione.",
+      "es-ES": "Se ofrece una vista general de {0} valores de dimensión.",
+      "de-DE": "Bietet einen Überblick über {0} Dimensionswerte.",
+      "pl-PL": "Udostępnianie przeglądu wartości wymiaru {0}.",
+      "nl-NL": "Er wordt een overzicht van {0} dimensiewaarden verstrekt.",
+      "ko-KR": "{0}차원 값의 개요 제공.",
+      "pt-BR": "Fornecendo visão geral de {0} valores de dimensão.",
+      "fr-FR": "Offre une vue d'ensemble de {0} valeurs de dimension.",
+      "ja-JP": "{0} 軸値の概要を提供",
+      "ru-RU": "Обеспечение обзора значений измерения в следующем количестве: {0}."
+    }
+  },
   "Object_Disclaimer_OnlyNegativeOrZeroValues": {
     "id": "Object.Disclaimer.OnlyNegativeOrZeroValues",
     "locale": {

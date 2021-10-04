@@ -31,6 +31,7 @@ const useCore = ({ flags }) => {
       chart,
       actions,
       viewState,
+      picasso,
     });
 
     return () => {

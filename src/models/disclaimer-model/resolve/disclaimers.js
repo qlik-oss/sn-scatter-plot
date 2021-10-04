@@ -1,3 +1,6 @@
+import isBigData from '../../../utils/is-big-data';
+import NUMBERS from '../../../constants/numbers';
+
 export default [
   {
     key: 'NoDataExist',
@@ -18,13 +21,25 @@ export default [
   {
     key: 'LimitedData',
     alignment: 'bottom',
-    condition: ({ layoutService, flags }) => {
+    condition: ({ app, layoutService, flags }) => {
       if (layoutService.getLayout().showDisclaimer === false && flags.isEnabled('SHOW_DISCLAIMER')) {
         return false;
       }
 
       const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-      return qcy > 1000;
+      return qcy > NUMBERS.MAX_NR_SCATTER && !isBigData(qcy, app.layout, flags);
+    },
+  },
+  {
+    key: 'OverviewData',
+    alignment: 'bottom',
+    condition: ({ app, layoutService, flags }) => {
+      if (layoutService.getLayout().showDisclaimer === false && flags.isEnabled('SHOW_DISCLAIMER')) {
+        return false;
+      }
+      const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
+
+      return qcy > NUMBERS.MAX_NR_SCATTER && isBigData(qcy, app.layout, flags);
     },
   },
 ];

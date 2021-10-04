@@ -1,16 +1,15 @@
 import KEYS from '../../constants/keys';
-import createViewHandler from '../../view-handler';
+// import { debouncedUpdateLayout } from '../../utils/binning-utils';
 
 export default function createChartModel({
   chart,
   localeInfo,
   layoutService,
-  dockService,
-  model,
   colorService,
   picasso,
   viewState,
   extremumModel,
+  viewHandler,
 }) {
   let interactionInProgess = false;
   const EXCLUDE = [
@@ -31,16 +30,10 @@ export default function createChartModel({
 
   const dataset = picasso.data('q')(mainConfig);
 
-  const viewHandler = createViewHandler({
-    dockService,
-    layoutService,
-    model,
-    viewState,
-  });
-
   function updatePartial() {
     const dataView = viewState.get('dataView');
     const { isHomeState } = viewHandler.getMeta();
+    // const bins = debouncedUpdateLayout({ app, flags, layoutService, tickModel, model });
     extremumModel.command.updateExtrema(dataView, isHomeState);
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???

@@ -2,14 +2,16 @@ import createGridLines from './grid-lines';
 import createAxes from './axes';
 import createAxisTitles from './axis-titles';
 import createPoint from './point';
+// import createHeatMap from './heat-map';
 import createReferenceLines from './reference-lines';
 import createPointLabels from './point-labels';
 import createTooltips from './tooltips';
 import createDisclaimer from './disclaimer';
 
-export default function createComponents({ context, models, flags }) {
-  const { colorService, disclaimerModel } = models;
-  const disclaimer = createDisclaimer({ disclaimerModel, context });
+export default function createComponents({ context, models, flags, picasso, app }) {
+  const { colorService, disclaimerModel, layoutService } = models;
+  const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
+  // const bins = debouncedUpdateLayout({ app, flags, layoutService, tickModel, model });
 
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
     return [disclaimer];
@@ -18,7 +20,8 @@ export default function createComponents({ context, models, flags }) {
   const components = [
     createGridLines(models),
     ...createReferenceLines({ models, context }),
-    createPoint(models),
+    // createHeatMap({ app, models, flags }),
+    createPoint({ app, models, flags }),
     ...createAxes({ models, flags }),
     ...createAxisTitles(models),
     createPointLabels(models),
