@@ -1,3 +1,4 @@
+import extend from 'extend';
 import KEYS from '../../../constants/keys';
 import * as zoom from '../../../utils/math/zoom';
 import pinch from '../pinch';
@@ -9,6 +10,7 @@ describe('pinch', () => {
   let viewHandler;
   let pinchObject;
   let e;
+  let myDataView;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -57,20 +59,80 @@ describe('pinch', () => {
 
   describe('events', () => {
     it('should have correct attributes', () => {
-      expect(pinchObject.events).to.have.all.keys(['zoomstart', 'zoommove']);
+      expect(pinchObject.events).to.have.all.keys(['zoomstart', 'zoommove', 'zoomend', 'zoomcancel']);
+    });
+
+    describe('zoomstart', () => {
+      it('should add correct zoom object to events', () => {
+        viewHandler.getDataView.returns({ xAxisMin: 1, xAxisMax: 2, yAxisMin: 3, yAxisMax: 4 });
+        pinchObject.events.pointArea = { rect: { width: 1, height: 2 } };
+        e = { preventDefault: sandbox.stub() };
+        pinchObject.events.zoomstart(e);
+        expect(pinchObject.events.started).to.equal('zoom');
+        expect(pinchObject.events.zoom).to.deep.equal({
+          componentSize: { width: 1, height: 2 },
+          xAxisMin: 1,
+          xAxisMax: 2,
+          yAxisMin: 3,
+          yAxisMax: 4,
+        });
+      });
     });
 
     describe('zoommove', () => {
-      it('should not call zoom when scale diff is smalller than 0.01', () => {
-        e = { preventDefault: sandbox.stub(), scale: 0.001 };
-        pinchObject.events.zoommove(e);
-        expect(zoom.default).not.to.have.been.called;
+      describe('pan', () => {
+        it('should modify myDataView correctly', () => {
+          e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20, scale: 1 };
+          pinchObject.events.zoom = {
+            componentSize: { width: 100, height: 200 },
+            xAxisMin: -1000,
+            xAxisMax: 1000,
+            yAxisMin: 0,
+            yAxisMax: 2000,
+          };
+          myDataView = {};
+          viewHandler.setDataView = (dataView) => {
+            extend(true, myDataView, dataView);
+          };
+          pinchObject.events.zoommove(e);
+          expect(myDataView).to.deep.equal({ xAxisMin: -1200, xAxisMax: 800, yAxisMin: 200, yAxisMax: 2200 });
+        });
       });
 
-      it('should call zoom when scale diff is larger than 0.01', () => {
-        e = { preventDefault: sandbox.stub(), scale: 1.1 };
-        pinchObject.events.zoommove(e);
-        expect(zoom.default).to.have.been.calledOnce;
+      describe('pinch zoom', () => {
+        it('should not call zoom when scale diff is smalller than 0.01', () => {
+          pinchObject.events.pointArea = { rect: { width: 1, height: 2 } };
+          e = { preventDefault: sandbox.stub(), scale: 0.892 };
+          pinchObject.events.zoomstart(e);
+          e = { preventDefault: sandbox.stub(), scale: 0.891 };
+          pinchObject.events.zoommove(e);
+          expect(zoom.default).not.to.have.been.called;
+        });
+
+        it('should call zoom when scale diff is larger than 0.01', () => {
+          pinchObject.events.pointArea = { rect: { width: 1, height: 2 } };
+          e = { preventDefault: sandbox.stub(), scale: 1.11 };
+          pinchObject.events.zoomstart(e);
+          e = { preventDefault: sandbox.stub(), scale: 1.13 };
+          pinchObject.events.zoommove(e);
+          expect(zoom.default).to.have.been.calledOnce;
+        });
+      });
+    });
+
+    describe('zoomend', () => {
+      it('should set events.started to false', () => {
+        e = { preventDefault: sandbox.stub() };
+        pinchObject.events.zoomend(e);
+        expect(pinchObject.events.started).to.equal(false);
+      });
+    });
+
+    describe('zoomcancel', () => {
+      it('should set events.started to false', () => {
+        e = { preventDefault: sandbox.stub() };
+        pinchObject.events.zoomcancel(e);
+        expect(pinchObject.events.started).to.equal(false);
       });
     });
   });

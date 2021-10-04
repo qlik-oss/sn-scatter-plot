@@ -51,12 +51,6 @@ const pan = ({ chart, actions, viewHandler }) => ({
       };
 
       viewHandler.setDataView(dataView);
-      // viewHandler.setDataView({
-      //   xAxisMin: xAxisMin - xDiff,
-      //   xAxisMax: xAxisMax - xDiff,
-      //   yAxisMin: yAxisMin + yDiff,
-      //   yAxisMax: yAxisMax + yDiff,
-      // });
     },
     areaPanend(e) {
       e.preventDefault();

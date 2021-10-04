@@ -17,34 +17,66 @@ const pinch = ({ chart, actions, viewHandler }) => ({
     pointers: 2,
     threshold: 0,
     enable(r, e) {
-      if (!e) {
+      if (this.started === EVENT_NAME || !e) {
         return true;
       }
       if (!actions.zoom.enabled()) {
         return false;
       }
 
-      [this.pointAreaPinched] = chart
+      [this.pointArea] = chart
         .componentsFromPoint({ x: e.center.x, y: e.center.y })
         .filter((c) => c.key === KEYS.COMPONENT.POINT);
 
-      return this.pointAreaPinched;
+      return this.pointArea;
     },
   },
   events: {
     zoomstart(e) {
-      lastScale = e.scale;
       e.preventDefault();
+      lastScale = e.scale;
+      this.started = EVENT_NAME;
+      const initialDataView = viewHandler.getDataView();
+      this[EVENT_NAME] = {
+        componentSize: this.pointArea.rect,
+        ...initialDataView,
+      };
     },
     zoommove(e) {
-      const diff = e.scale - lastScale;
-
-      if (isWithinThreshold(diff)) {
-        zoom(e, chart, this.pointAreaPinched, viewHandler, lastScale / e.scale);
-        lastScale = e.scale;
-      }
-
       e.preventDefault();
+      // Pinch zoom
+      if (e.scale > 1.1 || e.scale < 0.9) {
+        const diff = e.scale - lastScale;
+
+        if (isWithinThreshold(diff)) {
+          zoom(e, chart, this.pointArea, viewHandler, lastScale / e.scale);
+          lastScale = e.scale;
+        }
+      }
+      // Pan
+      else {
+        const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin } = this[EVENT_NAME];
+
+        const xDiff = (xAxisMax - xAxisMin) * (e.deltaX / componentSize.width);
+        const yDiff = (yAxisMax - yAxisMin) * (e.deltaY / componentSize.height);
+
+        const dataView = {
+          xAxisMin: xAxisMin - xDiff,
+          xAxisMax: xAxisMax - xDiff,
+          yAxisMin: yAxisMin + yDiff,
+          yAxisMax: yAxisMax + yDiff,
+        };
+
+        viewHandler.setDataView(dataView);
+      }
+    },
+    zoomend(e) {
+      e.preventDefault();
+      this.started = false;
+    },
+    zoomcancel(e) {
+      e.preventDefault();
+      this.started = false;
     },
   },
 });
