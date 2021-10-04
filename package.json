@@ -1,6 +1,6 @@
 {
   "name": "@nebula.js/sn-scatter-plot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A scatter plot.",
   "license": "MIT",
   "author": "QlikTech International AB",
@@ -93,8 +93,8 @@
     "prettier": "2.2.1",
     "pretty-quick": "3.1.0",
     "prop-types": "^15.7.2",
-    "qlik-chart-modules": "0.13.3",
     "puppeteer": "2.0.0",
+    "qlik-chart-modules": "0.13.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "scriptappy-from-jsdoc": "0.7.0",
