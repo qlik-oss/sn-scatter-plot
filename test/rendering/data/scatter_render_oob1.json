@@ -1,6 +1,6 @@
 {
   "qInfo": {
-    "qId": "SpwJ",
+    "qId": "czmn",
     "qType": "sn-scatter-plot"
   },
   "qExtendsId": "",
@@ -10,11 +10,11 @@
     "qStateName": "",
     "qDimensions": [
       {
-        "qLibraryId": "",
+        "qLibraryId": "jgxpDbw",
         "qDef": {
           "qGrouping": "N",
-          "qFieldDefs": ["Alpha"],
-          "qFieldLabels": [""],
+          "qFieldDefs": [],
+          "qFieldLabels": [],
           "qSortCriterias": [
             {
               "qSortByState": 0,
@@ -34,7 +34,7 @@
           "qActiveField": 0,
           "qLabelExpression": "",
           "autoSort": true,
-          "cId": "ZaKwP",
+          "cId": "jawgk",
           "othersLabel": "Others"
         },
         "qNullSuppression": false,
@@ -71,27 +71,7 @@
           "qv": ""
         },
         "qAttributeExpressions": [],
-        "qAttributeDimensions": [
-          {
-            "qDef": "Alpha",
-            "qLibraryId": "",
-            "qSortBy": {
-              "qSortByState": 0,
-              "qSortByFrequency": 0,
-              "qSortByNumeric": 0,
-              "qSortByAscii": 1,
-              "qSortByLoadOrder": 0,
-              "qSortByExpression": 0,
-              "qExpression": {
-                "qv": ""
-              },
-              "qSortByGreyness": 0
-            },
-            "qAttribute": true,
-            "id": "colorByAlternative",
-            "label": "Alpha"
-          }
-        ],
+        "qAttributeDimensions": [],
         "qCalcCondition": {
           "qCond": {
             "qv": ""
@@ -104,13 +84,13 @@
     ],
     "qMeasures": [
       {
-        "qLibraryId": "",
+        "qLibraryId": "DSrjAGm",
         "qDef": {
           "qLabel": "",
           "qDescription": "",
           "qTags": [],
           "qGrouping": "N",
-          "qDef": "Count(Dim1)",
+          "qDef": "",
           "qNumFormat": {
             "qType": "U",
             "qnDec": 10,
@@ -128,7 +108,7 @@
           "qExpressions": [],
           "qLabelExpression": "",
           "autoSort": true,
-          "cId": "HBZdJ",
+          "cId": "euYFpHv",
           "numFormatFromTemplate": true
         },
         "qSortBy": {
@@ -198,107 +178,13 @@
         }
       },
       {
-        "qLibraryId": "",
+        "qLibraryId": "KdPhAt",
         "qDef": {
           "qLabel": "",
           "qDescription": "",
           "qTags": [],
           "qGrouping": "N",
-          "qDef": "Count(Dim2)",
-          "qNumFormat": {
-            "qType": "U",
-            "qnDec": 10,
-            "qUseThou": 0,
-            "qFmt": "",
-            "qDec": "",
-            "qThou": ""
-          },
-          "qRelative": false,
-          "qBrutalSum": false,
-          "qAggrFunc": "",
-          "qAccumulate": 0,
-          "qReverseSort": false,
-          "qActiveExpression": 0,
-          "qExpressions": [],
-          "qLabelExpression": "",
-          "autoSort": true,
-          "cId": "ybdVaa",
-          "numFormatFromTemplate": true
-        },
-        "qSortBy": {
-          "qSortByState": 0,
-          "qSortByFrequency": 0,
-          "qSortByNumeric": -1,
-          "qSortByAscii": 0,
-          "qSortByLoadOrder": 1,
-          "qSortByExpression": 0,
-          "qExpression": {
-            "qv": ""
-          },
-          "qSortByGreyness": 0
-        },
-        "qAttributeExpressions": [],
-        "qAttributeDimensions": [],
-        "qCalcCond": {
-          "qv": ""
-        },
-        "qCalcCondition": {
-          "qCond": {
-            "qv": ""
-          },
-          "qMsg": {
-            "qv": ""
-          }
-        },
-        "qTrendLines": [],
-        "qMiniChartDef": {
           "qDef": "",
-          "qLibraryId": "",
-          "qSortBy": {
-            "qSortByState": 0,
-            "qSortByFrequency": 0,
-            "qSortByNumeric": 0,
-            "qSortByAscii": 0,
-            "qSortByLoadOrder": 0,
-            "qSortByExpression": 0,
-            "qExpression": {
-              "qv": ""
-            },
-            "qSortByGreyness": 0
-          },
-          "qOtherTotalSpec": {
-            "qOtherMode": "OTHER_OFF",
-            "qOtherCounted": {
-              "qv": ""
-            },
-            "qOtherLimit": {
-              "qv": ""
-            },
-            "qOtherLimitMode": "OTHER_GT_LIMIT",
-            "qSuppressOther": false,
-            "qForceBadValueKeeping": true,
-            "qApplyEvenWhenPossiblyWrongResult": true,
-            "qGlobalOtherGrouping": false,
-            "qOtherCollapseInnerDimensions": false,
-            "qOtherSortMode": "OTHER_SORT_DESCENDING",
-            "qTotalMode": "TOTAL_OFF",
-            "qReferencedExpression": {
-              "qv": ""
-            }
-          },
-          "qMaxNumberPoints": -1,
-          "qAttributeExpressions": [],
-          "qNullSuppression": false
-        }
-      },
-      {
-        "qLibraryId": "",
-        "qDef": {
-          "qLabel": "",
-          "qDescription": "",
-          "qTags": [],
-          "qGrouping": "N",
-          "qDef": "Count(Dim3)",
           "qNumFormat": {
             "qType": "U",
             "qnDec": 10,
@@ -316,7 +202,7 @@
           "qExpressions": [],
           "qLabelExpression": "",
           "autoSort": true,
-          "cId": "upzLWV",
+          "cId": "jjLyC",
           "numFormatFromTemplate": true
         },
         "qSortBy": {
@@ -386,7 +272,7 @@
         }
       }
     ],
-    "qInterColumnSortOrder": [3, 2, 1, 0],
+    "qInterColumnSortOrder": [2, 1, 0],
     "qSuppressZero": false,
     "qSuppressMissing": true,
     "qInitialDataFetch": [],
@@ -461,7 +347,7 @@
     "refLinesY": []
   },
   "showTitles": true,
-  "title": "",
+  "title": "new",
   "subtitle": "",
   "footnote": "",
   "disableNavMenu": false,
@@ -476,12 +362,12 @@
     "mode": 1
   },
   "gridLine": {
-    "auto": true,
+    "auto": false,
     "spacing": 2
   },
   "color": {
-    "auto": false,
-    "mode": "byDimension",
+    "auto": true,
+    "mode": "primary",
     "formatting": {
       "numFormatFromTemplate": true
     },
@@ -499,18 +385,7 @@
     "dimensionScheme": "12",
     "autoMinMax": true,
     "measureMin": 0,
-    "measureMax": 10,
-    "altLabel": "Alpha",
-    "byMeasureDef": {
-      "label": "Count(Dim1)",
-      "key": "Count(Dim1)",
-      "type": "expression"
-    },
-    "byDimDef": {
-      "label": "Alpha",
-      "key": "Alpha",
-      "type": "expression"
-    }
+    "measureMax": 10
   },
   "legend": {
     "show": true,
@@ -523,7 +398,7 @@
     "spacing": 1,
     "autoMinMax": true,
     "minMax": "min",
-    "min": 6,
+    "min": 0,
     "max": 10
   },
   "yAxis": {
@@ -533,7 +408,7 @@
     "autoMinMax": false,
     "minMax": "max",
     "min": 0,
-    "max": 780
+    "max": 700
   },
   "tooltip": {
     "auto": true,
