@@ -32,7 +32,7 @@ export default function createViewHandler({ app, layoutService, extremumModel, m
 
       const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
 
-      return isBigData(qcy, app.layout, flags) && flags.isEnabled('binned_data')
+      return isBigData(qcy, app.layout, flags) && flags.isEnabled('DATA_BINNING')
         ? updateBinnedData({ app, flags, layoutService, extremumModel, model })
         : dataFetcher.fetchData(dataRect);
     },

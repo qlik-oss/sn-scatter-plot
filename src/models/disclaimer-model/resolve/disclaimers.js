@@ -27,7 +27,7 @@ export default [
       }
 
       const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-      return qcy > NUMBERS.MAX_NR_SCATTER && (!isBigData(qcy, app.layout, flags) || !flags.isEnabled('binned_data'));
+      return qcy > NUMBERS.MAX_NR_SCATTER && (!isBigData(qcy, app.layout, flags) || !flags.isEnabled('DATA_BINNING'));
     },
   },
   {
@@ -37,7 +37,7 @@ export default [
       if (
         layoutService.getLayout().showDisclaimer === false &&
         flags.isEnabled('SHOW_DISCLAIMER') &&
-        !flags.isEnabled('binned_data')
+        !flags.isEnabled('DATA_BINNING')
       ) {
         return false;
       }

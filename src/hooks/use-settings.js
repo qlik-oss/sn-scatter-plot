@@ -55,7 +55,7 @@ const useSettings = ({ core, models, flags }) => {
     const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
 
     return viewHandler.fetchData().then((pages) => {
-      isBigData(qcy, app.layout, flags) && flags.isEnabled('binned_data')
+      isBigData(qcy, app.layout, flags) && flags.isEnabled('DATA_BINNING')
         ? layoutService.setLayoutValue('qDataPages', pages)
         : layoutService.setDataPages(pages);
       return pluginService.initialize().then(() =>
