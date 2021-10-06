@@ -68,6 +68,54 @@ export default function createChartModel({
 
   const state = { isPrelayout: true };
 
+  const getBinData = () => ({
+    key: 'binData',
+    type: 'matrix',
+    data: layoutService.getLayoutValue('bin')[0].filter((item) => item.qText !== undefined),
+    config: {
+      parse: {
+        fields() {
+          return [
+            {
+              key: 'bin',
+              title: 'Bin',
+            },
+            {
+              key: 'binX',
+              title: 'BinX',
+            },
+            {
+              key: 'binY',
+              title: 'BinY',
+            },
+            {
+              key: 'binDensity',
+              title: 'Bin Density',
+            },
+            {
+              key: 'binWidth',
+              title: 'Bin Width',
+            },
+            {
+              key: 'binHeight',
+              title: 'Bin Height',
+            },
+          ];
+        },
+        row(d) {
+          return {
+            bin: d.qElemNumber,
+            binX: (d.qText[0] + d.qText[2]) / 2,
+            binY: (d.qText[1] + d.qText[3]) / 2,
+            binWidth: Math.abs(d.qText[0] - d.qText[2]),
+            binHeight: Math.abs(d.qText[1] - d.qText[3]),
+            binDensity: d.qNum,
+          };
+        },
+      },
+    },
+  });
+
   return {
     query: {
       getDataset: () => dataset,
@@ -86,6 +134,7 @@ export default function createChartModel({
               type: 'q',
               ...mainConfig,
             },
+            getBinData(),
             ...colorService.getData(),
           ],
           settings,
@@ -93,12 +142,14 @@ export default function createChartModel({
         state.isPrelayout = false;
       },
       update: ({ settings } = {}) => {
+        const binData = getBinData();
         chart.update({
           data: [
             {
               type: 'q',
               ...mainConfig,
             },
+            binData,
             ...colorService.getData(),
           ],
           settings,

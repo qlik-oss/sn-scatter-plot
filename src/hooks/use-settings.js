@@ -56,7 +56,7 @@ const useSettings = ({ core, models, flags }) => {
 
     return viewHandler.fetchData().then((pages) => {
       isBigData(qcy, app.layout, flags) && flags.isEnabled('DATA_BINNING')
-        ? layoutService.setLayoutValue('qDataPages', pages)
+        ? layoutService.setLayoutValue('bin', pages)
         : layoutService.setDataPages(pages);
       return pluginService.initialize().then(() =>
         colorService.initialize().then(() => {
