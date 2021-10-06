@@ -11,7 +11,7 @@ export default function create({
   app,
   flags,
   layoutService,
-  tickModel,
+  extremumModel,
   model,
 }) {
   const hammer = {
@@ -21,7 +21,7 @@ export default function create({
       // Note: the order of these gestures are important
       ...colorService.custom.legendInteractions(), // need higher priority than the tap in selectables.gestures
       ...[...gestures].sort((a, b) => (b.prio || 0) - (a.prio || 0)),
-      pan({ chart, actions, viewHandler, app, flags, layoutService, tickModel, model }),
+      pan({ chart, actions, viewHandler, app, flags, layoutService, extremumModel, model }),
       pinch({ chart, actions, viewHandler }),
     ],
   };

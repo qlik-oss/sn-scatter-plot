@@ -1,10 +1,10 @@
 import KEYS from '../../constants/keys';
-import { debouncedUpdateLayout } from '../../utils/binning-utils';
+import { updateBinnedData } from '../../utils/binning-utils';
 
 const threshold = 10;
 const eventName = 'areaPan';
 
-const pan = ({ chart, actions, viewHandler, app, flags, layoutService, tickModel, model }) => ({
+const pan = ({ chart, actions, viewHandler, app, flags, layoutService, extremumModel, model }) => ({
   type: 'Pan',
   key: 'panorama',
   options: {
@@ -56,7 +56,7 @@ const pan = ({ chart, actions, viewHandler, app, flags, layoutService, tickModel
     areaPanend(e) {
       e.preventDefault();
       this.started = false;
-      debouncedUpdateLayout({ app, flags, layoutService, tickModel, model });
+      updateBinnedData({ app, flags, layoutService, extremumModel, model });
     },
     areaPancancel(e) {
       e.preventDefault();

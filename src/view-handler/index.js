@@ -1,5 +1,7 @@
 import extend from 'extend';
 import createDataFetcher from './data-fetcher';
+import isBigData from '../utils/is-big-data';
+import { updateBinnedData } from '../utils/binning-utils';
 
 function areIntervalsEqual(min1, max1, min2, max2, e) {
   // e is the relative tolerance; d is the absolute tolerence
@@ -9,7 +11,7 @@ function areIntervalsEqual(min1, max1, min2, max2, e) {
   return Math.abs(min2 - min1) <= d && Math.abs(max2 - max1) <= d;
 }
 
-export default function createViewHandler({ layoutService, model, viewState }) {
+export default function createViewHandler({ app, layoutService, extremumModel, model, viewState, flags }) {
   let dataFetcher;
   const meta = { homeStateDataView: {}, scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1 };
 
@@ -28,7 +30,11 @@ export default function createViewHandler({ layoutService, model, viewState }) {
         qHeight: 2000, // data.qHyperCube.qSize.qcy
       };
 
-      return dataFetcher.fetchData(dataRect);
+      const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
+
+      return isBigData(qcy, app.layout, flags) && flags.isEnabled('binned_data')
+        ? updateBinnedData({ app, flags, layoutService, extremumModel, model })
+        : dataFetcher.fetchData(dataRect);
     },
 
     setDataView(dataView) {

@@ -19,7 +19,7 @@ export default function createPicassoDefinition({
   app,
 }) {
   const { chart, actions, picasso } = core;
-  const { chartModel, colorService, pluginService, layoutService, tickModel } = models;
+  const { chartModel, colorService, pluginService, layoutService, extremumModel } = models;
   const viewHandler = chartModel.query.getViewHandler();
   const viewState = chartModel.query.getViewState();
   const localeInfo = chartModel.query.getLocaleInfo();
@@ -52,7 +52,7 @@ export default function createPicassoDefinition({
       app,
       flags,
       layoutService,
-      tickModel,
+      extremumModel,
       model,
     }),
     scales,

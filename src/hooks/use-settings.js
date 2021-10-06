@@ -14,6 +14,7 @@ import {
 import createPicassoDefinition from '../picasso-definition';
 import getLogicalSize from '../logical-size';
 import { initializeViewState, updateViewState } from './view-state';
+import isBigData from '../utils/is-big-data';
 
 const useSettings = ({ core, models, flags }) => {
   const rect = useRect();
@@ -51,8 +52,12 @@ const useSettings = ({ core, models, flags }) => {
     const viewHandler = chartModel.query.getViewHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
 
+    const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
+
     return viewHandler.fetchData().then((pages) => {
-      layoutService.setDataPages(pages);
+      isBigData(qcy, app.layout, flags) && flags.isEnabled('binned_data')
+        ? layoutService.setLayoutValue('qDataPages', pages)
+        : layoutService.setDataPages(pages);
       return pluginService.initialize().then(() =>
         colorService.initialize().then(() => {
           colorService.custom.updateBrushAliases();

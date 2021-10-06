@@ -1,4 +1,3 @@
-import { debouncer } from 'qlik-chart-modules';
 import isBigData from './is-big-data';
 import NUMBERS from '../constants/numbers';
 
@@ -42,22 +41,6 @@ const getBinnedData = (left, top, width, height, zoomLevel, layoutService, model
   const heatMapLevelZoomChange = zoomLevel ? zoomLevel - 1 : 0;
   const resolutionLevel = Math.min(queryLevel + heatMapLevelZoomChange, MaxResolutionLevel);
 
-  const rePaint = function () {
-    // self._fetchedData = true;
-    // self.prePaint(self._data);
-    // return Deferred.all([self._updateData(self._data)]).then(() => {
-    //   deferred.resolve();
-    //   if (self._destroyed) {
-    //     return;
-    //   }
-    //   if (self.backendApi.isSnapshot) {
-    //     self._isBigData =
-    //       !!self._data.dataPages && self._data.dataPages.length > 0 && self._data.dataPages[0].qMatrix.length > 0; // if snapshot was taken when zoomed in - data may not be 'bigData' anymore.
-    //     self.components.dataArea.setIsBigData(self._isBigData);
-    //   }
-    // });
-  };
-
   const requestPromise = model.getHyperCubeBinnedData(
     '/qHyperCubeDef',
     layout === undefined
@@ -84,54 +67,22 @@ const getBinnedData = (left, top, width, height, zoomLevel, layoutService, model
     0
   );
 
-  // this.$scope.throbberApi.trackRequest(requestPromise);
-
-  return requestPromise.then((dataPages) => {
-    if (dataPages[0].qMatrix.length > 0) {
-      const splittedDataPages = splitJSONDataPages([dataPages[0]]);
-      console.log(splittedDataPages);
-      /*
-      self.components.dataArea.setHeatMapData(splittedDataPages); // the first row is meta data
-      self._heatMapData = self.components.dataArea.getHeatMapData(); // removed the first row which is meta data
-
-      // Set the max min of the custom color map to the number of items in the largest cluster
-      self._heatColorMap.setMaxMin(splittedDataPages[0][0].qNum, 0);
-
-      //   if (self._needUpdateMiniMap) {
-      //     self.$scope.$emit('onUpdateMiniMapData', splittedDataPages);
-      //   }
-      self.components.dataArea.setIsReduced(true);
-      */
-    } else {
-      /*
-      self._isReduced = false;
-      self._data.qHyperCube.isReduced = false;
-      self._data.qHyperCube.qDataPages = [dataPages[1]];
-      self.components.dataArea.setIsReduced(false);
-      // allowLasso.call( self, true );
-      */
-    }
-    return rePaint();
-  });
+  return requestPromise.then((dataPages) =>
+    dataPages[0].qMatrix.length > 0 ? splitJSONDataPages([dataPages[0]]) : [dataPages[1]]
+  );
 };
 
-const debouncedUpdateLayout = debouncer(
-  ({ app, flags, layoutService, tickModel, model }) => {
-    const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-    const requestNewDataOnInteraction = isBigData(qcy, app.layout, flags) && !layoutService.meta.isSnapshot;
-    const [xAxisMin, xAxisMax] = tickModel.query.getXMinMax();
-    const [yAxisMin, yAxisMax] = tickModel.query.getYMinMax();
-    const { qMin, qMax } = layoutService.getHyperCubeValue('qMeasureInfo.1', {});
-    const zoomLevel = Math.floor(Math.sqrt((qMax - qMin) / (yAxisMax - yAxisMin)));
-    if (requestNewDataOnInteraction) {
-      getBinnedData(xAxisMin, yAxisMax, xAxisMax - xAxisMin, yAxisMax - yAxisMin, zoomLevel, layoutService, model);
-      // .then(paintWithTransition());
-    } else {
-      // paintWithTransition();
-    }
-  },
-  400,
-  this
-);
+const updateBinnedData = ({ app, flags, layoutService, extremumModel, model }) => {
+  const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
+  const requestNewDataOnInteraction = isBigData(qcy, app.layout, flags) && !layoutService.meta.isSnapshot;
+  const { xAxisMin, xAxisMax } = extremumModel.query.getXExtrema();
+  const { yAxisMin, yAxisMax } = extremumModel.query.getYExtrema();
+  const { qMin, qMax } = layoutService.getHyperCubeValue('qMeasureInfo.1', {});
+  const zoomLevel = Math.floor(Math.sqrt((qMax - qMin) / (yAxisMax - yAxisMin)));
+  if (requestNewDataOnInteraction) {
+    return getBinnedData(xAxisMin, yAxisMax, xAxisMax - xAxisMin, yAxisMax - yAxisMin, zoomLevel, layoutService, model);
+  }
+  return layoutService.getLayoutValue('qDataPages');
+};
 
-export { debouncedUpdateLayout, getBinnedData };
+export { updateBinnedData, getBinnedData };

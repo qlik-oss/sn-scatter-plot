@@ -27,14 +27,18 @@ export default [
       }
 
       const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-      return qcy > NUMBERS.MAX_NR_SCATTER && !isBigData(qcy, app.layout, flags);
+      return qcy > NUMBERS.MAX_NR_SCATTER && (!isBigData(qcy, app.layout, flags) || !flags.isEnabled('binned_data'));
     },
   },
   {
     key: 'OverviewData',
     alignment: 'bottom',
     condition: ({ app, layoutService, flags }) => {
-      if (layoutService.getLayout().showDisclaimer === false && flags.isEnabled('SHOW_DISCLAIMER')) {
+      if (
+        layoutService.getLayout().showDisclaimer === false &&
+        flags.isEnabled('SHOW_DISCLAIMER') &&
+        !flags.isEnabled('binned_data')
+      ) {
         return false;
       }
       const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
