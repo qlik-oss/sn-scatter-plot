@@ -76,9 +76,6 @@ export default function createChartModel({
     }
 
     const data = layoutService.getLayoutValue('bin')[0].slice(1);
-    const firstBin = data[0];
-    const binWidth = firstBin ? Math.abs(firstBin.qText[0] - firstBin.qText[2]) : 0;
-    const binHeight = firstBin ? Math.abs(firstBin.qText[1] - firstBin.qText[3]) : 0;
 
     return [
       {
@@ -105,14 +102,6 @@ export default function createChartModel({
                   key: 'binDensity',
                   title: 'Density',
                 },
-                {
-                  key: 'binWidth',
-                  title: 'Width',
-                },
-                {
-                  key: 'binHeight',
-                  title: 'Height',
-                },
               ];
             },
             row(d) {
@@ -120,8 +109,6 @@ export default function createChartModel({
                 bin: d.qElemNumber,
                 binX: (d.qText[0] + d.qText[2]) / 2,
                 binY: (d.qText[1] + d.qText[3]) / 2,
-                binWidth,
-                binHeight,
                 binDensity: d.qNum,
               };
             },

@@ -1,9 +1,12 @@
+import { rgb } from 'd3-color';
 import KEYS from '../../../constants/keys';
 import isBigData from '../../../utils/is-big-data';
 
 export default function createHeatMap({ app, models, flags }) {
-  let scaleWidth;
-  let scaleHeight;
+  const { layoutService, chartModel } = models;
+  let binWidthPx;
+  let binHeightPx;
+  let maxDensity;
 
   return {
     key: KEYS.COMPONENT.HEAT_MAP,
@@ -15,13 +18,12 @@ export default function createHeatMap({ app, models, flags }) {
         props: {
           x: { field: 'binX' },
           y: { field: 'binY' },
-          binWidth: { field: 'binWidth' },
-          binHeight: { field: 'binHeight' },
+          binDensity: { field: 'binDensity' },
         },
       },
     },
     show: () => {
-      const qcy = models.layoutService.getHyperCubeValue('qSize.qcy', 0);
+      const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
       return isBigData(qcy, app.layout, flags) && flags.isEnabled('DATA_BINNING');
     },
     // brush: { consume: [highlight, highlightIntersect, highlightColor] },
@@ -32,24 +34,30 @@ export default function createHeatMap({ app, models, flags }) {
       y: {
         scale: KEYS.SCALE.Y,
       },
-      fill: '#000099',
-      opacity: 0.5,
-      shape: (d) => {
-        const width = d.datum.binWidth.value * scaleWidth;
-        const height = d.datum.binHeight.value * scaleHeight;
-
-        return {
-          type: 'rect',
-          width,
-          height,
-        };
+      fill: (d) => {
+        const s = d.datum.binDensity.value / maxDensity;
+        const c = Math.floor((1 - s) * 192);
+        return rgb(c, c, c);
       },
+      opacity: 0.8,
+      shape: () => ({
+        type: 'rect',
+        width: binWidthPx,
+        height: binHeightPx,
+      }),
     },
     beforeRender: ({ size }) => {
-      const viewHandler = models.chartModel.query.getViewHandler();
+      const viewHandler = chartModel.query.getViewHandler();
       const dataView = viewHandler.getDataView();
-      scaleWidth = size.width / (dataView.xAxisMax - dataView.xAxisMin);
-      scaleHeight = size.height / (dataView.yAxisMax - dataView.yAxisMin);
+      const bins = layoutService.getLayoutValue('bin')[0];
+      const data = bins.slice(1);
+      const firstBin = data[0];
+      const binWidth = firstBin ? Math.abs(firstBin.qText[0] - firstBin.qText[2]) : 0;
+      const binHeight = firstBin ? Math.abs(firstBin.qText[1] - firstBin.qText[3]) : 0;
+
+      binWidthPx = (binWidth * size.width) / (dataView.xAxisMax - dataView.xAxisMin);
+      binHeightPx = (binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin);
+      maxDensity = bins[0].qNum;
     },
   };
 }
