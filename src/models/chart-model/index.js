@@ -1,5 +1,6 @@
 import KEYS from '../../constants/keys';
 import createViewHandler from '../../view-handler';
+import isBigData from '../../utils/is-big-data';
 
 export default function createChartModel({
   chart,
@@ -69,58 +70,65 @@ export default function createChartModel({
   const state = { isPrelayout: true };
 
   const getBinData = () => {
+    const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
+    if (!isBigData(qcy, app.layout, flags) || !flags.isEnabled('DATA_BINNING')) {
+      return [];
+    }
+
     const data = layoutService.getLayoutValue('bin')[0].slice(1);
     const firstBin = data[0];
     const binWidth = firstBin ? Math.abs(firstBin.qText[0] - firstBin.qText[2]) : 0;
     const binHeight = firstBin ? Math.abs(firstBin.qText[1] - firstBin.qText[3]) : 0;
 
-    return {
-      key: 'binData',
-      type: 'matrix',
-      data,
-      config: {
-        parse: {
-          fields() {
-            return [
-              {
-                key: 'bin',
-                title: 'Bin',
-              },
-              {
-                key: 'binX',
-                title: 'X',
-              },
-              {
-                key: 'binY',
-                title: 'Y',
-              },
-              {
-                key: 'binDensity',
-                title: 'Density',
-              },
-              {
-                key: 'binWidth',
-                title: 'Width',
-              },
-              {
-                key: 'binHeight',
-                title: 'Height',
-              },
-            ];
-          },
-          row(d) {
-            return {
-              bin: d.qElemNumber,
-              binX: (d.qText[0] + d.qText[2]) / 2,
-              binY: (d.qText[1] + d.qText[3]) / 2,
-              binWidth,
-              binHeight,
-              binDensity: d.qNum,
-            };
+    return [
+      {
+        key: 'binData',
+        type: 'matrix',
+        data,
+        config: {
+          parse: {
+            fields() {
+              return [
+                {
+                  key: 'bin',
+                  title: 'Bin',
+                },
+                {
+                  key: 'binX',
+                  title: 'X',
+                },
+                {
+                  key: 'binY',
+                  title: 'Y',
+                },
+                {
+                  key: 'binDensity',
+                  title: 'Density',
+                },
+                {
+                  key: 'binWidth',
+                  title: 'Width',
+                },
+                {
+                  key: 'binHeight',
+                  title: 'Height',
+                },
+              ];
+            },
+            row(d) {
+              return {
+                bin: d.qElemNumber,
+                binX: (d.qText[0] + d.qText[2]) / 2,
+                binY: (d.qText[1] + d.qText[3]) / 2,
+                binWidth,
+                binHeight,
+                binDensity: d.qNum,
+              };
+            },
           },
         },
       },
-    };
+    ];
   };
 
   return {
@@ -142,7 +150,7 @@ export default function createChartModel({
               type: 'q',
               ...mainConfig,
             },
-            binData,
+            ...binData,
             ...colorService.getData(),
           ],
           settings,
@@ -157,7 +165,7 @@ export default function createChartModel({
               type: 'q',
               ...mainConfig,
             },
-            binData,
+            ...binData,
             ...colorService.getData(),
           ],
           settings,

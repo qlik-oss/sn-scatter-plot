@@ -22,9 +22,7 @@ export default function createHeatMap({ app, models, flags }) {
     },
     show: () => {
       const qcy = models.layoutService.getHyperCubeValue('qSize.qcy', 0);
-      const s = isBigData(qcy, app.layout, flags);
-
-      return s;
+      return isBigData(qcy, app.layout, flags) && flags.isEnabled('DATA_BINNING');
     },
     // brush: { consume: [highlight, highlightIntersect, highlightColor] },
     settings: {
