@@ -68,53 +68,60 @@ export default function createChartModel({
 
   const state = { isPrelayout: true };
 
-  const getBinData = () => ({
-    key: 'binData',
-    type: 'matrix',
-    data: layoutService.getLayoutValue('bin')[0].filter((item) => item.qText !== undefined),
-    config: {
-      parse: {
-        fields() {
-          return [
-            {
-              key: 'bin',
-              title: 'Bin',
-            },
-            {
-              key: 'binX',
-              title: 'BinX',
-            },
-            {
-              key: 'binY',
-              title: 'BinY',
-            },
-            {
-              key: 'binDensity',
-              title: 'Bin Density',
-            },
-            {
-              key: 'binWidth',
-              title: 'Bin Width',
-            },
-            {
-              key: 'binHeight',
-              title: 'Bin Height',
-            },
-          ];
-        },
-        row(d) {
-          return {
-            bin: d.qElemNumber,
-            binX: (d.qText[0] + d.qText[2]) / 2,
-            binY: (d.qText[1] + d.qText[3]) / 2,
-            binWidth: Math.abs(d.qText[0] - d.qText[2]),
-            binHeight: Math.abs(d.qText[1] - d.qText[3]),
-            binDensity: d.qNum,
-          };
+  const getBinData = () => {
+    const data = layoutService.getLayoutValue('bin')[0].slice(1);
+    const firstBin = data[0];
+    const binWidth = firstBin ? Math.abs(firstBin.qText[0] - firstBin.qText[2]) : 0;
+    const binHeight = firstBin ? Math.abs(firstBin.qText[1] - firstBin.qText[3]) : 0;
+
+    return {
+      key: 'binData',
+      type: 'matrix',
+      data,
+      config: {
+        parse: {
+          fields() {
+            return [
+              {
+                key: 'bin',
+                title: 'Bin',
+              },
+              {
+                key: 'binX',
+                title: 'X',
+              },
+              {
+                key: 'binY',
+                title: 'Y',
+              },
+              {
+                key: 'binDensity',
+                title: 'Density',
+              },
+              {
+                key: 'binWidth',
+                title: 'Width',
+              },
+              {
+                key: 'binHeight',
+                title: 'Height',
+              },
+            ];
+          },
+          row(d) {
+            return {
+              bin: d.qElemNumber,
+              binX: (d.qText[0] + d.qText[2]) / 2,
+              binY: (d.qText[1] + d.qText[3]) / 2,
+              binWidth,
+              binHeight,
+              binDensity: d.qNum,
+            };
+          },
         },
       },
-    },
-  });
+    };
+  };
 
   return {
     query: {
@@ -128,13 +135,14 @@ export default function createChartModel({
     },
     command: {
       layoutComponents: ({ settings } = {}) => {
+        const binData = getBinData();
         chart.layoutComponents({
           data: [
             {
               type: 'q',
               ...mainConfig,
             },
-            getBinData(),
+            binData,
             ...colorService.getData(),
           ],
           settings,
