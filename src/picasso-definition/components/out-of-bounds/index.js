@@ -35,8 +35,12 @@ export default function createOutOfBounds({ models, context }) {
           x: {
             scale: KEYS.SCALE.X,
             fn: ({ datum }) => {
-              if (datum.x.value < xAxisMin) return rtl ? oobPositions.xMax : oobPositions.xMin;
-              if (datum.x.value > xAxisMax) return rtl ? oobPositions.xMin : oobPositions.xMax;
+              if (datum.x.value < xAxisMin) {
+                return rtl ? oobPositions.xMax : oobPositions.xMin;
+              }
+              if (datum.x.value > xAxisMax) {
+                return rtl ? oobPositions.xMin : oobPositions.xMax;
+              }
               return rtl
                 ? (datum.x.value - xAxisMax) / (xAxisMin - xAxisMax)
                 : (datum.x.value - xAxisMin) / (xAxisMax - xAxisMin);
@@ -45,8 +49,12 @@ export default function createOutOfBounds({ models, context }) {
           y: {
             scale: KEYS.SCALE.Y,
             fn: ({ datum }) => {
-              if (datum.y.value < yAxisMin) return oobPositions.yMin;
-              if (datum.y.value > yAxisMax) return oobPositions.yMax;
+              if (datum.y.value < yAxisMin) {
+                return oobPositions.yMin;
+              }
+              if (datum.y.value > yAxisMax) {
+                return oobPositions.yMax;
+              }
               return 1 - (datum.y.value - yAxisMin) / (yAxisMax - yAxisMin);
             },
           },
