@@ -49,7 +49,7 @@ export default function createHeatMap({ app, models, flags }) {
     beforeRender: ({ size }) => {
       const viewHandler = chartModel.query.getViewHandler();
       const dataView = viewHandler.getDataView();
-      const bins = layoutService.getLayoutValue('bin')[0];
+      const bins = layoutService.getLayoutValue('dataPages')[0];
       const data = bins.slice(1);
       const firstBin = data[0];
       const binWidth = firstBin ? Math.abs(firstBin.qText[0] - firstBin.qText[2]) : 0;
@@ -57,7 +57,7 @@ export default function createHeatMap({ app, models, flags }) {
 
       binWidthPx = (binWidth * size.width) / (dataView.xAxisMax - dataView.xAxisMin);
       binHeightPx = (binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin);
-      maxDensity = bins[0].qNum;
+      maxDensity = bins[0]?.qNum || 0;
     },
   };
 }

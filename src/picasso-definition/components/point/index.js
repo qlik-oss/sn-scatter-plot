@@ -1,9 +1,8 @@
 import KEYS from '../../../constants/keys';
 import createSizeScale from '../../scales/size';
 import createBrush from '../../brush';
-import isBigData from '../../../utils/is-big-data';
 
-export default function createPoint({ app, models, flags }) {
+export default function createPoint({ models }) {
   const { layoutService, colorService } = models;
   let windowSizeMultiplier;
   const sizeScaleFn = createSizeScale(layoutService);
@@ -12,10 +11,6 @@ export default function createPoint({ app, models, flags }) {
     type: 'point',
     data: {
       collection: KEYS.COLLECTION.MAIN,
-    },
-    show: () => {
-      const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-      return !isBigData(qcy, app.layout, flags) || !flags.isEnabled('DATA_BINNING');
     },
     brush: createBrush(),
     settings: {

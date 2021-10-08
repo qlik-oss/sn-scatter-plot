@@ -43,6 +43,19 @@ export default function createChartModel({
   });
 
   function updatePartial() {
+    const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
+    if (isBigData(qcy, app.layout, flags) && flags.isEnabled('DATA_BINNING')) {
+      viewHandler.fetchData().then((pages) => {
+        // Transition between bin data and normal data
+        if (pages[0].qMatrix?.length) {
+          layoutService.setDataPages(pages);
+          layoutService.setLayoutValue('dataPages', [[]]);
+        } else {
+          layoutService.setLayoutValue('dataPages', pages);
+          layoutService.setDataPages([]);
+        }
+      });
+    }
     const dataView = viewState.get('dataView');
     const { isHomeState } = viewHandler.getMeta();
     extremumModel.command.updateExtrema(dataView, isHomeState);
@@ -75,7 +88,7 @@ export default function createChartModel({
       return [];
     }
 
-    const data = layoutService.getLayoutValue('bin')[0].slice(1);
+    const data = layoutService.getLayoutValue('dataPages')[0].slice(1);
 
     return [
       {

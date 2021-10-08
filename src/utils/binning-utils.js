@@ -82,7 +82,7 @@ const updateBinnedData = ({ app, flags, layoutService, extremumModel, model }) =
   if (requestNewDataOnInteraction) {
     return getBinnedData(xAxisMin, yAxisMax, xAxisMax - xAxisMin, yAxisMax - yAxisMin, zoomLevel, layoutService, model);
   }
-  return layoutService.getLayoutValue('qDataPages');
+  return layoutService.getLayoutValue('dataPages');
 };
 
 export { updateBinnedData, getBinnedData };

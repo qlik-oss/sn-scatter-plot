@@ -19,7 +19,7 @@ export default function createComponents({ context, models, flags, picasso, app 
   const components = [
     createGridLines(models),
     ...createReferenceLines({ models, context }),
-    createPoint({ app, models, flags }),
+    createPoint({ models }),
     createHeatMap({ app, models, flags }),
     ...createAxes({ models, flags }),
     ...createAxisTitles(models),

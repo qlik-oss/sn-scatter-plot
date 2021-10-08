@@ -19,7 +19,7 @@ export default function createPicassoDefinition({
   app,
 }) {
   const { chart, actions, picasso } = core;
-  const { chartModel, colorService, pluginService, layoutService, extremumModel } = models;
+  const { chartModel, colorService, pluginService } = models;
   const viewHandler = chartModel.query.getViewHandler();
   const viewState = chartModel.query.getViewState();
   const localeInfo = chartModel.query.getLocaleInfo();
@@ -49,11 +49,6 @@ export default function createPicassoDefinition({
       viewHandler,
       gestures: [...selectables.gestures],
       colorService,
-      app,
-      flags,
-      layoutService,
-      extremumModel,
-      model,
     }),
     scales,
     components: pluginService.extendComponents(componentDefinitions),
