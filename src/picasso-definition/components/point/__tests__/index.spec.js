@@ -6,18 +6,19 @@ describe('point', () => {
   let sandbox;
   let layoutService;
   let colorService;
+  let tickModel;
   let create;
   let layoutValueStub;
   let hyperCubeValueStub;
-  let chartModel;
-  let interactionInProgress;
-  let viewStateStub;
-  let getDataViewStub;
   let canvasBufferSizeStub;
   let sizeScaleFn;
   let d;
   const wsm = 1;
   let rect;
+  const xMin = 2;
+  const xMax = 14;
+  const yMin = 0;
+  const yMax = 10;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -45,17 +46,10 @@ describe('point', () => {
       },
     };
     sizeScaleFn = createSizeScale(layoutService);
-    interactionInProgress = true;
-    getDataViewStub = sandbox.stub();
-    getDataViewStub.withArgs('dataView').returns({ x: 10, y: 10 });
-    viewStateStub = {
-      get: getDataViewStub,
-    };
-    chartModel = {
-      key: 'chart-model',
+    tickModel = {
       query: {
-        getViewState: () => viewStateStub,
-        isInteractionInProgess: () => interactionInProgress,
+        getXMinMax: () => [xMin, xMax],
+        getYMinMax: () => [yMin, yMax],
       },
     };
     canvasBufferSizeStub = sandbox.stub();
@@ -82,9 +76,9 @@ describe('point', () => {
 
     create = () =>
       createPoint({
-        chartModel,
         layoutService,
         colorService,
+        tickModel,
       });
   });
 
@@ -110,7 +104,7 @@ describe('point', () => {
 
     describe('data', () => {
       it('should be correct', () => {
-        expect(create().data).to.deep.equal({ collection: 'mainCollectionKey' });
+        expect(create().data.collection).to.equal('mainCollectionKey');
       });
     });
   });

@@ -6,6 +6,7 @@ import createReferenceLines from './reference-lines';
 import createPointLabels from './point-labels';
 import createTooltips from './tooltips';
 import createDisclaimer from './disclaimer';
+import createOutOfBounds from './out-of-bounds';
 
 export default function createComponents({ context, models, flags }) {
   const { colorService, disclaimerModel } = models;
@@ -22,6 +23,7 @@ export default function createComponents({ context, models, flags }) {
     ...createAxes({ models, flags }),
     ...createAxisTitles(models),
     createPointLabels(models),
+    createOutOfBounds({ models, context }),
     ...colorService.custom.legendComponents(),
     disclaimer,
     ...createTooltips({ models, context }),
