@@ -4,6 +4,7 @@ checks:
     config:
       threshold: 60
   method-complexity:
+    enabled: false
     config:
       threshold: 8
 exclude_patterns:

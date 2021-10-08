@@ -26,6 +26,7 @@ describe('keys', () => {
       'LEGEND',
       'LEGEND_CATEGORICAL',
       'LEGEND_CAT_TOOLTIP',
+      'OUT_OF_BOUNDS',
       'X_AXIS',
       'Y_AXIS',
       'X_AXIS_TITLE',
