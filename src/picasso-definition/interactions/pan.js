@@ -1,10 +1,9 @@
 import KEYS from '../../constants/keys';
-import { updateBinnedData } from '../../utils/binning-utils';
 
 const threshold = 10;
 const eventName = 'areaPan';
 
-const pan = ({ chart, actions, viewHandler, app, flags, layoutService, extremumModel, model }) => ({
+const pan = ({ chart, actions, viewHandler }) => ({
   type: 'Pan',
   key: 'panorama',
   options: {
@@ -22,7 +21,7 @@ const pan = ({ chart, actions, viewHandler, app, flags, layoutService, extremumM
 
       [this.pointAreaPanned] = chart
         .componentsFromPoint({ x: e.center.x, y: e.center.y })
-        .filter((c) => c.key === KEYS.COMPONENT.POINT);
+        .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
 
       return this.pointAreaPanned;
     },
@@ -56,7 +55,6 @@ const pan = ({ chart, actions, viewHandler, app, flags, layoutService, extremumM
     areaPanend(e) {
       e.preventDefault();
       this.started = false;
-      updateBinnedData({ app, flags, layoutService, extremumModel, model });
     },
     areaPancancel(e) {
       e.preventDefault();

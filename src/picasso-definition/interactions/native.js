@@ -31,7 +31,9 @@ export default function native({ chart, actions, viewHandler }) {
         let target;
 
         if (actions.zoom.enabled()) {
-          [target] = chart.componentsFromPoint(point).filter((c) => c.key === KEYS.COMPONENT.POINT);
+          [target] = chart
+            .componentsFromPoint(point)
+            .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
           if (target) {
             zoom(e, chart, target, viewHandler);
             e.preventDefault();
@@ -51,7 +53,7 @@ export default function native({ chart, actions, viewHandler }) {
           const target = chart.componentsFromPoint({ x: e.clientX, y: e.clientY });
           const pointTooltip = getPointTooltip();
           if (pointTooltip?.show) {
-            if (target.some((c) => c.key === KEYS.COMPONENT.POINT)) {
+            if (target.some((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP)) {
               pointTooltip.emit('show', e);
             } else {
               pointTooltip.emit('hide');
