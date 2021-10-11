@@ -61,6 +61,7 @@ describe('chart-model', () => {
       }),
       getHyperCubeValue: (path, defaultValue) => defaultValue,
       getLayoutValue: sandbox.stub().withArgs('dataPages').returns(binnedData),
+      setLayoutValue: sandbox.stub(),
     };
     extremumModel = { command: { updateExtrema: sandbox.stub() } };
     colorModelDataFn = sandbox.stub().returns([{ colorData: 'oh yes' }]);
