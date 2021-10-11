@@ -26,9 +26,10 @@ describe('chart-model', () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     global.requestAnimationFrame = (cb) => setTimeout(cb, 20);
+    dataPoint = { qText: [2194.59375, 5.03125, 2235.234375, 4.671875], qNum: 1, qElemNumber: 7964 };
     viewHandler = {
       getMeta: sandbox.stub().returns('isHomeState'),
-      fetchData: sandbox.stub().returns(Promise.resolve({})),
+      fetchData: sandbox.stub().returns(Promise.resolve([{ qNum: 1164, qElemNumber: 0 }, dataPoint])),
     };
     sandbox.stub(createViewHandler, 'default').returns(viewHandler);
     viewState = {
@@ -50,7 +51,6 @@ describe('chart-model', () => {
     hyperCube = {
       dataPages: [{ key: 'page-0' }, { key: 'page-1' }],
     };
-    dataPoint = { qText: [2194.59375, 5.03125, 2235.234375, 4.671875], qNum: 1, qElemNumber: 7964 };
     binnedData = [[{ qNum: 1164, qElemNumber: 0 }, dataPoint]];
     layoutService = {
       meta: { isContinuous: false, isSnapshot: false },
