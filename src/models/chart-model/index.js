@@ -92,7 +92,7 @@ export default function createChartModel({
 
     return [
       {
-        key: 'binData',
+        key: KEYS.DATA.BIN,
         type: 'matrix',
         data,
         config: {

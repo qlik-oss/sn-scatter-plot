@@ -1,6 +1,7 @@
 export default {
   DATA: {
     MAIN: 'qHyperCube',
+    BIN: 'binData',
   },
   SCALE: {
     COLOR: 'color',

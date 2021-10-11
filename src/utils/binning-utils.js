@@ -85,4 +85,4 @@ const updateBinnedData = ({ app, flags, layoutService, extremumModel, model }) =
   return layoutService.getLayoutValue('dataPages');
 };
 
-export { updateBinnedData, getBinnedData };
+export default updateBinnedData;

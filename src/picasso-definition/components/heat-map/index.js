@@ -13,7 +13,7 @@ export default function createHeatMap({ app, models, flags }) {
     type: 'point',
     data: {
       extract: {
-        source: 'binData',
+        source: KEYS.DATA.BIN,
         field: 'bin',
         props: {
           x: { field: 'binX' },

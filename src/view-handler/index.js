@@ -1,7 +1,7 @@
 import extend from 'extend';
 import createDataFetcher from './data-fetcher';
 import isBigData from '../utils/is-big-data';
-import { updateBinnedData } from '../utils/binning-utils';
+import updateBinnedData from '../utils/binning-utils';
 
 function areIntervalsEqual(min1, max1, min2, max2, e) {
   // e is the relative tolerance; d is the absolute tolerence
