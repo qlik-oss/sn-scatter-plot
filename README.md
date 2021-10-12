@@ -213,3 +213,8 @@ const xAxisPlugin = {
 ```
 
 More details can be found in the `examples` folder.
+
+### Plugins disclaimer
+
+- The plugins API is still experimental.
+- We can not guarantee our charts to be compatible with all different settings, especially when modifying existing components.
