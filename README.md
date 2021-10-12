@@ -70,7 +70,7 @@ const pointPlugin = {
   },
   fn: ({ layout, keys }) => {
     const componentDefinition = {
-      key: keys.components.point,
+      key: keys.COMPONENT.POINT,
       type: 'point',
       settings: {
         strokeWidth: '2px',
@@ -101,14 +101,14 @@ some important chart internals are passed into the argument object of `fn`.
 const pluginArgs = {
     layout,
     keys: {
-      scales:
-        x,
-        y,
+      SCALE:
+        X,
+        Y,
       },
-      components: {
-        'x-axis',
-        'y-axis',
-        point,
+      COMPONENT: {
+        X_AXIS,
+        Y_AXIS,
+        POINT,
       },
     },
   };
@@ -148,11 +148,11 @@ const linePlugin = {
       settings: {
         coordinates: {
           minor: {
-            scale: keys.scales.y,
+            scale: keys.SCALE.Y,
             ref: 'y',
           },
           major: {
-            scale: keys.scales.x,
+            scale: keys.SCALE.X,
             ref: 'x',
           },
         },
@@ -187,10 +187,10 @@ const xAxisPlugin = {
     name: 'x-axis-plugin',
     type: 'component-definition',
   },
-  fn: () => {
+  fn: ({ keys }) => {
     const componentDefinition = {
       type: 'axis',
-      key: 'x-axis',
+      key: keys.COMPONENT.X_AXIS,
       layout: {
         dock: 'top',
       },
@@ -213,3 +213,8 @@ const xAxisPlugin = {
 ```
 
 More details can be found in the `examples` folder.
+
+### Plugins disclaimer
+
+- The plugins API is still experimental.
+- We can not guarantee our charts to be compatible with all different settings, especially when modifying existing components.

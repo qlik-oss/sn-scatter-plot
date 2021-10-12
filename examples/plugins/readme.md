@@ -14,11 +14,11 @@ The properties used in the examples.
 
 | Property             | Value            | Point | Axes | Line |
 | -------------------- | ---------------- | ----- | ---- | ---- |
-| Scale key            | "x"              |       |      | x    |
-| Scale key            | "y"              |       |      | x    |
-| Component key        | "x-axis"         |       | x    |      |
-| Component key        | "y-axis"         |       | x    |      |
-| Component key        | "point"          | x     |      |      |
+| Scale key            | SCALE.X          |       |      | x    |
+| Scale key            | SCALE.Y          |       |      | x    |
+| Component key        | COMPONENT.X_AXIS |       | x    |      |
+| Component key        | COMPONENT.Y_AXIS |       | x    |      |
+| Component key        | COMPONENT.POINT  | x     |      |      |
 | Data property: x     | { value, label } |       |      | x    |
 | Data property: y     | { value, label } |       |      |      |
 | Data property: size  | { value, label } | x     |      |      |
