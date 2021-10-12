@@ -71,11 +71,11 @@ const linePlugin = {
       settings: {
         coordinates: {
           minor: {
-            scale: keys.SCALES.Y,
+            scale: keys.SCALE.Y,
             ref: 'y',
           },
           major: {
-            scale: keys.SCALES.X,
+            scale: keys.SCALE.X,
             ref: 'x',
           },
         },

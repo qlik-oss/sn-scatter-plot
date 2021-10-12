@@ -35,7 +35,7 @@
                 }
               }
             },
-            "SCALES": {
+            "SCALE": {
               "description": "The scales associated with the measures.\nThey are useful if you want to, via plugin, add a new component that\nuses the same scale as one of the measures.",
               "kind": "object",
               "entries": {

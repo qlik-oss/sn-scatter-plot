@@ -50,7 +50,7 @@ export default function getPluginArgs(layoutService) {
        * uses the same scale as one of the measures.
        * @type {object}
        */
-      SCALES: {
+      SCALE: {
         /**
          * The scale used for positioning items along the x axis
          * @type {string}
