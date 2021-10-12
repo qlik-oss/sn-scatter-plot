@@ -17,33 +17,33 @@
           "description": "The keys (references) to different types of chart internals",
           "kind": "object",
           "entries": {
-            "components": {
+            "COMPONENT": {
               "description": "The unique keys of the existing components available in the chart.\nThey are useful if you want to extend or override the existing components.",
               "kind": "object",
               "entries": {
-                "\"x-axis\"": {
+                "POINT": {
+                  "description": "The point component",
+                  "type": "string"
+                },
+                "X_AXIS": {
                   "description": "The x-axis component",
                   "type": "string"
                 },
-                "\"y-axis\"": {
+                "Y_AXIS": {
                   "description": "The y-axis component",
-                  "type": "string"
-                },
-                "point": {
-                  "description": "The point component",
                   "type": "string"
                 }
               }
             },
-            "scales": {
+            "SCALES": {
               "description": "The scales associated with the measures.\nThey are useful if you want to, via plugin, add a new component that\nuses the same scale as one of the measures.",
               "kind": "object",
               "entries": {
-                "x": {
+                "X": {
                   "description": "The scale used for positioning items along the x axis",
                   "type": "string"
                 },
-                "y": {
+                "Y": {
                   "description": "The scale used for positioning items along the y axis",
                   "type": "string"
                 }

@@ -8,7 +8,7 @@ const pointPlugin = {
   },
   fn: ({ layout, keys }) => {
     const componentDefinition = {
-      key: keys.components.point,
+      key: keys.COMPONENT.POINT,
       type: 'point',
       settings: {
         strokeWidth: '2px',
@@ -30,9 +30,9 @@ function createAxisPlugin(axisName) {
     fn: ({ keys }) => {
       const componentDefinition = {
         type: 'axis',
-        key: keys.components[axisName],
+        key: keys.COMPONENT[axisName],
         layout: {
-          dock: axisName === 'x-axis' ? 'top' : 'right',
+          dock: axisName === 'X_AXIS' ? 'top' : 'right',
         },
         settings: {
           labels: {
@@ -71,11 +71,11 @@ const linePlugin = {
       settings: {
         coordinates: {
           minor: {
-            scale: keys.scales.y,
+            scale: keys.SCALES.Y,
             ref: 'y',
           },
           major: {
-            scale: keys.scales.x,
+            scale: keys.SCALES.X,
             ref: 'x',
           },
         },
@@ -93,5 +93,5 @@ const linePlugin = {
 };
 
 const pluginSet1 = [pointPlugin];
-const pluginSet2 = [createAxisPlugin('x-axis'), createAxisPlugin('y-axis')];
+const pluginSet2 = [createAxisPlugin('X_AXIS'), createAxisPlugin('Y_AXIS')];
 const pluginSet3 = [linePlugin];

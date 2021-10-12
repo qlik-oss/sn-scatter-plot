@@ -50,39 +50,39 @@ export default function getPluginArgs(layoutService) {
        * uses the same scale as one of the measures.
        * @type {object}
        */
-      scales: {
+      SCALES: {
         /**
          * The scale used for positioning items along the x axis
          * @type {string}
          */
-        x: KEYS.SCALE.X,
+        X: KEYS.SCALE.X,
         /**
          * The scale used for positioning items along the y axis
          * @type {string}
          */
-        y: KEYS.SCALE.Y,
+        Y: KEYS.SCALE.Y,
       },
       /**
        * The unique keys of the existing components available in the chart.
        * They are useful if you want to extend or override the existing components.
        * @type {object}
        */
-      components: {
+      COMPONENT: {
         /**
          * The x-axis component
          * @type {string}
          */
-        'x-axis': KEYS.COMPONENT.X_AXIS,
+        X_AXIS: KEYS.COMPONENT.X_AXIS,
         /**
          * The y-axis component
          * @type {string}
          */
-        'y-axis': KEYS.COMPONENT.Y_AXIS,
+        Y_AXIS: KEYS.COMPONENT.Y_AXIS,
         /**
          * The point component
          * @type {string}
          */
-        point: KEYS.COMPONENT.POINT,
+        POINT: KEYS.COMPONENT.POINT,
       },
     },
   };
