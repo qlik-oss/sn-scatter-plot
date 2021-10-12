@@ -24,14 +24,14 @@ describe('heat-map', () => {
       },
     }));
     const viewHandler = {
-      getDataView: sandbox.stub().returns({ xAxisMin: 0, xAxisMax: 3000, yAxisMin: 0, yAxisMax: 10 }),
+      getDataView: sandbox.stub().returns({ xAxisMin: 0, xAxisMax: 4000, yAxisMin: 0, yAxisMax: 10 }),
     };
     sandbox.stub(isBigData, 'default');
     isBigData.default.returns(false);
     const binnedData = [
       [
         { qNum: 1164, qElemNumber: 0 },
-        { qText: [2194.59375, 5.03125, 2235.234375, 4.671875], qNum: 1, qElemNumber: 7964 },
+        { qText: [2100, 5, 2200, 4], qNum: 1, qElemNumber: 7964 },
       ],
     ];
     models = {
@@ -130,10 +130,10 @@ describe('heat-map', () => {
         });
         it('should be have correct width and height', () => {
           const comp = create();
-          const size = { width: 500, height: 300 };
+          const size = { width: 400, height: 200 };
           comp.beforeRender({ size });
-          expect(comp.settings.shape().width).to.equal(6.7734375);
-          expect(comp.settings.shape().height).to.equal(10.78125);
+          expect(comp.settings.shape().width).to.equal(10);
+          expect(comp.settings.shape().height).to.equal(20);
         });
       });
     });
