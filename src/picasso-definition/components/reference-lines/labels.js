@@ -90,6 +90,10 @@ export default function createRefLineLabels({ models, context, scale, key, dock,
         },
       },
     },
+    animations: {
+      enabled: true,
+      trackBy: (node) => `${node.labelID}: ${node.text}`,
+    },
   };
 
   return refLineLabelsDef;

@@ -25,6 +25,7 @@ export default function createRefLines({ layoutService, scale, key, minimumLayou
         show: false,
       },
     },
+    animations: { enabled: true },
   };
 
   refLines.forEach((refLineLayout) => {

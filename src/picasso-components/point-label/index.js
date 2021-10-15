@@ -29,9 +29,7 @@ export default {
       },
     };
   },
-  render({ data }) {
-    console.log('data:');
-    console.log(data);
+  render() {
     const DY = DISTANCE - 1;
     const { settings } = this.settings;
     const { target, label, showLabel, mode, debugMode } = settings;
@@ -45,15 +43,17 @@ export default {
     let nodes;
 
     if (component.animations?.enabled) {
-      const tobeRenderedPoints = (this.chart.getToBeRenderedNodes() || []).filter((node) =>
-        ['circle', 'path'].includes(node.type)
-      );
-      const nodeFilter = (node) =>
-        showLabel(node) && component.data.items.map((item) => item.value).includes(node.data.value);
+      const tobeRenderedPoints = [
+        ...this.chart.getToBeRenderedNodes('circle', component.key),
+        ...this.chart.getToBeRenderedNodes('path', component.key),
+      ];
+      const nodeFilter = (node) => showLabel(node);
       nodes = tobeRenderedPoints.filter(nodeFilter);
     } else {
       const nodeFilter = (node) =>
-        node.key === key && showLabel(node) && component.data.items.map((item) => item.value).includes(node.data.value);
+        node.key === key &&
+        showLabel(node) &&
+        component.data.items.map((item) => item.value).includes(node.data?.value);
       nodes = [...this.chart.findShapes('circle'), ...this.chart.findShapes('path')].filter(nodeFilter);
     }
 

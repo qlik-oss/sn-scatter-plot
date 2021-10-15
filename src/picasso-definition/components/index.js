@@ -16,10 +16,10 @@ export default function createComponents({ context, models, flags }) {
   }
 
   const components = [
+    ...createAxes({ models, flags }),
     createGridLines(models),
     ...createReferenceLines({ models, context }),
     createPoint(models),
-    ...createAxes({ models, flags }),
     ...createAxisTitles(models),
     createPointLabels(models),
     ...colorService.custom.legendComponents(),

@@ -55,6 +55,7 @@ export default function createTickModel({
     const scale = scaleLinear().domain([min, max]);
     const formatter = axis === KEYS.SCALE.X ? formatters.x : formatters.y;
     const tickObject = getTicks({ scale, explicitType, distance, size, measure, formatter });
+    if (prop === 'width' || prop === 'height') return size;
     return prop === 'ticks' ? tickObject.ticks : tickObject.minMax;
   }
 
@@ -64,6 +65,7 @@ export default function createTickModel({
       getYTicks: () => resolve(KEYS.SCALE.Y, 'ticks'),
       getXMinMax: () => resolve(KEYS.SCALE.X, 'minMax'),
       getYMinMax: () => resolve(KEYS.SCALE.Y, 'minMax'),
+      getChart: () => chart,
     },
 
     command: {

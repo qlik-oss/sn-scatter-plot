@@ -9,7 +9,7 @@ const SPACINGS = {
 };
 
 export default function createGridLines(models) {
-  const { layoutService, themeService } = models;
+  const { layoutService, themeService, tickModel } = models;
   const { auto, spacing } = layoutService.getLayoutValue('gridLine', {});
   if (!auto && spacing === SPACINGS.NO_LINES) {
     return false;
@@ -49,6 +49,25 @@ export default function createGridLines(models) {
       show: !auto && spacing === SPACINGS.NARROW,
       stroke: line.minor.color,
       strokeWidth: 1,
+    },
+    animations: {
+      enabled: true,
+      trackBy: (node, i, nodeState) => {
+        const xAxisNodes = tickModel.query.getChart().getToBeRenderedNodes('text', 'x-axis');
+        const xAxisPreNodes = tickModel.query.getChart().getRenderedNodes('text', 'x-axis');
+        const yAxisNodes = tickModel.query.getChart().getToBeRenderedNodes('text', 'y-axis');
+        const yAxisPreNodes = tickModel.query.getChart().getRenderedNodes('text', 'y-axis');
+        const nodeLabels = [...xAxisNodes.map((n) => `x: ${n.text}`), ...yAxisNodes.map((n) => `y: ${n.text}`)];
+        const preNodeLabels = [
+          ...xAxisPreNodes.map((n) => `x: ${n.text}`),
+          ...yAxisPreNodes.map((n) => `y: ${n.text}`),
+        ];
+        let id;
+        console.log(tickModel);
+        if (nodeState === 'old') id = preNodeLabels[i];
+        else id = nodeLabels[i];
+        return id;
+      },
     },
   };
 

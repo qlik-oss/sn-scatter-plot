@@ -20,9 +20,6 @@ export default function createPointLabels({ layoutService, themeService }) {
   const pointLabelsComponent = {
     type: 'point-label',
     key: KEYS.COMPONENT.POINT_LABELS,
-    data: {
-      collection: KEYS.COLLECTION.MAIN,
-    },
     layout: {
       minimumLayoutMode: MODES.POINT_LABELS,
     },
@@ -37,6 +34,38 @@ export default function createPointLabels({ layoutService, themeService }) {
       fill: color,
       backgroundColor: '#ffc0cb',
     },
+
+    // type: 'labels',
+    // key: KEYS.COMPONENT.POINT_LABELS,
+    // settings: {
+    //   sources: [
+    //     {
+    //       component: KEYS.COMPONENT.POINT,
+    //       selector: 'circle',
+    //       strategy: {
+    //         type: 'bar',
+    //         settings: {
+    //           direction: 'up',
+    //           labels: [
+    //             {
+    //               placements: [
+    //                 {
+    //                   position: 'outside',
+    //                   justify: 0,
+    //                   align: 0.5,
+    //                   fill: 'black',
+    //                   overflow: true,
+    //                 },
+    //               ],
+    //               label: ({ data }) => data.label,
+    //             },
+    //           ],
+    //         },
+    //       },
+    //     },
+    //   ],
+    // },
+
     animations: {
       enabled: true,
       trackBy: (node) => {

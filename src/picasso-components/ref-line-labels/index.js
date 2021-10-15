@@ -93,7 +93,7 @@ export default {
     // filteredLabels2: filteredLabels whose segments are not out of bounds
     const filteredLabels2 = labelLayout.createLayout(filteredLabels, min, max, gap);
     let renderedLabels = [];
-    filteredLabels2.forEach((label) => {
+    filteredLabels2.forEach((label, index) => {
       const { lines } = label;
       const count = lines.length;
       const renderedTextLines = lines.map((line, idx) => {
@@ -118,6 +118,7 @@ export default {
           anchor: 'middle',
           [minorAxis]: minorCenter,
           [majorAxis]: label.segment.position,
+          labelID: `ref-${majorAxis}-${index}`,
         };
 
         obj.y += (idx - (count - 1) / 2) * lineHeight;
