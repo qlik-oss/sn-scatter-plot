@@ -1,6 +1,7 @@
 export default {
   DATA: {
     MAIN: 'qHyperCube',
+    BIN: 'binData',
   },
   SCALE: {
     COLOR: 'color',
@@ -24,6 +25,7 @@ export default {
     Y_AXIS: 'y-axis',
     X_AXIS_TITLE: 'x-axis-title',
     Y_AXIS_TITLE: 'y-axis-title',
+    HEAT_MAP: 'heat-map',
     OUT_OF_BOUNDS: 'out-of-bounds',
   },
   COLLECTION: {
@@ -39,5 +41,9 @@ export default {
     X: 'qMeasureInfo/0',
     Y: 'qMeasureInfo/1',
     SIZE: 'qMeasureInfo/2',
+    BIN: 'bin',
+    BIN_X: 'binX',
+    BIN_Y: 'binY',
+    BIN_DENSITY: 'binDensity',
   },
 };

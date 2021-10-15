@@ -17,7 +17,7 @@ export default function createPicassoDefinition({
   logicalSize,
   flags,
 }) {
-  const { chart, actions } = core;
+  const { chart, actions, picasso } = core;
   const { chartModel, colorService, pluginService } = models;
   const viewHandler = chartModel.query.getViewHandler();
   const viewState = chartModel.query.getViewState();
@@ -35,7 +35,7 @@ export default function createPicassoDefinition({
 
   const collections = createCollections(models);
 
-  const components = createComponents({ models, context, flags });
+  const components = createComponents({ models, context, flags, picasso, model });
 
   const selectables = createSelectables({ models, actions, scales, flags });
 

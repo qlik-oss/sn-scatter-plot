@@ -49,7 +49,9 @@ const useSettings = ({ core, models, flags }) => {
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
 
     return viewHandler.fetchData().then((pages) => {
-      layoutService.setDataPages(pages);
+      layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')
+        ? layoutService.setLayoutValue('dataPages', pages)
+        : layoutService.setDataPages(pages);
       return pluginService.initialize().then(() =>
         colorService.initialize().then(() => {
           colorService.custom.updateBrushAliases();

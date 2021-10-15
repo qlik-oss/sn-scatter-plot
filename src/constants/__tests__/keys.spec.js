@@ -6,7 +6,7 @@ describe('keys', () => {
   });
 
   it('should have correct data keys', () => {
-    expect(KEYS.DATA).to.have.all.keys(['MAIN']);
+    expect(KEYS.DATA).to.have.all.keys(['MAIN', 'BIN']);
   });
 
   it('should have correct scale keys', () => {
@@ -31,6 +31,7 @@ describe('keys', () => {
       'Y_AXIS',
       'X_AXIS_TITLE',
       'Y_AXIS_TITLE',
+      'HEAT_MAP',
     ]);
   });
 
@@ -43,6 +44,6 @@ describe('keys', () => {
   });
 
   it('should have correct fields keys', () => {
-    expect(KEYS.FIELDS).to.have.all.keys(['DIM', 'X', 'Y', 'SIZE']);
+    expect(KEYS.FIELDS).to.have.all.keys(['DIM', 'X', 'Y', 'SIZE', 'BIN', 'BIN_DENSITY', 'BIN_X', 'BIN_Y']);
   });
 });

@@ -31,4 +31,6 @@ export default {
     XSMALL: { width: 150, height: 75 },
     SPARK: { width: 0, height: 0 },
   },
+
+  MAX_NR_SCATTER: 1000,
 };

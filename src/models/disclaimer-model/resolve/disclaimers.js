@@ -1,3 +1,5 @@
+import NUMBERS from '../../../constants/numbers';
+
 export default [
   {
     key: 'NoDataExist',
@@ -19,12 +21,23 @@ export default [
     key: 'LimitedData',
     alignment: 'bottom',
     condition: ({ layoutService, flags }) => {
-      if (layoutService.getLayout().showDisclaimer === false && flags.isEnabled('SHOW_DISCLAIMER')) {
+      if (layoutService.getLayout().showDisclaimer === false) {
         return false;
       }
 
       const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-      return qcy > 1000;
+      return qcy > NUMBERS.MAX_NR_SCATTER && (!layoutService.meta.isBigData || !flags.isEnabled('DATA_BINNING'));
+    },
+  },
+  {
+    key: 'OverviewData',
+    alignment: 'bottom',
+    condition: ({ layoutService, flags }) => {
+      if (layoutService.getLayout().showDisclaimer === false && !flags.isEnabled('DATA_BINNING')) {
+        return false;
+      }
+
+      return layoutService.meta.isBigData;
     },
   },
 ];

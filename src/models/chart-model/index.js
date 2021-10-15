@@ -5,12 +5,12 @@ export default function createChartModel({
   chart,
   localeInfo,
   layoutService,
-  dockService,
-  model,
   colorService,
   picasso,
   viewState,
   extremumModel,
+  flags,
+  model,
 }) {
   let interactionInProgess = false;
   const EXCLUDE = [
@@ -32,13 +32,26 @@ export default function createChartModel({
   const dataset = picasso.data('q')(mainConfig);
 
   const viewHandler = createViewHandler({
-    dockService,
+    flags,
     layoutService,
+    extremumModel,
     model,
     viewState,
   });
 
   function updatePartial() {
+    if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
+      viewHandler.fetchData().then((pages) => {
+        // Transition between bin data and normal data
+        if (pages[0].qMatrix?.length) {
+          layoutService.setDataPages(pages);
+          layoutService.setLayoutValue('dataPages', [[]]);
+        } else {
+          layoutService.setLayoutValue('dataPages', pages);
+          layoutService.setDataPages([]);
+        }
+      });
+    }
     const dataView = viewState.get('dataView');
     const { isHomeState } = viewHandler.getMeta();
     extremumModel.command.updateExtrema(dataView, isHomeState);
@@ -65,6 +78,57 @@ export default function createChartModel({
 
   const state = { isPrelayout: true };
 
+  const getBinData = () => {
+    if (!layoutService.meta.isBigData || !flags.isEnabled('DATA_BINNING')) {
+      return [];
+    }
+
+    const data = layoutService.getLayoutValue('dataPages')[0].slice(1);
+    if (!data.length) {
+      return [];
+    }
+
+    return [
+      {
+        key: KEYS.DATA.BIN,
+        type: 'matrix',
+        data,
+        config: {
+          parse: {
+            fields() {
+              return [
+                {
+                  key: KEYS.FIELDS.BIN,
+                  title: 'Bin',
+                },
+                {
+                  key: KEYS.FIELDS.BIN_X,
+                  title: 'X',
+                },
+                {
+                  key: KEYS.FIELDS.BIN_Y,
+                  title: 'Y',
+                },
+                {
+                  key: KEYS.FIELDS.BIN_DENSITY,
+                  title: 'Density',
+                },
+              ];
+            },
+            row(d) {
+              return {
+                bin: d.qElemNumber,
+                binX: (d.qText[0] + d.qText[2]) / 2,
+                binY: (d.qText[1] + d.qText[3]) / 2,
+                binDensity: d.qNum,
+              };
+            },
+          },
+        },
+      },
+    ];
+  };
+
   return {
     query: {
       getDataset: () => dataset,
@@ -77,12 +141,14 @@ export default function createChartModel({
     },
     command: {
       layoutComponents: ({ settings } = {}) => {
+        const binData = getBinData();
         chart.layoutComponents({
           data: [
             {
               type: 'q',
               ...mainConfig,
             },
+            ...binData,
             ...colorService.getData(),
           ],
           settings,
@@ -90,12 +156,14 @@ export default function createChartModel({
         state.isPrelayout = false;
       },
       update: ({ settings } = {}) => {
+        const binData = getBinData();
         chart.update({
           data: [
             {
               type: 'q',
               ...mainConfig,
             },
+            ...binData,
             ...colorService.getData(),
           ],
           settings,

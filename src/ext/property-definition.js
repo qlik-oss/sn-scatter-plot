@@ -1,11 +1,11 @@
 import { getValue, setValue } from 'qlik-chart-modules';
 
-/*
-const COMPORESSION_THRESHOLD = 1000;
+const COMPRESSION_THRESHOLD = 1000;
 function showCompressionResolution(layout) {
-  const dim = layout.qHypercube.qDimensionInfo[0];
-  return dim?.qCardinal > COMPORESSION_THRESHOLD;
+  const dim = layout.qHyperCube.qDimensionInfo[0];
+  return dim?.qCardinal > COMPRESSION_THRESHOLD;
 }
+/*
 const nonCompProp = {
   component: 'text',
   translation: 'properties.compression.willNotAffect',
@@ -139,7 +139,6 @@ export default function propertyDefinition(env) {
               // labelModeCompressionNote: nonCompProp,
             },
           },
-          /*
           queryLevel: {
             type: 'integer',
             component: 'slider',
@@ -153,7 +152,6 @@ export default function propertyDefinition(env) {
               return showCompressionResolution(handler.layout);
             },
           },
-          */
           gridLines: {
             type: 'items',
             snapshot: {

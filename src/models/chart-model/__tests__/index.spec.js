@@ -17,11 +17,19 @@ describe('chart-model', () => {
   let viewHandler;
   let viewState;
   let extremumModel;
+  let app;
+  let flags;
+  let dataPoint;
+  let binnedData;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     global.requestAnimationFrame = (cb) => setTimeout(cb, 20);
-    viewHandler = { getMeta: sandbox.stub().returns('isHomeState') };
+    dataPoint = { qText: [2000, 5, 2200, 4], qNum: 1, qElemNumber: 7964 };
+    viewHandler = {
+      getMeta: sandbox.stub().returns('isHomeState'),
+      fetchData: sandbox.stub().returns(Promise.resolve([{ qNum: 1164, qElemNumber: 0 }, dataPoint])),
+    };
     sandbox.stub(createViewHandler, 'default').returns(viewHandler);
     viewState = {
       get() {
@@ -42,14 +50,17 @@ describe('chart-model', () => {
     hyperCube = {
       dataPages: [{ key: 'page-0' }, { key: 'page-1' }],
     };
+    binnedData = [[{ qNum: 1164, qElemNumber: 0 }, dataPoint]];
     layoutService = {
-      meta: { isContinuous: false, isSnapshot: false },
+      meta: { isContinuous: false, isSnapshot: false, isBigData: false },
       getHyperCube: sandbox.stub().returns(hyperCube),
       getDataPages: sandbox.stub().returns(hyperCube.dataPages),
       setDataPages: sandbox.stub().callsFake((pages) => {
         hyperCube.dataPages = pages;
       }),
       getHyperCubeValue: (path, defaultValue) => defaultValue,
+      getLayoutValue: sandbox.stub().withArgs('dataPages').returns(binnedData),
+      setLayoutValue: sandbox.stub(),
     };
     extremumModel = { command: { updateExtrema: sandbox.stub() } };
     colorModelDataFn = sandbox.stub().returns([{ colorData: 'oh yes' }]);
@@ -62,6 +73,10 @@ describe('chart-model', () => {
     };
     dockService = {};
     model = {};
+    app = {
+      layout: [],
+    };
+    flags = { isEnabled: sandbox.stub().returns(false) };
     create = () =>
       createChartModel({
         chart,
@@ -73,6 +88,8 @@ describe('chart-model', () => {
         picasso: picassoInstance,
         viewState,
         extremumModel,
+        app,
+        flags,
       });
   });
 
@@ -177,6 +194,20 @@ describe('chart-model', () => {
         create().command.layoutComponents();
         expect(chart.layoutComponents).to.have.been.calledOnce;
       });
+
+      it('should set correct binned data when calling layoutComponents', () => {
+        layoutService.meta.isBigData = true;
+        flags.isEnabled.returns(true);
+        create().command.layoutComponents({ settings: { key: 'settings' } });
+        const argsObject = chart.layoutComponents.args[0][0];
+
+        expect(chart.layoutComponents).to.have.been.calledOnce;
+        expect(argsObject.data).to.be.an('array');
+        expect(argsObject.data[1].key).to.equal('binData');
+        expect(argsObject.data[1].type).to.equal('matrix');
+        expect(argsObject.data[1].data[0]).eql(dataPoint);
+        expect(argsObject.settings).eql({ key: 'settings' });
+      });
     });
 
     describe('update', () => {
@@ -194,6 +225,20 @@ describe('chart-model', () => {
         create().command.update();
         expect(chart.update).to.have.been.calledOnce;
       });
+
+      it('should update correct binned data when calling update', () => {
+        layoutService.meta.isBigData = true;
+        flags.isEnabled.returns(true);
+        create().command.update({ settings: { key: 'settings' } });
+        const argsObject = chart.update.args[0][0];
+
+        expect(chart.update).to.have.been.calledOnce;
+        expect(argsObject.data).to.be.an('array');
+        expect(argsObject.data[1].key).to.equal('binData');
+        expect(argsObject.data[1].type).to.equal('matrix');
+        expect(argsObject.data[1].data[0]).eql(dataPoint);
+        expect(argsObject.settings).eql({ key: 'settings' });
+      });
     });
 
     describe('partial update', () => {
@@ -210,6 +255,17 @@ describe('chart-model', () => {
             excludeFromUpdate: ['x-axis-title', 'y-axis-title'],
           })
         ).to.have.been.calledOnce;
+      });
+
+      it('should fetch data when is big data and flag DATA_BINNING is enabled ', async () => {
+        layoutService.meta.isBigData = true;
+        flags.isEnabled.returns(true);
+        sandbox.useFakeTimers();
+        const { clock } = sandbox;
+        create();
+        viewState.dataView();
+        await clock.tick(50);
+        expect(createViewHandler.default().fetchData).to.have.been.calledOnce;
       });
     });
   });

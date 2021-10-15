@@ -27,6 +27,14 @@ describe('property panel definition', () => {
       .true;
   });
 
+  it('should only show queryLevel when appropriate', () => {
+    const showFn = def.items.settings.items.presentation.items.queryLevel.show;
+    expect(
+      showFn({}, { layout: { qHyperCube: { qDimensionInfo: [{ qCardinal: 1001 }] } } }),
+      'when qCardinal is larger than 1000'
+    ).to.be.true;
+  });
+
   it('should only show grid lines when appropriate', () => {
     const showFn = def.items.settings.items.presentation.items.gridLines.items.gridSpacing.show;
     expect(showFn({ gridLine: { auto: true } }), 'not when gridLine is set to auto').to.be.false;
