@@ -71,7 +71,7 @@ const getBinnedData = (left, top, width, height, zoomLevel, layoutService, model
   );
 };
 
-const updateBinnedData = ({ layoutService, extremumModel, model }) => {
+const fetchBinnedData = ({ layoutService, extremumModel, model }) => {
   const requestNewDataOnInteraction = layoutService.meta.isBigData && !layoutService.meta.isSnapshot;
   const { xAxisMin, xAxisMax } = extremumModel.query.getXExtrema();
   const { yAxisMin, yAxisMax } = extremumModel.query.getYExtrema();
@@ -80,7 +80,7 @@ const updateBinnedData = ({ layoutService, extremumModel, model }) => {
   if (requestNewDataOnInteraction) {
     return getBinnedData(xAxisMin, yAxisMax, xAxisMax - xAxisMin, yAxisMax - yAxisMin, zoomLevel, layoutService, model);
   }
-  return layoutService.getLayoutValue('dataPages');
+  return Promise.resolve(layoutService.getLayoutValue('dataPages'));
 };
 
-export default updateBinnedData;
+export default fetchBinnedData;

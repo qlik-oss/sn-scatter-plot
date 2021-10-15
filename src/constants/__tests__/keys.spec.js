@@ -44,6 +44,6 @@ describe('keys', () => {
   });
 
   it('should have correct fields keys', () => {
-    expect(KEYS.FIELDS).to.have.all.keys(['DIM', 'X', 'Y', 'SIZE']);
+    expect(KEYS.FIELDS).to.have.all.keys(['DIM', 'X', 'Y', 'SIZE', 'BIN', 'BIN_DENSITY', 'BIN_X', 'BIN_Y']);
   });
 });

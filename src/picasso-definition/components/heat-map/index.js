@@ -13,11 +13,11 @@ export default function createHeatMap({ models, flags }) {
     data: {
       extract: {
         source: KEYS.DATA.BIN,
-        field: 'bin',
+        field: KEYS.FIELDS.BIN,
         props: {
-          x: { field: 'binX' },
-          y: { field: 'binY' },
-          binDensity: { field: 'binDensity' },
+          x: { field: KEYS.FIELDS.BIN_X },
+          y: { field: KEYS.FIELDS.BIN_Y },
+          binDensity: { field: KEYS.FIELDS.BIN_DENSITY },
         },
       },
     },

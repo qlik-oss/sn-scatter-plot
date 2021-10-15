@@ -1,5 +1,5 @@
 import * as createDataFetcher from '../data-fetcher';
-import * as updateBinnedData from '../../utils/binning-utils';
+import * as fetchBinnedData from '../binned-data-fetcher';
 import createViewHandler from '..';
 
 describe('createViewHandler', () => {
@@ -18,7 +18,7 @@ describe('createViewHandler', () => {
     viewState.get.withArgs('dataView').returns('correct data view');
     sandbox.stub(createDataFetcher, 'default');
     createDataFetcher.default.returns({ fetchData: sandbox.stub() });
-    sandbox.stub(updateBinnedData, 'default');
+    sandbox.stub(fetchBinnedData, 'default');
     myDataView = { xAxisMin: 0, xAxisMax: 100, yAxisMin: -100, yAxisMax: 200 };
     layoutService = {
       getHyperCubeValue: (path, defaultValue) => defaultValue,
@@ -48,7 +48,7 @@ describe('createViewHandler', () => {
     layoutService.meta.isBigData = true;
     flags.isEnabled.returns(true);
     viewHandler.fetchData();
-    expect(updateBinnedData.default).to.have.been.calledOnce;
+    expect(fetchBinnedData.default).to.have.been.calledOnce;
   });
 
   it('should return a view handler with proper getMeta method', () => {

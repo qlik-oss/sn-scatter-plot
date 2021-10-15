@@ -84,6 +84,9 @@ export default function createChartModel({
     }
 
     const data = layoutService.getLayoutValue('dataPages')[0].slice(1);
+    if (!data.length) {
+      return [];
+    }
 
     return [
       {
@@ -95,19 +98,19 @@ export default function createChartModel({
             fields() {
               return [
                 {
-                  key: 'bin',
+                  key: KEYS.FIELDS.BIN,
                   title: 'Bin',
                 },
                 {
-                  key: 'binX',
+                  key: KEYS.FIELDS.BIN_X,
                   title: 'X',
                 },
                 {
-                  key: 'binY',
+                  key: KEYS.FIELDS.BIN_Y,
                   title: 'Y',
                 },
                 {
-                  key: 'binDensity',
+                  key: KEYS.FIELDS.BIN_DENSITY,
                   title: 'Density',
                 },
               ];

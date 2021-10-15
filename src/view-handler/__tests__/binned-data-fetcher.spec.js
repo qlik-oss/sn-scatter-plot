@@ -1,6 +1,6 @@
-import updateBinnedData from '../binning-utils';
+import fetchBinnedData from '../binned-data-fetcher';
 
-describe('binning', () => {
+describe('fetchBinnedData', () => {
   let sandbox;
   let layoutService;
   let extremumModel;
@@ -48,7 +48,7 @@ describe('binning', () => {
       ),
     };
     create = () =>
-      updateBinnedData({
+      fetchBinnedData({
         layoutService,
         extremumModel,
         model,

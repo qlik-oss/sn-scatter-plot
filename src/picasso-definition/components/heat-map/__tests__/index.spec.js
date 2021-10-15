@@ -20,6 +20,12 @@ describe('heat-map', () => {
         X: 'x',
         Y: 'y',
       },
+      FIELDS: {
+        BIN: 'bin',
+        BIN_X: 'binX',
+        BIN_Y: 'binY',
+        BIN_DENSITY: 'binDensity',
+      },
     }));
     const viewHandler = {
       getDataView: sandbox.stub().returns({ xAxisMin: 0, xAxisMax: 4000, yAxisMin: 0, yAxisMax: 10 }),

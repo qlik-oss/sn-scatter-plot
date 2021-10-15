@@ -41,5 +41,9 @@ export default {
     X: 'qMeasureInfo/0',
     Y: 'qMeasureInfo/1',
     SIZE: 'qMeasureInfo/2',
+    BIN: 'bin',
+    BIN_X: 'binX',
+    BIN_Y: 'binY',
+    BIN_DENSITY: 'binDensity',
   },
 };
