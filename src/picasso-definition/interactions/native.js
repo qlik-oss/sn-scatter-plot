@@ -1,9 +1,10 @@
 import KEYS from '../../constants/keys';
 import zoom from '../../utils/math/zoom';
 
-export default function native({ chart, actions, viewHandler }) {
+export default function native({ chart, actions, viewHandler, models }) {
   const getPointTooltip = () => chart.component(KEYS.COMPONENT.POINT_TOOLTIP);
   const getLegendTooltip = () => chart.component(KEYS.COMPONENT.LEGEND_CAT_TOOLTIP);
+  const getHeatMapTooltip = () => chart.component(KEYS.COMPONENT.HEAT_MAP_TOOLTIP);
 
   const hideTooltips = () => {
     const pointTooltip = getPointTooltip();
@@ -14,6 +15,10 @@ export default function native({ chart, actions, viewHandler }) {
     const legendTooltip = getLegendTooltip();
     if (legendTooltip?.show) {
       legendTooltip.emit('hide');
+    }
+    const heatMapTooltip = getHeatMapTooltip();
+    if (heatMapTooltip?.show) {
+      heatMapTooltip.emit('hide');
     }
   };
 
@@ -35,7 +40,7 @@ export default function native({ chart, actions, viewHandler }) {
             .componentsFromPoint(point)
             .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
           if (target) {
-            zoom(e, chart, target, viewHandler);
+            zoom({ e, chart, pointComponent: target, viewHandler, chartModel: models.chartModel });
             e.preventDefault();
           }
         }
@@ -53,7 +58,7 @@ export default function native({ chart, actions, viewHandler }) {
           const target = chart.componentsFromPoint({ x: e.clientX, y: e.clientY });
           const pointTooltip = getPointTooltip();
           if (pointTooltip?.show) {
-            if (target.some((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP)) {
+            if (target.some((c) => c.key === KEYS.COMPONENT.POINT)) {
               pointTooltip.emit('show', e);
             } else {
               pointTooltip.emit('hide');
@@ -65,6 +70,15 @@ export default function native({ chart, actions, viewHandler }) {
               legendTooltip.emit('show', e);
             } else {
               legendTooltip.emit('hide');
+            }
+          }
+
+          const heatMapTooltip = getHeatMapTooltip();
+          if (heatMapTooltip?.show) {
+            if (target.some((c) => c.key === KEYS.COMPONENT.HEAT_MAP)) {
+              heatMapTooltip.emit('show', e);
+            } else {
+              heatMapTooltip.emit('hide');
             }
           }
         }

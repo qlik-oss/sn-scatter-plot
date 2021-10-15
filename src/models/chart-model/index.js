@@ -13,6 +13,7 @@ export default function createChartModel({
   model,
 }) {
   let interactionInProgess = false;
+  let settingsCopy;
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
     KEYS.COMPONENT.Y_AXIS_TITLE,
@@ -40,18 +41,6 @@ export default function createChartModel({
   });
 
   function updatePartial() {
-    if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
-      viewHandler.fetchData().then((pages) => {
-        // Transition between bin data and normal data
-        if (pages[0].qMatrix?.length) {
-          layoutService.setDataPages(pages);
-          layoutService.setLayoutValue('dataPages', [[]]);
-        } else {
-          layoutService.setLayoutValue('dataPages', pages);
-          layoutService.setDataPages([]);
-        }
-      });
-    }
     const dataView = viewState.get('dataView');
     const { isHomeState } = viewHandler.getMeta();
     extremumModel.command.updateExtrema(dataView, isHomeState);
@@ -129,6 +118,21 @@ export default function createChartModel({
     ];
   };
 
+  const update = ({ settings } = {}) => {
+    const binData = getBinData();
+    chart.update({
+      data: [
+        {
+          type: 'q',
+          ...mainConfig,
+        },
+        ...binData,
+        ...colorService.getData(),
+      ],
+      settings,
+    });
+  };
+
   return {
     query: {
       getDataset: () => dataset,
@@ -138,10 +142,12 @@ export default function createChartModel({
       isInteractionInProgess: () => interactionInProgess,
       getFormatter: (fieldName) => dataset.field(fieldName).formatter(),
       isPrelayout: () => state.isPrelayout,
+      getSettings: () => settingsCopy,
     },
     command: {
       layoutComponents: ({ settings } = {}) => {
         const binData = getBinData();
+        settingsCopy = settings;
         chart.layoutComponents({
           data: [
             {
@@ -155,20 +161,7 @@ export default function createChartModel({
         });
         state.isPrelayout = false;
       },
-      update: ({ settings } = {}) => {
-        const binData = getBinData();
-        chart.update({
-          data: [
-            {
-              type: 'q',
-              ...mainConfig,
-            },
-            ...binData,
-            ...colorService.getData(),
-          ],
-          settings,
-        });
-      },
+      update,
     },
   };
 }

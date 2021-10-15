@@ -15,7 +15,6 @@ export default function createPointTooltip({ models, context }) {
   const { rtl, translator } = context;
   const baseTooltip = createBaseTooltip({
     key: KEYS.COMPONENT.POINT_TOOLTIP,
-    rtl,
   });
 
   const style2 = themeService.getStyles();
@@ -78,6 +77,7 @@ export default function createPointTooltip({ models, context }) {
 
   return extend(true, baseTooltip, {
     settings: {
+      direction: rtl ? 'rtl' : 'ltr',
       filter: (nodes) => nodes.filter((node) => node.data && TOOLTIPPERS[node.key]),
       extract: (nodeContext) => nodeContext,
       content: ({ h, data, style }) => {

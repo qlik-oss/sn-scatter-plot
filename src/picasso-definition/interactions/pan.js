@@ -3,7 +3,7 @@ import KEYS from '../../constants/keys';
 const threshold = 10;
 const eventName = 'areaPan';
 
-const pan = ({ chart, actions, viewHandler }) => ({
+const pan = ({ chart, actions, viewHandler, context, models }) => ({
   type: 'Pan',
   key: 'panorama',
   options: {
@@ -44,8 +44,8 @@ const pan = ({ chart, actions, viewHandler }) => ({
       const yDiff = (yAxisMax - yAxisMin) * (e.deltaY / componentSize.height);
 
       const dataView = {
-        xAxisMin: xAxisMin - xDiff,
-        xAxisMax: xAxisMax - xDiff,
+        xAxisMin: context.rtl ? xAxisMin + xDiff : xAxisMin - xDiff,
+        xAxisMax: context.rtl ? xAxisMax + xDiff : xAxisMax - xDiff,
         yAxisMin: yAxisMin + yDiff,
         yAxisMax: yAxisMax + yDiff,
       };
@@ -55,6 +55,8 @@ const pan = ({ chart, actions, viewHandler }) => ({
     areaPanend(e) {
       e.preventDefault();
       this.started = false;
+
+      viewHandler.throttlerFetchData(models.chartModel)();
     },
     areaPancancel(e) {
       e.preventDefault();

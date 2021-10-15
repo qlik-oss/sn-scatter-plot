@@ -3,6 +3,7 @@ import createAxes from './axes';
 import createAxisTitles from './axis-titles';
 import createPoint from './point';
 import createHeatMap from './heat-map';
+import createHeatMapLabels from './heat-map-labels';
 import createReferenceLines from './reference-lines';
 import createPointLabels from './point-labels';
 import createTooltips from './tooltips';
@@ -10,7 +11,7 @@ import createDisclaimer from './disclaimer';
 import createOutOfBounds from './out-of-bounds';
 
 export default function createComponents({ context, models, flags, picasso }) {
-  const { colorService, disclaimerModel, layoutService } = models;
+  const { colorService, disclaimerModel, layoutService, themeService } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
 
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
@@ -22,6 +23,7 @@ export default function createComponents({ context, models, flags, picasso }) {
     ...createReferenceLines({ models, context }),
     createPoint({ layoutService, colorService }),
     createHeatMap({ models, flags }),
+    createHeatMapLabels({ themeService, picasso, context }),
     ...createAxes({ models, flags }),
     ...createAxisTitles(models),
     createPointLabels(models),

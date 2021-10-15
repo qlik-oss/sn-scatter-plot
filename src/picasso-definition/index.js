@@ -43,11 +43,14 @@ export default function createPicassoDefinition({
 
   return {
     interactions: createInteractions({
+      models,
       chart,
       actions,
       viewHandler,
       gestures: [...selectables.gestures],
       colorService,
+      context,
+      flags,
     }),
     scales,
     components: pluginService.extendComponents(componentDefinitions),

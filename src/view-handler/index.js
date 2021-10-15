@@ -1,4 +1,5 @@
 import extend from 'extend';
+import { throttler } from 'qlik-chart-modules';
 import createDataFetcher from './data-fetcher';
 import fetchBinnedData from './binned-data-fetcher';
 
@@ -32,6 +33,26 @@ export default function createViewHandler({ layoutService, extremumModel, model,
       return layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')
         ? fetchBinnedData({ layoutService, extremumModel, model })
         : dataFetcher.fetchData(dataRect);
+    },
+
+    throttlerFetchData(chartModel) {
+      return throttler(() => {
+        if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
+          viewHandler.fetchData().then((pages) => {
+            // Transition between bin data and normal data
+            if (pages[0].qMatrix?.length) {
+              layoutService.setDataPages(pages);
+              layoutService.setLayoutValue('dataPages', [[]]);
+              viewHandler.setMeta({ isHeatMapView: false });
+            } else {
+              layoutService.setLayoutValue('dataPages', pages);
+              layoutService.setDataPages([]);
+              viewHandler.setMeta({ isHeatMapView: true });
+            }
+            chartModel.command.update({ settings: chartModel.query.getSettings() });
+          });
+        }
+      }, 100);
     },
 
     setDataView(dataView) {
