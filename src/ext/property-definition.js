@@ -1,9 +1,9 @@
 import { getValue, setValue } from 'qlik-chart-modules';
 
-const COMPORESSION_THRESHOLD = 1000;
+const COMPRESSION_THRESHOLD = 1000;
 function showCompressionResolution(layout) {
   const dim = layout.qHyperCube.qDimensionInfo[0];
-  return dim?.qCardinal > COMPORESSION_THRESHOLD;
+  return dim?.qCardinal > COMPRESSION_THRESHOLD;
 }
 /*
 const nonCompProp = {

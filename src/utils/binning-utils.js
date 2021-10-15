@@ -1,4 +1,3 @@
-import isBigData from './is-big-data';
 import NUMBERS from '../constants/numbers';
 
 const DefaultResolutionLevel = 6;
@@ -72,9 +71,8 @@ const getBinnedData = (left, top, width, height, zoomLevel, layoutService, model
   );
 };
 
-const updateBinnedData = ({ app, flags, layoutService, extremumModel, model }) => {
-  const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-  const requestNewDataOnInteraction = isBigData(qcy, app.layout, flags) && !layoutService.meta.isSnapshot;
+const updateBinnedData = ({ layoutService, extremumModel, model }) => {
+  const requestNewDataOnInteraction = layoutService.meta.isBigData && !layoutService.meta.isSnapshot;
   const { xAxisMin, xAxisMax } = extremumModel.query.getXExtrema();
   const { yAxisMin, yAxisMax } = extremumModel.query.getYExtrema();
   const { qMin, qMax } = layoutService.getHyperCubeValue('qMeasureInfo.1', {});

@@ -1,5 +1,4 @@
 import * as createDataFetcher from '../data-fetcher';
-import * as isBigData from '../../utils/is-big-data';
 import * as updateBinnedData from '../../utils/binning-utils';
 import createViewHandler from '..';
 
@@ -12,7 +11,6 @@ describe('createViewHandler', () => {
   let viewHandler;
   let myDataView;
   let flags;
-  let app;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -20,18 +18,16 @@ describe('createViewHandler', () => {
     viewState.get.withArgs('dataView').returns('correct data view');
     sandbox.stub(createDataFetcher, 'default');
     createDataFetcher.default.returns({ fetchData: sandbox.stub() });
-    sandbox.stub(isBigData, 'default');
-    isBigData.default.returns(false);
     sandbox.stub(updateBinnedData, 'default');
     myDataView = { xAxisMin: 0, xAxisMax: 100, yAxisMin: -100, yAxisMax: 200 };
     layoutService = {
       getHyperCubeValue: (path, defaultValue) => defaultValue,
+      meta: {
+        isBigData: false,
+      },
     };
     flags = { isEnabled: sandbox.stub().returns(false) };
-    app = {
-      layout: [],
-    };
-    create = () => createViewHandler({ app, layoutService, model, viewState, flags });
+    create = () => createViewHandler({ layoutService, model, viewState, flags });
     viewHandler = create();
   });
 
@@ -49,7 +45,7 @@ describe('createViewHandler', () => {
   });
 
   it('should get binned data when data is big data and flag DATA_BINNING is enabled', () => {
-    isBigData.default.returns(true);
+    layoutService.meta.isBigData = true;
     flags.isEnabled.returns(true);
     viewHandler.fetchData();
     expect(updateBinnedData.default).to.have.been.calledOnce;

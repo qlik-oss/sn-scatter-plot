@@ -16,7 +16,6 @@ export default function createPicassoDefinition({
   translator,
   logicalSize,
   flags,
-  app,
 }) {
   const { chart, actions, picasso } = core;
   const { chartModel, colorService, pluginService } = models;
@@ -36,7 +35,7 @@ export default function createPicassoDefinition({
 
   const collections = createCollections(models);
 
-  const components = createComponents({ models, context, flags, picasso, app, model });
+  const components = createComponents({ models, context, flags, picasso, model });
 
   const selectables = createSelectables({ models, actions, scales, flags });
 

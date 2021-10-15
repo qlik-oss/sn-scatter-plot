@@ -1,11 +1,8 @@
 import updateBinnedData from '../binning-utils';
-import * as isBigData from '../is-big-data';
 
 describe('binning', () => {
   let sandbox;
-  let app;
   let layoutService;
-  let flags;
   let extremumModel;
   let model;
   let layout;
@@ -13,8 +10,6 @@ describe('binning', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    sandbox.stub(isBigData, 'default').returns(true);
-    app = { layout: false };
     layout = {
       compressionResolution: 5,
       qHyperCube: {
@@ -25,7 +20,7 @@ describe('binning', () => {
       },
     };
     layoutService = {
-      meta: { isSnapshot: false },
+      meta: { isSnapshot: false, isBigData: false },
       getHyperCubeValue: (path, defaultValue) => defaultValue,
       getLayoutValue: sandbox.stub().withArgs('dataPages').returns([]),
       getLayout: () => layout,
@@ -52,11 +47,8 @@ describe('binning', () => {
         ])
       ),
     };
-    flags = { isEnabled: sandbox.stub().returns(false) };
     create = () =>
       updateBinnedData({
-        app,
-        flags,
         layoutService,
         extremumModel,
         model,
@@ -68,6 +60,7 @@ describe('binning', () => {
   });
 
   it('should return correct binned data when requestNewDataOnInteraction is true', async () => {
+    layoutService.meta.isBigData = true;
     const binnedData = await create();
     expect(binnedData[0][0]).eql({ qNum: 996, qElemNumber: 0, qState: 'L' });
     expect(binnedData[0][1]).eql({
@@ -86,13 +79,11 @@ describe('binning', () => {
 
   describe('when requestNewDataOnInteraction is false', () => {
     it('should return stored data when is not big data', async () => {
-      isBigData.default.returns(false);
       layoutService.meta.isSnapshot = false;
       expect(await create()).eql([]);
     });
 
     it('should return stored data when is snapshot', async () => {
-      isBigData.default.returns(true);
       layoutService.meta.isSnapshot = true;
       expect(await create()).eql([]);
     });

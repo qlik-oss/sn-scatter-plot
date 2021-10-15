@@ -9,7 +9,7 @@ import createTooltips from './tooltips';
 import createDisclaimer from './disclaimer';
 import createOutOfBounds from './out-of-bounds';
 
-export default function createComponents({ context, models, flags, picasso, app }) {
+export default function createComponents({ context, models, flags, picasso }) {
   const { colorService, disclaimerModel, layoutService } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
 
@@ -21,7 +21,7 @@ export default function createComponents({ context, models, flags, picasso, app 
     createGridLines(models),
     ...createReferenceLines({ models, context }),
     createPoint({ layoutService, colorService }),
-    createHeatMap({ app, models, flags }),
+    createHeatMap({ models, flags }),
     ...createAxes({ models, flags }),
     ...createAxisTitles(models),
     createPointLabels(models),

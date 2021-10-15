@@ -18,12 +18,6 @@ describe('out of bounds', () => {
     yAxisMin,
     yAxisMax,
   };
-  const hyperCube = {
-    qSize: {
-      qcx: 3,
-      qcy: 100,
-    },
-  };
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -40,7 +34,9 @@ describe('out of bounds', () => {
     };
 
     layoutService = {
-      getHyperCube: () => hyperCube,
+      meta: {
+        isBigData: false,
+      },
     };
 
     sandbox.stub(KEYS, 'default').get(() => ({

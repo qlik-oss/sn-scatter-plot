@@ -1,8 +1,7 @@
 import { rgb } from 'd3-color';
 import KEYS from '../../../constants/keys';
-import isBigData from '../../../utils/is-big-data';
 
-export default function createHeatMap({ app, models, flags }) {
+export default function createHeatMap({ models, flags }) {
   const { layoutService, chartModel } = models;
   let binWidthPx;
   let binHeightPx;
@@ -22,10 +21,7 @@ export default function createHeatMap({ app, models, flags }) {
         },
       },
     },
-    show: () => {
-      const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-      return isBigData(qcy, app.layout, flags) && flags.isEnabled('DATA_BINNING');
-    },
+    show: () => layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING'),
     // brush: { consume: [highlight, highlightIntersect, highlightColor] },
     settings: {
       x: {

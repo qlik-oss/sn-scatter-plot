@@ -1,6 +1,5 @@
 import KEYS from '../../constants/keys';
 import createViewHandler from '../../view-handler';
-import isBigData from '../../utils/is-big-data';
 
 export default function createChartModel({
   chart,
@@ -43,8 +42,7 @@ export default function createChartModel({
   });
 
   function updatePartial() {
-    const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-    if (isBigData(qcy, app.layout, flags) && flags.isEnabled('DATA_BINNING')) {
+    if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
       viewHandler.fetchData().then((pages) => {
         // Transition between bin data and normal data
         if (pages[0].qMatrix?.length) {
@@ -83,8 +81,7 @@ export default function createChartModel({
   const state = { isPrelayout: true };
 
   const getBinData = () => {
-    const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-    if (!isBigData(qcy, app.layout, flags) || !flags.isEnabled('DATA_BINNING')) {
+    if (!layoutService.meta.isBigData || !flags.isEnabled('DATA_BINNING')) {
       return [];
     }
 

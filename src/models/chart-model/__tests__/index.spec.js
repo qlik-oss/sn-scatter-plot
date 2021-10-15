@@ -1,6 +1,5 @@
 import createChartModel from '..';
 import * as createViewHandler from '../../../view-handler';
-import * as isBigData from '../../../utils/is-big-data';
 
 describe('chart-model', () => {
   let sandbox;
@@ -53,7 +52,7 @@ describe('chart-model', () => {
     };
     binnedData = [[{ qNum: 1164, qElemNumber: 0 }, dataPoint]];
     layoutService = {
-      meta: { isContinuous: false, isSnapshot: false },
+      meta: { isContinuous: false, isSnapshot: false, isBigData: false },
       getHyperCube: sandbox.stub().returns(hyperCube),
       getDataPages: sandbox.stub().returns(hyperCube.dataPages),
       setDataPages: sandbox.stub().callsFake((pages) => {
@@ -77,8 +76,6 @@ describe('chart-model', () => {
     app = {
       layout: [],
     };
-    sandbox.stub(isBigData, 'default');
-    isBigData.default.returns(false);
     flags = { isEnabled: sandbox.stub().returns(false) };
     create = () =>
       createChartModel({
@@ -199,7 +196,7 @@ describe('chart-model', () => {
       });
 
       it('should set correct binned data when calling layoutComponents', () => {
-        isBigData.default.returns(true);
+        layoutService.meta.isBigData = true;
         flags.isEnabled.returns(true);
         create().command.layoutComponents({ settings: { key: 'settings' } });
         const argsObject = chart.layoutComponents.args[0][0];
@@ -230,7 +227,7 @@ describe('chart-model', () => {
       });
 
       it('should update correct binned data when calling update', () => {
-        isBigData.default.returns(true);
+        layoutService.meta.isBigData = true;
         flags.isEnabled.returns(true);
         create().command.update({ settings: { key: 'settings' } });
         const argsObject = chart.update.args[0][0];
@@ -261,7 +258,7 @@ describe('chart-model', () => {
       });
 
       it('should fetch data when is big data and flag DATA_BINNING is enabled ', async () => {
-        isBigData.default.returns(true);
+        layoutService.meta.isBigData = true;
         flags.isEnabled.returns(true);
         sandbox.useFakeTimers();
         const { clock } = sandbox;

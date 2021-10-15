@@ -1,11 +1,9 @@
 import KEYS from '../../../constants/keys';
 
 const OOB_SPACE = 10;
-const MAX_NR_SCATTER = 1000;
 
 export default function createOutOfBounds({ models, context }) {
   const { chartModel, colorService, layoutService } = models;
-  const isBigData = layoutService.getHyperCube().qSize.qcy > MAX_NR_SCATTER;
   const viewHandler = chartModel.query.getViewHandler();
   const { rtl } = context;
   const oobPositions = {
@@ -19,7 +17,7 @@ export default function createOutOfBounds({ models, context }) {
   let yAxisMax;
   let yAxisMin;
 
-  const oobDefinition = !isBigData
+  const oobDefinition = !layoutService.meta.isBigData
     ? {
         key: KEYS.COMPONENT.OUT_OF_BOUNDS,
         type: 'point',

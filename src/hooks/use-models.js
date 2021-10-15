@@ -69,7 +69,10 @@ const useModels = ({ core, flags }) => {
     }
 
     const { picassoInstance, chart, actions, viewState } = core;
-    const layoutService = createLayoutService({ source: layout, metaAdditionsFn: layoutServiceMeta });
+    const layoutService = createLayoutService({
+      source: layout,
+      metaAdditionsFn: layoutServiceMeta(flags),
+    });
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
     const dockService = createDockService({
       chart,
@@ -116,7 +119,7 @@ const useModels = ({ core, flags }) => {
 
     const tickModel = createTickModel({ layoutService, dockService, extremumModel, themeService, chartModel, chart });
 
-    const disclaimerModel = createDisclaimerModel({ app, layoutService, flags });
+    const disclaimerModel = createDisclaimerModel({ layoutService, flags });
 
     selectionService.setLayout(layout);
     setModels({

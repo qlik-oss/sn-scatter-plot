@@ -1,4 +1,3 @@
-import isBigData from '../../../utils/is-big-data';
 import NUMBERS from '../../../constants/numbers';
 
 export default [
@@ -21,19 +20,19 @@ export default [
   {
     key: 'LimitedData',
     alignment: 'bottom',
-    condition: ({ app, layoutService, flags }) => {
+    condition: ({ layoutService, flags }) => {
       if (layoutService.getLayout().showDisclaimer === false && flags.isEnabled('SHOW_DISCLAIMER')) {
         return false;
       }
 
       const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-      return qcy > NUMBERS.MAX_NR_SCATTER && (!isBigData(qcy, app.layout, flags) || !flags.isEnabled('DATA_BINNING'));
+      return qcy > NUMBERS.MAX_NR_SCATTER && (!layoutService.meta.isBigData || !flags.isEnabled('DATA_BINNING'));
     },
   },
   {
     key: 'OverviewData',
     alignment: 'bottom',
-    condition: ({ app, layoutService, flags }) => {
+    condition: ({ layoutService, flags }) => {
       if (
         layoutService.getLayout().showDisclaimer === false &&
         flags.isEnabled('SHOW_DISCLAIMER') &&
@@ -43,7 +42,7 @@ export default [
       }
       const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
 
-      return qcy > NUMBERS.MAX_NR_SCATTER && isBigData(qcy, app.layout, flags);
+      return qcy > NUMBERS.MAX_NR_SCATTER && layoutService.meta.isBigData;
     },
   },
 ];
