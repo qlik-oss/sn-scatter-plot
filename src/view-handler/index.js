@@ -1,6 +1,6 @@
 import extend from 'extend';
 import createDataFetcher from './data-fetcher';
-import updateBinnedData from '../utils/binning-utils';
+import fetchBinnedData from './binned-data-fetcher';
 
 function areIntervalsEqual(min1, max1, min2, max2, e) {
   // e is the relative tolerance; d is the absolute tolerence
@@ -30,7 +30,7 @@ export default function createViewHandler({ layoutService, extremumModel, model,
       };
 
       return layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')
-        ? updateBinnedData({ layoutService, extremumModel, model })
+        ? fetchBinnedData({ layoutService, extremumModel, model })
         : dataFetcher.fetchData(dataRect);
     },
 
