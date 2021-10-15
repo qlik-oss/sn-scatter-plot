@@ -40,9 +40,8 @@ export default [
       ) {
         return false;
       }
-      const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
 
-      return qcy > NUMBERS.MAX_NR_SCATTER && layoutService.meta.isBigData;
+      return layoutService.meta.isBigData;
     },
   },
 ];

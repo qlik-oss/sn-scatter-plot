@@ -113,7 +113,6 @@ const useModels = ({ core, flags }) => {
       viewState,
       colorService,
       extremumModel,
-      app,
       flags,
     });
 

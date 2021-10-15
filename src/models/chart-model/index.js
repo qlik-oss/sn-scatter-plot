@@ -9,7 +9,6 @@ export default function createChartModel({
   picasso,
   viewState,
   extremumModel,
-  app,
   flags,
   model,
 }) {
@@ -33,7 +32,6 @@ export default function createChartModel({
   const dataset = picasso.data('q')(mainConfig);
 
   const viewHandler = createViewHandler({
-    app,
     flags,
     layoutService,
     extremumModel,
