@@ -28,7 +28,6 @@ describe('chart-model', () => {
     dataPoint = { qText: [2000, 5, 2200, 4], qNum: 1, qElemNumber: 7964 };
     viewHandler = {
       getMeta: sandbox.stub().returns('isHomeState'),
-      fetchData: sandbox.stub().returns(Promise.resolve([{ qNum: 1164, qElemNumber: 0 }, dataPoint])),
     };
     sandbox.stub(createViewHandler, 'default').returns(viewHandler);
     viewState = {
@@ -122,6 +121,7 @@ describe('chart-model', () => {
         'isPrelayout',
         'isInteractionInProgess',
         'getFormatter',
+        'getSettings',
       ]);
     });
 
@@ -170,6 +170,14 @@ describe('chart-model', () => {
             .returns({ formatter: sandbox.stub().returns('x-formatter') }),
         });
         expect(create().query.getFormatter('x')).to.deep.equal('x-formatter');
+      });
+    });
+
+    describe('getSettings', () => {
+      it('should return correct setting value', () => {
+        const chartModel = create();
+        chartModel.command.layoutComponents({ settings: { key: 'settings' } });
+        expect(chartModel.query.getSettings()).eql({ key: 'settings' });
       });
     });
   });
@@ -255,17 +263,6 @@ describe('chart-model', () => {
             excludeFromUpdate: ['x-axis-title', 'y-axis-title'],
           })
         ).to.have.been.calledOnce;
-      });
-
-      it('should fetch data when is big data and flag DATA_BINNING is enabled ', async () => {
-        layoutService.meta.isBigData = true;
-        flags.isEnabled.returns(true);
-        sandbox.useFakeTimers();
-        const { clock } = sandbox;
-        create();
-        viewState.dataView();
-        await clock.tick(50);
-        expect(createViewHandler.default().fetchData).to.have.been.calledOnce;
       });
     });
   });

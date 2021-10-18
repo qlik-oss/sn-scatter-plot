@@ -9,7 +9,7 @@ function isWithinThreshold(diff) {
   return Math.abs(diff) > 0.01;
 }
 
-const pinch = ({ chart, actions, viewHandler, context, models }) => ({
+const pinch = ({ chart, actions, viewHandler, context, chartModel }) => ({
   type: 'Pinch',
   key: 'pinchZoom',
   options: {
@@ -55,7 +55,7 @@ const pinch = ({ chart, actions, viewHandler, context, models }) => ({
             pointComponent: this.pointArea,
             viewHandler,
             pinchZoomFactor: lastScale / e.scale,
-            chartModel: models.chartModel,
+            chartModel,
           });
           lastScale = e.scale;
         }
@@ -75,7 +75,7 @@ const pinch = ({ chart, actions, viewHandler, context, models }) => ({
         };
 
         viewHandler.setDataView(dataView);
-        viewHandler.throttlerFetchData(models.chartModel)();
+        viewHandler.throttledFetchData(chartModel)();
       }
     },
     zoomend(e) {

@@ -28,7 +28,6 @@ export default {
     HEAT_MAP: 'heat-map',
     HEAT_MAP_LABELS: 'heat-map-labels',
     HEAT_MAP_TOOLTIP: 'heat-map-tooltip',
-
     OUT_OF_BOUNDS: 'out-of-bounds',
   },
   COLLECTION: {

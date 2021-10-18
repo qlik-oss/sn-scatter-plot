@@ -31,5 +31,5 @@ export default function zoom({ e, chart, pointComponent, viewHandler, pinchZoomF
   });
   viewHandler.setMeta({ scale: newScale });
 
-  viewHandler.throttlerFetchData(chartModel)();
+  viewHandler.throttledFetchData(chartModel)();
 }

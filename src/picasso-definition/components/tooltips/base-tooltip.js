@@ -26,7 +26,7 @@ function destroyTooltipContainer() {
 /**
  * Base tooltip definition
  */
-export default function createBaseTooltip({ key = 'tooltip' }) {
+export default function createBaseTooltip({ key = 'tooltip', rtl }) {
   return {
     show: true,
     key,
@@ -45,6 +45,7 @@ export default function createBaseTooltip({ key = 'tooltip' }) {
     },
     settings: {
       appendTo: () => document.querySelector(TOOLTIP_CONTAINER_SELECTOR),
+      direction: rtl ? 'rtl' : 'ltr',
     },
     style: {
       arrow: {

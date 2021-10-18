@@ -35,7 +35,7 @@ export default function createViewHandler({ layoutService, extremumModel, model,
         : dataFetcher.fetchData(dataRect);
     },
 
-    throttlerFetchData(chartModel) {
+    throttledFetchData(chartModel) {
       return throttler(() => {
         if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
           viewHandler.fetchData().then((pages) => {
@@ -43,11 +43,9 @@ export default function createViewHandler({ layoutService, extremumModel, model,
             if (pages[0].qMatrix?.length) {
               layoutService.setDataPages(pages);
               layoutService.setLayoutValue('dataPages', [[]]);
-              viewHandler.setMeta({ isHeatMapView: false });
             } else {
               layoutService.setLayoutValue('dataPages', pages);
               layoutService.setDataPages([]);
-              viewHandler.setMeta({ isHeatMapView: true });
             }
             chartModel.command.update({ settings: chartModel.query.getSettings() });
           });

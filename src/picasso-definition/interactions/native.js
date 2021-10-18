@@ -1,7 +1,7 @@
 import KEYS from '../../constants/keys';
 import zoom from '../../utils/math/zoom';
 
-export default function native({ chart, actions, viewHandler, models }) {
+export default function native({ chart, actions, viewHandler, chartModel }) {
   const getPointTooltip = () => chart.component(KEYS.COMPONENT.POINT_TOOLTIP);
   const getLegendTooltip = () => chart.component(KEYS.COMPONENT.LEGEND_CAT_TOOLTIP);
   const getHeatMapTooltip = () => chart.component(KEYS.COMPONENT.HEAT_MAP_TOOLTIP);
@@ -40,7 +40,7 @@ export default function native({ chart, actions, viewHandler, models }) {
             .componentsFromPoint(point)
             .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
           if (target) {
-            zoom({ e, chart, pointComponent: target, viewHandler, chartModel: models.chartModel });
+            zoom({ e, chart, pointComponent: target, viewHandler, chartModel });
             e.preventDefault();
           }
         }

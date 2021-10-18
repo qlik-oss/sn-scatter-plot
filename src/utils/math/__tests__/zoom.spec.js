@@ -11,14 +11,21 @@ describe('zoom', () => {
   let viewHandler;
   let dataView;
   let pinchZoomFactor;
+  let chartModel;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    viewHandler = { getMeta: sandbox.stub(), getDataView: sandbox.stub(), setMeta: sandbox.stub() };
+    viewHandler = {
+      getMeta: sandbox.stub(),
+      getDataView: sandbox.stub(),
+      setMeta: sandbox.stub(),
+      throttledFetchData: sandbox.stub().callsFake(() => sandbox.stub()),
+    };
     viewHandler.getMeta.returns({ scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1 });
+    chartModel = {};
     sandbox.stub(eventUtils, 'eventToComponentPoint');
     pointComponent = { rect: { computedPhysical: { width: 100, height: 100 } } };
-    create = () => zoom(e, chart, pointComponent, viewHandler, pinchZoomFactor);
+    create = () => zoom({ e, chart, pointComponent, viewHandler, pinchZoomFactor, chartModel });
   });
 
   afterEach(() => {
@@ -40,6 +47,8 @@ describe('zoom', () => {
       yAxisMin: 1000 - 1000 * Math.sqrt(2),
       yAxisMax: 1000 + 1000 * Math.sqrt(2),
     });
+    expect(viewHandler.throttledFetchData).to.have.been.calledOnce;
+    expect(viewHandler.throttledFetchData).to.have.been.calledWithExactly(chartModel);
   });
 
   it('should update correct dataView for viewHandler, when we zoom in', () => {
@@ -57,6 +66,8 @@ describe('zoom', () => {
       yAxisMin: -1000 * Math.sqrt(1 / 2) + 1000,
       yAxisMax: 1000 + 1000 / Math.sqrt(2),
     });
+    expect(viewHandler.throttledFetchData).to.have.been.calledOnce;
+    expect(viewHandler.throttledFetchData).to.have.been.calledWithExactly(chartModel);
   });
 
   it('should update correct dataView for viewHandler, when we zoom out but reach the maxScale limit', () => {
@@ -75,6 +86,7 @@ describe('zoom', () => {
       yAxisMin: 0,
       yAxisMax: 2000,
     });
+    expect(viewHandler.throttledFetchData).to.not.have.been.called;
   });
 
   it('should update correct dataView for viewHandler, when we zoom in but reach the minScale limit', () => {
@@ -93,6 +105,7 @@ describe('zoom', () => {
       yAxisMin: 0,
       yAxisMax: 2000,
     });
+    expect(viewHandler.throttledFetchData).to.not.have.been.called;
   });
 
   it('should update correct dataView for pinch zoom', () => {
@@ -110,5 +123,7 @@ describe('zoom', () => {
       yAxisMin: 400,
       yAxisMax: 1600,
     });
+    expect(viewHandler.throttledFetchData).to.have.been.calledOnce;
+    expect(viewHandler.throttledFetchData).to.have.been.calledWithExactly(chartModel);
   });
 });

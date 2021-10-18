@@ -1,15 +1,15 @@
-import extend from 'extend';
-import createBaseTooltip from './base-tooltip';
 import KEYS from '../../../constants/keys';
 
-/**
- * Generate the tooltip definition
- */
 export default function createHeatMapTooltip({ context }) {
-  const { translator, rtl } = context;
-  const base = createBaseTooltip({ key: KEYS.COMPONENT.HEAT_MAP_TOOLTIP });
+  const { translator, rtl, theme } = context;
 
-  return extend(true, base, {
+  const heatMapTooltipsComponent = {
+    show: true,
+    key: KEYS.COMPONENT.HEAT_MAP_TOOLTIP,
+    type: 'tooltip',
+    layout: {
+      displayOrder: 3,
+    },
     settings: {
       filter: (nodes) => nodes.filter((node) => node.data && node.key === KEYS.COMPONENT.HEAT_MAP),
       extract: (nodeContext) => nodeContext,
@@ -21,8 +21,11 @@ export default function createHeatMapTooltip({ context }) {
     },
     style: {
       content: {
-        fontFamily: context.theme.getStyle('object', '', 'fontFamily'),
+        fontFamily: theme.getStyle('object', '', 'fontFamily'),
+        fontSize: theme.getStyle('object', '', 'fontSize'),
       },
     },
-  });
+  };
+
+  return heatMapTooltipsComponent;
 }
