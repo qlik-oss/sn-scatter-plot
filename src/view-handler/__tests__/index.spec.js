@@ -10,6 +10,8 @@ describe('createViewHandler', () => {
   let viewState;
   let viewHandler;
   let myDataView;
+  let normalData;
+  let binnedData;
   let flags;
 
   beforeEach(() => {
@@ -18,13 +20,33 @@ describe('createViewHandler', () => {
     viewState.get.withArgs('dataView').returns('correct data view');
     sandbox.stub(createDataFetcher, 'default');
     createDataFetcher.default.returns({ fetchData: sandbox.stub() });
-    sandbox.stub(fetchBinnedData, 'default');
+    normalData = [
+      {
+        qMatrix: [
+          [{ qNum: 996, qElemNumber: 0, qState: 'L' }],
+          [{ qElemNumber: 7954, qNum: 1, qState: 'L', qText: '[1732.25, 6.09375, 1765.5625, 5.6875]' }],
+          [{ qElemNumber: 7946, qNum: 1, qState: 'L', qText: '[1599.0, 5.28125, 1632.3125, 4.875]' }],
+        ],
+        qTails: [],
+        qArea: { qLeft: 0, qTop: 0, qWidth: 3, qHeight: 565 },
+      },
+      { qMatrix: [], qTails: [], qArea: [] },
+    ];
+    binnedData = [
+      [
+        { qNum: 1164, qElemNumber: 0 },
+        { qText: [2000, 5, 2200, 4], qNum: 1, qElemNumber: 7964 },
+      ],
+    ];
+    sandbox.stub(fetchBinnedData, 'default').returns(Promise.resolve(normalData));
     myDataView = { xAxisMin: 0, xAxisMax: 100, yAxisMin: -100, yAxisMax: 200 };
     layoutService = {
       getHyperCubeValue: (path, defaultValue) => defaultValue,
       meta: {
         isBigData: false,
       },
+      setDataPages: sandbox.stub(),
+      setLayoutValue: sandbox.stub(),
     };
     flags = { isEnabled: sandbox.stub().returns(false) };
     create = () => createViewHandler({ layoutService, model, viewState, flags });
@@ -49,6 +71,43 @@ describe('createViewHandler', () => {
     flags.isEnabled.returns(true);
     viewHandler.fetchData();
     expect(fetchBinnedData.default).to.have.been.calledOnce;
+  });
+
+  describe('throttledFetchData', () => {
+    it('should set correct data and update chart when return nomal data', async () => {
+      const chartModel = {
+        command: {
+          update: sandbox.stub(),
+        },
+        query: {
+          getSettings: sandbox.stub().returns('settings'),
+        },
+      };
+      layoutService.meta.isBigData = true;
+      flags.isEnabled.returns(true);
+      await viewHandler.throttledFetchData(chartModel)();
+      expect(layoutService.setDataPages.withArgs(normalData)).to.have.been.calledOnce;
+      expect(layoutService.setLayoutValue.withArgs('dataPages', [[]])).to.have.been.calledOnce;
+      expect(chartModel.command.update.withArgs({ settings: 'settings' })).to.have.been.calledOnce;
+    });
+
+    it('should set correct data and update chart when return binned data', async () => {
+      const chartModel = {
+        command: {
+          update: sandbox.stub(),
+        },
+        query: {
+          getSettings: sandbox.stub().returns('settings'),
+        },
+      };
+      layoutService.meta.isBigData = true;
+      flags.isEnabled.returns(true);
+      fetchBinnedData.default.returns(Promise.resolve(binnedData));
+      await viewHandler.throttledFetchData(chartModel)();
+      expect(layoutService.setDataPages.withArgs([])).to.have.been.calledOnce;
+      expect(layoutService.setLayoutValue.withArgs('dataPages', binnedData)).to.have.been.calledOnce;
+      expect(chartModel.command.update.withArgs({ settings: 'settings' })).to.have.been.calledOnce;
+    });
   });
 
   it('should return a view handler with proper getMeta method', () => {
