@@ -33,7 +33,7 @@ export default function createAxes({ models, flags }) {
             },
             line: {
               stroke: style.axis.line.major.color,
-              strokeWidth: 1,
+              strokeWidth: 2,
             },
             ticks: {
               stroke: style.axis.line.major.color,
@@ -78,7 +78,7 @@ export default function createAxes({ models, flags }) {
             },
             line: {
               stroke: style.axis.line.major.color,
-              strokeWidth: 1,
+              strokeWidth: 2,
             },
             ticks: {
               stroke: style.axis.line.major.color,
@@ -108,8 +108,6 @@ export default function createAxes({ models, flags }) {
             },
           },
         };
-  console.log(xAxisDefinition);
-  console.log(yAxisDefinition);
 
   return [xAxisDefinition, yAxisDefinition];
 }
