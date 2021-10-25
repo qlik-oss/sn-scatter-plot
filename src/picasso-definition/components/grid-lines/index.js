@@ -50,6 +50,10 @@ export default function createGridLines(models) {
       stroke: line.minor.color,
       strokeWidth: 1,
     },
+    animations: {
+      enabled: true,
+      trackBy: (node) => `${node.dir}: ${node.label}`,
+    },
   };
 
   return gridLinesDef;

@@ -9,6 +9,13 @@ export default function createAxes({ models, flags }) {
 
   const style = themeService.getStyles();
   const viewHandler = chartModel.query.getViewHandler();
+  const trackBy = (node, i) => {
+    if (i === 0) return 'axis';
+    if (node.type === 'text') {
+      return `label: ${node.text}`;
+    }
+    return `mark: ${node.tickLabel}`;
+  };
 
   const xAxisDefinition =
     !xAxis || xAxis.show === 'none'
@@ -38,6 +45,10 @@ export default function createAxes({ models, flags }) {
               stroke: style.axis.line.minor.color,
             },
             paddingEnd: NUMBERS.AXIS.X.PADDING.END,
+          },
+          animations: {
+            enabled: true,
+            trackBy,
           },
         };
 
@@ -75,6 +86,10 @@ export default function createAxes({ models, flags }) {
                   yAxis.show === 'title' || viewHandler.getMeta().isHomeState === false
                     ? 0
                     : NUMBERS.AXIS.Y.PADDING.END,
+          },
+          animations: {
+            enabled: true,
+            trackBy,
           },
         };
 
