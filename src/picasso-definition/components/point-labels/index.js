@@ -34,6 +34,16 @@ export default function createPointLabels({ layoutService, themeService }) {
       fill: color,
       backgroundColor: style.backgroundColor,
     },
+    animations: {
+      enabled: true,
+      trackBy: (node) => {
+        let id;
+        if (node.type === 'text') id = `label: ${node.pointValue}`;
+        else if (node.type === 'line') id = `line: ${node.pointValue}`;
+        else id = `rect: ${node.pointValue}`;
+        return id;
+      },
+    },
   };
 
   return pointLabelsComponent;
