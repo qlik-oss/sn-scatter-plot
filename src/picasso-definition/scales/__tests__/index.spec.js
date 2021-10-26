@@ -7,14 +7,17 @@ describe('scales', () => {
   let tickModel;
   let viewState;
   let colorService;
+  let layoutService;
   let models;
+  let theme;
   let sandbox;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    sandbox
-      .stub(KEYS, 'default')
-      .value({ FIELDS: { X: 'qDimensionInfo/0', Y: 'qDimensionInfo/1', SIZE: 'qMeasureInfo/0' } });
+    sandbox.stub(KEYS, 'default').value({
+      FIELDS: { X: 'qDimensionInfo/0', Y: 'qDimensionInfo/1', SIZE: 'qMeasureInfo/0' },
+      SCALE: { HEAT_MAP_COLOR: 'heatMapColor' },
+    });
     disclaimerModel = {
       query: {
         getHasSuppressingDisclaimer: sinon.stub().returns(false),
@@ -37,9 +40,13 @@ describe('scales', () => {
     colorService = {
       getScales: sinon.stub().returns({ s1: 's1', s2: 's2' }),
     };
-    models = { tickModel, colorService, disclaimerModel };
+    layoutService = {
+      getLayoutValue: sandbox.stub().returns([[{ qNum: 200 }]]),
+    };
+    models = { tickModel, colorService, disclaimerModel, layoutService };
     const options = { direction: 'rtl' };
-    create = () => createScales({ models, viewState, options });
+    theme = { getStyle: sandbox.stub().returns('#000000') };
+    create = () => createScales({ models, viewState, options, theme });
   });
 
   afterEach(() => {
@@ -48,7 +55,7 @@ describe('scales', () => {
 
   it('should contain correct scales', () => {
     const scales = create();
-    expect(Object.keys(scales)).to.deep.equal(['x', 'y', 's1', 's2']);
+    expect(Object.keys(scales)).to.deep.equal(['x', 'y', 's1', 's2', 'heatMapColor']);
   });
 
   it('scales should have proper properties', () => {
@@ -95,5 +102,23 @@ describe('scales', () => {
     const { y } = create();
     const res = y.max();
     expect(res).to.equal(30);
+  });
+
+  describe('heatMapColor scale', () => {
+    it('should return correct type', () => {
+      const { heatMapColor } = create();
+      expect(heatMapColor.type).to.equal('sequential-color');
+    });
+
+    it('should return correct min', () => {
+      const { heatMapColor } = create();
+      expect(heatMapColor.min).to.equal(0);
+    });
+
+    it('should return correct max', () => {
+      const { heatMapColor } = create();
+      const res = heatMapColor.max();
+      expect(res).to.equal(200);
+    });
   });
 });
