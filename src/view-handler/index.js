@@ -38,18 +38,36 @@ export default function createViewHandler({ layoutService, extremumModel, model,
     throttledFetchData(chartModel) {
       return throttler(() => {
         if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
+          let transition = false;
           viewHandler.fetchData().then((pages) => {
-            // Transition between bin data and normal data
-            if (pages[0].qMatrix?.length) {
-              layoutService.setDataPages(pages);
-              layoutService.setLayoutValue('dataPages', [[]]);
-              viewHandler.setMeta({ heatMapView: false });
-            } else {
-              layoutService.setLayoutValue('dataPages', pages);
-              layoutService.setDataPages([]);
-              viewHandler.setMeta({ heatMapView: true });
+            if (
+              JSON.stringify(pages) !== JSON.stringify(layoutService.getDataPages(pages)) &&
+              JSON.stringify(pages) !== JSON.stringify(layoutService.getLayoutValue('dataPages'))
+            ) {
+              // Transition between bin data and normal data
+              const isCurrentHeatMap = viewHandler.getMeta().heatMapView;
+              if (pages[0].qMatrix?.length) {
+                layoutService.setDataPages(pages);
+                layoutService.setLayoutValue('dataPages', [[]]);
+                if (isCurrentHeatMap) {
+                  viewHandler.setMeta({ heatMapView: false });
+                  transition = true;
+                }
+              } else {
+                layoutService.setLayoutValue('dataPages', pages);
+                layoutService.setDataPages([]);
+                if (!isCurrentHeatMap) {
+                  viewHandler.setMeta({ heatMapView: true });
+                  transition = true;
+                }
+              }
+
+              if (transition) {
+                chartModel.command.update({ settings: chartModel.query.getSettings() });
+              } else {
+                chartModel.command.updatePartialWithData();
+              }
             }
-            chartModel.command.update({ settings: chartModel.query.getSettings() });
           });
         }
       }, 100);

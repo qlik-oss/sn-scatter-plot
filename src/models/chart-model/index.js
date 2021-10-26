@@ -153,6 +153,21 @@ export default function createChartModel({
         state.isPrelayout = false;
       },
       update,
+      updatePartialWithData: () => {
+        const binData = getBinData();
+        chart.update({
+          data: [
+            {
+              type: 'q',
+              ...mainConfig,
+            },
+            ...binData,
+            ...colorService.getData(),
+          ],
+          partialData: true,
+          excludeFromUpdate: EXCLUDE,
+        });
+      },
     },
   };
 }

@@ -12,6 +12,7 @@ describe('createViewHandler', () => {
   let myDataView;
   let normalData;
   let binnedData;
+  let chartModel;
   let flags;
 
   beforeEach(() => {
@@ -47,8 +48,19 @@ describe('createViewHandler', () => {
       },
       setDataPages: sandbox.stub(),
       setLayoutValue: sandbox.stub(),
+      getDataPages: sandbox.stub(),
+      getLayoutValue: sandbox.stub(),
     };
     flags = { isEnabled: sandbox.stub().returns(false) };
+    chartModel = {
+      command: {
+        update: sandbox.stub(),
+        updatePartialWithData: sandbox.stub(),
+      },
+      query: {
+        getSettings: sandbox.stub().returns('settings'),
+      },
+    };
     create = () => createViewHandler({ layoutService, model, viewState, flags });
     viewHandler = create();
   });
@@ -74,39 +86,77 @@ describe('createViewHandler', () => {
   });
 
   describe('throttledFetchData', () => {
-    it('should set correct data and update chart when return nomal data', async () => {
-      const chartModel = {
-        command: {
-          update: sandbox.stub(),
-        },
-        query: {
-          getSettings: sandbox.stub().returns('settings'),
-        },
-      };
+    beforeEach(() => {
       layoutService.meta.isBigData = true;
       flags.isEnabled.returns(true);
-      await viewHandler.throttledFetchData(chartModel)();
-      expect(layoutService.setDataPages.withArgs(normalData)).to.have.been.calledOnce;
-      expect(layoutService.setLayoutValue.withArgs('dataPages', [[]])).to.have.been.calledOnce;
-      expect(chartModel.command.update.withArgs({ settings: 'settings' })).to.have.been.calledOnce;
     });
 
-    it('should set correct data and update chart when return binned data', async () => {
-      const chartModel = {
-        command: {
-          update: sandbox.stub(),
-        },
-        query: {
-          getSettings: sandbox.stub().returns('settings'),
-        },
-      };
-      layoutService.meta.isBigData = true;
-      flags.isEnabled.returns(true);
-      fetchBinnedData.default.returns(Promise.resolve(binnedData));
-      await viewHandler.throttledFetchData(chartModel)();
-      expect(layoutService.setDataPages.withArgs([])).to.have.been.calledOnce;
-      expect(layoutService.setLayoutValue.withArgs('dataPages', binnedData)).to.have.been.calledOnce;
-      expect(chartModel.command.update.withArgs({ settings: 'settings' })).to.have.been.calledOnce;
+    afterEach(() => {
+      sandbox.restore();
+    });
+
+    it('shout not set data and update chart when the new data is the same', () => {
+      layoutService.getLayoutValue.withArgs('dataPages').returns(binnedData);
+      layoutService.getDataPages.returns([normalData]);
+
+      expect(layoutService.setDataPages).to.not.have.been.called;
+      expect(layoutService.setLayoutValue).to.not.have.been.called;
+      expect(chartModel.command.update).to.not.have.been.called;
+      expect(chartModel.command.updatePartialWithData).to.not.have.been.called;
+    });
+
+    describe('partial update chart when fetched different data', () => {
+      it('should set correct data and partial update chart when return different nomal data', async () => {
+        viewHandler.setMeta({ heatMapView: false });
+        layoutService.getLayoutValue.withArgs('dataPages').returns([]);
+        layoutService.getDataPages.returns([]);
+        await viewHandler.throttledFetchData(chartModel)();
+
+        expect(layoutService.setDataPages.withArgs(normalData)).to.have.been.calledOnce;
+        expect(layoutService.setLayoutValue.withArgs('dataPages', [[]])).to.have.been.calledOnce;
+        expect(viewHandler.getMeta().heatMapView).to.be.false;
+        expect(chartModel.command.updatePartialWithData).to.have.been.calledOnce;
+      });
+
+      it('should set correct data and partial update chart when return different binned data', async () => {
+        viewHandler.setMeta({ heatMapView: true });
+        layoutService.getLayoutValue.withArgs('dataPages').returns('binnedData');
+        layoutService.getDataPages.returns('normalData');
+        fetchBinnedData.default.returns(Promise.resolve(binnedData));
+        await viewHandler.throttledFetchData(chartModel)();
+
+        expect(layoutService.setDataPages.withArgs([])).to.have.been.calledOnce;
+        expect(layoutService.setLayoutValue.withArgs('dataPages', binnedData)).to.have.been.calledOnce;
+        expect(viewHandler.getMeta().heatMapView).to.be.true;
+        expect(chartModel.command.updatePartialWithData).to.have.been.calledOnce;
+      });
+    });
+
+    describe('fully update chart when transition between bin data and normal data', () => {
+      it('should set correct data and update chart when transferring from heat map view to point view', async () => {
+        viewHandler.setMeta({ heatMapView: true });
+        layoutService.getLayoutValue.withArgs('dataPages').returns('binnedData');
+        layoutService.getDataPages.returns('normalData');
+        await viewHandler.throttledFetchData(chartModel)();
+
+        expect(layoutService.setDataPages.withArgs(normalData)).to.have.been.calledOnce;
+        expect(layoutService.setLayoutValue.withArgs('dataPages', [[]])).to.have.been.calledOnce;
+        expect(viewHandler.getMeta().heatMapView).to.be.false;
+        expect(chartModel.command.update.withArgs({ settings: 'settings' })).to.have.been.calledOnce;
+      });
+
+      it('should set correct data and update chart when transferring from point view to heat map view', async () => {
+        viewHandler.setMeta({ heatMapView: false });
+        layoutService.getLayoutValue.withArgs('dataPages').returns('binnedData');
+        layoutService.getDataPages.returns('normalData');
+        fetchBinnedData.default.returns(Promise.resolve(binnedData));
+        await viewHandler.throttledFetchData(chartModel)();
+
+        expect(layoutService.setDataPages.withArgs([])).to.have.been.calledOnce;
+        expect(layoutService.setLayoutValue.withArgs('dataPages', binnedData)).to.have.been.calledOnce;
+        expect(viewHandler.getMeta().heatMapView).to.be.true;
+        expect(chartModel.command.update.withArgs({ settings: 'settings' })).to.have.been.calledOnce;
+      });
     });
   });
 

@@ -1,5 +1,4 @@
 import createChartModel from '..';
-import * as createViewHandler from '../../../view-handler';
 
 describe('chart-model', () => {
   let sandbox;
@@ -29,7 +28,6 @@ describe('chart-model', () => {
     viewHandler = {
       getMeta: sandbox.stub().returns('isHomeState'),
     };
-    sandbox.stub(createViewHandler, 'default').returns(viewHandler);
     viewState = {
       get() {
         return this.props;
@@ -89,6 +87,7 @@ describe('chart-model', () => {
         extremumModel,
         app,
         flags,
+        viewHandler,
       });
   });
 
@@ -184,7 +183,7 @@ describe('chart-model', () => {
 
   describe('command', () => {
     it('should expose correct methods', () => {
-      expect(create().command).to.have.all.keys(['layoutComponents', 'update']);
+      expect(create().command).to.have.all.keys(['layoutComponents', 'update', 'updatePartialWithData']);
     });
 
     describe('layoutComponents', () => {
