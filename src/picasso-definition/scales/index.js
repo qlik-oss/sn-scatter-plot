@@ -1,10 +1,14 @@
 import KEYS from '../../constants/keys';
 
-export default function createScales({ models, viewState, options }) {
-  const { tickModel, colorService, disclaimerModel } = models;
+export default function createScales({ models, viewState, options, theme }) {
+  const { tickModel, colorService, disclaimerModel, layoutService } = models;
+
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
     return {};
   }
+
+  // TODO get lightcolor and darkcolor based on primarycolor
+  const color = theme.getStyle('object', '', 'dataColors').primaryColor;
 
   return {
     x: {
@@ -32,5 +36,12 @@ export default function createScales({ models, viewState, options }) {
       },
     },
     ...colorService.getScales(),
+    [KEYS.SCALE.HEAT_MAP_COLOR]: {
+      type: 'sequential-color',
+      min: 0,
+      max: () => layoutService.getLayoutValue('dataPages')?.[0]?.[0]?.qNum || 0,
+      invert: true,
+      range: ['pink', color],
+    },
   };
 }

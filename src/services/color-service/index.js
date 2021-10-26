@@ -14,6 +14,7 @@ export default function createService({
   layoutService,
   picasso,
   viewState,
+  viewHandler,
 }) {
   let colorService;
   const state = {
@@ -60,7 +61,10 @@ export default function createService({
         useBaseColors:
           layoutService.getLayoutValue('color.useBaseColors') === 'dimension' && hasDimensionBase ? 'dimension' : 'off',
       },
-      legendProps: layoutService.getLayoutValue('legend'),
+      legendProps: {
+        ...layoutService.getLayoutValue('legend'),
+        show: () => !viewHandler.getMeta().heatMapView,
+      },
       hc,
       key: KEYS.SCALE.COLOR,
     };

@@ -1,5 +1,4 @@
 import KEYS from '../../constants/keys';
-import createViewHandler from '../../view-handler';
 
 export default function createChartModel({
   chart,
@@ -10,7 +9,7 @@ export default function createChartModel({
   viewState,
   extremumModel,
   flags,
-  model,
+  viewHandler,
 }) {
   let interactionInProgess = false;
   let settingsCopy;
@@ -31,14 +30,6 @@ export default function createChartModel({
   };
 
   const dataset = picasso.data('q')(mainConfig);
-
-  const viewHandler = createViewHandler({
-    flags,
-    layoutService,
-    extremumModel,
-    model,
-    viewState,
-  });
 
   function updatePartial() {
     const dataView = viewState.get('dataView');

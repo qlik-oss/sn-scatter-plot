@@ -43,9 +43,11 @@ export default function createViewHandler({ layoutService, extremumModel, model,
             if (pages[0].qMatrix?.length) {
               layoutService.setDataPages(pages);
               layoutService.setLayoutValue('dataPages', [[]]);
+              viewHandler.setMeta({ heatMapView: false });
             } else {
               layoutService.setLayoutValue('dataPages', pages);
               layoutService.setDataPages([]);
+              viewHandler.setMeta({ heatMapView: true });
             }
             chartModel.command.update({ settings: chartModel.query.getSettings() });
           });
