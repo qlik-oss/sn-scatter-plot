@@ -119,7 +119,7 @@ describe('heat-map', () => {
 
     describe('settings', () => {
       it('should have correct properties', () => {
-        expect(create().settings).to.have.all.keys(['x', 'y', 'opacity', 'fill', 'shape']);
+        expect(create().settings).to.have.all.keys(['x', 'y', 'fill', 'shape']);
       });
 
       describe('shape', () => {

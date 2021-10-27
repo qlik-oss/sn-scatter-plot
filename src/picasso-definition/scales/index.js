@@ -1,4 +1,5 @@
 import KEYS from '../../constants/keys';
+import { makeBrighter, makeDarker } from './color';
 
 export default function createScales({ models, viewState, options, theme }) {
   const { tickModel, colorService, disclaimerModel, layoutService } = models;
@@ -7,8 +8,9 @@ export default function createScales({ models, viewState, options, theme }) {
     return {};
   }
 
-  // TODO get lightcolor and darkcolor based on primarycolor
   const color = theme.getStyle('object', '', 'dataColors').primaryColor;
+  const brightColor = makeBrighter(color);
+  const darkColor = makeDarker(color);
 
   return {
     x: {
@@ -41,7 +43,7 @@ export default function createScales({ models, viewState, options, theme }) {
       min: 0,
       max: () => layoutService.getLayoutValue('dataPages')?.[0]?.[0]?.qNum || 0,
       invert: true,
-      range: ['pink', color],
+      range: [darkColor, brightColor],
     },
   };
 }

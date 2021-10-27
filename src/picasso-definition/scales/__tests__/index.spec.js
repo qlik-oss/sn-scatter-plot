@@ -1,5 +1,6 @@
 import createScales from '../index';
 import * as KEYS from '../../../constants/keys';
+import * as color from '../color';
 
 describe('scales', () => {
   let create;
@@ -18,6 +19,8 @@ describe('scales', () => {
       FIELDS: { X: 'qDimensionInfo/0', Y: 'qDimensionInfo/1', SIZE: 'qMeasureInfo/0' },
       SCALE: { HEAT_MAP_COLOR: 'heatMapColor' },
     });
+    sandbox.stub(color, 'makeBrighter').returns('brighter-red');
+    sandbox.stub(color, 'makeDarker').returns('darker-red');
     disclaimerModel = {
       query: {
         getHasSuppressingDisclaimer: sinon.stub().returns(false),
@@ -45,7 +48,7 @@ describe('scales', () => {
     };
     models = { tickModel, colorService, disclaimerModel, layoutService };
     const options = { direction: 'rtl' };
-    theme = { getStyle: sandbox.stub().returns('#000000') };
+    theme = { getStyle: sandbox.stub().returns('red') };
     create = () => createScales({ models, viewState, options, theme });
   });
 
@@ -119,6 +122,17 @@ describe('scales', () => {
       const { heatMapColor } = create();
       const res = heatMapColor.max();
       expect(res).to.equal(200);
+    });
+
+    it('should return correct invert', () => {
+      const { heatMapColor } = create();
+      expect(heatMapColor.invert).to.be.true;
+    });
+
+    it('should return correct color range', () => {
+      const { heatMapColor } = create();
+      expect(heatMapColor.range[0]).to.equal('darker-red');
+      expect(heatMapColor.range[1]).to.equal('brighter-red');
     });
   });
 });
