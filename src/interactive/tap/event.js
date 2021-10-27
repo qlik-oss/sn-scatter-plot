@@ -92,16 +92,6 @@ const tap = ({ targets, requireFailure, recognizeWith, components, eventName = '
           if (shapes.length) {
             const { customTooltipModel } = opts;
             if (
-              (!opts.flags || (opts.flags && !opts.flags.isEnabled('CUSTOM_TOOLTIP_REMOVE_LIMITS'))) &&
-              customTooltipModel &&
-              customTooltipModel.useCustomTooltip
-            ) {
-              const nodes = customTooltipUtils.getNodes(e, this.chart);
-              const dimsAndNodeFn = () => customTooltipModel.extractDimsAndNode(nodes);
-              debouncedDisplayCustomTooltip(e, tooltip, { nodes, dimsAndNodeFn, customTooltipModel, opts });
-            } else if (
-              opts.flags &&
-              opts.flags.isEnabled('CUSTOM_TOOLTIP_IMAGES') &&
               customTooltipModel &&
               customTooltipModel.useCustomTooltip &&
               customTooltipUtils.checkIfPromisesExist({ customTooltipModel })
