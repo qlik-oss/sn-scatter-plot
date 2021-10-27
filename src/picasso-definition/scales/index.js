@@ -1,16 +1,20 @@
 import KEYS from '../../constants/keys';
 import { makeBrighter, makeDarker } from './color';
+import getDock from '../../utils/dock-helper';
 
-export default function createScales({ models, viewState, options, theme }) {
+export default function createScales({ models, viewState, options, theme, rtl, chart }) {
   const { tickModel, colorService, disclaimerModel, layoutService } = models;
 
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
     return {};
   }
 
+  const d = layoutService.getLayoutValue('legend.dock', 'auto');
   const color = theme.getStyle('object', '', 'dataColors').primaryColor;
   const brightColor = makeBrighter(color);
   const darkColor = makeDarker(color);
+
+  const dock = getDock({ dock: d, chart, rtl });
 
   return {
     x: {
@@ -42,8 +46,8 @@ export default function createScales({ models, viewState, options, theme }) {
       type: 'sequential-color',
       min: 0,
       max: () => layoutService.getLayoutValue('dataPages')?.[0]?.[0]?.qNum || 0,
-      invert: true,
-      range: [darkColor, brightColor],
+      invert: rtl || !(dock === 'top' || dock === 'bottom'),
+      range: !rtl && (dock === 'top' || dock === 'bottom') ? [brightColor, darkColor] : [darkColor, brightColor],
     },
   };
 }

@@ -11,7 +11,7 @@ import createDisclaimer from './disclaimer';
 import createOutOfBounds from './out-of-bounds';
 import createHeatMapLegend from './heat-map-legend';
 
-export default function createComponents({ context, models, flags, picasso }) {
+export default function createComponents({ context, models, flags, picasso, chart }) {
   const { colorService, disclaimerModel, layoutService, themeService } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
 
@@ -30,7 +30,7 @@ export default function createComponents({ context, models, flags, picasso }) {
     createPointLabels(models),
     createOutOfBounds({ models, context }),
     ...colorService.custom.legendComponents(),
-    createHeatMapLegend({ models, context }),
+    createHeatMapLegend({ models, context, chart }),
     disclaimer,
     ...createTooltips({ models, context }),
   ].filter(Boolean);

@@ -27,6 +27,7 @@ export default function createService({
   const hc = layoutService.getHyperCube();
   const hasDimensionBase = hc.qDimensionInfo.some(hasBase);
   const dimension = hasDimensionBase ? 'dimension' : undefined;
+  const showLegend = layoutService.getLayoutValue('legend.show', true);
 
   const updateLegend = () => {
     const { components, interactions, scales } = createLegend({
@@ -63,7 +64,7 @@ export default function createService({
       },
       legendProps: {
         ...layoutService.getLayoutValue('legend'),
-        show: () => !viewHandler.getMeta().heatMapView,
+        show: () => showLegend && !viewHandler.getMeta().heatMapView,
       },
       hc,
       key: KEYS.SCALE.COLOR,
