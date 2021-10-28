@@ -1,6 +1,7 @@
 import createScales from '../index';
 import * as KEYS from '../../../constants/keys';
 import * as color from '../color';
+import * as getDock from '../../../utils/dock-helper';
 
 describe('scales', () => {
   let create;
@@ -11,6 +12,7 @@ describe('scales', () => {
   let layoutService;
   let models;
   let theme;
+  let rtl;
   let sandbox;
 
   beforeEach(() => {
@@ -21,6 +23,8 @@ describe('scales', () => {
     });
     sandbox.stub(color, 'makeBrighter').returns('brighter-red');
     sandbox.stub(color, 'makeDarker').returns('darker-red');
+    sandbox.stub(getDock, 'default');
+    getDock.default.returns('right');
     disclaimerModel = {
       query: {
         getHasSuppressingDisclaimer: sinon.stub().returns(false),
@@ -49,7 +53,8 @@ describe('scales', () => {
     models = { tickModel, colorService, disclaimerModel, layoutService };
     const options = { direction: 'rtl' };
     theme = { getStyle: sandbox.stub().returns('red') };
-    create = () => createScales({ models, viewState, options, theme });
+    rtl = false;
+    create = () => createScales({ models, viewState, options, theme, rtl });
   });
 
   afterEach(() => {
@@ -124,15 +129,55 @@ describe('scales', () => {
       expect(res).to.equal(200);
     });
 
-    it('should return correct invert', () => {
-      const { heatMapColor } = create();
-      expect(heatMapColor.invert).to.be.true;
+    describe('invert', () => {
+      it('should return true when is not rtl and not dock on top or bottom', () => {
+        const { heatMapColor } = create();
+        expect(heatMapColor.invert).to.be.true;
+      });
+
+      it('should return true when is rtl ', () => {
+        rtl = true;
+        const { heatMapColor } = create();
+        expect(heatMapColor.invert).to.be.true;
+      });
+
+      it('should return false when is not rtl and dock on top', () => {
+        rtl = false;
+        getDock.default.returns('top');
+        const { heatMapColor } = create();
+        expect(heatMapColor.invert).to.be.false;
+      });
+
+      it('should return false when is not rtl and dock on bottom', () => {
+        rtl = false;
+        getDock.default.returns('bottom');
+        const { heatMapColor } = create();
+        expect(heatMapColor.invert).to.be.false;
+      });
     });
 
-    it('should return correct color range', () => {
-      const { heatMapColor } = create();
-      expect(heatMapColor.range[0]).to.equal('darker-red');
-      expect(heatMapColor.range[1]).to.equal('brighter-red');
+    describe('range', () => {
+      it('should return correct color range', () => {
+        const { heatMapColor } = create();
+        expect(heatMapColor.range[0]).to.equal('darker-red');
+        expect(heatMapColor.range[1]).to.equal('brighter-red');
+      });
+
+      it('should return correct color range when is not rtl and dock on top', () => {
+        rtl = false;
+        getDock.default.returns('top');
+        const { heatMapColor } = create();
+        expect(heatMapColor.range[0]).to.equal('brighter-red');
+        expect(heatMapColor.range[1]).to.equal('darker-red');
+      });
+
+      it('should return correct color range when is not rtl and dock on bottom', () => {
+        rtl = false;
+        getDock.default.returns('bottom');
+        const { heatMapColor } = create();
+        expect(heatMapColor.range[0]).to.equal('brighter-red');
+        expect(heatMapColor.range[1]).to.equal('darker-red');
+      });
     });
   });
 });

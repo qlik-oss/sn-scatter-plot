@@ -19,6 +19,7 @@ describe('heat-map', () => {
       SCALE: {
         X: 'x',
         Y: 'y',
+        HEAT_MAP_COLOR: 'heat-map-color',
       },
       FIELDS: {
         BIN: 'bin',
@@ -122,13 +123,41 @@ describe('heat-map', () => {
         expect(create().settings).to.have.all.keys(['x', 'y', 'fill', 'shape']);
       });
 
+      it('should be correct x scale', () => {
+        expect(create().settings.x.scale).to.equal('x');
+      });
+
+      it('should be correct y scale', () => {
+        expect(create().settings.y.scale).to.equal('y');
+      });
+
+      describe('fill', () => {
+        it('should be correct scale', () => {
+          expect(create().settings.fill.scale).to.equal('heat-map-color');
+        });
+
+        it('should return correct scale color', () => {
+          const d = {
+            scale: sandbox.stub().withArgs(10).returns('red'),
+            datum: {
+              binDensity: {
+                value: 10,
+              },
+            },
+          };
+          expect(create().settings.fill.fn(d)).to.equal('red');
+        });
+      });
+
       describe('shape', () => {
         it('should be set with a function', () => {
           expect(create().settings.shape).to.be.a('function');
         });
+
         it('should be rect type', () => {
           expect(create().settings.shape().type).to.equal('rect');
         });
+
         it('should be have correct width and height', () => {
           const comp = create();
           const size = { width: 400, height: 200 };
