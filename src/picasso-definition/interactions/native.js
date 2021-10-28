@@ -1,7 +1,7 @@
 import KEYS from '../../constants/keys';
 import zoom from '../../utils/math/zoom';
 
-export default function native({ chart, actions, viewHandler }) {
+export default function native({ chart, actions, viewHandler, chartModel }) {
   const getPointTooltip = () => chart.component(KEYS.COMPONENT.POINT_TOOLTIP);
   const getLegendTooltip = () => chart.component(KEYS.COMPONENT.LEGEND_CAT_TOOLTIP);
 
@@ -35,7 +35,10 @@ export default function native({ chart, actions, viewHandler }) {
             .componentsFromPoint(point)
             .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
           if (target) {
-            zoom(e, chart, target, viewHandler);
+            // TODO
+            // use touch pad to zoom sometime gets console error, probbaly need to specify how much to zoom each time
+            zoom({ e, chart, pointComponent: target, viewHandler });
+            viewHandler.throttledFetchData(chartModel)();
             e.preventDefault();
           }
         }

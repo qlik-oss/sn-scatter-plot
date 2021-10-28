@@ -122,6 +122,7 @@ describe('chart-model', () => {
         'isPrelayout',
         'isInteractionInProgess',
         'getFormatter',
+        'getSettings',
       ]);
     });
 
@@ -172,11 +173,19 @@ describe('chart-model', () => {
         expect(create().query.getFormatter('x')).to.deep.equal('x-formatter');
       });
     });
+
+    describe('getSettings', () => {
+      it('should return correct setting value', () => {
+        const chartModel = create();
+        chartModel.command.layoutComponents({ settings: { key: 'settings' } });
+        expect(chartModel.query.getSettings()).eql({ key: 'settings' });
+      });
+    });
   });
 
   describe('command', () => {
     it('should expose correct methods', () => {
-      expect(create().command).to.have.all.keys(['layoutComponents', 'update']);
+      expect(create().command).to.have.all.keys(['layoutComponents', 'update', 'updatePartialWithData']);
     });
 
     describe('layoutComponents', () => {
@@ -255,17 +264,6 @@ describe('chart-model', () => {
             excludeFromUpdate: ['x-axis-title', 'y-axis-title'],
           })
         ).to.have.been.calledOnce;
-      });
-
-      it('should fetch data when is big data and flag DATA_BINNING is enabled ', async () => {
-        layoutService.meta.isBigData = true;
-        flags.isEnabled.returns(true);
-        sandbox.useFakeTimers();
-        const { clock } = sandbox;
-        create();
-        viewState.dataView();
-        await clock.tick(50);
-        expect(createViewHandler.default().fetchData).to.have.been.calledOnce;
       });
     });
   });

@@ -1,4 +1,5 @@
 import extend from 'extend';
+import { throttler } from 'qlik-chart-modules';
 import createDataFetcher from './data-fetcher';
 import fetchBinnedData from './binned-data-fetcher';
 
@@ -32,6 +33,44 @@ export default function createViewHandler({ layoutService, extremumModel, model,
       return layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')
         ? fetchBinnedData({ layoutService, extremumModel, model })
         : dataFetcher.fetchData(dataRect);
+    },
+
+    throttledFetchData(chartModel) {
+      return throttler(() => {
+        if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
+          let transition = false;
+          viewHandler.fetchData().then((pages) => {
+            if (
+              JSON.stringify(pages) !== JSON.stringify(layoutService.getDataPages(pages)) &&
+              JSON.stringify(pages) !== JSON.stringify(layoutService.getLayoutValue('dataPages'))
+            ) {
+              // Transition between bin data and normal data
+              const isCurrentHeatMap = viewHandler.getMeta().heatMapView;
+              if (pages[0].qMatrix?.length) {
+                layoutService.setDataPages(pages);
+                layoutService.setLayoutValue('dataPages', [[]]);
+                if (isCurrentHeatMap) {
+                  viewHandler.setMeta({ heatMapView: false });
+                  transition = true;
+                }
+              } else {
+                layoutService.setLayoutValue('dataPages', pages);
+                layoutService.setDataPages([]);
+                if (!isCurrentHeatMap) {
+                  viewHandler.setMeta({ heatMapView: true });
+                  transition = true;
+                }
+              }
+
+              if (transition) {
+                chartModel.command.update({ settings: chartModel.query.getSettings() });
+              } else {
+                chartModel.command.updatePartialWithData();
+              }
+            }
+          });
+        }
+      }, 100);
     },
 
     setDataView(dataView) {
