@@ -72,7 +72,12 @@ export default function createChartModel({
       return [];
     }
 
-    const data = layoutService.getLayoutValue('dataPages')[0].slice(1);
+    const bins = layoutService.getLayoutValue('dataPages')[0];
+    if (!bins.length) {
+      return [];
+    }
+
+    const data = bins.slice(1);
     if (!data.length) {
       return [];
     }
