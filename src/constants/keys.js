@@ -8,6 +8,7 @@ export default {
     X: 'x',
     Y: 'y',
     SIZE: 'size',
+    HEAT_MAP_COLOR: 'heat-map-color',
   },
   COMPONENT: {
     GRID_LINES: 'grid-lines',
@@ -21,6 +22,7 @@ export default {
     LEGEND: 'legend-color',
     LEGEND_CATEGORICAL: 'legend-color-cat',
     LEGEND_CAT_TOOLTIP: 'legend-cat-tooltip',
+    LEGEND_HEAT_MAP: 'legend-heat-map',
     X_AXIS: 'x-axis',
     Y_AXIS: 'y-axis',
     X_AXIS_TITLE: 'x-axis-title',

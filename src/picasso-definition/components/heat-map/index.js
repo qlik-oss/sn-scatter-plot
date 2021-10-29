@@ -1,11 +1,9 @@
-import { rgb } from 'd3-color';
 import KEYS from '../../../constants/keys';
 
 export default function createHeatMap({ models, flags }) {
   const { layoutService, chartModel } = models;
   let binWidthPx;
   let binHeightPx;
-  let maxDensity;
 
   return {
     key: KEYS.COMPONENT.HEAT_MAP,
@@ -30,10 +28,9 @@ export default function createHeatMap({ models, flags }) {
       y: {
         scale: KEYS.SCALE.Y,
       },
-      fill: (d) => {
-        const s = d.datum.binDensity.value / maxDensity;
-        const c = Math.floor((1 - s) * 192);
-        return rgb(c, c, c);
+      fill: {
+        scale: KEYS.SCALE.HEAT_MAP_COLOR,
+        fn: (d) => d.scale(d.datum.binDensity.value),
       },
       opacity: 0.8,
       shape: () => ({
@@ -53,7 +50,6 @@ export default function createHeatMap({ models, flags }) {
 
       binWidthPx = (binWidth * size.width) / (dataView.xAxisMax - dataView.xAxisMin);
       binHeightPx = (binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin);
-      maxDensity = bins[0]?.qNum || 0;
     },
   };
 }

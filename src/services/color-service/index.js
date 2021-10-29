@@ -14,6 +14,7 @@ export default function createService({
   layoutService,
   picasso,
   viewState,
+  viewHandler,
 }) {
   let colorService;
   const state = {
@@ -26,6 +27,7 @@ export default function createService({
   const hc = layoutService.getHyperCube();
   const hasDimensionBase = hc.qDimensionInfo.some(hasBase);
   const dimension = hasDimensionBase ? 'dimension' : undefined;
+  const showLegend = layoutService.getLayoutValue('legend.show', true);
 
   const updateLegend = () => {
     const { components, interactions, scales } = createLegend({
@@ -60,7 +62,10 @@ export default function createService({
         useBaseColors:
           layoutService.getLayoutValue('color.useBaseColors') === 'dimension' && hasDimensionBase ? 'dimension' : 'off',
       },
-      legendProps: layoutService.getLayoutValue('legend'),
+      legendProps: {
+        ...layoutService.getLayoutValue('legend'),
+        show: () => showLegend && !viewHandler.getMeta().heatMapView,
+      },
       hc,
       key: KEYS.SCALE.COLOR,
     };

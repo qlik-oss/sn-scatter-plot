@@ -1,5 +1,4 @@
 import createChartModel from '..';
-import * as createViewHandler from '../../../view-handler';
 
 describe('chart-model', () => {
   let sandbox;
@@ -9,7 +8,6 @@ describe('chart-model', () => {
   let layoutService;
   let colorService;
   let dockService;
-  let model;
   let picassoInstance;
   let picassoDataFn;
   let colorModelDataFn;
@@ -28,9 +26,7 @@ describe('chart-model', () => {
     dataPoint = { qText: [2000, 5, 2200, 4], qNum: 1, qElemNumber: 7964 };
     viewHandler = {
       getMeta: sandbox.stub().returns('isHomeState'),
-      fetchData: sandbox.stub().returns(Promise.resolve([{ qNum: 1164, qElemNumber: 0 }, dataPoint])),
     };
-    sandbox.stub(createViewHandler, 'default').returns(viewHandler);
     viewState = {
       get() {
         return this.props;
@@ -72,7 +68,6 @@ describe('chart-model', () => {
       data: () => picassoDataFn,
     };
     dockService = {};
-    model = {};
     app = {
       layout: [],
     };
@@ -84,12 +79,12 @@ describe('chart-model', () => {
         layoutService,
         dockService,
         colorService,
-        model,
         picasso: picassoInstance,
         viewState,
         extremumModel,
         app,
         flags,
+        viewHandler,
       });
   });
 
@@ -255,17 +250,6 @@ describe('chart-model', () => {
             excludeFromUpdate: ['x-axis-title', 'y-axis-title'],
           })
         ).to.have.been.calledOnce;
-      });
-
-      it('should fetch data when is big data and flag DATA_BINNING is enabled ', async () => {
-        layoutService.meta.isBigData = true;
-        flags.isEnabled.returns(true);
-        sandbox.useFakeTimers();
-        const { clock } = sandbox;
-        create();
-        viewState.dataView();
-        await clock.tick(50);
-        expect(createViewHandler.default().fetchData).to.have.been.calledOnce;
       });
     });
   });

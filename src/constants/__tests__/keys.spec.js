@@ -10,7 +10,7 @@ describe('keys', () => {
   });
 
   it('should have correct scale keys', () => {
-    expect(KEYS.SCALE).to.have.all.keys(['COLOR', 'SIZE', 'X', 'Y']);
+    expect(KEYS.SCALE).to.have.all.keys(['COLOR', 'SIZE', 'X', 'Y', 'HEAT_MAP_COLOR']);
   });
 
   it('should have correct component keys', () => {
@@ -32,6 +32,7 @@ describe('keys', () => {
       'X_AXIS_TITLE',
       'Y_AXIS_TITLE',
       'HEAT_MAP',
+      'LEGEND_HEAT_MAP',
     ]);
   });
 
