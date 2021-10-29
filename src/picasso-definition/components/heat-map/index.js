@@ -32,7 +32,6 @@ export default function createHeatMap({ models, flags }) {
         scale: KEYS.SCALE.HEAT_MAP_COLOR,
         fn: (d) => d.scale(d.datum.binDensity.value),
       },
-      opacity: 0.8,
       shape: () => ({
         type: 'rect',
         width: binWidthPx,
