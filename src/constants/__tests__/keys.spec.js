@@ -32,6 +32,7 @@ describe('keys', () => {
       'X_AXIS_TITLE',
       'Y_AXIS_TITLE',
       'HEAT_MAP',
+      'HEAT_MAP_TOOLTIP',
     ]);
   });
 

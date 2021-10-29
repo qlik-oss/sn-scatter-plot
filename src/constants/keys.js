@@ -26,6 +26,7 @@ export default {
     X_AXIS_TITLE: 'x-axis-title',
     Y_AXIS_TITLE: 'y-axis-title',
     HEAT_MAP: 'heat-map',
+    HEAT_MAP_TOOLTIP: 'heat-map-tooltip',
     OUT_OF_BOUNDS: 'out-of-bounds',
   },
   COLLECTION: {
