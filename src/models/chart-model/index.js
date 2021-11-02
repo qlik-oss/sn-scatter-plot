@@ -79,7 +79,11 @@ export default function createChartModel({
   const state = { isPrelayout: true };
 
   const getBinData = () => {
-    if (!layoutService.meta.isBigData || !flags.isEnabled('DATA_BINNING')) {
+    if (
+      !layoutService.meta.isBigData ||
+      !flags.isEnabled('DATA_BINNING') ||
+      (layoutService.meta.isSnapshot && !viewHandler.getMeta().heatMapView)
+    ) {
       return [];
     }
 

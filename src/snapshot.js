@@ -12,11 +12,15 @@ const setupSnapshot = ({ core, models }) => {
 
     const { layoutService, dockService, colorService, chartModel } = models;
     const viewState = chartModel.query.getViewState();
+    const { heatMapView } = chartModel.query.getViewHandler().getMeta();
+    const dataPages = heatMapView ? layoutService.getLayoutValue('dataPages') : layout.qHyperCube.qDataPages;
+    const newDataPages = heatMapView ? layoutService.getLayoutValue('dataPages') : layoutService.getDataPages();
 
     // Update snapshot layout with data from the plot
-    extend(true, layout.qHyperCube.qDataPages, layoutService.getDataPages());
+    extend(true, dataPages, newDataPages);
     const { width: w, height: h } = dockService.meta.chart.size;
     layout.snapshotData = layout.snapshotData || {};
+    layout.dataPages = newDataPages;
     layout.snapshotData.content = {
       size: { w, h },
     };
