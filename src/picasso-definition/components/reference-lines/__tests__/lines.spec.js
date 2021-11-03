@@ -54,6 +54,7 @@ describe('createRefLines', () => {
     const key = 'reference-line-X';
     const minimumLayoutMode = 'min-layout-mode';
     const result = createRefLines({ layoutService, scale, key, minimumLayoutMode });
+    result.animations.compensateForLayoutChanges = 'function';
     expect(result).to.deep.equal({
       key: 'reference-line-X',
       type: 'ref-line',
@@ -78,6 +79,10 @@ describe('createRefLines', () => {
           show: false,
         },
       },
+      animations: {
+        compensateForLayoutChanges: 'function',
+        enabled: true,
+      },
     });
   });
 
@@ -100,6 +105,7 @@ describe('createRefLines', () => {
     const key = 'reference-line-Y';
     const minimumLayoutMode = 'min-layout-mode';
     const result = createRefLines({ layoutService, scale, key, minimumLayoutMode });
+    result.animations.compensateForLayoutChanges = 'function';
     expect(result).to.deep.equal({
       key: 'reference-line-Y',
       type: 'ref-line',
@@ -123,6 +129,10 @@ describe('createRefLines', () => {
         oob: {
           show: false,
         },
+      },
+      animations: {
+        compensateForLayoutChanges: 'function',
+        enabled: true,
       },
     });
   });

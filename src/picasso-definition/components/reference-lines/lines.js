@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 
 export default function createRefLines({ layoutService, scale, key, minimumLayoutMode }) {
@@ -25,7 +26,32 @@ export default function createRefLines({ layoutService, scale, key, minimumLayou
         show: false,
       },
     },
-    animations: { enabled: true },
+    animations: {
+      enabled: true,
+      compensateForLayoutChanges(currentNodes, currentRect, preRect) {
+        switch (scale) {
+          case KEYS.SCALE.X:
+            if (currentRect.x !== preRect.x) {
+              const deltaX = currentRect.x - preRect.x;
+              currentNodes.forEach((node) => {
+                node.x1 -= deltaX;
+                node.x2 -= deltaX;
+              });
+            }
+            break;
+          case KEYS.SCALE.Y:
+            if (currentNodes.width !== preRect.width) {
+              const deltaWidth = currentNodes.width - preRect.width;
+              currentNodes.forEach((node) => {
+                node.x2 += deltaWidth;
+              });
+            }
+            break;
+          default:
+            break;
+        }
+      },
+    },
   };
 
   refLines.forEach((refLineLayout) => {

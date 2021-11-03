@@ -94,6 +94,8 @@ describe('createRefLineLabels', () => {
 
     const key = 'reference-line-labels-X';
     const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+    result.animations.trackBy = 'function';
+    result.animations.compensateForLayoutChanges = 'function';
     expect(result).to.deep.equal({
       key: 'reference-line-labels-X',
       type: 'reference-line-labels',
@@ -130,6 +132,11 @@ describe('createRefLineLabels', () => {
           text: { fontFamily: 'oob font', fontSize: 'oob fontSize', fill: '#ffffff', background: { fill: '#111111' } },
         },
       },
+      animations: {
+        enabled: true,
+        trackBy: 'function',
+        compensateForLayoutChanges: 'function',
+      },
     });
   });
 
@@ -150,6 +157,8 @@ describe('createRefLineLabels', () => {
 
     const key = 'reference-line-labels-X';
     const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+    result.animations.trackBy = 'function';
+    result.animations.compensateForLayoutChanges = 'function';
     expect(result).to.deep.equal({
       key: 'reference-line-labels-X',
       type: 'reference-line-labels',
@@ -186,6 +195,11 @@ describe('createRefLineLabels', () => {
           text: { fontFamily: 'oob font', fontSize: 'oob fontSize', fill: '#654321', background: { fill: '#123456' } },
         },
       },
+      animations: {
+        enabled: true,
+        trackBy: 'function',
+        compensateForLayoutChanges: 'function',
+      },
     });
   });
 
@@ -202,6 +216,8 @@ describe('createRefLineLabels', () => {
     themeService.getStyles = sandbox.stub().returns(themeStyle);
     const key = 'reference-line-labels-Y';
     const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+    result.animations.trackBy = 'function';
+    result.animations.compensateForLayoutChanges = 'function';
     expect(result).to.deep.equal({
       key: 'reference-line-labels-Y',
       type: 'reference-line-labels',
@@ -245,6 +261,11 @@ describe('createRefLineLabels', () => {
           },
         },
       },
+      animations: {
+        enabled: true,
+        trackBy: 'function',
+        compensateForLayoutChanges: 'function',
+      },
     });
   });
 
@@ -262,6 +283,8 @@ describe('createRefLineLabels', () => {
     context.rtl = true;
     const key = 'reference-line-labels-Y';
     const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+    result.animations.trackBy = 'function';
+    result.animations.compensateForLayoutChanges = 'function';
     expect(result).to.deep.equal({
       key: 'reference-line-labels-Y',
       type: 'reference-line-labels',
@@ -304,6 +327,11 @@ describe('createRefLineLabels', () => {
             },
           },
         },
+      },
+      animations: {
+        enabled: true,
+        trackBy: 'function',
+        compensateForLayoutChanges: 'function',
       },
     });
   });

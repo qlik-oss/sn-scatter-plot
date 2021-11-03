@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 import NUMBERS from '../../../constants/numbers';
@@ -49,6 +50,14 @@ export default function createAxes({ models, flags }) {
           animations: {
             enabled: true,
             trackBy,
+            compensateForLayoutChanges(currentNodes, currentRect, preRect) {
+              if (currentRect.width !== preRect.width) {
+                const deltaX = currentRect.x - preRect.x;
+                const deltaWidth = currentRect.width - preRect.width;
+                currentNodes[0].x1 += deltaX;
+                currentNodes[0].x2 += deltaX + deltaWidth;
+              }
+            },
           },
         };
 
@@ -90,6 +99,20 @@ export default function createAxes({ models, flags }) {
           animations: {
             enabled: true,
             trackBy,
+            compensateForLayoutChanges(currentNodes, currentRect, preRect) {
+              if (dockService.meta.y.dock === 'right') {
+                return;
+              }
+              const deltaWidth = currentRect.width - preRect.width;
+              currentNodes.forEach((node) => {
+                if (node.type === 'line') {
+                  node.x1 += deltaWidth;
+                  node.x2 += deltaWidth;
+                } else if (node.type === 'text') {
+                  node.x += deltaWidth;
+                }
+              });
+            },
           },
         };
 

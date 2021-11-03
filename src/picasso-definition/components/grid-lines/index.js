@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 
@@ -53,6 +54,18 @@ export default function createGridLines(models) {
     animations: {
       enabled: true,
       trackBy: (node) => `${node.dir}: ${node.label}`,
+      compensateForLayoutChanges(currentNodes, currentRect, preRect) {
+        const deltaWidth = currentRect.width - preRect.width;
+        const deltaX = currentRect.x - preRect.x;
+        currentNodes.forEach((node) => {
+          if (node.dir === 'x') {
+            node.x1 -= deltaX;
+            node.x2 -= deltaX;
+          } else {
+            node.x2 += deltaWidth;
+          }
+        });
+      },
     },
   };
 

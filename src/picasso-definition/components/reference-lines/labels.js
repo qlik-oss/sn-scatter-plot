@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import extend from 'extend';
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
@@ -93,6 +94,12 @@ export default function createRefLineLabels({ models, context, scale, key, dock,
     animations: {
       enabled: true,
       trackBy: (node) => `${node.labelID}: ${node.text}`,
+      compensateForLayoutChanges(currentNodes, currentRect, preRect) {
+        const deltaX = currentRect.x - preRect.x;
+        currentNodes.forEach((node) => {
+          node.x -= deltaX;
+        });
+      },
     },
   };
 

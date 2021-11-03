@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 
@@ -42,6 +43,24 @@ export default function createPointLabels({ layoutService, themeService }) {
         else if (node.type === 'line') id = `line: ${node.pointValue}`;
         else id = `rect: ${node.pointValue}`;
         return id;
+      },
+      compensateForLayoutChanges(currentNodes, currentRect, preRect) {
+        if (currentRect.x !== preRect.x) {
+          const deltaX = preRect.x - currentRect.x;
+          currentNodes.forEach((node) => {
+            switch (node.type) {
+              case 'text':
+                node.x += deltaX;
+                break;
+              case 'line':
+                node.x1 += deltaX;
+                node.x2 += deltaX;
+                break;
+              default:
+                break;
+            }
+          });
+        }
       },
     },
   };
