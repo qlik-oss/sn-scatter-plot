@@ -3,7 +3,7 @@ import KEYS from '../../constants/keys';
 const threshold = 10;
 const eventName = 'areaPan';
 
-const pan = ({ chart, actions, viewHandler, rtl, chartModel }) => ({
+const pan = ({ chart, actions, viewHandler, rtl }) => ({
   type: 'Pan',
   key: 'panorama',
   options: {
@@ -55,7 +55,6 @@ const pan = ({ chart, actions, viewHandler, rtl, chartModel }) => ({
     areaPanend(e) {
       e.preventDefault();
       this.started = false;
-      viewHandler.throttledFetchData(chartModel)();
     },
     areaPancancel(e) {
       e.preventDefault();

@@ -115,21 +115,15 @@ describe('chart-model', () => {
   describe('query', () => {
     it('should have correct properties', () => {
       expect(create().query).to.have.all.keys([
-        'getDataset',
         'getViewState',
         'getViewHandler',
+        'getDataHandler',
         'getLocaleInfo',
         'isPrelayout',
         'isInteractionInProgess',
         'getFormatter',
         'getSettings',
       ]);
-    });
-
-    describe('getDataSet', () => {
-      it('should return correct data set', () => {
-        expect(create().query.getDataset()).to.deep.equal('correct dataset');
-      });
     });
 
     describe('getViewState', () => {
