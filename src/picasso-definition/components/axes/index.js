@@ -13,9 +13,9 @@ export default function createAxes({ models, flags }) {
   const trackBy = (node, i) => {
     if (i === 0) return 'axis';
     if (node.type === 'text') {
-      return `label: ${node.text}`;
+      return `label: ${node.tickValue}`;
     }
-    return `mark: ${node.tickLabel}`;
+    return `mark: ${node.tickValue}`;
   };
 
   const xAxisDefinition =
