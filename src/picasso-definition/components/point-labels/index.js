@@ -8,7 +8,7 @@ const LABEL_MODE = {
   FALLBACK: 1,
 };
 
-export default function createPointLabels({ layoutService, themeService }) {
+export default function createPointLabels({ layoutService, themeService, chartModel }) {
   const labels = layoutService.getLayoutValue('labels', {});
   if (labels.mode === LABEL_MODE.NONE) {
     return false;
@@ -33,6 +33,29 @@ export default function createPointLabels({ layoutService, themeService }) {
       fontSize,
       fill: color,
       backgroundColor: style.backgroundColor,
+    },
+    rendererSettings: {
+      transform: () => {
+        if (chartModel.query.isPanEnded()) {
+          return false;
+        }
+        if (chartModel.query.isInteractionInProgess()) {
+          const { deltaX, deltaY } = chartModel.query.getViewState().get('dataView');
+          return {
+            horizontalScaling: 1,
+            horizontalSkewing: 0,
+            verticalSkewing: 0,
+            verticalScaling: 1,
+            horizontalMoving: deltaX,
+            verticalMoving: deltaY,
+          };
+        }
+        return false;
+      },
+      canvasBufferSize: (rect) => ({
+        width: rect.computedPhysical.width + 100,
+        height: rect.computedPhysical.height + 0,
+      }),
     },
   };
 

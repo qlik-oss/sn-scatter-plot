@@ -13,6 +13,7 @@ export default function createChartModel({
   model,
 }) {
   let interactionInProgess = false;
+  let panEnded = false;
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
     KEYS.COMPONENT.Y_AXIS_TITLE,
@@ -57,7 +58,7 @@ export default function createChartModel({
     extremumModel.command.updateExtrema(dataView, isHomeState);
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???
-      // const startTime = Date.now();
+      const startTime = Date.now();
       interactionInProgess = true;
       chart.update({
         partialData: true,
@@ -70,7 +71,7 @@ export default function createChartModel({
         // ],
       });
       // TODO: debounce -> interactionInProgess = false
-      // console.log('chart rendered in ', Date.now() - startTime, ' ms');
+      console.log('chart rendered in ', Date.now() - startTime, ' ms');
     });
   }
 
@@ -138,8 +139,15 @@ export default function createChartModel({
       isInteractionInProgess: () => interactionInProgess,
       getFormatter: (fieldName) => dataset.field(fieldName).formatter(),
       isPrelayout: () => state.isPrelayout,
+      isPanEnded: () => panEnded,
     },
     command: {
+      setPanEnded: () => {
+        panEnded = true;
+      },
+      clearPanEnded: () => {
+        panEnded = false;
+      },
       layoutComponents: ({ settings } = {}) => {
         const binData = getBinData();
         chart.layoutComponents({

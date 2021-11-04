@@ -3,7 +3,7 @@ import KEYS from '../../constants/keys';
 const threshold = 10;
 const eventName = 'areaPan';
 
-const pan = ({ chart, actions, viewHandler }) => ({
+const pan = ({ chart, actions, viewHandler, chartModel }) => ({
   type: 'Pan',
   key: 'panorama',
   options: {
@@ -29,6 +29,7 @@ const pan = ({ chart, actions, viewHandler }) => ({
   events: {
     areaPanstart(e) {
       e.preventDefault();
+      chartModel.command.clearPanEnded();
       this.started = eventName;
       const initialDataView = viewHandler.getDataView();
       this[eventName] = {
@@ -48,12 +49,30 @@ const pan = ({ chart, actions, viewHandler }) => ({
         xAxisMax: xAxisMax - xDiff,
         yAxisMin: yAxisMin + yDiff,
         yAxisMax: yAxisMax + yDiff,
+        deltaX: e.deltaX,
+        deltaY: e.deltaY,
       };
 
       viewHandler.setDataView(dataView);
     },
     areaPanend(e) {
       e.preventDefault();
+      chartModel.command.setPanEnded();
+      const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin } = this[eventName];
+
+      const xDiff = (xAxisMax - xAxisMin) * (e.deltaX / componentSize.width);
+      const yDiff = (yAxisMax - yAxisMin) * (e.deltaY / componentSize.height);
+
+      const dataView = {
+        xAxisMin: xAxisMin - xDiff,
+        xAxisMax: xAxisMax - xDiff,
+        yAxisMin: yAxisMin + yDiff,
+        yAxisMax: yAxisMax + yDiff,
+        deltaX: e.deltaX,
+        deltaY: e.deltaY,
+      };
+
+      viewHandler.setDataView(dataView);
       this.started = false;
     },
     areaPancancel(e) {

@@ -122,6 +122,7 @@ describe('chart-model', () => {
         'isPrelayout',
         'isInteractionInProgess',
         'getFormatter',
+        'isPanEnded',
       ]);
     });
 
@@ -176,7 +177,7 @@ describe('chart-model', () => {
 
   describe('command', () => {
     it('should expose correct methods', () => {
-      expect(create().command).to.have.all.keys(['layoutComponents', 'update']);
+      expect(create().command).to.have.all.keys(['layoutComponents', 'update', 'setPanEnded', 'clearPanEnded']);
     });
 
     describe('layoutComponents', () => {

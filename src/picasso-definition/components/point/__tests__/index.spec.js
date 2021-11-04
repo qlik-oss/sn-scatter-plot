@@ -95,7 +95,15 @@ describe('point', () => {
     });
 
     it('should have correct properties', () => {
-      expect(create()).to.have.all.keys(['key', 'type', 'data', 'brush', 'settings', 'beforeRender']);
+      expect(create()).to.have.all.keys([
+        'key',
+        'type',
+        'data',
+        'brush',
+        'settings',
+        'beforeRender',
+        'rendererSettings',
+      ]);
     });
 
     it('should have correct key', () => {
