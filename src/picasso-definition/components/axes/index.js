@@ -50,10 +50,10 @@ export default function createAxes({ models, flags }) {
           animations: {
             enabled: true,
             trackBy,
-            compensateForLayoutChanges(currentNodes, currentRect, preRect) {
-              if (currentRect.width !== preRect.width) {
-                const deltaX = currentRect.x - preRect.x;
-                const deltaWidth = currentRect.width - preRect.width;
+            compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
+              if (currentRect.width !== previousRect.width) {
+                const deltaX = currentRect.x - previousRect.x;
+                const deltaWidth = currentRect.width - previousRect.width;
                 currentNodes[0].x1 += deltaX;
                 currentNodes[0].x2 += deltaX + deltaWidth;
               }
@@ -99,11 +99,11 @@ export default function createAxes({ models, flags }) {
           animations: {
             enabled: true,
             trackBy,
-            compensateForLayoutChanges(currentNodes, currentRect, preRect) {
+            compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
               if (dockService.meta.y.dock === 'right') {
                 return;
               }
-              const deltaWidth = currentRect.width - preRect.width;
+              const deltaWidth = currentRect.width - previousRect.width;
               currentNodes.forEach((node) => {
                 if (node.type === 'line') {
                   node.x1 += deltaWidth;

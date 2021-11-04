@@ -33,16 +33,16 @@ export default function createPoint({ layoutService, colorService }) {
     },
     animations: {
       enabled: true,
-      compensateForLayoutChanges(currentNodes, currentRect, preRect) {
-        if (currentRect.x !== preRect.x) {
-          const deltaX = preRect.x - currentRect.x;
+      compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
+        if (currentRect.x !== previousRect.x) {
+          const deltaX = currentRect.x - previousRect.x;
           currentNodes.forEach((node) => {
             switch (node.type) {
               case 'circle':
-                node.cx += deltaX;
+                node.cx -= deltaX;
                 break;
               case 'path': {
-                node.d = movePath(node.d, deltaX);
+                node.d = movePath(node.d, -deltaX);
                 break;
               }
               default:

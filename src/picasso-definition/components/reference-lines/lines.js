@@ -28,11 +28,11 @@ export default function createRefLines({ layoutService, scale, key, minimumLayou
     },
     animations: {
       enabled: true,
-      compensateForLayoutChanges(currentNodes, currentRect, preRect) {
+      compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         switch (scale) {
           case KEYS.SCALE.X:
-            if (currentRect.x !== preRect.x) {
-              const deltaX = currentRect.x - preRect.x;
+            if (currentRect.x !== previousRect.x) {
+              const deltaX = currentRect.x - previousRect.x;
               currentNodes.forEach((node) => {
                 node.x1 -= deltaX;
                 node.x2 -= deltaX;
@@ -40,8 +40,8 @@ export default function createRefLines({ layoutService, scale, key, minimumLayou
             }
             break;
           case KEYS.SCALE.Y:
-            if (currentNodes.width !== preRect.width) {
-              const deltaWidth = currentNodes.width - preRect.width;
+            if (currentNodes.width !== previousRect.width) {
+              const deltaWidth = currentNodes.width - previousRect.width;
               currentNodes.forEach((node) => {
                 node.x2 += deltaWidth;
               });

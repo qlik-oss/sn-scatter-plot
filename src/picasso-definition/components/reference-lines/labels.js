@@ -94,8 +94,8 @@ export default function createRefLineLabels({ models, context, scale, key, dock,
     animations: {
       enabled: true,
       trackBy: (node) => `${node.labelID}: ${node.text}`,
-      compensateForLayoutChanges(currentNodes, currentRect, preRect) {
-        const deltaX = currentRect.x - preRect.x;
+      compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
+        const deltaX = currentRect.x - previousRect.x;
         currentNodes.forEach((node) => {
           node.x -= deltaX;
         });

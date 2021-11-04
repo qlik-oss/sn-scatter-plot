@@ -54,9 +54,9 @@ export default function createGridLines(models) {
     animations: {
       enabled: true,
       trackBy: (node) => `${node.dir}: ${node.value}`,
-      compensateForLayoutChanges(currentNodes, currentRect, preRect) {
-        const deltaWidth = currentRect.width - preRect.width;
-        const deltaX = currentRect.x - preRect.x;
+      compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
+        const deltaWidth = currentRect.width - previousRect.width;
+        const deltaX = currentRect.x - previousRect.x;
         currentNodes.forEach((node) => {
           if (node.dir === 'x') {
             node.x1 -= deltaX;
