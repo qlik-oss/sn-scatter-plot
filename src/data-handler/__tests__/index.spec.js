@@ -63,4 +63,7 @@ describe('createDataHandler', () => {
 
     expect(data).to.eql({ binnedData: 'binnedData' });
   });
+
+  // TODO add test case for fetching data many times
+  it.skip('should await ongoing request before sending new', async () => {});
 });
