@@ -44,6 +44,7 @@ describe('native', () => {
         y: 2,
       }),
       setPxOffsets: sandbox.spy(),
+      throttledFetchData: sandbox.stub().callsFake(() => sandbox.stub()),
     };
     chart.component.withArgs('tooltip').returns(pointTooltip);
     chart.component.withArgs('legend-cat-tooltip').returns(legendTooltip);
