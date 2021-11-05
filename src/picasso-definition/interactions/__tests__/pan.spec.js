@@ -8,7 +8,6 @@ describe('pan', () => {
   let actions;
   let viewHandler;
   let rtl;
-  let chartModel;
   let panObject;
   let e;
   let myDataView;
@@ -20,11 +19,10 @@ describe('pan', () => {
       throttledFetchData: sandbox.stub().callsFake(() => sandbox.stub()),
     };
     rtl = false;
-    chartModel = {};
     actions = { zoom: { enabled: sandbox.stub() } };
     chart = { componentsFromPoint: sandbox.stub() };
     sandbox.stub(KEYS, 'COMPONENT').value({ POINT: 'point-component' });
-    panObject = pan({ chart, actions, viewHandler, rtl, chartModel });
+    panObject = pan({ chart, actions, viewHandler, rtl });
   });
 
   afterEach(() => {
@@ -108,7 +106,7 @@ describe('pan', () => {
       it('should modify myDataView correctly when is rtl', () => {
         rtl = true;
         e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20 };
-        panObject = pan({ chart, actions, viewHandler, rtl, chartModel });
+        panObject = pan({ chart, actions, viewHandler, rtl });
         panObject.events.areaPan = {
           componentSize: { width: 100, height: 200 },
           xAxisMin: -1000,
@@ -130,8 +128,6 @@ describe('pan', () => {
         e = { preventDefault: sandbox.stub() };
         panObject.events.areaPanend(e);
         expect(panObject.events.started).to.equal(false);
-        expect(viewHandler.throttledFetchData).to.have.been.calledOnce;
-        expect(viewHandler.throttledFetchData).to.have.been.calledWithExactly(chartModel);
       });
     });
 

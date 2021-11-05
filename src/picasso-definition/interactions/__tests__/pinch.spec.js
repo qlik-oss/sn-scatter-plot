@@ -9,7 +9,6 @@ describe('pinch', () => {
   let actions;
   let viewHandler;
   let rtl;
-  let chartModel;
   let pinchObject;
   let e;
   let myDataView;
@@ -20,10 +19,9 @@ describe('pinch', () => {
     actions = { zoom: { enabled: sandbox.stub() } };
     chart = { componentsFromPoint: sandbox.stub() };
     rtl = false;
-    chartModel = {};
     sandbox.stub(KEYS, 'COMPONENT').value({ POINT: 'point-component' });
     sandbox.stub(zoom, 'default');
-    pinchObject = pinch({ chart, actions, viewHandler, rtl, chartModel });
+    pinchObject = pinch({ chart, actions, viewHandler, rtl });
   });
 
   afterEach(() => {
@@ -105,7 +103,7 @@ describe('pinch', () => {
         it('should modify myDataView correctly when is rtl', () => {
           rtl = true;
           e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20, scale: 1 };
-          pinchObject = pinch({ chart, actions, viewHandler, rtl, chartModel });
+          pinchObject = pinch({ chart, actions, viewHandler, rtl });
           pinchObject.events.zoom = {
             componentSize: { width: 100, height: 200 },
             xAxisMin: -1000,
@@ -148,8 +146,6 @@ describe('pinch', () => {
         e = { preventDefault: sandbox.stub() };
         pinchObject.events.zoomend(e);
         expect(pinchObject.events.started).to.equal(false);
-        expect(viewHandler.throttledFetchData).to.have.been.calledOnce;
-        expect(viewHandler.throttledFetchData).to.have.been.calledWithExactly(chartModel);
       });
     });
 
