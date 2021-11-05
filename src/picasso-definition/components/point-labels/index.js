@@ -8,7 +8,7 @@ const LABEL_MODE = {
   FALLBACK: 1,
 };
 
-export default function createPointLabels({ layoutService, themeService }) {
+export default function createPointLabels({ layoutService, themeService, chartModel }) {
   const labels = layoutService.getLayoutValue('labels', {});
   if (labels.mode === LABEL_MODE.NONE) {
     return false;
@@ -16,6 +16,8 @@ export default function createPointLabels({ layoutService, themeService }) {
 
   const style = themeService.getStyles();
   const { fontFamily, fontSize, color } = style.label?.value || {};
+  const viewHandler = chartModel.query.getViewHandler();
+  const { transform } = viewHandler;
 
   const pointLabelsComponent = {
     type: 'point-label',
@@ -33,6 +35,12 @@ export default function createPointLabels({ layoutService, themeService }) {
       fontSize,
       fill: color,
       backgroundColor: style.backgroundColor,
+    },
+    rendererSettings: {
+      transform,
+      canvasBufferSize(rect) {
+        return { width: rect.computedPhysical.width + 100, height: rect.computedPhysical.height + 100 };
+      },
     },
   };
 
