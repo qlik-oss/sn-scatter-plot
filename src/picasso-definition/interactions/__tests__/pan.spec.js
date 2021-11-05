@@ -127,7 +127,14 @@ describe('pan', () => {
           extend(true, myDataView, dataView);
         };
         panObject.events.areaPanmove(e);
-        expect(myDataView).to.deep.equal({ xAxisMin: -800, xAxisMax: 1200, yAxisMin: 200, yAxisMax: 2200 });
+        expect(myDataView).to.deep.equal({
+          xAxisMin: -800,
+          xAxisMax: 1200,
+          yAxisMin: 200,
+          yAxisMax: 2200,
+          deltaX: 10,
+          deltaY: 20,
+        });
       });
     });
 
