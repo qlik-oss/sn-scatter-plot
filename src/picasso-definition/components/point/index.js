@@ -6,7 +6,7 @@ export default function createPoint({ layoutService, colorService, chartModel })
   let windowSizeMultiplier;
   const sizeScaleFn = createSizeScale(layoutService);
   const viewHandler = chartModel.query.getViewHandler();
-  const { rendererSettings } = viewHandler;
+  const { transform } = viewHandler;
   return {
     key: KEYS.COMPONENT.POINT,
     type: 'point',
@@ -31,6 +31,12 @@ export default function createPoint({ layoutService, colorService, chartModel })
     beforeRender: ({ size }) => {
       windowSizeMultiplier = Math.min(size.height, size.width) / 300;
     },
-    rendererSettings,
+    rendererSettings: {
+      transform,
+      canvasBufferSize: (rect) => ({
+        width: rect.computedPhysical.width + 100,
+        height: rect.computedPhysical.height + 100,
+      }),
+    },
   };
 }

@@ -17,7 +17,7 @@ export default function createPointLabels({ layoutService, themeService, chartMo
   const style = themeService.getStyles();
   const { fontFamily, fontSize, color } = style.label?.value || {};
   const viewHandler = chartModel.query.getViewHandler();
-  const { rendererSettings } = viewHandler;
+  const { transform } = viewHandler;
 
   const pointLabelsComponent = {
     type: 'point-label',
@@ -36,7 +36,13 @@ export default function createPointLabels({ layoutService, themeService, chartMo
       fill: color,
       backgroundColor: style.backgroundColor,
     },
-    rendererSettings,
+    rendererSettings: {
+      transform,
+      canvasBufferSize: (rect) => ({
+        width: rect.computedPhysical.width + 100,
+        height: rect.computedPhysical.height + 100,
+      }),
+    },
   };
 
   return pointLabelsComponent;

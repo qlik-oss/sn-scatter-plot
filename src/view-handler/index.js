@@ -60,26 +60,19 @@ export default function createViewHandler({ layoutService, extremumModel, model,
     setInteractionInProgress: (newState) => {
       interactionInProgress = newState;
     },
-    rendererSettings: {
-      transform: () => {
-        if (interactionInProgress) {
-          const { deltaX, deltaY } = viewHandler.getDataView();
-          return {
-            horizontalScaling: 1,
-            horizontalSkewing: 0,
-            verticalSkewing: 0,
-            verticalScaling: 1,
-            horizontalMoving: deltaX,
-            verticalMoving: deltaY,
-          };
-        }
-        return false;
-      },
-
-      canvasBufferSize: (rect) => ({
-        width: rect.computedPhysical.width + 100,
-        height: rect.computedPhysical.height + 100,
-      }),
+    transform: () => {
+      if (interactionInProgress) {
+        const { deltaX, deltaY } = viewHandler.getDataView();
+        return {
+          horizontalScaling: 1,
+          horizontalSkewing: 0,
+          verticalSkewing: 0,
+          verticalScaling: 1,
+          horizontalMoving: deltaX,
+          verticalMoving: deltaY,
+        };
+      }
+      return false;
     },
   };
 
