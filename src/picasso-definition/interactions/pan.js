@@ -2,15 +2,15 @@ import KEYS from '../../constants/keys';
 
 const threshold = 10;
 const eventName = 'areaPan';
-const updateDataView = ({ event, rect, viewHandler }) => {
+const updateDataView = ({ event, rect, viewHandler, rtl }) => {
   const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin } = rect;
 
   const xDiff = (xAxisMax - xAxisMin) * (event.deltaX / componentSize.width);
   const yDiff = (yAxisMax - yAxisMin) * (event.deltaY / componentSize.height);
 
   const dataView = {
-    xAxisMin: xAxisMin - xDiff,
-    xAxisMax: xAxisMax - xDiff,
+    xAxisMin: rtl ? xAxisMin + xDiff : xAxisMin - xDiff,
+    xAxisMax: rtl ? xAxisMax + xDiff : xAxisMax - xDiff,
     yAxisMin: yAxisMin + yDiff,
     yAxisMax: yAxisMax + yDiff,
     deltaX: event.deltaX,
@@ -20,7 +20,7 @@ const updateDataView = ({ event, rect, viewHandler }) => {
   viewHandler.setDataView(dataView);
 };
 
-const pan = ({ chart, actions, viewHandler }) => ({
+const pan = ({ chart, actions, viewHandler, rtl }) => ({
   type: 'Pan',
   key: 'panorama',
   options: {
@@ -56,12 +56,12 @@ const pan = ({ chart, actions, viewHandler }) => ({
     },
     areaPanmove(e) {
       e.preventDefault();
-      updateDataView({ event: e, rect: this[eventName], viewHandler });
+      updateDataView({ event: e, rect: this[eventName], viewHandler, rtl });
     },
     areaPanend(e) {
       e.preventDefault();
       viewHandler.setInteractionInProgress(false);
-      updateDataView({ event: e, rect: this[eventName], viewHandler });
+      updateDataView({ event: e, rect: this[eventName], viewHandler, rtl });
       this.started = false;
     },
     areaPancancel(e) {

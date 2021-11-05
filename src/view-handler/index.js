@@ -1,6 +1,4 @@
 import extend from 'extend';
-import createDataFetcher from './data-fetcher';
-import fetchBinnedData from './binned-data-fetcher';
 
 function areIntervalsEqual(min1, max1, min2, max2, e) {
   // e is the relative tolerance; d is the absolute tolerence
@@ -10,45 +8,24 @@ function areIntervalsEqual(min1, max1, min2, max2, e) {
   return Math.abs(min2 - min1) <= d && Math.abs(max2 - max1) <= d;
 }
 
-export default function createViewHandler({ layoutService, extremumModel, model, viewState, flags }) {
-  let dataFetcher;
+export default function createViewHandler({ viewState, extremumModel }) {
   const meta = { homeStateDataView: {}, scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1 };
   let interactionInProgress = false;
 
   const viewHandler = {
     getDataView: () => viewState.get('dataView'),
-    // getPxOffsets: () => pixelOffsets,
-    update() {
-      dataFetcher = createDataFetcher({ layoutService, model });
-    },
-    fetchData() {
-      // Calc data window (based on dataView, chart size, data size, settings?)
-      const dataRect = {
-        qTop: 0,
-        qLeft: 0,
-        qWidth: 4, // data.qHyperCube.qSize.qcx,
-        qHeight: 2000, // data.qHyperCube.qSize.qcy
-      };
-
-      return layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')
-        ? fetchBinnedData({ layoutService, extremumModel, model })
-        : dataFetcher.fetchData(dataRect);
-    },
-
     setDataView(dataView) {
-      // scrollUtil.getLimitedPixelOffsets(offsets);
-      // relativePos.x = [limitedOffsets.x, limitedOffsets.x + 1];
-      // relativePos.y = [limitedOffsets.y, limitedOffsets.y + 1];
-
-      viewState.set('dataView', dataView);
-
       // Update isHomeState
       const { xAxisMin: xMin1, xAxisMax: xMax1, yAxisMin: yMin1, yAxisMax: yMax1 } = dataView;
       const { xAxisMin: xMin2, xAxisMax: xMax2, yAxisMin: yMin2, yAxisMax: yMax2 } = meta.homeStateDataView;
       const e = 1e-4;
       if (areIntervalsEqual(xMin1, xMax1, xMin2, xMax2, e) && areIntervalsEqual(yMin1, yMax1, yMin2, yMax2, e)) {
         meta.isHomeState = true;
-      } else meta.isHomeState = false;
+      } else {
+        meta.isHomeState = false;
+      }
+      extremumModel.command.updateExtrema(dataView, meta.isHomeState);
+      viewState.set('dataView', dataView);
     },
 
     getMeta: () => meta,
@@ -75,8 +52,6 @@ export default function createViewHandler({ layoutService, extremumModel, model,
       return false;
     },
   };
-
-  viewHandler.update();
 
   return viewHandler;
 }
