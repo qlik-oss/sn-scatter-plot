@@ -2,8 +2,25 @@ import KEYS from '../../constants/keys';
 
 const threshold = 10;
 const eventName = 'areaPan';
+const updateDataView = ({ event, rect, viewHandler }) => {
+  const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin } = rect;
 
-const pan = ({ chart, actions, viewHandler, chartModel }) => ({
+  const xDiff = (xAxisMax - xAxisMin) * (event.deltaX / componentSize.width);
+  const yDiff = (yAxisMax - yAxisMin) * (event.deltaY / componentSize.height);
+
+  const dataView = {
+    xAxisMin: xAxisMin - xDiff,
+    xAxisMax: xAxisMax - xDiff,
+    yAxisMin: yAxisMin + yDiff,
+    yAxisMax: yAxisMax + yDiff,
+    deltaX: event.deltaX,
+    deltaY: event.deltaY,
+  };
+
+  viewHandler.setDataView(dataView);
+};
+
+const pan = ({ chart, actions, viewHandler }) => ({
   type: 'Pan',
   key: 'panorama',
   options: {
@@ -29,7 +46,7 @@ const pan = ({ chart, actions, viewHandler, chartModel }) => ({
   events: {
     areaPanstart(e) {
       e.preventDefault();
-      chartModel.command.clearPanEnded();
+      viewHandler.setInteractionInProgress(true);
       this.started = eventName;
       const initialDataView = viewHandler.getDataView();
       this[eventName] = {
@@ -39,40 +56,12 @@ const pan = ({ chart, actions, viewHandler, chartModel }) => ({
     },
     areaPanmove(e) {
       e.preventDefault();
-      const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin } = this[eventName];
-
-      const xDiff = (xAxisMax - xAxisMin) * (e.deltaX / componentSize.width);
-      const yDiff = (yAxisMax - yAxisMin) * (e.deltaY / componentSize.height);
-
-      const dataView = {
-        xAxisMin: xAxisMin - xDiff,
-        xAxisMax: xAxisMax - xDiff,
-        yAxisMin: yAxisMin + yDiff,
-        yAxisMax: yAxisMax + yDiff,
-        deltaX: e.deltaX,
-        deltaY: e.deltaY,
-      };
-
-      viewHandler.setDataView(dataView);
+      updateDataView({ event: e, rect: this[eventName], viewHandler });
     },
     areaPanend(e) {
       e.preventDefault();
-      chartModel.command.setPanEnded();
-      const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin } = this[eventName];
-
-      const xDiff = (xAxisMax - xAxisMin) * (e.deltaX / componentSize.width);
-      const yDiff = (yAxisMax - yAxisMin) * (e.deltaY / componentSize.height);
-
-      const dataView = {
-        xAxisMin: xAxisMin - xDiff,
-        xAxisMax: xAxisMax - xDiff,
-        yAxisMin: yAxisMin + yDiff,
-        yAxisMax: yAxisMax + yDiff,
-        deltaX: e.deltaX,
-        deltaY: e.deltaY,
-      };
-
-      viewHandler.setDataView(dataView);
+      viewHandler.setInteractionInProgress(false);
+      updateDataView({ event: e, rect: this[eventName], viewHandler });
       this.started = false;
     },
     areaPancancel(e) {

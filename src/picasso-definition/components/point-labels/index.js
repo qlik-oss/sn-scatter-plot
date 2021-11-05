@@ -16,6 +16,8 @@ export default function createPointLabels({ layoutService, themeService, chartMo
 
   const style = themeService.getStyles();
   const { fontFamily, fontSize, color } = style.label?.value || {};
+  const viewHandler = chartModel.query.getViewHandler();
+  const { rendererSettings } = viewHandler;
 
   const pointLabelsComponent = {
     type: 'point-label',
@@ -34,29 +36,7 @@ export default function createPointLabels({ layoutService, themeService, chartMo
       fill: color,
       backgroundColor: style.backgroundColor,
     },
-    rendererSettings: {
-      transform: () => {
-        if (chartModel.query.isPanEnded()) {
-          return false;
-        }
-        if (chartModel.query.isInteractionInProgess()) {
-          const { deltaX, deltaY } = chartModel.query.getViewState().get('dataView');
-          return {
-            horizontalScaling: 1,
-            horizontalSkewing: 0,
-            verticalSkewing: 0,
-            verticalScaling: 1,
-            horizontalMoving: deltaX,
-            verticalMoving: deltaY,
-          };
-        }
-        return false;
-      },
-      canvasBufferSize: (rect) => ({
-        width: rect.computedPhysical.width + 100,
-        height: rect.computedPhysical.height + 0,
-      }),
-    },
+    rendererSettings,
   };
 
   return pointLabelsComponent;

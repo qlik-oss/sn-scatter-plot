@@ -5,6 +5,8 @@ import createBrush from '../../brush';
 export default function createPoint({ layoutService, colorService, chartModel }) {
   let windowSizeMultiplier;
   const sizeScaleFn = createSizeScale(layoutService);
+  const viewHandler = chartModel.query.getViewHandler();
+  const { rendererSettings } = viewHandler;
   return {
     key: KEYS.COMPONENT.POINT,
     type: 'point',
@@ -29,28 +31,6 @@ export default function createPoint({ layoutService, colorService, chartModel })
     beforeRender: ({ size }) => {
       windowSizeMultiplier = Math.min(size.height, size.width) / 300;
     },
-    rendererSettings: {
-      transform: () => {
-        if (chartModel.query.isPanEnded()) {
-          return false;
-        }
-        if (chartModel.query.isInteractionInProgess()) {
-          const { deltaX, deltaY } = chartModel.query.getViewState().get('dataView');
-          return {
-            horizontalScaling: 1,
-            horizontalSkewing: 0,
-            verticalSkewing: 0,
-            verticalScaling: 1,
-            horizontalMoving: deltaX,
-            verticalMoving: deltaY,
-          };
-        }
-        return false;
-      },
-      canvasBufferSize: (rect) => ({
-        width: rect.computedPhysical.width + 100,
-        height: rect.computedPhysical.height + 0,
-      }),
-    },
+    rendererSettings,
   };
 }

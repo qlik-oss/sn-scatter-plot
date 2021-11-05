@@ -6,7 +6,7 @@ describe('point', () => {
   let sandbox;
   let layoutService;
   let colorService;
-  let tickModel;
+  let chartModel;
   let create;
   let layoutValueStub;
   let hyperCubeValueStub;
@@ -15,10 +15,6 @@ describe('point', () => {
   let d;
   const wsm = 1;
   let rect;
-  const xMin = 2;
-  const xMax = 14;
-  const yMin = 0;
-  const yMax = 10;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -46,12 +42,8 @@ describe('point', () => {
       },
     };
     sizeScaleFn = createSizeScale(layoutService);
-    tickModel = {
-      query: {
-        getXMinMax: () => [xMin, xMax],
-        getYMinMax: () => [yMin, yMax],
-      },
-    };
+    chartModel = { query: { getViewHandler: sandbox.stub() } };
+    chartModel.query.getViewHandler.returns({ redererSettings: 'renderer-settings' });
     canvasBufferSizeStub = sandbox.stub();
     rect = {
       computedPhysical: {
@@ -78,7 +70,7 @@ describe('point', () => {
       createPoint({
         layoutService,
         colorService,
-        tickModel,
+        chartModel,
       });
   });
 

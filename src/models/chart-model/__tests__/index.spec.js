@@ -120,9 +120,7 @@ describe('chart-model', () => {
         'getViewHandler',
         'getLocaleInfo',
         'isPrelayout',
-        'isInteractionInProgess',
         'getFormatter',
-        'isPanEnded',
       ]);
     });
 
@@ -150,12 +148,6 @@ describe('chart-model', () => {
       });
     });
 
-    describe('isInteractionInProgess', () => {
-      it('should return correct isInteractionInProgess value', () => {
-        expect(create().query.isInteractionInProgess()).to.deep.equal(false);
-      });
-    });
-
     describe('isPrelayout', () => {
       it('should return correct isPrelayout value', () => {
         expect(create().query.isPrelayout()).to.equal(true);
@@ -177,7 +169,7 @@ describe('chart-model', () => {
 
   describe('command', () => {
     it('should expose correct methods', () => {
-      expect(create().command).to.have.all.keys(['layoutComponents', 'update', 'setPanEnded', 'clearPanEnded']);
+      expect(create().command).to.have.all.keys(['layoutComponents', 'update']);
     });
 
     describe('layoutComponents', () => {

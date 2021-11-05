@@ -10,16 +10,14 @@ describe('pan', () => {
   let panObject;
   let e;
   let myDataView;
-  let chartModel;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    viewHandler = { getDataView: sandbox.stub() };
+    viewHandler = { getDataView: sandbox.stub(), setInteractionInProgress: sandbox.stub() };
     actions = { zoom: { enabled: sandbox.stub() } };
     chart = { componentsFromPoint: sandbox.stub() };
     sandbox.stub(KEYS, 'COMPONENT').value({ POINT: 'point-component' });
-    chartModel = { command: { setPanEnded: sandbox.stub(), clearPanEnded: sandbox.stub() } };
-    panObject = pan({ chart, actions, viewHandler, chartModel });
+    panObject = pan({ chart, actions, viewHandler });
   });
 
   afterEach(() => {
