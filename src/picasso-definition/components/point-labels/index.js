@@ -39,8 +39,8 @@ export default function createPointLabels({ layoutService, themeService, chartMo
     rendererSettings: {
       transform,
       canvasBufferSize: (rect) => ({
-        width: rect.computedPhysical.width + 100,
         height: rect.computedPhysical.height + 100,
+        width: rect.computedPhysical.width + 100,
       }),
     },
   };
