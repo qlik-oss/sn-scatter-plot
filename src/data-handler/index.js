@@ -31,18 +31,20 @@ export default function createDataHandler({ layoutService, model, extremumModel,
       if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
         requestInProgress = binnedDataFetcher.fetch();
       } else {
-        requestInProgress = dataFetcher.fetch().catch(() => {});
+        requestInProgress = dataFetcher.fetch();
       }
 
-      requestInProgress.then(() => {
-        requestInProgress = null;
-        meta.isBinnedData = !layoutService.getDataPages().length;
-        if (nextInLine) {
-          const tempRef = nextInLine;
-          nextInLine = null;
-          tempRef.resolve(dataHandler.fetch());
-        }
-      });
+      requestInProgress
+        .then(() => {
+          requestInProgress = null;
+          meta.isBinnedData = !layoutService.getDataPages().length;
+          if (nextInLine) {
+            const tempRef = nextInLine;
+            nextInLine = null;
+            tempRef.resolve(dataHandler.fetch());
+          }
+        })
+        .catch(() => {});
 
       return requestInProgress;
     },
