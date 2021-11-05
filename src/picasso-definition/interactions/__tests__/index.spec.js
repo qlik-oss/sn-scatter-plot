@@ -62,7 +62,6 @@ describe('interactions', () => {
       chart,
       actions,
       viewHandler,
-      chartModel: models.chartModel,
     }).calledOnce;
   });
 
