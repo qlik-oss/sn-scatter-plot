@@ -10,7 +10,7 @@ function transform(scale, start, end, factor) {
   return [newStart, newEnd];
 }
 
-export default function zoom(e, chart, pointComponent, viewHandler, pinchZoomFactor) {
+export default function zoom({ e, chart, pointComponent, viewHandler, pinchZoomFactor }) {
   const { scale, maxScale, minScale } = viewHandler.getMeta();
   const zoomFactor = pinchZoomFactor || (e.deltaY > 0 ? ZOOM_SCALE : 1 / ZOOM_SCALE);
   const newScale = zoomFactor * scale;
