@@ -31,7 +31,7 @@ export default function createDataHandler({ layoutService, model, extremumModel,
       if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
         requestInProgress = binnedDataFetcher.fetch();
       } else {
-        requestInProgress = dataFetcher.fetch();
+        requestInProgress = dataFetcher.fetch().catch(() => {});
       }
 
       requestInProgress.then(() => {
