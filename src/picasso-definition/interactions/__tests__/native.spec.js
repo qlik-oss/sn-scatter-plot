@@ -6,6 +6,7 @@ describe('native', () => {
   let sandbox;
   let pointTooltip;
   let legendTooltip;
+  let heatMapTooltip;
   let actions;
   let legend;
   let create;
@@ -21,6 +22,8 @@ describe('native', () => {
         POINT: 'point-component',
         LEGEND_CATEGORICAL: 'legend-categorical',
         LEGEND_CAT_TOOLTIP: 'legend-cat-tooltip',
+        HEAT_MAP: 'heat-map-component',
+        HEAT_MAP_TOOLTIP: 'heat-map-tooltip',
       },
     });
     legend = { key: 'legend-categorical', emit: sandbox.spy() };
@@ -29,6 +32,10 @@ describe('native', () => {
       emit: sandbox.spy(),
     };
     legendTooltip = {
+      show: true,
+      emit: sandbox.spy(),
+    };
+    heatMapTooltip = {
       show: true,
       emit: sandbox.spy(),
     };
@@ -48,6 +55,7 @@ describe('native', () => {
     };
     chart.component.withArgs('tooltip').returns(pointTooltip);
     chart.component.withArgs('legend-cat-tooltip').returns(legendTooltip);
+    chart.component.withArgs('heat-map-tooltip').returns(heatMapTooltip);
     chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'tooltip' }]);
     actions = {
       zoom: {
@@ -100,14 +108,27 @@ describe('native', () => {
           expect(chart.componentsFromPoint.withArgs({ x: 50, y: 100 })).to.have.been.called;
         });
 
-        it('should emit on zoom if zoom is enabled', () => {
+        it('should emit on zoom if zoom is enabled to point component', () => {
           chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'point-component' }]);
           create().events.wheel(e);
           expect(zoom.default).to.have.been.calledOnce;
         });
 
-        it('should not emit on zoom if zoom is not enabled', () => {
+        it('should not emit on zoom if zoom is not enabled to point component', () => {
           chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'point-component' }]);
+          actions.zoom.enabled.returns(false);
+          create().events.wheel(e);
+          expect(zoom.default).not.to.have.been.called;
+        });
+
+        it('should emit on zoom if zoom is enabled to heat map component', () => {
+          chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'heat-map-component' }]);
+          create().events.wheel(e);
+          expect(zoom.default).to.have.been.calledOnce;
+        });
+
+        it('should not emit on zoom if zoom is not enabled to heat map component', () => {
+          chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'heat-map-component' }]);
           actions.zoom.enabled.returns(false);
           create().events.wheel(e);
           expect(zoom.default).not.to.have.been.called;
@@ -160,6 +181,17 @@ describe('native', () => {
         it('should hide legend tooltip if exists and is shown', () => {
           create().events.wheel(e);
           expect(legendTooltip.emit.withArgs('hide')).to.have.been.calledOnce;
+        });
+
+        it('should not hide heat map tooltip if exists and is not shown', () => {
+          heatMapTooltip.show = false;
+          create().events.wheel(e);
+          expect(heatMapTooltip.emit).not.to.have.been.called;
+        });
+
+        it('should hide heat map tooltip if exists and is shown', () => {
+          create().events.wheel(e);
+          expect(heatMapTooltip.emit.withArgs('hide')).to.have.been.calledOnce;
         });
       });
 
@@ -215,6 +247,25 @@ describe('native', () => {
           legendTooltip.show = false;
           create().events.mousemove(e);
           expect(legendTooltip.emit).not.to.have.been.called;
+        });
+
+        it('should not show nor hide heat map tooltip if no heat map tooltip component', () => {
+          chart.component.withArgs('heat-map-tooltip').returns(undefined);
+          create().events.mousemove(e);
+          expect(heatMapTooltip.emit).not.to.have.been.called;
+        });
+
+        it('should not show nor hide heat map tooltip if heat map tooltip show is false', () => {
+          heatMapTooltip.show = false;
+          create().events.mousemove(e);
+          expect(heatMapTooltip.emit).not.to.have.been.called;
+        });
+
+        it('should show heat map tooltip if target is heat map component', () => {
+          pointTooltip.show = true;
+          chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'heat-map-component' }]);
+          create().events.mousemove(e);
+          expect(heatMapTooltip.emit.withArgs('show', e)).to.have.been.called;
         });
       });
 
