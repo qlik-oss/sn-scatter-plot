@@ -6,7 +6,10 @@ const heatMapLegend = ({ models, context, chart }) => {
   const dataHandler = chartModel.query.getDataHandler();
   const { translator, rtl, theme } = context;
   const { fontFamily } = themeService.getStyles().axis.label.name;
-  const legendStyle = theme.getStyle('object', '', 'legend').title;
+  const legendStyle = theme.getStyle('object', '', 'legend')?.title || {
+    fontSize: '15px',
+    color: '#595959',
+  };
   const { show: showLegend, dock: d, showTitle } = layoutService.getLayoutValue('legend', {
     show: true,
     dock: 'auto',
