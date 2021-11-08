@@ -38,34 +38,25 @@ const useSettings = ({ core, models, flags }) => {
       flags,
     });
 
-  usePromise(() => {
+  usePromise(async () => {
     if (!models) {
       return Promise.resolve();
     }
 
     const { layoutService, chartModel, colorService, pluginService } = models;
     const { viewState } = core;
-    const viewHandler = chartModel.query.getViewHandler();
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
+    const dataHandler = chartModel.query.getDataHandler();
 
-    return viewHandler.fetchData().then((pages) => {
-      if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
-        layoutService.setLayoutValue('dataPages', pages);
-        viewHandler.setMeta({ heatMapView: true });
-      } else {
-        layoutService.setDataPages(pages);
-        viewHandler.setMeta({ heatMapView: false });
-      }
-      return pluginService.initialize().then(() =>
-        colorService.initialize().then(() => {
-          colorService.custom.updateBrushAliases();
-          colorService.custom.updateLegend();
-          const newSettings = getPicassoDef(logicalSize);
-          chartModel.command.layoutComponents({ settings: newSettings });
-          initializeViewState({ viewState, viewStateOptions: options.viewState, models });
-          setSettings(newSettings);
-        })
-      );
+    await dataHandler.fetch().catch(() => {}); // Promise rejected if trying to fetch same data window twice in a row
+    await pluginService.initialize();
+    return colorService.initialize().finally(() => {
+      colorService.custom.updateBrushAliases();
+      colorService.custom.updateLegend();
+      const newSettings = getPicassoDef(logicalSize);
+      chartModel.command.layoutComponents({ settings: newSettings });
+      initializeViewState({ viewState, viewStateOptions: options.viewState, models });
+      setSettings(newSettings);
     });
   }, [models]);
 

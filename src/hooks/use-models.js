@@ -91,10 +91,7 @@ const useModels = ({ core, flags }) => {
     const pluginService = createPluginService({ picassoInstance, plugins, pluginArgs });
     const extremumModel = createExtremumModel(layoutService, options.viewState);
     const viewHandler = createViewHandler({
-      flags,
-      layoutService,
       extremumModel,
-      model,
       viewState,
     });
 
@@ -123,6 +120,7 @@ const useModels = ({ core, flags }) => {
       extremumModel,
       flags,
       viewHandler,
+      model,
     });
 
     const tickModel = createTickModel({ layoutService, dockService, extremumModel, themeService, chartModel, chart });
