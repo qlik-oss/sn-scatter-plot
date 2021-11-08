@@ -121,7 +121,6 @@ describe('chart-model', () => {
         'getDataHandler',
         'getLocaleInfo',
         'isPrelayout',
-        'isInteractionInProgess',
         'getFormatter',
       ]);
     });
@@ -141,12 +140,6 @@ describe('chart-model', () => {
     describe('getLocaleInfo', () => {
       it('should return correct locale info', () => {
         expect(create().query.getLocaleInfo()).to.deep.equal({ key: 'locale-info' });
-      });
-    });
-
-    describe('isInteractionInProgess', () => {
-      it('should return correct isInteractionInProgess value', () => {
-        expect(create().query.isInteractionInProgess()).to.deep.equal(false);
       });
     });
 

@@ -10,6 +10,7 @@ function areIntervalsEqual(min1, max1, min2, max2, e) {
 
 export default function createViewHandler({ viewState, extremumModel }) {
   const meta = { homeStateDataView: {}, scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1 };
+  let interactionInProgress = false;
 
   const viewHandler = {
     getDataView: () => viewState.get('dataView'),
@@ -31,6 +32,24 @@ export default function createViewHandler({ viewState, extremumModel }) {
 
     setMeta(newMeta) {
       extend(true, meta, newMeta);
+    },
+
+    setInteractionInProgress: (newState) => {
+      interactionInProgress = newState;
+    },
+    transform: () => {
+      if (interactionInProgress) {
+        const { deltaX, deltaY } = viewHandler.getDataView();
+        return {
+          horizontalScaling: 1,
+          horizontalSkewing: 0,
+          verticalSkewing: 0,
+          verticalScaling: 1,
+          horizontalMoving: deltaX,
+          verticalMoving: deltaY,
+        };
+      }
+      return false;
     },
   };
 
