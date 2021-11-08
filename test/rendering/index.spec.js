@@ -26,6 +26,7 @@ describe('rendering', () => {
       // eslint-disable-next-line global-require
       const puppeteer = require('puppeteer');
       myBrowser = await puppeteer.launch({ args: ['--no-sandbox'] });
+      // myBrowser = await puppeteer.launch({ args: ['--no-sandbox'], headless: false, slowMo: 500 });
       myPage = await myBrowser.newPage();
 
       myPage.on('pageerror', (e) => {

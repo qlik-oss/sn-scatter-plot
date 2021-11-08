@@ -1,4 +1,4 @@
-# Note
+# Local rendering tests on Docker
 
 There is slight difference between fonts rendered on CircleCI
 and on local dev (MacOS).
@@ -21,6 +21,22 @@ When you run the Docker rendering tests for the first time, it can take time
 to download and install all the neccessary images. But from the second time,
 thanks to Docker caching, only the build and the tests are run, which take
 between 1-2 minutes.
+
+# Local rendering tests with Chrome
+
+To debug, the true local rendering tests can be run with
+`yarn test:rendering:local`, but keeping in mind that these tests will
+encounter the font issue mentioned above. Note that Sense Client containers in Docker
+need to be on for the tests.
+
+When running the tests with Chrome, it is sometimes useful to actually show
+the browsers and slow down the puppeteer rendering process.
+
+```js
+// In index.spec.js
+myBrowser = await puppeteer.launch({ args: ['--no-sandbox'], headless: false, slowMo: 500 });
+// slowMo are in millisecond unit
+```
 
 # Tests
 
