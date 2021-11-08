@@ -33,7 +33,7 @@ Here is how you do it:
 - Step 1: turn on Sense Client containers in Docker
 - Step 2: copy the `Executive_Dashboard.qvf` app from `data` to your computer's apps folder
 
-  For me, for example, it'll in `/Users/gqm/Qlik/Sense/Apps`
+  For me, for example, it is in `/Users/gqm/Qlik/Sense/Apps`
 
 - Step 3: run `yarn test:rendering:local`
 
