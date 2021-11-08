@@ -88,7 +88,9 @@ export default function createBinnedDataFetcher({ layoutService, extremumModel, 
     },
     fetch: () => {
       if (!layoutService.meta.isBigData || layoutService.meta.isSnapshot) {
-        return Promise.resolve(layoutService.getLayoutValue('dataPages'));
+        const dataPages = layoutService.getLayoutValue('dataPages');
+        populateBins(dataPages);
+        return Promise.resolve(dataPages);
       }
 
       const { xAxisMin, xAxisMax } = extremumModel.query.getXExtrema();
