@@ -3,6 +3,7 @@ import createAxes from './axes';
 import createAxisTitles from './axis-titles';
 import createPoint from './point';
 import createHeatMap from './heat-map';
+import createHeatMapLabels from './heat-map-labels';
 import createReferenceLines from './reference-lines';
 import createPointLabels from './point-labels';
 import createTooltips from './tooltips';
@@ -11,7 +12,7 @@ import createOutOfBounds from './out-of-bounds';
 import createHeatMapLegend from './heat-map-legend';
 
 export default function createComponents({ context, models, flags, picasso, chart }) {
-  const { colorService, disclaimerModel, layoutService } = models;
+  const { colorService, disclaimerModel, layoutService, themeService } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
 
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
@@ -26,6 +27,7 @@ export default function createComponents({ context, models, flags, picasso, char
     ...createAxes({ models, flags }),
     ...createAxisTitles(models),
     createPointLabels(models),
+    createHeatMapLabels({ themeService, picasso, context }),
     createOutOfBounds({ models, context }),
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
