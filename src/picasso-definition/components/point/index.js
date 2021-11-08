@@ -2,9 +2,11 @@ import KEYS from '../../../constants/keys';
 import createSizeScale from '../../scales/size';
 import createBrush from '../../brush';
 
-export default function createPoint({ layoutService, colorService }) {
+export default function createPoint({ layoutService, colorService, chartModel }) {
   let windowSizeMultiplier;
   const sizeScaleFn = createSizeScale(layoutService);
+  const viewHandler = chartModel.query.getViewHandler();
+  const { transform } = viewHandler;
   return {
     key: KEYS.COMPONENT.POINT,
     type: 'point',
@@ -28,6 +30,13 @@ export default function createPoint({ layoutService, colorService }) {
     },
     beforeRender: ({ size }) => {
       windowSizeMultiplier = Math.min(size.height, size.width) / 300;
+    },
+    rendererSettings: {
+      transform,
+      canvasBufferSize: (rect) => ({
+        width: rect.computedPhysical.width + 100,
+        height: rect.computedPhysical.height + 100,
+      }),
     },
   };
 }

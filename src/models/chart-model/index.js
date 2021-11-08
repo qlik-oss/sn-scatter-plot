@@ -13,7 +13,6 @@ export default function createChartModel({
   viewHandler,
   model,
 }) {
-  let interactionInProgess = false;
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
     KEYS.COMPONENT.Y_AXIS_TITLE,
@@ -84,7 +83,6 @@ export default function createChartModel({
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???
       // const startTime = Date.now();
-      interactionInProgess = true;
       chart.update({
         partialData: true,
         excludeFromUpdate: EXCLUDE,
@@ -139,7 +137,6 @@ export default function createChartModel({
       getViewHandler: () => viewHandler,
       getDataHandler: () => dataHandler,
       getLocaleInfo: () => localeInfo,
-      isInteractionInProgess: () => interactionInProgess,
       getFormatter: (fieldName) => dataset.field(fieldName).formatter(),
       isPrelayout: () => state.isPrelayout,
     },

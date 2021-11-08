@@ -17,6 +17,7 @@ describe('pan', () => {
     viewHandler = {
       getDataView: sandbox.stub(),
       throttledFetchData: sandbox.stub().callsFake(() => sandbox.stub()),
+      setInteractionInProgress: sandbox.stub(),
     };
     rtl = false;
     actions = { zoom: { enabled: sandbox.stub() } };
@@ -100,7 +101,14 @@ describe('pan', () => {
           extend(true, myDataView, dataView);
         };
         panObject.events.areaPanmove(e);
-        expect(myDataView).to.deep.equal({ xAxisMin: -1200, xAxisMax: 800, yAxisMin: 200, yAxisMax: 2200 });
+        expect(myDataView).to.deep.equal({
+          xAxisMin: -1200,
+          xAxisMax: 800,
+          yAxisMin: 200,
+          yAxisMax: 2200,
+          deltaX: 10,
+          deltaY: 20,
+        });
       });
 
       it('should modify myDataView correctly when is rtl', () => {
@@ -119,13 +127,28 @@ describe('pan', () => {
           extend(true, myDataView, dataView);
         };
         panObject.events.areaPanmove(e);
-        expect(myDataView).to.deep.equal({ xAxisMin: -800, xAxisMax: 1200, yAxisMin: 200, yAxisMax: 2200 });
+        expect(myDataView).to.deep.equal({
+          xAxisMin: -800,
+          xAxisMax: 1200,
+          yAxisMin: 200,
+          yAxisMax: 2200,
+          deltaX: 10,
+          deltaY: 20,
+        });
       });
     });
 
     describe('areaPanend', () => {
       it('should set events.started to false', () => {
         e = { preventDefault: sandbox.stub() };
+        panObject.events.areaPan = {
+          componentSize: { width: 100, height: 200 },
+          xAxisMin: -1000,
+          xAxisMax: 1000,
+          yAxisMin: 0,
+          yAxisMax: 2000,
+        };
+        viewHandler.setDataView = sandbox.stub();
         panObject.events.areaPanend(e);
         expect(panObject.events.started).to.equal(false);
       });
