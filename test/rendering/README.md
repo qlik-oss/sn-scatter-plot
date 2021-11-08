@@ -26,8 +26,16 @@ between 1-2 minutes.
 
 To debug, the true local rendering tests can be run with
 `yarn test:rendering:local`, but keeping in mind that these tests will
-encounter the font issue mentioned above. Note that Sense Client containers in Docker
-need to be on for the tests.
+encounter the font issue mentioned above.
+
+Here is how you do it:
+
+- Step 1: turn on Sense Client containers in Docker
+- Step 2: copy the `Executive_Dashboard.qvf` app from `data` to your computer's apps folder
+
+  For me, for example, it'll in `/Users/gqm/Qlik/Sense/Apps`
+
+- Step 3: run `yarn test:rendering:local`
 
 When running the tests with Chrome, it is sometimes useful to actually show
 the browsers and slow down the puppeteer rendering process.
