@@ -1,4 +1,4 @@
-import { makeDarker, makeBrighter } from '../index';
+import { makeDarker, makeBrighter } from '../adjust-color';
 
 describe('makeBrighter', () => {
   it('should return correct darker color', () => {

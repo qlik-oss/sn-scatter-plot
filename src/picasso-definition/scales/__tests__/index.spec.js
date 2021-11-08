@@ -1,6 +1,6 @@
 import createScales from '../index';
 import * as KEYS from '../../../constants/keys';
-import * as color from '../color';
+import * as color from '../../../utils/color/adjust-color';
 import * as getDock from '../../../utils/dock-helper';
 
 describe('scales', () => {

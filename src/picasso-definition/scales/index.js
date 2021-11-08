@@ -1,5 +1,5 @@
 import KEYS from '../../constants/keys';
-import { makeBrighter, makeDarker } from './color';
+import { makeBrighter, makeDarker } from '../../utils/color/adjust-color';
 import getDock from '../../utils/dock-helper';
 
 export default function createScales({ models, viewState, options, theme, rtl, chart }) {
