@@ -8,6 +8,7 @@ import createPointLabels from './point-labels';
 import createTooltips from './tooltips';
 import createDisclaimer from './disclaimer';
 import createOutOfBounds from './out-of-bounds';
+import createMiniChart from './mini-chart';
 
 export default function createComponents({ context, models, flags, picasso }) {
   const { colorService, disclaimerModel, layoutService } = models;
@@ -28,6 +29,7 @@ export default function createComponents({ context, models, flags, picasso }) {
     createOutOfBounds({ models, context }),
     ...colorService.custom.legendComponents(),
     disclaimer,
+    createMiniChart(models),
     ...createTooltips({ models, context }),
   ].filter(Boolean);
   // setDisplayOrder(components);
