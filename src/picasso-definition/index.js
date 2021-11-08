@@ -48,6 +48,7 @@ export default function createPicassoDefinition({
       viewHandler,
       gestures: [...selectables.gestures],
       colorService,
+      rtl: context.rtl,
     }),
     scales,
     components: pluginService.extendComponents(componentDefinitions),

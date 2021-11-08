@@ -8,18 +8,20 @@ describe('pinch', () => {
   let chart;
   let actions;
   let viewHandler;
+  let rtl;
   let pinchObject;
   let e;
   let myDataView;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    viewHandler = { getDataView: sandbox.stub() };
+    viewHandler = { getDataView: sandbox.stub(), throttledFetchData: sandbox.stub().callsFake(() => sandbox.stub()) };
     actions = { zoom: { enabled: sandbox.stub() } };
     chart = { componentsFromPoint: sandbox.stub() };
+    rtl = false;
     sandbox.stub(KEYS, 'COMPONENT').value({ POINT: 'point-component' });
     sandbox.stub(zoom, 'default');
-    pinchObject = pinch({ chart, actions, viewHandler });
+    pinchObject = pinch({ chart, actions, viewHandler, rtl });
   });
 
   afterEach(() => {
@@ -96,6 +98,25 @@ describe('pinch', () => {
           };
           pinchObject.events.zoommove(e);
           expect(myDataView).to.deep.equal({ xAxisMin: -1200, xAxisMax: 800, yAxisMin: 200, yAxisMax: 2200 });
+        });
+
+        it('should modify myDataView correctly when is rtl', () => {
+          rtl = true;
+          e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20, scale: 1 };
+          pinchObject = pinch({ chart, actions, viewHandler, rtl });
+          pinchObject.events.zoom = {
+            componentSize: { width: 100, height: 200 },
+            xAxisMin: -1000,
+            xAxisMax: 1000,
+            yAxisMin: 0,
+            yAxisMax: 2000,
+          };
+          myDataView = {};
+          viewHandler.setDataView = (dataView) => {
+            extend(true, myDataView, dataView);
+          };
+          pinchObject.events.zoommove(e);
+          expect(myDataView).to.deep.equal({ xAxisMin: -800, xAxisMax: 1200, yAxisMin: 200, yAxisMax: 2200 });
         });
       });
 

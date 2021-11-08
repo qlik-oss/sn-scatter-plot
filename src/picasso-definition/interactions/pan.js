@@ -2,8 +2,25 @@ import KEYS from '../../constants/keys';
 
 const threshold = 10;
 const eventName = 'areaPan';
+const updateDataView = ({ event, rect, viewHandler, rtl }) => {
+  const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin } = rect;
 
-const pan = ({ chart, actions, viewHandler }) => ({
+  const xDiff = (xAxisMax - xAxisMin) * (event.deltaX / componentSize.width);
+  const yDiff = (yAxisMax - yAxisMin) * (event.deltaY / componentSize.height);
+
+  const dataView = {
+    xAxisMin: rtl ? xAxisMin + xDiff : xAxisMin - xDiff,
+    xAxisMax: rtl ? xAxisMax + xDiff : xAxisMax - xDiff,
+    yAxisMin: yAxisMin + yDiff,
+    yAxisMax: yAxisMax + yDiff,
+    deltaX: event.deltaX,
+    deltaY: event.deltaY,
+  };
+
+  viewHandler.setDataView(dataView);
+};
+
+const pan = ({ chart, actions, viewHandler, rtl }) => ({
   type: 'Pan',
   key: 'panorama',
   options: {
@@ -29,6 +46,7 @@ const pan = ({ chart, actions, viewHandler }) => ({
   events: {
     areaPanstart(e) {
       e.preventDefault();
+      viewHandler.setInteractionInProgress(true);
       this.started = eventName;
       const initialDataView = viewHandler.getDataView();
       this[eventName] = {
@@ -38,22 +56,12 @@ const pan = ({ chart, actions, viewHandler }) => ({
     },
     areaPanmove(e) {
       e.preventDefault();
-      const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin } = this[eventName];
-
-      const xDiff = (xAxisMax - xAxisMin) * (e.deltaX / componentSize.width);
-      const yDiff = (yAxisMax - yAxisMin) * (e.deltaY / componentSize.height);
-
-      const dataView = {
-        xAxisMin: xAxisMin - xDiff,
-        xAxisMax: xAxisMax - xDiff,
-        yAxisMin: yAxisMin + yDiff,
-        yAxisMax: yAxisMax + yDiff,
-      };
-
-      viewHandler.setDataView(dataView);
+      updateDataView({ event: e, rect: this[eventName], viewHandler, rtl });
     },
     areaPanend(e) {
       e.preventDefault();
+      viewHandler.setInteractionInProgress(false);
+      updateDataView({ event: e, rect: this[eventName], viewHandler, rtl });
       this.started = false;
     },
     areaPancancel(e) {

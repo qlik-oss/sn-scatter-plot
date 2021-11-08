@@ -35,7 +35,9 @@ export default function native({ chart, actions, viewHandler }) {
             .componentsFromPoint(point)
             .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
           if (target) {
-            zoom(e, chart, target, viewHandler);
+            // TODO
+            // use touch pad to zoom sometime gets console error, probbaly need to specify how much to zoom each time
+            zoom({ e, chart, pointComponent: target, viewHandler });
             e.preventDefault();
           }
         }

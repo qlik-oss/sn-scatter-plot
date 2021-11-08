@@ -8,12 +8,15 @@ describe('point-labels', () => {
   let labels;
   let create;
   let component;
+  let chartModel;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     layoutService = { getLayoutValue: sandbox.stub() };
     themeService = { getStyles: sandbox.stub() };
-    create = () => createPointLabels({ layoutService, themeService });
+    chartModel = { query: { getViewHandler: sandbox.stub() } };
+    chartModel.query.getViewHandler.returns({ redererSettings: 'renderer-settings' });
+    create = () => createPointLabels({ layoutService, themeService, chartModel });
     labels = { mode: 1 };
     layoutService.getLayoutValue.withArgs('labels').returns(labels);
     themeService.getStyles.returns({ label: { value: { fontFamily: 'Sans serif', fontSize: '1px', color: 'red' } } });
