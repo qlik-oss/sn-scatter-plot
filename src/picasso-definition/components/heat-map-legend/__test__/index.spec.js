@@ -8,8 +8,7 @@ describe('heat-map-legend', () => {
   let themeService;
   let layoutService;
   let chartModel;
-  let heatMapView;
-  let viewHandler;
+  let dataHandler;
   let chart;
   let context;
   let create;
@@ -26,11 +25,13 @@ describe('heat-map-legend', () => {
     layoutService = {
       getLayoutValue: sandbox.stub().returns({ show: true, dock: 'auto', showTitle: true }),
     };
-    heatMapView = true;
-    viewHandler = { getMeta: sandbox.stub().returns({ heatMapView }) };
+    dataHandler = {
+      maxBinDensity: 200,
+      getMeta: sandbox.stub().returns({ isBinnedData: true }),
+    };
     chartModel = {
       query: {
-        getViewHandler: () => viewHandler,
+        getDataHandler: () => dataHandler,
       },
     };
     models = {
@@ -146,7 +147,6 @@ describe('heat-map-legend', () => {
 
       describe('tick', () => {
         it('should have correct label', () => {
-          layoutService.getLayoutValue.withArgs('dataPages').returns([[{ qNum: 200 }]]);
           expect(create().settings.tick.label(0, 2)).to.equal(0);
           expect(create().settings.tick.label(0, 3)).to.equal(200);
         });
@@ -158,18 +158,17 @@ describe('heat-map-legend', () => {
     });
 
     describe('show', () => {
-      it('should return true if showLegend and is heatMapView', () => {
+      it('should return true if showLegend and is binned data', () => {
         expect(create().show()).to.be.true;
       });
 
-      it('should return false if showLegend is false and is heatMapView', () => {
+      it('should return false if showLegend is false and is binned data', () => {
         layoutService.getLayoutValue.returns({ show: false, dock: 'auto', showTitle: true });
         expect(create().show()).to.be.false;
       });
 
-      it('should return false if showLegend and is not heatMapView', () => {
-        heatMapView = false;
-        viewHandler.getMeta.returns({ heatMapView });
+      it('should return false if showLegend and is not binned data', () => {
+        dataHandler.getMeta.returns({ isBinnedData: false });
         expect(create().show()).to.be.false;
       });
     });

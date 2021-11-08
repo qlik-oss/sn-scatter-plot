@@ -28,7 +28,7 @@ import getPluginArgs from '../services/plugin-service/plugin-args';
 import getLogicalSize from '../logical-size';
 import createExtremumModel from '../models/extremum-model';
 import createDisclaimerModel from '../models/disclaimer-model';
-import createViewHandler from '../view-handler';
+import createDataHandler from '../data-handler';
 
 const useModels = ({ core, flags }) => {
   const layout = useStaleLayout();
@@ -90,10 +90,8 @@ const useModels = ({ core, flags }) => {
     const pluginArgs = getPluginArgs(layoutService);
     const pluginService = createPluginService({ picassoInstance, plugins, pluginArgs });
     const extremumModel = createExtremumModel(layoutService, options.viewState);
-    const viewHandler = createViewHandler({
-      extremumModel,
-      viewState,
-    });
+
+    const dataHandler = createDataHandler({ layoutService, model, extremumModel, flags });
 
     const colorService = createColorService({
       actions,
@@ -107,7 +105,7 @@ const useModels = ({ core, flags }) => {
       layoutService,
       picasso: picassoInstance,
       viewState,
-      viewHandler,
+      dataHandler,
     });
 
     const chartModel = createChartModel({
@@ -118,9 +116,7 @@ const useModels = ({ core, flags }) => {
       viewState,
       colorService,
       extremumModel,
-      flags,
-      viewHandler,
-      model,
+      dataHandler,
     });
 
     const tickModel = createTickModel({ layoutService, dockService, extremumModel, themeService, chartModel, chart });

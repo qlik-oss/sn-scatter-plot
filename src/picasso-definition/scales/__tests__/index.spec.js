@@ -10,6 +10,8 @@ describe('scales', () => {
   let viewState;
   let colorService;
   let layoutService;
+  let chartModel;
+  let dataHandler;
   let models;
   let theme;
   let rtl;
@@ -48,9 +50,15 @@ describe('scales', () => {
       getScales: sinon.stub().returns({ s1: 's1', s2: 's2' }),
     };
     layoutService = {
-      getLayoutValue: sandbox.stub().returns([[{ qNum: 200 }]]),
+      getLayoutValue: sandbox.stub(),
     };
-    models = { tickModel, colorService, disclaimerModel, layoutService };
+    dataHandler = { maxBinDensity: 200 };
+    chartModel = {
+      query: {
+        getDataHandler: () => dataHandler,
+      },
+    };
+    models = { tickModel, colorService, disclaimerModel, layoutService, chartModel };
     const options = { direction: 'rtl' };
     theme = { getStyle: sandbox.stub().returns('red') };
     rtl = false;

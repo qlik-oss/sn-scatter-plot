@@ -3,7 +3,7 @@ import getDock from '../../../utils/dock-helper';
 
 const heatMapLegend = ({ models, context, chart }) => {
   const { themeService, layoutService, chartModel } = models;
-  const viewHandler = chartModel.query.getViewHandler();
+  const dataHandler = chartModel.query.getDataHandler();
   const { translator, rtl, theme } = context;
   const { fontFamily } = themeService.getStyles().axis.label.name;
   const legendStyle = theme.getStyle('object', '', 'legend').title;
@@ -32,14 +32,14 @@ const heatMapLegend = ({ models, context, chart }) => {
       },
       tick: {
         label: (tickValue, index) => {
-          const maxDensity = layoutService.getLayoutValue('dataPages')?.[0]?.[0]?.qNum || 0;
+          const maxDensity = dataHandler.maxBinDensity;
           const density = [0, maxDensity];
           return density[index % 2];
         },
         fontFamily,
       },
     },
-    show: () => showLegend && viewHandler.getMeta().heatMapView,
+    show: () => showLegend && dataHandler.getMeta().isBinnedData,
   };
 };
 

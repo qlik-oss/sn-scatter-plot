@@ -1,6 +1,5 @@
 import createChartModel from '..';
 import * as createViewHandler from '../../../view-handler';
-import * as createDataHandler from '../../../data-handler';
 
 describe('chart-model', () => {
   let sandbox;
@@ -9,7 +8,6 @@ describe('chart-model', () => {
   let hyperCube;
   let layoutService;
   let colorService;
-  let dockService;
   let picassoInstance;
   let picassoDataFn;
   let colorModelDataFn;
@@ -17,8 +15,6 @@ describe('chart-model', () => {
   let viewHandler;
   let viewState;
   let extremumModel;
-  let app;
-  let flags;
   let dataPages;
   let dataHandler;
 
@@ -38,7 +34,6 @@ describe('chart-model', () => {
       fetch: () => Promise.resolve({ isBinnedData: true }),
     };
     sandbox.stub(createViewHandler, 'default').returns(viewHandler);
-    sandbox.stub(createDataHandler, 'default').returns(dataHandler);
     viewState = {
       get() {
         return this.props;
@@ -71,23 +66,16 @@ describe('chart-model', () => {
     picassoInstance = {
       data: () => picassoDataFn,
     };
-    dockService = {};
-    app = {
-      layout: [],
-    };
-    flags = { isEnabled: sandbox.stub().returns(false) };
     create = () =>
       createChartModel({
         chart,
         localeInfo,
         layoutService,
-        dockService,
         colorService,
         picasso: picassoInstance,
         viewState,
         extremumModel,
-        app,
-        flags,
+        dataHandler,
       });
   });
 

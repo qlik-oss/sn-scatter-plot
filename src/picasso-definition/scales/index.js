@@ -3,7 +3,8 @@ import { makeBrighter, makeDarker } from './color';
 import getDock from '../../utils/dock-helper';
 
 export default function createScales({ models, viewState, options, theme, rtl, chart }) {
-  const { tickModel, colorService, disclaimerModel, layoutService } = models;
+  const { tickModel, colorService, disclaimerModel, layoutService, chartModel } = models;
+  const dataHandler = chartModel.query.getDataHandler();
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
     return {};
   }
@@ -44,7 +45,7 @@ export default function createScales({ models, viewState, options, theme, rtl, c
     [KEYS.SCALE.HEAT_MAP_COLOR]: {
       type: 'sequential-color',
       min: 0,
-      max: () => layoutService.getLayoutValue('dataPages')?.[0]?.[0]?.qNum || 0,
+      max: () => dataHandler.maxBinDensity,
       invert: rtl || !(dock === 'top' || dock === 'bottom'),
       range: !rtl && (dock === 'top' || dock === 'bottom') ? [brightColor, darkColor] : [darkColor, brightColor],
     },

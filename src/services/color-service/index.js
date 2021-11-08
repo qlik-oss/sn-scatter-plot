@@ -14,7 +14,7 @@ export default function createService({
   layoutService,
   picasso,
   viewState,
-  viewHandler,
+  dataHandler,
 }) {
   let colorService;
   const state = {
@@ -64,7 +64,7 @@ export default function createService({
       },
       legendProps: {
         ...layoutService.getLayoutValue('legend'),
-        show: () => showLegend && !viewHandler.getMeta().heatMapView,
+        show: () => showLegend && !dataHandler.getMeta().isBinnedData,
       },
       hc,
       key: KEYS.SCALE.COLOR,
