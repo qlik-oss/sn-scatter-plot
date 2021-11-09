@@ -6,13 +6,12 @@ export default function createBinnedDataFetcher({ layoutService, extremumModel, 
   const bins = [];
   let maxBinDensity = 0;
 
-  const populateBins = (dp) => {
+  const populateBins = (dataPages) => {
     bins.length = 0;
-    const matrix = dp[0].qMatrix;
+    const matrix = dataPages[0].qMatrix;
     let i;
 
-    // Hack for snapshot
-    if (dp[0].reformatted) {
+    if (dataPages[0].reformatted) {
       for (i = 1; i < matrix.length; i++) {
         try {
           bins.push(matrix[i][0]);
@@ -30,7 +29,7 @@ export default function createBinnedDataFetcher({ layoutService, extremumModel, 
         }
       }
       // eslint-disable-next-line no-param-reassign
-      dp[0].reformatted = true;
+      dataPages[0].reformatted = true;
     }
   };
 
