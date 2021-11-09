@@ -85,7 +85,7 @@
     "fs-extra": "8.1.0",
     "hammerjs": "2.0.8",
     "husky": "4.2.5",
-    "lint-staged": "10.2.2",
+    "lint-staged": "11.2.6",
     "mocha-junit-reporter": "2.0.0",
     "picasso-plugin-hammer": "1.2.2",
     "picasso-plugin-q": "1.2.2",
