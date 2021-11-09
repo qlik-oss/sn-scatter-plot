@@ -29,7 +29,7 @@ export default function createComponents({ context, models, flags, picasso }) {
     createOutOfBounds({ models, context }),
     ...colorService.custom.legendComponents(),
     disclaimer,
-    createMiniChart(models),
+    ...createMiniChart(models),
     ...createTooltips({ models, context }),
   ].filter(Boolean);
   // setDisplayOrder(components);

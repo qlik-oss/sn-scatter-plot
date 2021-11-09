@@ -64,6 +64,10 @@ export default function createTickModel({
       getYTicks: () => resolve(KEYS.SCALE.Y, 'ticks'),
       getXMinMax: () => resolve(KEYS.SCALE.X, 'minMax'),
       getYMinMax: () => resolve(KEYS.SCALE.Y, 'minMax'),
+      getSize: () => ({
+        width: tickHelper.getSize(dockService, chartModel, chart, 'width'),
+        height: tickHelper.getSize(dockService, chartModel, chart, 'height'),
+      }),
     },
 
     command: {

@@ -116,7 +116,7 @@ export default function createChartModel({
       settings,
     });
   };
-
+  let { scale: currentScale } = viewHandler.getMeta();
   const handleDataViewUpdate = () => {
     const binnedBeforeFetch = dataHandler.getMeta().isBinnedData;
     dataHandler
@@ -124,11 +124,15 @@ export default function createChartModel({
       // Promise rejected if trying to fetch same data window twice in a row
       .catch(() => {})
       .finally(() => {
-        if (binnedBeforeFetch !== dataHandler.getMeta().isBinnedData) {
+        const miniMapIsToggled =
+          (currentScale >= 1 && viewHandler.getMeta().scale < 1) || // Off -> On
+          (currentScale < 1 && viewHandler.getMeta().scale >= 1); // On -> Off
+        if (binnedBeforeFetch !== dataHandler.getMeta().isBinnedData || miniMapIsToggled) {
           update(); // Switching between binned and not binned data - requires complete chart update.
         } else {
           updatePartial();
         }
+        currentScale = viewHandler.getMeta().scale;
       });
   };
 
