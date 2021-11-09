@@ -13,7 +13,7 @@ const setupSnapshot = ({ core, models }) => {
     const { layoutService, dockService, colorService, chartModel } = models;
     const viewState = chartModel.query.getViewState();
     const dataHandler = chartModel.query.getDataHandler();
-    const isBinnedData = dataHandler.getMeta();
+    const { isBinnedData } = dataHandler.getMeta();
     const dataPages = isBinnedData ? layoutService.getLayoutValue('dataPages') : layout.qHyperCube.qDataPages;
     const newDataPages = isBinnedData ? layoutService.getLayoutValue('dataPages') : layoutService.getDataPages();
 

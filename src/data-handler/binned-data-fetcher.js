@@ -87,9 +87,10 @@ export default function createBinnedDataFetcher({ layoutService, extremumModel, 
       return maxBinDensity;
     },
     fetch: () => {
-      if (!layoutService.meta.isBigData || layoutService.meta.isSnapshot) {
+      if (layoutService.meta.isSnapshot) {
         const dataPages = layoutService.getLayoutValue('dataPages');
         populateBins(dataPages);
+        maxBinDensity = dataPages[0].qMatrix[0][0].qNum;
         return Promise.resolve(dataPages);
       }
 

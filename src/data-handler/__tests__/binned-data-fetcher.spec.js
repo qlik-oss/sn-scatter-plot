@@ -22,10 +22,20 @@ describe('createBinnedDataFetcher', () => {
         },
       },
     };
+    binnedDataPages = [
+      {
+        qMatrix: [
+          [{ qNum: 996, qElemNumber: 0, qState: 'L' }],
+          [{ qElemNumber: 7954, qNum: 1, qState: 'L', qText: '[1732, 6, 1765, 5]' }],
+          [{ qElemNumber: 7946, qNum: 1, qState: 'L', qText: '[1599, 5, 1632, 4]' }],
+        ],
+      },
+      { qMatrix: [], qTails: [], qArea: [] },
+    ];
     layoutService = {
       meta: { isSnapshot: false, isBigData: false },
       getHyperCubeValue: (path, defaultValue) => defaultValue,
-      getLayoutValue: sandbox.stub().withArgs('dataPages').returns([]),
+      getLayoutValue: sandbox.stub().withArgs('dataPages').returns(binnedDataPages),
       getLayout: () => layout,
       setLayoutValue: sandbox.stub(),
       setDataPages: sandbox.stub(),
@@ -45,16 +55,6 @@ describe('createBinnedDataFetcher', () => {
         ],
       },
     ];
-    binnedDataPages = [
-      {
-        qMatrix: [
-          [{ qNum: 996, qElemNumber: 0, qState: 'L' }],
-          [{ qElemNumber: 7954, qNum: 1, qState: 'L', qText: '[1732, 6, 1765, 5]' }],
-          [{ qElemNumber: 7946, qNum: 1, qState: 'L', qText: '[1599, 5, 1632, 4]' }],
-        ],
-      },
-      { qMatrix: [], qTails: [], qArea: [] },
-    ];
     model = {
       getHyperCubeBinnedData: sandbox.stub().returns(Promise.resolve(normalDataPages)),
     };
@@ -72,15 +72,16 @@ describe('createBinnedDataFetcher', () => {
     sandbox.restore();
   });
 
-  it('should return stored dataPages data when is not big data', async () => {
-    const binnedData = await binnedDataFetcher.fetch();
-    expect(binnedData).eql([]);
-  });
-
   it('should return stored dataPages data when is snapshot', async () => {
     layoutService.meta.isSnapshot = true;
     const binnedData = await binnedDataFetcher.fetch();
-    expect(binnedData).eql([]);
+
+    expect(binnedData).eql(binnedDataPages);
+    expect(binnedDataFetcher.maxBinDensity).to.equal(996);
+    expect(binnedDataFetcher.binArray).to.eql([
+      { qElemNumber: 7954, qNum: 1, qState: 'L', qText: [1732, 6, 1765, 5] },
+      { qElemNumber: 7946, qNum: 1, qState: 'L', qText: [1599, 5, 1632, 4] },
+    ]);
   });
 
   describe('should fetch data when is big data and is not snapshot', () => {
