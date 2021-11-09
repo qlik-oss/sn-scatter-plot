@@ -518,5 +518,25 @@
       "zh-TW": "量值",
       "ru-RU": "Меры"
     }
+  },
+  "properties.compression.density": {
+    "id": "properties.compression.density",
+    "locale": {
+      "en-US": "Density",
+      "de-DE": "Dichte",
+      "fr-FR": "Densité",
+      "it-IT": "Densità",
+      "ja-JP": "密度",
+      "ko-KR": "밀도",
+      "es-ES": "Densidad",
+      "nl-NL": "Dichtheid",
+      "pl-PL": "Gęstość",
+      "pt-BR": "Densidade",
+      "sv-SE": "Täthet",
+      "tr-TR": "Yoğunluk",
+      "zh-CN": "密度",
+      "zh-TW": "密度",
+      "ru-RU": "Плотность"
+    }
   }
 }
