@@ -6,7 +6,7 @@ import refLineLabelsComponent from './picasso-components/ref-line-labels';
 import pointLabelComponent from './picasso-components/point-label';
 import renderer from './picasso-components/react-components/react-renderer';
 import disclaimer from './picasso-components/react-components/disclaimer';
-import miniChartBackgroundComponent from './picasso-components/mini-chart-background';
+import customRect from './picasso-components/custom-rect';
 
 export default function configurePicasso() {
   const picasso = picassojs();
@@ -18,7 +18,7 @@ export default function configurePicasso() {
   picasso.component('reference-line-labels', refLineLabelsComponent);
   picasso.component('point-label', pointLabelComponent);
   picasso.component('disclaimer', disclaimer());
-  picasso.component('mini-chart-background', miniChartBackgroundComponent);
+  picasso.component('custom-rect', customRect);
 
   return picasso;
 }

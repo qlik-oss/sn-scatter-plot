@@ -7,7 +7,7 @@ export default {
       return false;
     }
     const { x, y, width, height } = this.settings.rect;
-    const { borderColor, boxSizing } = this.settings.style;
+    const { borderColor, background, opacity } = this.settings.style;
     return [
       h('div', {
         style: {
@@ -16,14 +16,11 @@ export default {
           top: `${y()}px`,
           width: `${width()}px`,
           height: `${height()}px`,
-          background: 'silver',
-          opacity: '0.5',
+          background,
+          opacity,
           'border-style': 'solid',
           'border-color': borderColor,
           'border-width': '1px',
-          'box-sizing': boxSizing, // To put the border inside
-          '-moz-box-sizing': boxSizing,
-          '-webkit-box-sizing': boxSizing,
         },
       }),
     ];
