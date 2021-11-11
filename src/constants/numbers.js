@@ -33,4 +33,6 @@ export default {
   },
 
   MAX_NR_SCATTER: 1000,
+
+  MINI_CHART: { SCALE: 0.25 },
 };

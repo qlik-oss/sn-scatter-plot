@@ -90,6 +90,14 @@ export default function native({ chart, actions, viewHandler }) {
         if (e.button === 2) {
           hideTooltips({ chart });
         }
+        // Update data view
+        // Step 1: get X0, Y0
+        const { x, y, width, height } = chart.component(KEYS.COMPONENT.POINT).rect.computed;
+        console.log(width, height);
+        const X = e.offsetX - x;
+        const Y = e.offsetY - y;
+        console.log(X, Y);
+        // Step 2: update data view based on X0, Y0, scale, component size
       },
       mouseleave() {
         hideTooltips({ chart });
