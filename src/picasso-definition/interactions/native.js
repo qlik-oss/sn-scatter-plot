@@ -93,6 +93,8 @@ export default function native({ chart, actions, viewHandler }) {
         }
       },
       mousedown(e) {
+        e.preventDefault();
+
         // Handle click in mini chart
         const { x, y, width: W, height: H } = chart.component(KEYS.COMPONENT.POINT).rect.computedPhysical;
 
@@ -100,24 +102,24 @@ export default function native({ chart, actions, viewHandler }) {
         const X0 = e.offsetX - x;
         const Y0 = e.offsetY - y;
 
-        const s = NUMBERS.MINI_CHART.SCALE;
-        const p = NUMBERS.MINI_CHART.PADDING;
+        const ratio = NUMBERS.MINI_CHART.RATIO;
+        const padding = NUMBERS.MINI_CHART.PADDING;
 
         // Top left corner of the mini chart, relative to the point component
-        const Xmin = W * (1 - s) - p;
-        const Ymin = H * (1 - s) - p;
+        const Xmin = W * (1 - ratio) - padding;
+        const Ymin = H * (1 - ratio) - padding;
 
         // Coordinate of the clicked spot, relative to the mini chart
         const u = X0 - Xmin;
         const v = Y0 - Ymin;
-        if (u <= 0 || u >= W * s || v <= 0 || v >= H * s) {
+        if (u <= 0 || u >= W * ratio || v <= 0 || v >= H * ratio) {
           return;
         }
 
         const { homeStateDataView } = viewHandler.getMeta();
         const { xAxisMin: xMin0, xAxisMax: xMax0, yAxisMin: yMin0, yAxisMax: yMax0 } = homeStateDataView;
-        const xCenter = xMin0 + (u * (xMax0 - xMin0)) / (W * s);
-        const yCenter = yMax0 - (v * (yMax0 - yMin0)) / (H * s);
+        const xCenter = xMin0 + (u * (xMax0 - xMin0)) / (W * ratio);
+        const yCenter = yMax0 - (v * (yMax0 - yMin0)) / (H * ratio);
         const { scale } = viewHandler.getMeta();
         const xWidth = (xMax0 - xMin0) * scale;
         const yWidth = (yMax0 - yMin0) * scale;

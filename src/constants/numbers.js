@@ -34,6 +34,6 @@ export default {
 
   MAX_NR_SCATTER: 1000,
 
-  // Scale = minichart_size/chart_size, Padding: away from the bottom right corner
-  MINI_CHART: { SCALE: 0.25, PADDING: 10 },
+  // Ratio = minichart_size/chart_size, Padding: away from the bottom right corner
+  MINI_CHART: { RATIO: 0.15, PADDING: 10 },
 };

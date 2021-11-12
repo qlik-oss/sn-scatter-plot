@@ -9,8 +9,8 @@ import createPointLabels from './point-labels';
 import createTooltips from './tooltips';
 import createDisclaimer from './disclaimer';
 import createOutOfBounds from './out-of-bounds';
-import createMiniChart from './mini-chart';
 import createHeatMapLegend from './heat-map-legend';
+import createMiniChart from './mini-chart';
 
 export default function createComponents({ context, models, flags, picasso, chart }) {
   const { colorService, disclaimerModel, layoutService, themeService } = models;

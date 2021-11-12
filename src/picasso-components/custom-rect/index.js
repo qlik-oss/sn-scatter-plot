@@ -7,7 +7,7 @@ export default {
       return false;
     }
     const { x, y, width, height } = this.settings.rect;
-    const { borderColor, background, opacity } = this.settings.style;
+    const { borderColor, background } = this.settings.style;
     return [
       h('div', {
         style: {
@@ -17,7 +17,6 @@ export default {
           width: `${width()}px`,
           height: `${height()}px`,
           background,
-          opacity,
           'border-style': 'solid',
           'border-color': borderColor,
           'border-width': '1px',

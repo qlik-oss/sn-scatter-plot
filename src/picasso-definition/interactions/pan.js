@@ -4,8 +4,8 @@ import NUMBERS from '../../constants/numbers';
 const threshold = 10;
 const eventName = 'areaPan';
 
-const s = NUMBERS.MINI_CHART.SCALE;
-const p = NUMBERS.MINI_CHART.PADDING;
+const ratio = NUMBERS.MINI_CHART.RATIO;
+const padding = NUMBERS.MINI_CHART.PADDING;
 
 const updateDataView = ({ event, props, viewHandler, rtl }) => {
   const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin, miniChart } = props;
@@ -70,18 +70,18 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
       const Y0 = e.pointers[0].offsetY - y;
 
       // Top left corner of the mini chart, relative to the point component
-      const Xmin = W * (1 - s) - p;
-      const Ymin = H * (1 - s) - p;
+      const Xmin = W * (1 - ratio) - padding;
+      const Ymin = H * (1 - ratio) - padding;
 
       // Coordinate of the starting spot, relative to the mini chart
       const u = X0 - Xmin;
       const v = Y0 - Ymin;
       let panInMiniChart = false;
-      if (u > 0 && u < W * s && v > 0 && v < H * s) {
+      if (u > 0 && u < W * ratio && v > 0 && v < H * ratio) {
         panInMiniChart = true;
       }
       const { scale } = viewHandler.getMeta();
-      const navWindowScale = scale * s;
+      const navWindowScale = scale * ratio;
       this[eventName] = {
         componentSize: this.pointAreaPanned.rect,
         ...initialDataView,
