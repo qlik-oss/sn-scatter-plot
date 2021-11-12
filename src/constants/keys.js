@@ -7,6 +7,7 @@ export default {
     COLOR: 'color',
     X: 'x',
     Y: 'y',
+    BINX: 'binX',
     SIZE: 'size',
     HEAT_MAP_COLOR: 'heat-map-color',
   },

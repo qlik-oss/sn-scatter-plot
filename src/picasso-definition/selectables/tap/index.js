@@ -5,7 +5,7 @@ import createIsLocked from './is-locked';
 
 export default function createTap({ models, actions, flags }) {
   const { selectionService, colorService, customTooltipModel, layoutService } = models;
-  const targets = [KEYS.COMPONENT.POINT, KEYS.COMPONENT.LEGEND_CATEGORICAL, KEYS.COMPONENT.HEAT_MAP];
+  const targets = [KEYS.COMPONENT.POINT, KEYS.COMPONENT.HEAT_MAP, KEYS.COMPONENT.LEGEND_CATEGORICAL];
   const isSingleSelection = layoutService.getHyperCubeValue('qDimensionInfo.0.qIsOneAndOnlyOne', false);
 
   const brushFromShapesConfig = (e, shapes) => {
@@ -48,7 +48,12 @@ export default function createTap({ models, actions, flags }) {
     customTooltipModel,
     actions,
     isLocked,
-    hitRadius: (components) => (components.some((component) => component.key === KEYS.COMPONENT.POINT) ? 3 : 0),
+    hitRadius: (components) =>
+      components.some(
+        (component) => component.key === KEYS.COMPONENT.POINT || component.key === KEYS.COMPONENT.HEAT_MAP
+      )
+        ? 3
+        : 0,
   };
 
   return tap(config, options);

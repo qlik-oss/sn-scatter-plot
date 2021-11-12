@@ -12,7 +12,7 @@ import createOutOfBounds from './out-of-bounds';
 import createHeatMapLegend from './heat-map-legend';
 
 export default function createComponents({ context, models, flags, picasso, chart }) {
-  const { colorService, disclaimerModel, layoutService, themeService } = models;
+  const { colorService, disclaimerModel, layoutService, themeService, chartModel } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
 
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
@@ -22,7 +22,7 @@ export default function createComponents({ context, models, flags, picasso, char
   const components = [
     createGridLines(models),
     ...createReferenceLines({ models, context }),
-    createPoint(models),
+    createPoint({ layoutService, colorService, chartModel }),
     createHeatMap({ models, flags }),
     ...createAxes({ models, flags }),
     ...createAxisTitles(models),

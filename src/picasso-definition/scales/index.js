@@ -28,6 +28,19 @@ export default function createScales({ models, viewState, options, theme, rtl, c
         values: () => tickModel.query.getXTicks(),
       },
     },
+    [KEYS.SCALE.BINX]: {
+      type: 'linear',
+      data: {
+        source: KEYS.DATA.BIN,
+        field: KEYS.FIELDS.BIN,
+      },
+      min: 0,
+      max: () => dataHandler.maxBinDensity,
+      invert: options.direction === 'rtl',
+      ticks: {
+        values: () => tickModel.query.getXTicks(),
+      },
+    },
     y: {
       data: {
         extract: {
