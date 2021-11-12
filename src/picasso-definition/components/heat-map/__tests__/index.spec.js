@@ -115,7 +115,11 @@ describe('heat-map', () => {
 
     describe('settings', () => {
       it('should have correct properties', () => {
-        expect(create().settings).to.have.all.keys(['x', 'y', 'fill', 'shape']);
+        expect(create().settings).to.have.all.keys(['x', 'y', 'fill', 'shape', 'strokeWidth']);
+      });
+
+      it('should have correct strokeWidth', () => {
+        expect(create().settings.strokeWidth).to.equal(0);
       });
 
       describe('shape', () => {
