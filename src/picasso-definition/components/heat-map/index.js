@@ -50,7 +50,7 @@ export default function createHeatMap({ models, flags }) {
         const binHeight = Math.abs(firstBin.qText[1] - firstBin.qText[3]);
 
         binWidthPx = Math.ceil((binWidth * size.width) / (dataView.xAxisMax - dataView.xAxisMin));
-        binHeightPx = Math.ceil(binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin);
+        binHeightPx = Math.ceil((binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin));
       }
     },
   };
