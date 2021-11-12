@@ -14,6 +14,7 @@ export default function createChartModel({
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
     KEYS.COMPONENT.Y_AXIS_TITLE,
+    KEYS.COMPONENT.MINI_CHART_POINT,
     // KEYS.COMPONENT.X_AXIS,
     // KEYS.COMPONENT.Y_AXIS,
     // KEYS.COMPONENT.GRID_LINES,
@@ -99,7 +100,13 @@ export default function createChartModel({
     });
   }
 
+  let homeStateBinArray = [];
+
   const update = ({ settings } = {}) => {
+    // Update data for mini chart
+    if (viewHandler.getMeta().isHomeState) {
+      homeStateBinArray = dataHandler.binArray.slice();
+    }
     chart.update({
       data: [
         {
@@ -144,6 +151,7 @@ export default function createChartModel({
       getLocaleInfo: () => localeInfo,
       getFormatter: (fieldName) => dataset.field(fieldName).formatter(),
       isPrelayout: () => state.isPrelayout,
+      getDataForMiniChart: () => homeStateBinArray,
     },
     command: {
       layoutComponents: ({ settings } = {}) => {

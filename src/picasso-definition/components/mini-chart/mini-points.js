@@ -21,7 +21,7 @@ export default function createMiniChartPoints({ chartModel }) {
   let binWidthPx;
   let binHeightPx;
 
-  const homeStateBins = chartModel.query.getDataHandler().binArray.slice();
+  const homeStateBins = chartModel.query.getDataForMiniChart();
   if (homeStateBins.length) {
     const firstBin = homeStateBins[0];
     binWidth = Math.abs(firstBin.qText[0] - firstBin.qText[2]);
@@ -62,6 +62,7 @@ export default function createMiniChartPoints({ chartModel }) {
       }),
     },
     beforeRender: ({ size }) => {
+      console.log(chartModel);
       const { homeStateDataView } = viewHandler.getMeta();
       ({ xAxisMin: xMin0, xAxisMax: xMax0, yAxisMin: yMin0, yAxisMax: yMax0 } = homeStateDataView);
       const { width, height } = size;
