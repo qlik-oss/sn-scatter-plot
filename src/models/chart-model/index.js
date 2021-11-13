@@ -84,7 +84,7 @@ export default function createChartModel({
   function updatePartial() {
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???
-      // const startTime = Date.now();
+      const startTime = Date.now();
       chart.update({
         partialData: true,
         excludeFromUpdate: EXCLUDE,
@@ -96,7 +96,7 @@ export default function createChartModel({
         // ],
       });
       // TODO: debounce -> interactionInProgess = false
-      // console.log('chart rendered in ', Date.now() - startTime, ' ms');
+      console.log('chart rendered in ', Date.now() - startTime, ' ms');
     });
   }
 

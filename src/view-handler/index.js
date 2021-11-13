@@ -9,7 +9,7 @@ function areIntervalsEqual(min1, max1, min2, max2, e) {
 }
 
 export default function createViewHandler({ viewState, extremumModel }) {
-  const meta = { homeStateDataView: {}, scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1 };
+  const meta = { homeStateDataView: {}, scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1, isHomeState: true };
   let interactionInProgress = false;
 
   const viewHandler = {

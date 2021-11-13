@@ -38,6 +38,7 @@ export default function createTap({ models, actions, flags }) {
   const config = {
     targets,
     components: brushFromShapesConfig,
+    viewHandler: models.chartModel.query.getViewHandler(),
   };
 
   const isLocked = createIsLocked({ selectionService, colorService });
