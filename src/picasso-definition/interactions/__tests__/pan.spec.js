@@ -1,6 +1,8 @@
 import extend from 'extend';
-import KEYS from '../../../constants/keys';
+import * as KEYS from '../../../constants/keys';
+import * as NUMBERS from '../../../constants/numbers';
 import pan from '../pan';
+import * as tapInMiniChart from '../../../interactive/tap/tap-in-mini-chart';
 
 describe('pan', () => {
   let sandbox;
@@ -18,11 +20,14 @@ describe('pan', () => {
       getDataView: sandbox.stub(),
       throttledFetchData: sandbox.stub().callsFake(() => sandbox.stub()),
       setInteractionInProgress: sandbox.stub(),
+      getMeta: sandbox.stub().returns({ scale: 0.1 }),
     };
     rtl = false;
     actions = { zoom: { enabled: sandbox.stub() } };
     chart = { componentsFromPoint: sandbox.stub() };
-    sandbox.stub(KEYS, 'COMPONENT').value({ POINT: 'point-component' });
+    sandbox.stub(KEYS, 'default').value({ COMPONENT: { POINT: 'point-comp' } });
+    sandbox.stub(NUMBERS, 'default').value({ MINI_CHART: { RATIO: 0.5 } });
+    sandbox.stub(tapInMiniChart, 'default').returns(true);
     panObject = pan({ chart, actions, viewHandler, rtl });
   });
 
@@ -58,8 +63,8 @@ describe('pan', () => {
         actions.zoom.enabled.returns(true);
         chart.componentsFromPoint
           .withArgs({ x: 200, y: 100 })
-          .returns([{ key: 'point-component' }, { key: 'point-component', id: 'should-not-return-this' }]);
-        expect(panObject.options.enable('', { center: { x: 200, y: 100 } })).to.deep.equal({ key: 'point-component' });
+          .returns([{ key: 'point-comp' }, { key: 'point-comp', id: 'should-not-return-this' }]);
+        expect(panObject.options.enable('', { center: { x: 200, y: 100 } })).to.deep.equal({ key: 'point-comp' });
       });
     });
   });
@@ -82,6 +87,7 @@ describe('pan', () => {
           xAxisMax: 2,
           yAxisMin: 3,
           yAxisMax: 4,
+          miniChart: { panInMiniChart: true, navWindowScale: 0.05 },
         });
       });
     });
@@ -95,6 +101,7 @@ describe('pan', () => {
           xAxisMax: 1000,
           yAxisMin: 0,
           yAxisMax: 2000,
+          miniChart: { panInMiniChart: false, navWindowScale: 0.05 },
         };
         myDataView = {};
         viewHandler.setDataView = (dataView) => {
@@ -111,6 +118,31 @@ describe('pan', () => {
         });
       });
 
+      it('should modify myDataView correctly when panning inside mini chart', () => {
+        e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20 };
+        panObject.events.areaPan = {
+          componentSize: { width: 100, height: 200 },
+          xAxisMin: -1000,
+          xAxisMax: 1000,
+          yAxisMin: 0,
+          yAxisMax: 2000,
+          miniChart: { panInMiniChart: true, navWindowScale: 0.05 },
+        };
+        myDataView = {};
+        viewHandler.setDataView = (dataView) => {
+          extend(true, myDataView, dataView);
+        };
+        panObject.events.areaPanmove(e);
+        expect(myDataView).to.deep.equal({
+          xAxisMin: 3000,
+          xAxisMax: 5000,
+          yAxisMin: -4000,
+          yAxisMax: -2000,
+          deltaX: -200,
+          deltaY: -400,
+        });
+      });
+
       it('should modify myDataView correctly when is rtl', () => {
         rtl = true;
         e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20 };
@@ -121,6 +153,7 @@ describe('pan', () => {
           xAxisMax: 1000,
           yAxisMin: 0,
           yAxisMax: 2000,
+          miniChart: { panInMiniChart: false, navWindowScale: 0.05 },
         };
         myDataView = {};
         viewHandler.setDataView = (dataView) => {
@@ -147,6 +180,7 @@ describe('pan', () => {
           xAxisMax: 1000,
           yAxisMin: 0,
           yAxisMax: 2000,
+          miniChart: { panInMiniChart: false, navWindowScale: 0.05 },
         };
         viewHandler.setDataView = sandbox.stub();
         panObject.events.areaPanend(e);

@@ -15,7 +15,7 @@ describe('point-labels', () => {
     layoutService = { getLayoutValue: sandbox.stub() };
     themeService = { getStyles: sandbox.stub() };
     chartModel = { query: { getViewHandler: sandbox.stub() } };
-    chartModel.query.getViewHandler.returns({ redererSettings: 'renderer-settings' });
+    chartModel.query.getViewHandler.returns({ transform: 'transform-function' });
     create = () => createPointLabels({ layoutService, themeService, chartModel });
     labels = { mode: 1 };
     layoutService.getLayoutValue.withArgs('labels').returns(labels);
@@ -78,6 +78,16 @@ describe('point-labels', () => {
     describe('style', () => {
       it('should have correct properties', () => {
         expect(create().style).to.have.all.keys(['fontFamily', 'fontSize', 'fill', 'backgroundColor']);
+      });
+    });
+
+    describe('rendererSettings', () => {
+      it('should have correct transform function', () => {
+        expect(create().rendererSettings.transform).to.equal('transform-function');
+      });
+      it('should have correct buffer size', () => {
+        const compRect = { computedPhysical: { width: 200, height: 150 } };
+        expect(create().rendererSettings.canvasBufferSize(compRect)).to.deep.equal({ width: 300, height: 250 });
       });
     });
   });

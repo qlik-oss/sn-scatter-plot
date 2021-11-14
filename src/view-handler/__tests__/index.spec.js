@@ -60,6 +60,7 @@ describe('createViewHandler', () => {
       scale: 1,
       maxScale: 2 ** 4.1,
       minScale: 2 ** -9.1,
+      isHomeState: true,
     });
   });
 
@@ -75,6 +76,7 @@ describe('createViewHandler', () => {
       scale: 2,
       maxScale: 3,
       minScale: 4,
+      isHomeState: true,
     });
   });
 });

@@ -43,7 +43,7 @@ describe('point', () => {
     };
     sizeScaleFn = createSizeScale(layoutService);
     chartModel = { query: { getViewHandler: sandbox.stub() } };
-    chartModel.query.getViewHandler.returns({ redererSettings: 'renderer-settings' });
+    chartModel.query.getViewHandler.returns({ transform: 'transform-function' });
     canvasBufferSizeStub = sandbox.stub();
     rect = {
       computedPhysical: {
@@ -146,6 +146,16 @@ describe('point', () => {
   describe('beforeRender', () => {
     it('should be set with a function', () => {
       expect(create().beforeRender).to.be.a('function');
+    });
+  });
+
+  describe('rendererSettings', () => {
+    it('should have correct transform function', () => {
+      expect(create().rendererSettings.transform).to.equal('transform-function');
+    });
+    it('should have correct buffer size', () => {
+      const compRect = { computedPhysical: { width: 200, height: 150 } };
+      expect(create().rendererSettings.canvasBufferSize(compRect)).to.deep.equal({ width: 300, height: 250 });
     });
   });
 });

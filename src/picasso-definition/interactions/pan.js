@@ -5,8 +5,6 @@ import tapInMiniChart from '../../interactive/tap/tap-in-mini-chart';
 const threshold = 10;
 const eventName = 'areaPan';
 
-const ratio = NUMBERS.MINI_CHART.RATIO;
-
 const updateDataView = ({ event, props, viewHandler, rtl }) => {
   const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin, miniChart } = props;
 
@@ -69,7 +67,7 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
       }
 
       const { scale } = viewHandler.getMeta();
-      const navWindowScale = scale * ratio;
+      const navWindowScale = scale * NUMBERS.MINI_CHART.RATIO;
       const initialDataView = viewHandler.getDataView();
       this[eventName] = {
         componentSize: this.pointAreaPanned.rect,
