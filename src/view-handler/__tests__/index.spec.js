@@ -11,7 +11,7 @@ describe('createViewHandler', () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     viewState = { get: sandbox.stub(), set: sandbox.stub() };
-    viewState.get.withArgs('dataView').returns('correct data view');
+    viewState.get.withArgs('dataView').returns({ deltaX: 1, deltaY: 2 });
     myDataView = { xAxisMin: 0, xAxisMax: 100, yAxisMin: -100, yAxisMax: 200 };
     extremumModel = {
       command: {
@@ -27,7 +27,7 @@ describe('createViewHandler', () => {
   });
 
   it('should return a view handler with proper getDataView method', () => {
-    expect(viewHandler.getDataView()).to.equal('correct data view');
+    expect(viewHandler.getDataView()).to.deep.equal({ deltaX: 1, deltaY: 2 });
   });
 
   it('should return a view handler with proper setDataView method, case 1: not home state', () => {
@@ -77,6 +77,19 @@ describe('createViewHandler', () => {
       maxScale: 3,
       minScale: 4,
       isHomeState: true,
+    });
+  });
+
+  it('should return a view handler with proper transform method', () => {
+    expect(viewHandler.transform()).to.equal(false);
+    viewHandler.setInteractionInProgress(true);
+    expect(viewHandler.transform()).to.deep.equal({
+      horizontalScaling: 1,
+      horizontalSkewing: 0,
+      verticalSkewing: 0,
+      verticalScaling: 1,
+      horizontalMoving: 1,
+      verticalMoving: 2,
     });
   });
 });
