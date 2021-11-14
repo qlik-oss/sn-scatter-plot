@@ -50,7 +50,7 @@ describe('createMiniChartNavigationRect', () => {
       expect(obj.rect.height()).to.equal(40);
     });
 
-    it('should return correct navigation rect when it truncated at top left', () => {
+    it('should return correct navigation rect when it is truncated at top left', () => {
       viewHandler.getDataView.returns({ xAxisMin: -10, xAxisMax: 10, yAxisMin: 15, yAxisMax: 25 });
       const obj = create();
       obj.beforeRender({ size: { width: 200, height: 160 } });
@@ -60,7 +60,17 @@ describe('createMiniChartNavigationRect', () => {
       expect(obj.rect.height()).to.equal(20);
     });
 
-    it('should return correct navigation rect when it truncated at bottom right', () => {
+    it('should return correct navigation rect when it is completely outside, near top left', () => {
+      viewHandler.getDataView.returns({ xAxisMin: -20, xAxisMax: 0, yAxisMin: 20, yAxisMax: 30 });
+      const obj = create();
+      obj.beforeRender({ size: { width: 200, height: 160 } });
+      expect(obj.rect.x()).to.equal(100);
+      expect(obj.rect.y()).to.equal(80);
+      expect(obj.rect.width()).to.equal(0);
+      expect(obj.rect.height()).to.equal(0);
+    });
+
+    it('should return correct navigation rect when it is truncated at bottom right', () => {
       viewHandler.getDataView.returns({ xAxisMin: 30, xAxisMax: 50, yAxisMin: -5, yAxisMax: 5 });
       const obj = create();
       obj.beforeRender({ size: { width: 200, height: 160 } });
@@ -68,6 +78,16 @@ describe('createMiniChartNavigationRect', () => {
       expect(obj.rect.y()).to.equal(140);
       expect(obj.rect.width()).to.equal(25);
       expect(obj.rect.height()).to.equal(20);
+    });
+
+    it('should return correct navigation rect when it is completely outside, near bottom right', () => {
+      viewHandler.getDataView.returns({ xAxisMin: 40, xAxisMax: 60, yAxisMin: -10, yAxisMax: 0 });
+      const obj = create();
+      obj.beforeRender({ size: { width: 200, height: 160 } });
+      expect(obj.rect.x()).to.equal(200);
+      expect(obj.rect.y()).to.equal(160);
+      expect(obj.rect.width()).to.equal(0);
+      expect(obj.rect.height()).to.equal(0);
     });
   });
 
