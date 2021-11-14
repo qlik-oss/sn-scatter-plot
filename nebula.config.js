@@ -29,7 +29,6 @@ module.exports = {
     renderConfigs,
     flags: {
       panZoom: true,
-      DATA_BINNING: true,
     },
   },
 };

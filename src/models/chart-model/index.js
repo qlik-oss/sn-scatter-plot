@@ -84,7 +84,7 @@ export default function createChartModel({
   function updatePartial() {
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???
-      const startTime = Date.now();
+      // const startTime = Date.now();
       chart.update({
         partialData: true,
         excludeFromUpdate: EXCLUDE,
@@ -96,17 +96,11 @@ export default function createChartModel({
         // ],
       });
       // TODO: debounce -> interactionInProgess = false
-      console.log('chart rendered in ', Date.now() - startTime, ' ms');
+      // console.log('chart rendered in ', Date.now() - startTime, ' ms');
     });
   }
 
-  let homeStateBinArray = [];
-
   const update = ({ settings } = {}) => {
-    // Update data for mini chart
-    if (viewHandler.getMeta().isHomeState) {
-      homeStateBinArray = dataHandler.binArray.slice();
-    }
     chart.update({
       data: [
         {
@@ -130,8 +124,9 @@ export default function createChartModel({
         const miniMapIsToggled =
           (currentScale >= 1 && viewHandler.getMeta().scale < 1) || // Off -> On
           (currentScale < 1 && viewHandler.getMeta().scale >= 1); // On -> Off
+        // Requires complete chart update when switching between binned and not binned data, or when show/hide mini chart
         if (binnedBeforeFetch !== dataHandler.getMeta().isBinnedData || miniMapIsToggled) {
-          update(); // Switching between binned and not binned data - requires complete chart update.
+          update();
         } else {
           updatePartial();
         }
@@ -151,7 +146,6 @@ export default function createChartModel({
       getLocaleInfo: () => localeInfo,
       getFormatter: (fieldName) => dataset.field(fieldName).formatter(),
       isPrelayout: () => state.isPrelayout,
-      getDataForMiniChart: () => homeStateBinArray,
     },
     command: {
       layoutComponents: ({ settings } = {}) => {
@@ -169,7 +163,6 @@ export default function createChartModel({
         state.isPrelayout = false;
       },
       update,
-      updatePartial,
     },
   };
 
