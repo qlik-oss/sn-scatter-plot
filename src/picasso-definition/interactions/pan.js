@@ -1,11 +1,11 @@
 import KEYS from '../../constants/keys';
 import NUMBERS from '../../constants/numbers';
+import tapInMiniChart from '../../interactive/tap/tap-in-mini-chart';
 
 const threshold = 10;
 const eventName = 'areaPan';
 
 const ratio = NUMBERS.MINI_CHART.RATIO;
-const padding = NUMBERS.MINI_CHART.PADDING;
 
 const updateDataView = ({ event, props, viewHandler, rtl }) => {
   const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin, miniChart } = props;
@@ -60,28 +60,17 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
       e.preventDefault();
       viewHandler.setInteractionInProgress(true);
       this.started = eventName;
-      const initialDataView = viewHandler.getDataView();
 
-      // Handle pan in mini chart
-      const { x, y, width: W, height: H } = this.pointAreaPanned.rect;
-
-      // Coordinate of the starting spot, relative to the point component
-      const X0 = e.pointers[0].offsetX - x;
-      const Y0 = e.pointers[0].offsetY - y;
-
-      // Top left corner of the mini chart, relative to the point component
-      const Xmin = W * (1 - ratio) - padding;
-      const Ymin = H * (1 - ratio) - padding;
-
-      // Coordinate of the starting spot, relative to the mini chart
-      const u = X0 - Xmin;
-      const v = Y0 - Ymin;
+      // A pan always starts with a tap/click
+      // Therefore, the tap/click has to be handled first
       let panInMiniChart = false;
-      if (u > 0 && u < W * ratio && v > 0 && v < H * ratio) {
+      if (tapInMiniChart({ e, viewHandler, chart })) {
         panInMiniChart = true;
       }
+
       const { scale } = viewHandler.getMeta();
       const navWindowScale = scale * ratio;
+      const initialDataView = viewHandler.getDataView();
       this[eventName] = {
         componentSize: this.pointAreaPanned.rect,
         ...initialDataView,

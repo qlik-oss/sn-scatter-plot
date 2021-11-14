@@ -1,10 +1,12 @@
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 
-export default function createHeatMapLabels({ themeService, picasso, context }) {
+export default function createHeatMapLabels({ themeService, chartModel, picasso, context }) {
   const formatter = picasso.formatter('q-number');
   const style = themeService.getStyles();
   const { fontFamily, numFontSize } = style.label?.value || {};
+  const viewHandler = chartModel.query.getViewHandler();
+  const { transform } = viewHandler;
 
   const heatMapLabelsComponent = {
     type: 'labels',
@@ -41,6 +43,13 @@ export default function createHeatMapLabels({ themeService, picasso, context }) 
           },
         },
       ],
+    },
+    rendererSettings: {
+      transform,
+      canvasBufferSize: (rect) => ({
+        width: rect.computedPhysical.width + 100,
+        height: rect.computedPhysical.height + 100,
+      }),
     },
   };
 

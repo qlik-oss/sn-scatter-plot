@@ -6,8 +6,8 @@ export default function tapInMiniChart({ e, viewHandler, chart }) {
   const { x, y, width: W, height: H } = chart.component(KEYS.COMPONENT.POINT).rect.computedPhysical;
 
   // Coordinate of the clicked spot, relative to the point component
-  const X0 = e.pointers[0].offsetX - x;
-  const Y0 = e.pointers[0].offsetY - y;
+  const X0 = e.pointers[0].offsetX - x - e.deltaX; // deltaX, deltaY !== 0 in case of panning
+  const Y0 = e.pointers[0].offsetY - y - e.deltaY; // detalX, deltaY === 0 in case of tapping
 
   const ratio = NUMBERS.MINI_CHART.RATIO;
   const padding = NUMBERS.MINI_CHART.PADDING;

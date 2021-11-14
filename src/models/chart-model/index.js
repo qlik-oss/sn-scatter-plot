@@ -169,6 +169,7 @@ export default function createChartModel({
         state.isPrelayout = false;
       },
       update,
+      updatePartial,
     },
   };
 

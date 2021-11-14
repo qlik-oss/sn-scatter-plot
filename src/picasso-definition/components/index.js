@@ -13,7 +13,7 @@ import createHeatMapLegend from './heat-map-legend';
 import createMiniChart from './mini-chart';
 
 export default function createComponents({ context, models, flags, picasso, chart }) {
-  const { colorService, disclaimerModel, layoutService, themeService } = models;
+  const { colorService, disclaimerModel, layoutService, themeService, chartModel } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
 
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
@@ -28,7 +28,7 @@ export default function createComponents({ context, models, flags, picasso, char
     ...createAxes({ models, flags }),
     ...createAxisTitles(models),
     createPointLabels(models),
-    createHeatMapLabels({ themeService, picasso, context }),
+    createHeatMapLabels({ themeService, chartModel, picasso, context }),
     createOutOfBounds({ models, context }),
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
