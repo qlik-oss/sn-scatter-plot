@@ -1,11 +1,12 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 
-export default function createMiniChartBackgroundRect({ chartModel }) {
+export default function createMiniChartBackgroundRect({ models, flags }) {
   const ratio = NUMBERS.MINI_CHART.RATIO;
   const padding = NUMBERS.MINI_CHART.PADDING; // Padding from the bottom right corner
   let width;
   let height;
+  const { chartModel, layoutService } = models;
   const viewHandler = chartModel.query.getViewHandler();
   return {
     key: KEYS.COMPONENT.MINI_CHART_BACKGROUND,
@@ -17,7 +18,7 @@ export default function createMiniChartBackgroundRect({ chartModel }) {
       width: () => width * ratio,
       height: () => height * ratio,
     },
-    show: () => viewHandler.getMeta().scale < 1,
+    show: () => viewHandler.getMeta().scale < 1 && layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING'),
     beforeRender: ({ size }) => {
       ({ width, height } = size);
     },

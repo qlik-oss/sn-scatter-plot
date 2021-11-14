@@ -33,7 +33,7 @@ export default function createComponents({ context, models, flags, picasso, char
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
-    ...createMiniChart(models),
+    ...createMiniChart({ models, flags }),
     ...createTooltips({ models, context }),
   ].filter(Boolean);
   // setDisplayOrder(components);

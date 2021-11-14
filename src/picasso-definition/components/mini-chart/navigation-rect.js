@@ -1,7 +1,7 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 
-export default function createMiniChartNavigationRect({ chartModel }) {
+export default function createMiniChartNavigationRect({ models, flags }) {
   const ratio = NUMBERS.MINI_CHART.RATIO;
   const padding = NUMBERS.MINI_CHART.PADDING; // Padding from the bottom right corner
 
@@ -29,6 +29,7 @@ export default function createMiniChartNavigationRect({ chartModel }) {
   let navX;
   let navY;
 
+  const { chartModel, layoutService } = models;
   const viewHandler = chartModel.query.getViewHandler();
 
   return {
@@ -41,7 +42,7 @@ export default function createMiniChartNavigationRect({ chartModel }) {
       width: () => navWidth,
       height: () => navHeight,
     },
-    show: () => viewHandler.getMeta().scale < 1,
+    show: () => viewHandler.getMeta().scale < 1 && layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING'),
     beforeRender: ({ size }) => {
       ({ width, height } = size);
       const { homeStateDataView } = viewHandler.getMeta();
