@@ -30,18 +30,13 @@ export default function createMiniChartPoints({ chartModel }) {
     binHeight = Math.abs(firstBin.qText[1] - firstBin.qText[3]);
   }
 
-  const show = () => {
-    const { isHomeState, scale } = viewHandler.getMeta();
-    return !isHomeState && scale < 1;
-  };
-
   return {
     key: KEYS.COMPONENT.MINI_CHART_POINT,
     type: 'point',
     data: {
       items: homeStateBins,
     },
-    show,
+    show: () => viewHandler.getMeta().scale < 1,
     settings: {
       x: (d) => {
         const xValue = (d.datum.value.qText[0] + d.datum.value.qText[2]) / 2;

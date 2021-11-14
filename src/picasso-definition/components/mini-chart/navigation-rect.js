@@ -30,10 +30,7 @@ export default function createMiniChartNavigationRect({ chartModel }) {
   let navY;
 
   const viewHandler = chartModel.query.getViewHandler();
-  const show = () => {
-    const { isHomeState, scale } = viewHandler.getMeta();
-    return !isHomeState && scale < 1;
-  };
+
   return {
     key: KEYS.COMPONENT.MINI_CHART_NAVIGATION,
     type: 'custom-rect',
@@ -44,7 +41,7 @@ export default function createMiniChartNavigationRect({ chartModel }) {
       width: () => navWidth,
       height: () => navHeight,
     },
-    show,
+    show: () => viewHandler.getMeta().scale < 1,
     beforeRender: ({ size }) => {
       ({ width, height } = size);
       const { homeStateDataView } = viewHandler.getMeta();

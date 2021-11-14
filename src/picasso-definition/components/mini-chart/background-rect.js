@@ -7,10 +7,6 @@ export default function createMiniChartBackgroundRect({ chartModel }) {
   let width;
   let height;
   const viewHandler = chartModel.query.getViewHandler();
-  const show = () => {
-    const { isHomeState, scale } = viewHandler.getMeta();
-    return !isHomeState && scale < 1;
-  };
   return {
     key: KEYS.COMPONENT.MINI_CHART_BACKGROUND,
     type: 'custom-rect',
@@ -21,7 +17,7 @@ export default function createMiniChartBackgroundRect({ chartModel }) {
       width: () => width * ratio,
       height: () => height * ratio,
     },
-    show,
+    show: () => viewHandler.getMeta().scale < 1,
     beforeRender: ({ size }) => {
       ({ width, height } = size);
     },
