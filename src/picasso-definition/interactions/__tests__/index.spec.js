@@ -8,6 +8,8 @@ describe('interactions', () => {
   let args;
   let chart;
   let viewHandler;
+  let models;
+  let rtl;
   let pan;
   let pinch;
 
@@ -26,6 +28,8 @@ describe('interactions', () => {
     )[0].default;
     chart = { key: 'chart' };
     viewHandler = {};
+    models = { chartModel: {} };
+    rtl = false;
     gestures = [
       { key: 'gesture-1', prio: 2 },
       { key: 'gesture-2', prio: 2 },
@@ -43,6 +47,8 @@ describe('interactions', () => {
       viewHandler,
       gestures,
       colorService,
+      models,
+      rtl,
     };
   });
 
@@ -88,6 +94,7 @@ describe('interactions', () => {
       viewHandler,
       gestures,
       colorService,
+      models,
     };
     expect(create(args)).to.deep.equal([
       {
