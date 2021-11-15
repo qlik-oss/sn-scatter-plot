@@ -129,12 +129,12 @@ describe('heat-map', () => {
         it('should be rect type', () => {
           expect(create().settings.shape().type).to.equal('rect');
         });
-        it('should be have correct width and height', () => {
+        it('should have correct width and height', () => {
           const comp = create();
           const size = { width: 400, height: 200 };
           comp.beforeRender({ size });
-          expect(comp.settings.shape().width).to.equal(10);
-          expect(comp.settings.shape().height).to.equal(20);
+          expect(comp.settings.shape().width).to.equal(10.5);
+          expect(comp.settings.shape().height).to.equal(20.5);
         });
       });
     });
