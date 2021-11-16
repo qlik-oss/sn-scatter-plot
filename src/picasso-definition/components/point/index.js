@@ -34,7 +34,7 @@ export default function createPoint({ layoutService, colorService, chartModel })
       windowSizeMultiplier = Math.min(size.height, size.width) / 300;
     },
     animations: {
-      enabled: true,
+      enabled: () => !viewHandler.getInteractionInProgress(),
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         if (currentRect.x !== previousRect.x) {
           const deltaX = currentRect.x - previousRect.x;

@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 
-export default function createRefLines({ layoutService, scale, key, minimumLayoutMode }) {
+export default function createRefLines({ layoutService, chartModel, scale, key, minimumLayoutMode }) {
+  const viewHandler = chartModel.query.getViewHandler();
   const path = scale === KEYS.SCALE.X ? 'refLine.refLinesX' : 'refLine.refLinesY';
   const refLines = layoutService
     .getLayoutValue(path)
@@ -27,7 +28,7 @@ export default function createRefLines({ layoutService, scale, key, minimumLayou
       },
     },
     animations: {
-      enabled: true,
+      enabled: () => !viewHandler.getInteractionInProgress(),
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         switch (scale) {
           case KEYS.SCALE.X:
@@ -40,8 +41,8 @@ export default function createRefLines({ layoutService, scale, key, minimumLayou
             }
             break;
           case KEYS.SCALE.Y:
-            if (currentNodes.width !== previousRect.width) {
-              const deltaWidth = currentNodes.width - previousRect.width;
+            if (currentRect.width !== previousRect.width) {
+              const deltaWidth = currentRect.width - previousRect.width;
               currentNodes.forEach((node) => {
                 node.x2 += deltaWidth;
               });

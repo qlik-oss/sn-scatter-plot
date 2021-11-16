@@ -37,6 +37,9 @@ export default function createViewHandler({ viewState, extremumModel }) {
     setInteractionInProgress: (newState) => {
       interactionInProgress = newState;
     },
+
+    getInteractionInProgress: () => interactionInProgress,
+
     transform: () => {
       if (interactionInProgress) {
         const { deltaX, deltaY } = viewHandler.getDataView();

@@ -48,7 +48,7 @@ export default function createAxes({ models, flags }) {
             paddingEnd: NUMBERS.AXIS.X.PADDING.END,
           },
           animations: {
-            enabled: true,
+            enabled: () => !viewHandler.getInteractionInProgress(),
             trackBy,
             compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
               if (currentRect.width !== previousRect.width) {
@@ -97,7 +97,7 @@ export default function createAxes({ models, flags }) {
                     : NUMBERS.AXIS.Y.PADDING.END,
           },
           animations: {
-            enabled: true,
+            enabled: () => !viewHandler.getInteractionInProgress(),
             trackBy,
             compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
               if (dockService.meta.y.dock === 'right') {

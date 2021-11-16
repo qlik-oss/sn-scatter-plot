@@ -38,7 +38,7 @@ export default function createPointLabels({ layoutService, themeService, chartMo
       backgroundColor: style.backgroundColor,
     },
     animations: {
-      enabled: true,
+      enabled: () => !viewHandler.getInteractionInProgress(),
       trackBy: (node) => {
         let id;
         if (node.type === 'text') id = `label: ${node.pointValue}`;

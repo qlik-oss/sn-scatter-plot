@@ -31,10 +31,11 @@ const getOobColors = (style, theme) => {
 };
 
 export default function createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode }) {
-  const { layoutService, themeService } = models;
+  const { layoutService, themeService, chartModel } = models;
   const { rtl, localeInfo } = context;
   const themeStyle = themeService.getStyles();
   const theme = themeService.getTheme();
+  const viewHandler = chartModel.query.getViewHandler();
 
   const path = scale === KEYS.SCALE.X ? 'refLine.refLinesX' : 'refLine.refLinesY';
   const refLineLabels = layoutService
@@ -92,7 +93,7 @@ export default function createRefLineLabels({ models, context, scale, key, dock,
       },
     },
     animations: {
-      enabled: true,
+      enabled: () => !viewHandler.getInteractionInProgress(),
       trackBy: (node) => `${node.labelID}: ${node.text}`,
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         const deltaX = currentRect.x - previousRect.x;
