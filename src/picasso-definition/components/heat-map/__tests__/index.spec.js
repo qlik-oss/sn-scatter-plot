@@ -5,6 +5,7 @@ describe('heat-map', () => {
   let sandbox;
   let models;
   let flags;
+  let dataHandler;
   let create;
 
   beforeEach(() => {
@@ -30,8 +31,9 @@ describe('heat-map', () => {
     const viewHandler = {
       getDataView: sandbox.stub().returns({ xAxisMin: 0, xAxisMax: 4000, yAxisMin: 0, yAxisMax: 10 }),
     };
-    const dataHandler = {
+    dataHandler = {
       binArray: [{ qText: [2100, 5, 2200, 4], qNum: 1, qElemNumber: 7964 }],
+      getMeta: sandbox.stub().returns({ isBinnedData: true }),
     };
     models = {
       chartModel: {
@@ -70,7 +72,7 @@ describe('heat-map', () => {
     });
 
     it('should have correct properties', () => {
-      expect(create()).to.have.all.keys(['key', 'type', 'data', 'show', 'settings', 'beforeRender']);
+      expect(create()).to.have.all.keys(['key', 'type', 'data', 'show', 'settings', 'beforeRender', 'brush']);
     });
 
     it('should have correct key', () => {
@@ -86,6 +88,9 @@ describe('heat-map', () => {
             x: { field: 'binX' },
             y: { field: 'binY' },
             binDensity: { field: 'binDensity' },
+            selectionDimension: {
+              field: 'bin',
+            },
           },
         });
       });
@@ -103,6 +108,11 @@ describe('heat-map', () => {
 
       it('should return false when is not big data and flag DATA_BINNING is enabled', () => {
         flags.isEnabled.returns(true);
+        expect(create().show()).to.equal(false);
+      });
+
+      it('should return false when is not binned data', () => {
+        dataHandler.getMeta.returns({ isBinnedData: false });
         expect(create().show()).to.equal(false);
       });
 
