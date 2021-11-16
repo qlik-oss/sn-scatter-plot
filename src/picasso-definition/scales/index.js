@@ -28,23 +28,38 @@ export default function createScales({ models, viewState, options, theme, rtl, c
         values: () => tickModel.query.getXTicks(),
       },
     },
-    [KEYS.SCALE.BINX]: {
-      type: 'linear',
+    y: {
       data: {
-        source: KEYS.DATA.BIN,
-        field: KEYS.FIELDS.BIN,
+        extract: {
+          field: KEYS.FIELDS.Y,
+        },
       },
-      min: 0,
-      max: () => dataHandler.maxBinDensity,
+      min: () => viewState.get('dataView').yAxisMin,
+      max: () => viewState.get('dataView').yAxisMax,
+      invert: true,
+      ticks: {
+        values: () => tickModel.query.getYTicks(),
+      },
+    },
+    [KEYS.SCALE.BIN_X]: {
+      data: {
+        extract: {
+          source: KEYS.DATA.BIN,
+          field: KEYS.FIELDS.BIN_X,
+        },
+      },
+      min: () => viewState.get('dataView').xAxisMin,
+      max: () => viewState.get('dataView').xAxisMax,
       invert: options.direction === 'rtl',
       ticks: {
         values: () => tickModel.query.getXTicks(),
       },
     },
-    y: {
+    [KEYS.SCALE.BIN_Y]: {
       data: {
         extract: {
-          field: KEYS.FIELDS.Y,
+          source: KEYS.DATA.BIN,
+          field: KEYS.FIELDS.BIN_Y,
         },
       },
       min: () => viewState.get('dataView').yAxisMin,

@@ -28,16 +28,15 @@ export default function createHeatMap({ models, flags }) {
     brush: createBrush(),
     settings: {
       x: {
-        scale: KEYS.SCALE.X,
+        scale: KEYS.SCALE.BIN_X,
       },
       y: {
-        scale: KEYS.SCALE.Y,
+        scale: KEYS.SCALE.BIN_Y,
       },
       fill: {
         scale: KEYS.SCALE.HEAT_MAP_COLOR,
         fn: (d) => d.scale(d.datum.binDensity.value),
       },
-      strokeWidth: 0,
       shape: () => ({
         type: 'rect',
         width: binWidthPx,
@@ -54,8 +53,8 @@ export default function createHeatMap({ models, flags }) {
         const binWidth = Math.abs(firstBin.qText[0] - firstBin.qText[2]);
         const binHeight = Math.abs(firstBin.qText[1] - firstBin.qText[3]);
 
-        binWidthPx = (binWidth * size.width) / (dataView.xAxisMax - dataView.xAxisMin) + 0.5;
-        binHeightPx = (binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin) + 0.5;
+        binWidthPx = (binWidth * size.width) / (dataView.xAxisMax - dataView.xAxisMin);
+        binHeightPx = (binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin);
       }
     },
   };
