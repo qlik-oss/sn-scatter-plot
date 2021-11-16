@@ -5,7 +5,7 @@ import createIsLocked from './is-locked';
 
 export default function createTap({ models, actions, flags }) {
   const { selectionService, colorService, customTooltipModel, layoutService } = models;
-  const targets = [KEYS.COMPONENT.POINT, KEYS.COMPONENT.HEAT_MAP, KEYS.COMPONENT.LEGEND_CATEGORICAL];
+  const targets = [KEYS.COMPONENT.POINT, KEYS.COMPONENT.LEGEND_CATEGORICAL, KEYS.COMPONENT.HEAT_MAP];
   const isSingleSelection = layoutService.getHyperCubeValue('qDimensionInfo.0.qIsOneAndOnlyOne', false);
 
   const brushFromShapesConfig = (e, shapes) => {
