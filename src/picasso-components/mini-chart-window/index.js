@@ -11,9 +11,6 @@ export default {
   },
   renderer: 'dom',
   render(h) {
-    if (!this.settings.show()) {
-      return false;
-    }
     const { x, y, width, height } = this.settings.settings.rect;
     const { borderColor, background } = this.settings.settings.style;
     return [

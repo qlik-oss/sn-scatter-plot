@@ -29,13 +29,7 @@ describe('custom rect', () => {
     expect(miniChartWindow).to.have.all.keys(['require', 'defaultSettings', 'renderer', 'render']);
   });
   describe('render', () => {
-    it('should render nothing when show is false', () => {
-      miniChartWindow.settings = { show: sandbox.stub() };
-      miniChartWindow.settings.show.returns(false);
-      expect(miniChartWindow.render(h)).to.equal(false);
-    });
-
-    it('should render correct rect when show is true', () => {
+    it('should render correct rect', () => {
       miniChartWindow.settings = {
         show: sandbox.stub(),
         settings: {
@@ -43,7 +37,6 @@ describe('custom rect', () => {
           style: { borderColor: 'red', background: 'white' },
         },
       };
-      miniChartWindow.settings.show.returns(true);
       miniChartWindow.settings.settings.rect.x.returns(0);
       miniChartWindow.settings.settings.rect.y.returns(1);
       miniChartWindow.settings.settings.rect.width.returns(2);
