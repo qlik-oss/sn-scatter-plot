@@ -225,15 +225,15 @@ describe('axes', () => {
       });
 
       it('should adjust axis and axis label correctly if the rect decrease 10px when it is docked to the left', () => {
-        currentRect = { width: 10 };
-        previousRect = { width: 20 };
+        currentRect = { width: 10, height: 100 };
+        previousRect = { width: 20, height: 200 };
         currentNodes = [
-          { type: 'line', x1: 20, x2: 20, y1: 10, y2: 100 },
+          { type: 'line', x1: 20, x2: 20, y1: 10, y2: 210 },
           { type: 'text', x: 20, y: 50 },
         ];
         axes[1].animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
         expect(currentNodes).to.deep.equal([
-          { type: 'line', x1: 10, x2: 10, y1: 10, y2: 100 },
+          { type: 'line', x1: 10, x2: 10, y1: 10, y2: 110 },
           { type: 'text', x: 10, y: 50 },
         ]);
       });

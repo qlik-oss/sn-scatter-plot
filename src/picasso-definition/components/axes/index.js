@@ -110,6 +110,9 @@ export default function createAxes({ models, flags }) {
                 if (node.type === 'line') {
                   node.x1 += deltaWidth;
                   node.x2 += deltaWidth;
+                  if (node.x1 === node.x2) {
+                    node.y2 = node.y1 + currentRect.height;
+                  }
                 } else if (node.type === 'text') {
                   node.x += deltaWidth;
                 }
