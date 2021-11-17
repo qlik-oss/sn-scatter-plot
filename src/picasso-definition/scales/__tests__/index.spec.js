@@ -1,5 +1,7 @@
 import createScales from '../index';
 import * as KEYS from '../../../constants/keys';
+import * as color from '../../../utils/color/adjust-color';
+import * as getDock from '../../../utils/dock-helper';
 
 describe('scales', () => {
   let create;
@@ -7,14 +9,24 @@ describe('scales', () => {
   let tickModel;
   let viewState;
   let colorService;
+  let layoutService;
+  let chartModel;
+  let dataHandler;
   let models;
+  let theme;
+  let rtl;
   let sandbox;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    sandbox
-      .stub(KEYS, 'default')
-      .value({ FIELDS: { X: 'qDimensionInfo/0', Y: 'qDimensionInfo/1', SIZE: 'qMeasureInfo/0' } });
+    sandbox.stub(KEYS, 'default').value({
+      FIELDS: { X: 'qDimensionInfo/0', Y: 'qDimensionInfo/1', SIZE: 'qMeasureInfo/0' },
+      SCALE: { HEAT_MAP_COLOR: 'heatMapColor' },
+    });
+    sandbox.stub(color, 'makeBrighter').returns('brighter-red');
+    sandbox.stub(color, 'makeDarker').returns('darker-red');
+    sandbox.stub(getDock, 'default');
+    getDock.default.returns('right');
     disclaimerModel = {
       query: {
         getHasSuppressingDisclaimer: sinon.stub().returns(false),
@@ -37,9 +49,20 @@ describe('scales', () => {
     colorService = {
       getScales: sinon.stub().returns({ s1: 's1', s2: 's2' }),
     };
-    models = { tickModel, colorService, disclaimerModel };
+    layoutService = {
+      getLayoutValue: sandbox.stub(),
+    };
+    dataHandler = { maxBinDensity: 200 };
+    chartModel = {
+      query: {
+        getDataHandler: () => dataHandler,
+      },
+    };
+    models = { tickModel, colorService, disclaimerModel, layoutService, chartModel };
     const options = { direction: 'rtl' };
-    create = () => createScales({ models, viewState, options });
+    theme = { getStyle: sandbox.stub().returns('red') };
+    rtl = false;
+    create = () => createScales({ models, viewState, options, theme, rtl });
   });
 
   afterEach(() => {
@@ -48,7 +71,7 @@ describe('scales', () => {
 
   it('should contain correct scales', () => {
     const scales = create();
-    expect(Object.keys(scales)).to.deep.equal(['x', 'y', 's1', 's2']);
+    expect(Object.keys(scales)).to.deep.equal(['x', 'y', 's1', 's2', 'heatMapColor']);
   });
 
   it('scales should have proper properties', () => {
@@ -95,5 +118,74 @@ describe('scales', () => {
     const { y } = create();
     const res = y.max();
     expect(res).to.equal(30);
+  });
+
+  describe('heatMapColor scale', () => {
+    it('should return correct type', () => {
+      const { heatMapColor } = create();
+      expect(heatMapColor.type).to.equal('sequential-color');
+    });
+
+    it('should return correct min', () => {
+      const { heatMapColor } = create();
+      expect(heatMapColor.min).to.equal(0);
+    });
+
+    it('should return correct max', () => {
+      const { heatMapColor } = create();
+      const res = heatMapColor.max();
+      expect(res).to.equal(200);
+    });
+
+    describe('invert', () => {
+      it('should return true when is not rtl and not dock on top or bottom', () => {
+        const { heatMapColor } = create();
+        expect(heatMapColor.invert).to.be.true;
+      });
+
+      it('should return true when is rtl ', () => {
+        rtl = true;
+        const { heatMapColor } = create();
+        expect(heatMapColor.invert).to.be.true;
+      });
+
+      it('should return false when is not rtl and dock on top', () => {
+        rtl = false;
+        getDock.default.returns('top');
+        const { heatMapColor } = create();
+        expect(heatMapColor.invert).to.be.false;
+      });
+
+      it('should return false when is not rtl and dock on bottom', () => {
+        rtl = false;
+        getDock.default.returns('bottom');
+        const { heatMapColor } = create();
+        expect(heatMapColor.invert).to.be.false;
+      });
+    });
+
+    describe('range', () => {
+      it('should return correct color range', () => {
+        const { heatMapColor } = create();
+        expect(heatMapColor.range[0]).to.equal('darker-red');
+        expect(heatMapColor.range[1]).to.equal('brighter-red');
+      });
+
+      it('should return correct color range when is not rtl and dock on top', () => {
+        rtl = false;
+        getDock.default.returns('top');
+        const { heatMapColor } = create();
+        expect(heatMapColor.range[0]).to.equal('brighter-red');
+        expect(heatMapColor.range[1]).to.equal('darker-red');
+      });
+
+      it('should return correct color range when is not rtl and dock on bottom', () => {
+        rtl = false;
+        getDock.default.returns('bottom');
+        const { heatMapColor } = create();
+        expect(heatMapColor.range[0]).to.equal('brighter-red');
+        expect(heatMapColor.range[1]).to.equal('darker-red');
+      });
+    });
   });
 });

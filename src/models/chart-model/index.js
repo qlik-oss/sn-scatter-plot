@@ -1,6 +1,5 @@
 import KEYS from '../../constants/keys';
 import createViewHandler from '../../view-handler';
-import createDataHandler from '../../data-handler';
 
 export default function createChartModel({
   chart,
@@ -10,8 +9,7 @@ export default function createChartModel({
   picasso,
   viewState,
   extremumModel,
-  flags,
-  model,
+  dataHandler,
 }) {
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
@@ -22,11 +20,9 @@ export default function createChartModel({
   ];
 
   const viewHandler = createViewHandler({
-    viewState,
     extremumModel,
+    viewState,
   });
-
-  const dataHandler = createDataHandler({ layoutService, model, viewHandler, extremumModel, flags });
 
   const mainConfig = {
     key: KEYS.DATA.MAIN,
