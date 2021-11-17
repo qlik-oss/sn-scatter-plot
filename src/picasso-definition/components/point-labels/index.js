@@ -52,6 +52,7 @@ export default function createPointLabels({ layoutService, themeService, chartMo
           currentNodes.forEach((node) => {
             switch (node.type) {
               case 'text':
+              case 'rect':
                 node.x -= deltaX;
                 break;
               case 'line':
