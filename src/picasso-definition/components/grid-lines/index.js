@@ -60,9 +60,11 @@ export default function createGridLines(models) {
         const deltaX = currentRect.x - previousRect.x;
         currentNodes.forEach((node) => {
           if (node.dir === 'x') {
+            // Move x grid lines towards the opposite direction to make them stay at the same absolute positions
             node.x1 -= deltaX;
             node.x2 -= deltaX;
           } else {
+            // Only expand y grid lines at right ends, the left ends go with the currentRect to avoid the gap
             node.x2 += deltaWidth;
           }
         });

@@ -6,6 +6,8 @@ describe('grid-line', () => {
   let layoutService;
   let themeService;
   let gridLine;
+  let viewHandler;
+  let chartModel;
   let create;
 
   before(() => {
@@ -18,6 +20,7 @@ describe('grid-line', () => {
       createGridLines({
         layoutService,
         themeService,
+        chartModel,
       });
   });
 
@@ -44,6 +47,9 @@ describe('grid-line', () => {
         GRID_LINES: 'grid-lines',
       },
     });
+
+    viewHandler = { getInteractionInProgress: sandbox.stub() };
+    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
   });
 
   after(() => {
@@ -256,6 +262,51 @@ describe('grid-line', () => {
 
       it('should have correct stroke', () => {
         expect(create().minorTicks.stroke).to.equal('minor-style' || '#d1d1d1');
+      });
+    });
+
+    describe('animation', () => {
+      describe('enabled', () => {
+        it('should be true if interaction is not in progress', () => {
+          viewHandler.getInteractionInProgress.returns(false);
+          expect(create().animations.enabled()).to.equal(true);
+        });
+
+        it('should be false if interaction is in progress', () => {
+          viewHandler.getInteractionInProgress.returns(true);
+          expect(create().animations.enabled()).to.equal(false);
+        });
+      });
+
+      describe('trackBy', () => {
+        it('should be return correct IDs', () => {
+          const node = { dir: 'x', value: 1000 };
+          expect(create().animations.trackBy(node)).to.equal('x: 1000');
+        });
+      });
+
+      describe('compensateForLayoutChanges', () => {
+        let currentNodes = [{ x1: 10, x2: 10, y1: 10, y2: 100 }];
+        let currentRect = { width: 200, x: 10 };
+        let previousRect = { width: 200, x: 10 };
+        it('should not adjust grid lines if the rect does not change', () => {
+          create().animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+          expect(currentNodes).to.deep.equal([{ x1: 10, x2: 10, y1: 10, y2: 100 }]);
+        });
+
+        it('should adjust grid lines correctly if the rect shifts 5px to left and increases 10px in width', () => {
+          currentRect = { width: 210, x: 5 };
+          previousRect = { width: 200, x: 10 };
+          currentNodes = [
+            { dir: 'x', x1: 50, x2: 50, y1: 10, y2: 100 },
+            { dir: 'y', x1: 0, x2: 200, y1: 50, y2: 50 },
+          ];
+          create().animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+          expect(currentNodes).to.deep.equal([
+            { dir: 'x', x1: 55, x2: 55, y1: 10, y2: 100 },
+            { dir: 'y', x1: 0, x2: 210, y1: 50, y2: 50 },
+          ]);
+        });
       });
     });
   });
