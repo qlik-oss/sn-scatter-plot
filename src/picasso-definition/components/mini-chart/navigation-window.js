@@ -1,7 +1,7 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 
-export default function createMiniChartNavigationRect({ models, flags }) {
+export default function createMiniChartNavigationWindow(chartModel) {
   const ratio = NUMBERS.MINI_CHART.RATIO;
   const padding = NUMBERS.MINI_CHART.PADDING; // Padding from the bottom right corner
 
@@ -29,20 +29,21 @@ export default function createMiniChartNavigationRect({ models, flags }) {
   let navX;
   let navY;
 
-  const { chartModel, layoutService } = models;
   const viewHandler = chartModel.query.getViewHandler();
 
   return {
     key: KEYS.COMPONENT.MINI_CHART_NAVIGATION,
-    type: 'custom-rect',
-    style: { borderColor: 'red', background: 'rgba(200, 200, 200, 0.3)' },
-    rect: {
-      x: () => width * (1 - ratio) - padding + navX,
-      y: () => height * (1 - ratio) - padding + navY,
-      width: () => navWidth,
-      height: () => navHeight,
+    type: 'mini-chart-window',
+    show: () => viewHandler.getMeta().scale < 1,
+    settings: {
+      style: { borderColor: 'red', background: 'rgba(200, 200, 200, 0.3)' },
+      rect: {
+        x: () => width * (1 - ratio) - padding + navX,
+        y: () => height * (1 - ratio) - padding + navY,
+        width: () => navWidth,
+        height: () => navHeight,
+      },
     },
-    show: () => viewHandler.getMeta().scale < 1 && layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING'),
     beforeRender: ({ size }) => {
       ({ width, height } = size);
       const { homeStateDataView } = viewHandler.getMeta();

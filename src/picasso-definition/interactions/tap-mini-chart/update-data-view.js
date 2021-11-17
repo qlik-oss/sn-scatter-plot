@@ -1,8 +1,8 @@
-import KEYS from '../../constants/keys';
-import NUMBERS from '../../constants/numbers';
+import KEYS from '../../../constants/keys';
+import NUMBERS from '../../../constants/numbers';
 
-export default function tapInMiniChart({ e, viewHandler, chart }) {
-  // Handle click in mini chart
+export default function updateDataView({ e, viewHandler, chart }) {
+  // Handle tap/click in mini chart
   const { x, y, width: W, height: H } = chart.component(KEYS.COMPONENT.POINT).rect.computedPhysical;
 
   // Coordinate of the clicked spot, relative to the point component

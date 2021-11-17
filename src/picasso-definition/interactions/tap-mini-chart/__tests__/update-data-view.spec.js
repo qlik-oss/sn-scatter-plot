@@ -1,6 +1,6 @@
-import KEYS from '../../../constants/keys';
-import * as NUMBERS from '../../../constants/numbers';
-import tapInMiniChart from '../tap-in-mini-chart';
+import KEYS from '../../../../constants/keys';
+import * as NUMBERS from '../../../../constants/numbers';
+import updateDataview from '../update-data-view';
 
 describe('tap in mini chart', () => {
   let sandbox;
@@ -24,7 +24,7 @@ describe('tap in mini chart', () => {
     sandbox.stub(NUMBERS, 'default').value({
       MINI_CHART: { RATIO: 0.5, PADDING: 0 },
     });
-    create = () => tapInMiniChart({ e, viewHandler, chart });
+    create = () => updateDataview({ e, viewHandler, chart });
   });
 
   afterEach(() => {

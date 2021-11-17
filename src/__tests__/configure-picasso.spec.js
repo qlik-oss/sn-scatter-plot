@@ -29,7 +29,7 @@ describe('configure-picasso', () => {
         ['**/hammer.js', () => 'touch it'],
         ['**/picasso-components/ref-line-labels/index.js', () => 'refLineLabelsComponent'],
         ['**/picasso-components/point-label/index.js', () => 'pointLabelComponent'],
-        ['**/picasso-components/custom-rect/index.js', () => 'customRect'],
+        ['**/picasso-components/mini-chart-window/index.js', () => 'miniChartWindow'],
       ],
       ['../configure-picasso']
     )[0].default;
@@ -64,7 +64,7 @@ describe('configure-picasso', () => {
     expect(picasso.component.getCall(0).calledWith('reference-line-labels', 'refLineLabelsComponent')).to.be.true;
     expect(picasso.component.getCall(1).calledWith('point-label', 'pointLabelComponent')).to.be.true;
     expect(picasso.component.getCall(2).calledWith('disclaimer', 'disclaimer')).to.be.true;
-    expect(picasso.component.getCall(3).calledWith('custom-rect', 'customRect')).to.be.true;
+    expect(picasso.component.getCall(3).calledWith('mini-chart-window', 'miniChartWindow')).to.be.true;
   });
 
   it('should return picasso instance', () => {

@@ -1,13 +1,21 @@
 export default {
   require: ['renderer'],
-  defaultSettings: {},
+  defaultSettings: {
+    style: { borderColor: 'black', background: 'red' },
+    rect: {
+      x: () => 100,
+      y: () => 100,
+      width: () => 100,
+      height: () => 100,
+    },
+  },
   renderer: 'dom',
   render(h) {
     if (!this.settings.show()) {
       return false;
     }
-    const { x, y, width, height } = this.settings.rect;
-    const { borderColor, background } = this.settings.style;
+    const { x, y, width, height } = this.settings.settings.rect;
+    const { borderColor, background } = this.settings.settings.style;
     return [
       h('div', {
         style: {

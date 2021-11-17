@@ -1,5 +1,3 @@
-import tapInMiniChart from './tap-in-mini-chart';
-
 function eventToLocalPoint(event, chart) {
   const bounds = chart.element.getBoundingClientRect();
 
@@ -19,7 +17,7 @@ function eventToLocalPoint(event, chart) {
   };
 }
 
-const tap = ({ targets, requireFailure, recognizeWith, components, eventName = 'tap', viewHandler }, opts) => {
+const tap = ({ targets, requireFailure, recognizeWith, components, eventName = 'tap' }, opts) => {
   let targetComponents;
   const customTooltipUtils = opts.customTooltipModel?.utils;
   const debouncedDisplayCustomTooltip = customTooltipUtils
@@ -54,11 +52,6 @@ const tap = ({ targets, requireFailure, recognizeWith, components, eventName = '
     events: {
       [eventName](e) {
         e.preventDefault();
-
-        if (tapInMiniChart({ e, viewHandler, chart: this.chart })) {
-          return;
-        }
-
         const localPoint = eventToLocalPoint(e, this.chart);
         const hitRadius = opts.hitRadius ? opts.hitRadius(targetComponents) : 0;
         const shape = hitRadius > 0 ? { cx: localPoint.x, cy: localPoint.y, r: hitRadius } : localPoint;

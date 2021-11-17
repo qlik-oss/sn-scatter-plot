@@ -1,7 +1,7 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 
-export default function createMiniChartPoints({ models, flags }) {
+export default function createMiniChartPoints(chartModel) {
   const ratio = NUMBERS.MINI_CHART.RATIO;
   const padding = NUMBERS.MINI_CHART.PADDING; // Padding from the bottom right corner
 
@@ -21,7 +21,6 @@ export default function createMiniChartPoints({ models, flags }) {
   let binWidthPx;
   let binHeightPx;
 
-  const { chartModel, layoutService } = models;
   const viewHandler = chartModel.query.getViewHandler();
   const dataHandler = chartModel.query.getDataHandler();
   const homeStateBins = dataHandler.getHomeStateBins(viewHandler.getMeta().isHomeState);
@@ -37,7 +36,7 @@ export default function createMiniChartPoints({ models, flags }) {
     data: {
       items: homeStateBins,
     },
-    show: () => viewHandler.getMeta().scale < 1 && layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING'),
+    show: () => viewHandler.getMeta().scale < 1,
     settings: {
       x: (d) => {
         const xValue = (d.datum.value.qText[0] + d.datum.value.qText[2]) / 2;

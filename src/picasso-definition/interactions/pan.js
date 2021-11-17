@@ -1,6 +1,6 @@
 import KEYS from '../../constants/keys';
 import NUMBERS from '../../constants/numbers';
-import tapInMiniChart from '../../interactive/tap/tap-in-mini-chart';
+import tapInMiniChart from './tap-mini-chart/update-data-view';
 
 const threshold = 10;
 const eventName = 'areaPan';
@@ -62,7 +62,7 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
       // A pan always starts with a tap/click
       // Therefore, the tap/click has to be handled first
       let panInMiniChart = false;
-      if (tapInMiniChart({ e, viewHandler, chart })) {
+      if (chart.component(KEYS.COMPONENT.MINI_CHART_POINT) && tapInMiniChart({ e, viewHandler, chart })) {
         panInMiniChart = true;
       }
 

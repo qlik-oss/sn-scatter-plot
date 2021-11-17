@@ -1,0 +1,59 @@
+import createMiniChartBackgroundWindow from '../background-window';
+import * as KEYS from '../../../../constants/keys';
+import * as NUMBERS from '../../../../constants/numbers';
+
+describe('createMiniChartBackgroundWindow', () => {
+  let sandbox;
+  let create;
+  let chartModel;
+  let flags;
+  let viewHandler;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+    sandbox.stub(KEYS, 'default').value({
+      COMPONENT: { MINI_CHART_BACKGROUND: 'mini-chart-background' },
+    });
+    sandbox.stub(NUMBERS, 'default').value({
+      MINI_CHART: { RATIO: 0.5, PADDING: 0 },
+    });
+    viewHandler = { getMeta: sandbox.stub().returns({ scale: 0.5 }) };
+    chartModel = {
+      query: {
+        getViewHandler: sandbox.stub().returns(viewHandler),
+      },
+    };
+    flags = { isEnabled: sandbox.stub() };
+    flags.isEnabled.withArgs('DATA_BINNING').returns(true);
+    create = () => createMiniChartBackgroundWindow(chartModel);
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it('should return an object with correct keys', () => {
+    expect(create()).to.have.all.keys(['key', 'type', 'show', 'settings', 'beforeRender']);
+  });
+
+  describe('show', () => {
+    it('should not be true when scale is 1', () => {
+      viewHandler.getMeta.returns({ scale: 1 });
+      const obj = create();
+      expect(obj.show()).to.equal(false);
+    });
+  });
+
+  describe('settings', () => {
+    describe('rect', () => {
+      it('should return correct rect', () => {
+        const obj = create();
+        obj.beforeRender({ size: { width: 200, height: 160 } });
+        expect(obj.settings.rect.x()).to.equal(100);
+        expect(obj.settings.rect.y()).to.equal(80);
+        expect(obj.settings.rect.width()).to.equal(100);
+        expect(obj.settings.rect.height()).to.equal(80);
+      });
+    });
+  });
+});

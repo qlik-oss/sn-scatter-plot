@@ -5,7 +5,7 @@ import * as NUMBERS from '../../../../constants/numbers';
 describe('createMiniChartPoints', () => {
   let sandbox;
   let create;
-  let models;
+  let chartModel;
   let flags;
   let viewHandler;
   let dataHandler;
@@ -28,20 +28,17 @@ describe('createMiniChartPoints', () => {
       }),
     };
     dataHandler = { getHomeStateBins: sandbox.stub().returns([{ qText: [1, 2, 3, 4] }]) };
-    models = {
-      chartModel: {
-        query: {
-          getViewHandler: sandbox.stub().returns(viewHandler),
-          getDataHandler: sandbox.stub().returns(dataHandler),
-        },
+    chartModel = {
+      query: {
+        getViewHandler: sandbox.stub().returns(viewHandler),
+        getDataHandler: sandbox.stub().returns(dataHandler),
       },
-      layoutService: { meta: { isBigData: true } },
     };
     flags = { isEnabled: sandbox.stub() };
     flags.isEnabled.withArgs('DATA_BINNING').returns(true);
     d = { datum: { value: { qText: [8, 8, 12, 12], qNum: 3 } }, scale: sandbox.stub() };
     d.scale.withArgs(3).returns(0.3);
-    create = () => createMiniChartPoints({ models, flags });
+    create = () => createMiniChartPoints(chartModel);
   });
 
   afterEach(() => {
@@ -57,23 +54,6 @@ describe('createMiniChartPoints', () => {
       viewHandler.getMeta.returns({ scale: 1 });
       const obj = create();
       expect(obj.show()).to.equal(false);
-    });
-
-    it('should not be true when data is not big', () => {
-      models.layoutService.meta.isBigData = false;
-      const obj = create();
-      expect(obj.show()).to.equal(false);
-    });
-
-    it('should not be true when flag is not enabled', () => {
-      flags.isEnabled.withArgs('DATA_BINNING').returns(false);
-      const obj = create();
-      expect(obj.show()).to.equal(false);
-    });
-
-    it('should be true when scale less than 1, data is big, and flag is enabled', () => {
-      const obj = create();
-      expect(obj.show()).to.equal(true);
     });
   });
 
