@@ -54,6 +54,7 @@ export default function createAxes({ models, flags }) {
               if (currentRect.width !== previousRect.width) {
                 const deltaX = currentRect.x - previousRect.x;
                 const deltaWidth = currentRect.width - previousRect.width;
+                // "Spread" x following the currentRect to avoid the gaps at two ends
                 currentNodes[0].x1 += deltaX;
                 currentNodes[0].x2 += deltaX + deltaWidth;
               }
@@ -104,6 +105,7 @@ export default function createAxes({ models, flags }) {
                 return;
               }
               const deltaWidth = currentRect.width - previousRect.width;
+              // Move y axis to avoid it being outside of the currentRect
               currentNodes.forEach((node) => {
                 if (node.type === 'line') {
                   node.x1 += deltaWidth;
