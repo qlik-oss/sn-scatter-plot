@@ -5,6 +5,7 @@ describe('legend', () => {
   let selectionService;
   let scales;
   let legend;
+  let enableInteraction;
   let createLegendRange;
   let create;
 
@@ -20,12 +21,14 @@ describe('legend', () => {
     selectionService = {
       getIsDimensionLocked: sandbox.stub(),
     };
+    enableInteraction = 'enableInteraction';
     create = () =>
       createLegendRange({
         actions,
         selectionService,
         scales,
         legend,
+        enableInteraction,
       });
   });
 
@@ -112,6 +115,7 @@ describe('legend', () => {
         'scale',
         'bubblesPlacement',
         'onEdited',
+        'enableInteraction',
       ]);
     });
 
@@ -162,6 +166,12 @@ describe('legend', () => {
       const [config] = range.getCall(0).args;
       config.onEdited();
       expect(actions.select.emit.withArgs('end', 'legendRange')).to.have.been.calledOnce;
+    });
+
+    it('should have correct enableInteraction', () => {
+      create();
+      const [config] = range.getCall(0).args;
+      expect(config.enableInteraction).to.equal('enableInteraction');
     });
   });
 

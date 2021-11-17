@@ -57,6 +57,7 @@ export default function createRange({ models, actions, scales, chart }) {
       selectionService,
       scales,
       legend,
+      enableInteraction: () => true,
     }) || EMPTY;
 
   return {
