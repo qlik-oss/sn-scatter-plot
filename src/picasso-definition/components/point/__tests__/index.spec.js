@@ -1,6 +1,7 @@
 import createPoint from '../index';
 import * as KEYS from '../../../../constants/keys';
 import createSizeScale from '../../../scales/size';
+import * as movePath from '../../../../utils/move-path';
 
 describe('point', () => {
   let sandbox;
@@ -15,6 +16,7 @@ describe('point', () => {
   let d;
   const wsm = 1;
   let rect;
+  let viewHandler;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -42,8 +44,8 @@ describe('point', () => {
       },
     };
     sizeScaleFn = createSizeScale(layoutService);
-    chartModel = { query: { getViewHandler: sandbox.stub() } };
-    chartModel.query.getViewHandler.returns({ redererSettings: 'renderer-settings' });
+    viewHandler = { redererSettings: 'renderer-settings', getInteractionInProgress: sandbox.stub() };
+    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
     canvasBufferSizeStub = sandbox.stub();
     rect = {
       computedPhysical: {
@@ -65,6 +67,8 @@ describe('point', () => {
         },
       },
     };
+
+    sandbox.stub(movePath, 'default').returns('new-path');
 
     create = () =>
       createPoint({
@@ -147,6 +151,51 @@ describe('point', () => {
   describe('beforeRender', () => {
     it('should be set with a function', () => {
       expect(create().beforeRender).to.be.a('function');
+    });
+  });
+
+  describe('animation', () => {
+    describe('enabled', () => {
+      it('should be true if interaction is not in progress', () => {
+        viewHandler.getInteractionInProgress.returns(false);
+        expect(create().animations.enabled()).to.equal(true);
+      });
+
+      it('should be false if interaction is in progress', () => {
+        viewHandler.getInteractionInProgress.returns(true);
+        expect(create().animations.enabled()).to.equal(false);
+      });
+    });
+
+    describe('compensateForLayoutChanges', () => {
+      let currentNodes = [
+        { type: 'circle', cx: 50, cy: 100 },
+        { type: 'path', d: 'old-path' },
+      ];
+      let currentRect = { x: 100 };
+      let previousRect = { x: 100 };
+
+      it('should not adjust node if the rect does not change', () => {
+        create().animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+        expect(currentNodes).to.deep.equal([
+          { type: 'circle', cx: 50, cy: 100 },
+          { type: 'path', d: 'old-path' },
+        ]);
+      });
+
+      it('should adjust label correctly if the rect shifts 5px to right', () => {
+        currentRect = { width: 200, x: 15 };
+        previousRect = { width: 200, x: 10 };
+        currentNodes = [
+          { type: 'circle', cx: 50, cy: 100 },
+          { type: 'path', d: 'old-path' },
+        ];
+        create().animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+        expect(currentNodes).to.deep.equal([
+          { type: 'circle', cx: 45, cy: 100 },
+          { type: 'path', d: 'new-path' },
+        ]);
+      });
     });
   });
 });

@@ -26,6 +26,18 @@ describe('createViewHandler', () => {
     sandbox.restore();
   });
 
+  it('should return a view handler with all keys', () => {
+    expect(viewHandler).to.have.all.keys([
+      'setDataView',
+      'getDataView',
+      'setMeta',
+      'getMeta',
+      'setInteractionInProgress',
+      'setInteractionInProgress',
+      'transform',
+    ]);
+  });
+
   it('should return a view handler with proper getDataView method', () => {
     expect(viewHandler.getDataView()).to.equal('correct data view');
   });
@@ -76,5 +88,11 @@ describe('createViewHandler', () => {
       maxScale: 3,
       minScale: 4,
     });
+  });
+
+  it('should return a view handler with proper set and getInteractionInProgress method', () => {
+    expect(viewHandler.getInteractionInProgress()).to.equal(false);
+    viewHandler.setInteractionInProgress(true);
+    expect(viewHandler.getInteractionInProgress()).to.equal(true);
   });
 });

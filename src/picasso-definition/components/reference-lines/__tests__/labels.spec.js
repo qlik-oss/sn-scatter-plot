@@ -9,6 +9,7 @@ describe('createRefLineLabels', () => {
   let themeService;
   let context;
   let theme;
+  let viewHandler;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -49,7 +50,12 @@ describe('createRefLineLabels', () => {
       getStyles: sandbox.stub().returns('theme'),
       getTheme: sandbox.stub().returns(theme),
     };
-    models = { layoutService, themeService };
+    viewHandler = { getInteractionInProgress: sandbox.stub() };
+    models = {
+      layoutService,
+      themeService,
+      chartModel: { query: { getViewHandler: sandbox.stub().returns(viewHandler) } },
+    };
     context = { rtl: false, localeInfo: 'valid localeInfo' };
   });
 
@@ -94,6 +100,7 @@ describe('createRefLineLabels', () => {
 
     const key = 'reference-line-labels-X';
     const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+    result.animations.enabled = 'function';
     result.animations.trackBy = 'function';
     result.animations.compensateForLayoutChanges = 'function';
     expect(result).to.deep.equal({
@@ -133,7 +140,7 @@ describe('createRefLineLabels', () => {
         },
       },
       animations: {
-        enabled: true,
+        enabled: 'function',
         trackBy: 'function',
         compensateForLayoutChanges: 'function',
       },
@@ -157,6 +164,7 @@ describe('createRefLineLabels', () => {
 
     const key = 'reference-line-labels-X';
     const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+    result.animations.enabled = 'function';
     result.animations.trackBy = 'function';
     result.animations.compensateForLayoutChanges = 'function';
     expect(result).to.deep.equal({
@@ -196,7 +204,7 @@ describe('createRefLineLabels', () => {
         },
       },
       animations: {
-        enabled: true,
+        enabled: 'function',
         trackBy: 'function',
         compensateForLayoutChanges: 'function',
       },
@@ -216,6 +224,7 @@ describe('createRefLineLabels', () => {
     themeService.getStyles = sandbox.stub().returns(themeStyle);
     const key = 'reference-line-labels-Y';
     const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+    result.animations.enabled = 'function';
     result.animations.trackBy = 'function';
     result.animations.compensateForLayoutChanges = 'function';
     expect(result).to.deep.equal({
@@ -262,7 +271,7 @@ describe('createRefLineLabels', () => {
         },
       },
       animations: {
-        enabled: true,
+        enabled: 'function',
         trackBy: 'function',
         compensateForLayoutChanges: 'function',
       },
@@ -283,6 +292,7 @@ describe('createRefLineLabels', () => {
     context.rtl = true;
     const key = 'reference-line-labels-Y';
     const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+    result.animations.enabled = 'function';
     result.animations.trackBy = 'function';
     result.animations.compensateForLayoutChanges = 'function';
     expect(result).to.deep.equal({
@@ -329,10 +339,66 @@ describe('createRefLineLabels', () => {
         },
       },
       animations: {
-        enabled: true,
+        enabled: 'function',
         trackBy: 'function',
         compensateForLayoutChanges: 'function',
       },
+    });
+  });
+
+  describe('animation', () => {
+    let scale;
+    let dock;
+    let minimumLayoutMode;
+    let key;
+
+    describe('enabled', () => {
+      it('should be true if interaction is not in progress', () => {
+        viewHandler.getInteractionInProgress.returns(false);
+        const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+        expect(refLineLabels.animations.enabled()).to.equal(true);
+      });
+
+      it('should be false if interaction is in progress', () => {
+        viewHandler.getInteractionInProgress.returns(true);
+        const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+        expect(refLineLabels.animations.enabled()).to.equal(false);
+      });
+    });
+
+    describe('trackBy', () => {
+      it('should be return correct IDs', () => {
+        const node = { labelID: 'x1', text: 'part-1' };
+        const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+        expect(refLineLabels.animations.trackBy(node)).to.equal('x1: part-1');
+      });
+    });
+
+    describe('compensateForLayoutChanges', () => {
+      let currentNodes = [{ x: 50, y: 100 }];
+      let currentRect = { x: 100 };
+      let previousRect = { x: 100 };
+
+      it('should not adjust node if the rect does not change', () => {
+        const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+        refLineLabels.animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+        expect(currentNodes).to.deep.equal([{ x: 50, y: 100 }]);
+      });
+
+      it('should adjust label correctly if the rect shifts 5px to right', () => {
+        currentRect = { x: 105 };
+        previousRect = { x: 100 };
+        currentNodes = [
+          { labelID: 'x-0', x: 150, y: 10 },
+          { labelID: 'y-0', x: 150, y: 100 },
+        ];
+        const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+        refLineLabels.animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+        expect(currentNodes).to.deep.equal([
+          { labelID: 'x-0', x: 145, y: 10 },
+          { labelID: 'y-0', x: 145, y: 100 },
+        ]);
+      });
     });
   });
 });
