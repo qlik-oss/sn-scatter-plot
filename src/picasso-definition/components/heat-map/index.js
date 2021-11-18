@@ -1,11 +1,9 @@
-import { rgb } from 'd3-color';
 import KEYS from '../../../constants/keys';
 
 export default function createHeatMap({ models, flags }) {
   const { layoutService, chartModel } = models;
   let binWidthPx;
   let binHeightPx;
-  let maxDensity;
 
   return {
     key: KEYS.COMPONENT.HEAT_MAP,
@@ -30,12 +28,10 @@ export default function createHeatMap({ models, flags }) {
       y: {
         scale: KEYS.SCALE.Y,
       },
-      fill: (d) => {
-        const s = d.datum.binDensity.value / maxDensity;
-        const c = Math.floor((1 - s) * 192);
-        return rgb(c, c, c);
+      fill: {
+        scale: KEYS.SCALE.HEAT_MAP_COLOR,
+        fn: (d) => d.scale(d.datum.binDensity.value),
       },
-      opacity: 0.8,
       shape: () => ({
         type: 'rect',
         width: binWidthPx,
@@ -45,15 +41,16 @@ export default function createHeatMap({ models, flags }) {
     beforeRender: ({ size }) => {
       const viewHandler = chartModel.query.getViewHandler();
       const dataView = viewHandler.getDataView();
-      const bins = layoutService.getLayoutValue('dataPages')[0];
-      const data = bins.slice(1);
-      const firstBin = data[0];
-      const binWidth = firstBin ? Math.abs(firstBin.qText[0] - firstBin.qText[2]) : 0;
-      const binHeight = firstBin ? Math.abs(firstBin.qText[1] - firstBin.qText[3]) : 0;
+      const dataHandler = chartModel.query.getDataHandler();
+      const bins = dataHandler.binArray;
+      if (bins.length) {
+        const firstBin = bins[0];
+        const binWidth = Math.abs(firstBin.qText[0] - firstBin.qText[2]);
+        const binHeight = Math.abs(firstBin.qText[1] - firstBin.qText[3]);
 
-      binWidthPx = (binWidth * size.width) / (dataView.xAxisMax - dataView.xAxisMin);
-      binHeightPx = (binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin);
-      maxDensity = bins[0]?.qNum || 0;
+        binWidthPx = (binWidth * size.width) / (dataView.xAxisMax - dataView.xAxisMin);
+        binHeightPx = (binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin);
+      }
     },
   };
 }

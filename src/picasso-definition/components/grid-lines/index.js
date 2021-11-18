@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 
@@ -9,8 +10,9 @@ const SPACINGS = {
 };
 
 export default function createGridLines(models) {
-  const { layoutService, themeService } = models;
+  const { layoutService, themeService, chartModel } = models;
   const { auto, spacing } = layoutService.getLayoutValue('gridLine', {});
+  const viewHandler = chartModel.query.getViewHandler();
   if (!auto && spacing === SPACINGS.NO_LINES) {
     return false;
   }
@@ -49,6 +51,24 @@ export default function createGridLines(models) {
       show: !auto && spacing === SPACINGS.NARROW,
       stroke: line.minor.color,
       strokeWidth: 1,
+    },
+    animations: {
+      enabled: () => viewHandler.animationEnabled,
+      trackBy: (node) => `${node.dir}: ${node.value}`,
+      compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
+        const deltaWidth = currentRect.width - previousRect.width;
+        const deltaX = currentRect.x - previousRect.x;
+        currentNodes.forEach((node) => {
+          if (node.dir === 'x') {
+            // Move x grid lines towards the opposite direction to make them stay at the same absolute positions
+            node.x1 -= deltaX;
+            node.x2 -= deltaX;
+          } else {
+            // Only expand y grid lines at right ends, the left ends go with the currentRect to avoid the gap
+            node.x2 += deltaWidth;
+          }
+        });
+      },
     },
   };
 

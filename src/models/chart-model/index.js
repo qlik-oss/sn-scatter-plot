@@ -9,10 +9,8 @@ export default function createChartModel({
   picasso,
   viewState,
   extremumModel,
-  flags,
-  model,
+  dataHandler,
 }) {
-  let interactionInProgess = false;
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
     KEYS.COMPONENT.Y_AXIS_TITLE,
@@ -20,6 +18,12 @@ export default function createChartModel({
     // KEYS.COMPONENT.Y_AXIS,
     // KEYS.COMPONENT.GRID_LINES,
   ];
+
+  const viewHandler = createViewHandler({
+    extremumModel,
+    layoutService,
+    viewState,
+  });
 
   const mainConfig = {
     key: KEYS.DATA.MAIN,
@@ -29,62 +33,8 @@ export default function createChartModel({
     },
   };
 
-  const dataset = picasso.data('q')(mainConfig);
-
-  const viewHandler = createViewHandler({
-    flags,
-    layoutService,
-    extremumModel,
-    model,
-    viewState,
-  });
-
-  function updatePartial() {
-    if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
-      viewHandler.fetchData().then((pages) => {
-        // Transition between bin data and normal data
-        if (pages[0].qMatrix?.length) {
-          layoutService.setDataPages(pages);
-          layoutService.setLayoutValue('dataPages', [[]]);
-        } else {
-          layoutService.setLayoutValue('dataPages', pages);
-          layoutService.setDataPages([]);
-        }
-      });
-    }
-    const dataView = viewState.get('dataView');
-    const { isHomeState } = viewHandler.getMeta();
-    extremumModel.command.updateExtrema(dataView, isHomeState);
-    requestAnimationFrame(() => {
-      // TODO: cancel requests as well to optimize???
-      // const startTime = Date.now();
-      interactionInProgess = true;
-      chart.update({
-        partialData: true,
-        excludeFromUpdate: EXCLUDE,
-        // transforms: [
-        //   {
-        //     key: KEYS.COMPONENT.POINT,
-        //     transform: { a: 1, b: 0, c: 0, d: 1, e: x, f: y },
-        //   },
-        // ],
-      });
-      // TODO: debounce -> interactionInProgess = false
-      // console.log('chart rendered in ', Date.now() - startTime, ' ms');
-    });
-  }
-
-  viewState.onChanged('dataView', updatePartial);
-
-  const state = { isPrelayout: true };
-
-  const getBinData = () => {
-    if (!layoutService.meta.isBigData || !flags.isEnabled('DATA_BINNING')) {
-      return [];
-    }
-
-    const data = layoutService.getLayoutValue('dataPages')[0].slice(1);
-    if (!data.length) {
+  const getBinnedDataConfig = () => {
+    if (!dataHandler.getMeta().isBinnedData) {
       return [];
     }
 
@@ -92,7 +42,7 @@ export default function createChartModel({
       {
         key: KEYS.DATA.BIN,
         type: 'matrix',
-        data,
+        data: dataHandler.binArray,
         config: {
           parse: {
             fields() {
@@ -129,46 +79,87 @@ export default function createChartModel({
     ];
   };
 
-  return {
+  const dataset = picasso.data('q')(mainConfig);
+
+  function updatePartial() {
+    requestAnimationFrame(() => {
+      // TODO: cancel requests as well to optimize???
+      // const startTime = Date.now();
+      chart.update({
+        partialData: true,
+        excludeFromUpdate: EXCLUDE,
+        // transforms: [
+        //   {
+        //     key: KEYS.COMPONENT.POINT,
+        //     transform: { a: 1, b: 0, c: 0, d: 1, e: x, f: y },
+        //   },
+        // ],
+      });
+      // TODO: debounce -> interactionInProgess = false
+      // console.log('chart rendered in ', Date.now() - startTime, ' ms');
+    });
+  }
+
+  const update = ({ settings } = {}) => {
+    chart.update({
+      data: [
+        {
+          type: 'q',
+          ...mainConfig,
+        },
+        ...getBinnedDataConfig(),
+        ...colorService.getData(),
+      ],
+      settings,
+    });
+  };
+
+  const handleDataViewUpdate = () => {
+    const binnedBeforeFetch = dataHandler.getMeta().isBinnedData;
+    dataHandler
+      .fetch()
+      // Promise rejected if trying to fetch same data window twice in a row
+      .catch(() => {})
+      .finally(() => {
+        if (binnedBeforeFetch !== dataHandler.getMeta().isBinnedData) {
+          update(); // Switching between binned and not binned data - requires complete chart update.
+        } else {
+          updatePartial();
+        }
+      });
+  };
+
+  viewState.onChanged('dataView', handleDataViewUpdate);
+
+  const state = { isPrelayout: true };
+
+  const chartModel = {
     query: {
-      getDataset: () => dataset,
       getViewState: () => viewState,
       getViewHandler: () => viewHandler,
+      getDataHandler: () => dataHandler,
       getLocaleInfo: () => localeInfo,
-      isInteractionInProgess: () => interactionInProgess,
       getFormatter: (fieldName) => dataset.field(fieldName).formatter(),
       isPrelayout: () => state.isPrelayout,
     },
     command: {
       layoutComponents: ({ settings } = {}) => {
-        const binData = getBinData();
         chart.layoutComponents({
           data: [
             {
               type: 'q',
               ...mainConfig,
             },
-            ...binData,
+            ...getBinnedDataConfig(),
             ...colorService.getData(),
           ],
           settings,
         });
         state.isPrelayout = false;
       },
-      update: ({ settings } = {}) => {
-        const binData = getBinData();
-        chart.update({
-          data: [
-            {
-              type: 'q',
-              ...mainConfig,
-            },
-            ...binData,
-            ...colorService.getData(),
-          ],
-          settings,
-        });
-      },
+      update,
     },
   };
+
+  return chartModel;
 }

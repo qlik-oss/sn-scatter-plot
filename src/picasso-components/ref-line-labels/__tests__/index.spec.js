@@ -312,6 +312,7 @@ describe('render', () => {
         anchor: 'middle',
         y: 95,
         x: 101,
+        labelID: 'x-0',
       },
       {
         fontSize: '11px',
@@ -328,6 +329,7 @@ describe('render', () => {
         anchor: 'middle',
         y: 105,
         x: 101,
+        labelID: 'x-0',
       },
       {
         fontSize: '11px',
@@ -344,6 +346,7 @@ describe('render', () => {
         anchor: 'middle',
         y: 100,
         x: 203,
+        labelID: 'x-1',
       },
       'lower oobs, dock top',
       'upper oobs, dock top',
@@ -369,6 +372,7 @@ describe('render', () => {
         anchor: 'middle',
         x: 200,
         y: 96,
+        labelID: 'y-0',
       },
       {
         fontSize: '11px',
@@ -385,6 +389,7 @@ describe('render', () => {
         anchor: 'middle',
         x: 200,
         y: 106,
+        labelID: 'y-0',
       },
       {
         fontSize: '11px',
@@ -401,6 +406,7 @@ describe('render', () => {
         anchor: 'middle',
         x: 200,
         y: 203,
+        labelID: 'y-1',
       },
       'lower oobs, dock right',
       'upper oobs, dock right',

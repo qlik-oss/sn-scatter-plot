@@ -21,6 +21,7 @@ function getAllTopLabels({ measureText, nodes, label, component }) {
       ellipsed,
       cx,
       topRect: { y2 },
+      pointValue: node.data.value,
     };
   });
 }
@@ -62,6 +63,7 @@ export function getLabels({ measureText, mode, nodes, label, labelHeight: textHe
       ellipsed,
       isEllipsisChar,
       circle: { x: cx, y: y + height / 2, r: height / 2, height },
+      pointValue: node.data.value,
     };
   });
 

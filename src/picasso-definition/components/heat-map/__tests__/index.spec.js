@@ -30,22 +30,18 @@ describe('heat-map', () => {
     const viewHandler = {
       getDataView: sandbox.stub().returns({ xAxisMin: 0, xAxisMax: 4000, yAxisMin: 0, yAxisMax: 10 }),
     };
-    const binnedData = [
-      [
-        { qNum: 1164, qElemNumber: 0 },
-        { qText: [2100, 5, 2200, 4], qNum: 1, qElemNumber: 7964 },
-      ],
-    ];
+    const dataHandler = {
+      binArray: [{ qText: [2100, 5, 2200, 4], qNum: 1, qElemNumber: 7964 }],
+    };
     models = {
       chartModel: {
         key: 'chart-model',
         query: {
           getViewHandler: () => viewHandler,
+          getDataHandler: () => dataHandler,
         },
       },
       layoutService: {
-        getHyperCubeValue: (path, defaultValue) => defaultValue,
-        getLayoutValue: sandbox.stub().withArgs('dataPages').returns(binnedData),
         meta: {
           isBigData: false,
         },
@@ -119,7 +115,7 @@ describe('heat-map', () => {
 
     describe('settings', () => {
       it('should have correct properties', () => {
-        expect(create().settings).to.have.all.keys(['x', 'y', 'opacity', 'fill', 'shape']);
+        expect(create().settings).to.have.all.keys(['x', 'y', 'fill', 'shape']);
       });
 
       describe('shape', () => {

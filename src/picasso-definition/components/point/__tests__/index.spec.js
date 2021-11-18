@@ -1,12 +1,13 @@
 import createPoint from '../index';
 import * as KEYS from '../../../../constants/keys';
 import createSizeScale from '../../../scales/size';
+import * as movePath from '../../../../utils/move-path';
 
 describe('point', () => {
   let sandbox;
   let layoutService;
   let colorService;
-  let tickModel;
+  let chartModel;
   let create;
   let layoutValueStub;
   let hyperCubeValueStub;
@@ -15,10 +16,7 @@ describe('point', () => {
   let d;
   const wsm = 1;
   let rect;
-  const xMin = 2;
-  const xMax = 14;
-  const yMin = 0;
-  const yMax = 10;
+  let viewHandler;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -46,12 +44,8 @@ describe('point', () => {
       },
     };
     sizeScaleFn = createSizeScale(layoutService);
-    tickModel = {
-      query: {
-        getXMinMax: () => [xMin, xMax],
-        getYMinMax: () => [yMin, yMax],
-      },
-    };
+    viewHandler = { redererSettings: 'renderer-settings', animationEnabled: false };
+    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
     canvasBufferSizeStub = sandbox.stub();
     rect = {
       computedPhysical: {
@@ -74,11 +68,13 @@ describe('point', () => {
       },
     };
 
+    sandbox.stub(movePath, 'default').returns('new-path');
+
     create = () =>
       createPoint({
         layoutService,
         colorService,
-        tickModel,
+        chartModel,
       });
   });
 
@@ -95,7 +91,16 @@ describe('point', () => {
     });
 
     it('should have correct properties', () => {
-      expect(create()).to.have.all.keys(['key', 'type', 'data', 'brush', 'settings', 'beforeRender']);
+      expect(create()).to.have.all.keys([
+        'key',
+        'type',
+        'data',
+        'brush',
+        'settings',
+        'beforeRender',
+        'rendererSettings',
+        'animations',
+      ]);
     });
 
     it('should have correct key', () => {
@@ -146,6 +151,51 @@ describe('point', () => {
   describe('beforeRender', () => {
     it('should be set with a function', () => {
       expect(create().beforeRender).to.be.a('function');
+    });
+  });
+
+  describe('animation', () => {
+    describe('enabled', () => {
+      it('should be true if animation is enabled in viewHandler', () => {
+        viewHandler.animationEnabled = true;
+        expect(create().animations.enabled()).to.equal(true);
+      });
+
+      it('should be false if animation is not enabled in viewHandler', () => {
+        viewHandler.animationEnabled = false;
+        expect(create().animations.enabled()).to.equal(false);
+      });
+    });
+
+    describe('compensateForLayoutChanges', () => {
+      let currentNodes = [
+        { type: 'circle', cx: 50, cy: 100 },
+        { type: 'path', d: 'old-path' },
+      ];
+      let currentRect = { x: 100 };
+      let previousRect = { x: 100 };
+
+      it('should not adjust node if the rect does not change', () => {
+        create().animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+        expect(currentNodes).to.deep.equal([
+          { type: 'circle', cx: 50, cy: 100 },
+          { type: 'path', d: 'old-path' },
+        ]);
+      });
+
+      it('should adjust label correctly if the rect shifts 5px to right', () => {
+        currentRect = { width: 200, x: 15 };
+        previousRect = { width: 200, x: 10 };
+        currentNodes = [
+          { type: 'circle', cx: 50, cy: 100 },
+          { type: 'path', d: 'old-path' },
+        ];
+        create().animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+        expect(currentNodes).to.deep.equal([
+          { type: 'circle', cx: 45, cy: 100 },
+          { type: 'path', d: 'new-path' },
+        ]);
+      });
     });
   });
 });
