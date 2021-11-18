@@ -72,7 +72,7 @@ describe('axes', () => {
     };
     themeService = { getStyles: () => style };
     isHomeState = false;
-    viewHandler = { getMeta: sandbox.stub().returns(isHomeState) };
+    viewHandler = { getMeta: sandbox.stub().returns(isHomeState), animationEnabled: false };
     chartModel = {
       query: {
         getViewHandler: () => viewHandler,
@@ -142,6 +142,101 @@ describe('axes', () => {
       isHomeState = true;
       const yAxis = createAxes({ models, flags })[1];
       expect(yAxis.settings.paddingEnd()).to.equal(NUMBERS.AXIS.Y.PADDING.END);
+    });
+  });
+
+  describe('animations for x axis', () => {
+    describe('enabled', () => {
+      it('should be true if animation is enabled in viewHandler', () => {
+        viewHandler.animationEnabled = true;
+        expect(axes[0].animations.enabled()).to.equal(true);
+      });
+
+      it('should be false if animation is not enabled in viewHandler', () => {
+        viewHandler.animationEnabled = false;
+        expect(axes[0].animations.enabled()).to.equal(false);
+      });
+    });
+
+    describe('trackBy', () => {
+      it('should be return correct IDs', () => {
+        let node;
+        let i = 0;
+        expect(axes[0].animations.trackBy(node, i)).to.equal('axis');
+        node = { type: 'text', tickValue: 1000 };
+        i = 1;
+        expect(axes[0].animations.trackBy(node, i)).to.equal('label: 1000');
+        node = { tickValue: 1000 };
+        expect(axes[0].animations.trackBy(node, i)).to.equal('mark: 1000');
+      });
+    });
+
+    describe('compensateForLayoutChanges', () => {
+      const currentNodes = [{ x1: 10, x2: 110, y1: 0, y2: 0 }];
+      let currentRect = { width: 100 };
+      let previousRect = { width: 100 };
+      it('should not adjust axis if the rect does not change', () => {
+        axes[0].animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+        expect(currentNodes).to.deep.equal([{ x1: 10, x2: 110, y1: 0, y2: 0 }]);
+      });
+
+      it('should adjust axis correctly if the rect shifts 5px to left and increases 10px in width', () => {
+        currentRect = { width: 110, x: 5 };
+        previousRect = { width: 100, x: 10 };
+        axes[0].animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+        expect(currentNodes).to.deep.equal([{ x1: 5, x2: 115, y1: 0, y2: 0 }]);
+      });
+    });
+  });
+
+  describe('animations for y axis', () => {
+    describe('enabled', () => {
+      it('should be true if animation is enabled in viewHandler', () => {
+        viewHandler.animationEnabled = true;
+        expect(axes[1].animations.enabled()).to.equal(true);
+      });
+
+      it('should be false if animation is not enabled in viewHandler', () => {
+        viewHandler.animationEnabled = false;
+        expect(axes[1].animations.enabled()).to.equal(false);
+      });
+    });
+
+    describe('trackBy', () => {
+      it('should be return correct IDs', () => {
+        let node;
+        let i = 0;
+        expect(axes[1].animations.trackBy(node, i)).to.equal('axis');
+        node = { type: 'text', tickValue: 1000 };
+        i = 1;
+        expect(axes[1].animations.trackBy(node, i)).to.equal('label: 1000');
+        node = { tickValue: 1000 };
+        expect(axes[1].animations.trackBy(node, i)).to.equal('mark: 1000');
+      });
+    });
+
+    describe('compensateForLayoutChanges', () => {
+      let currentNodes = [{ x1: 10, x2: 10, y1: 10, y2: 100 }];
+      let currentRect = { width: 20 };
+      let previousRect = { width: 20 };
+      it('should not adjust axis if the rect does not change', () => {
+        axes[1].animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+        expect(currentNodes).to.deep.equal([{ x1: 10, x2: 10, y1: 10, y2: 100 }]);
+      });
+
+      it('should adjust axis and axis label correctly if the rect decrease 10px when it is docked to the left', () => {
+        currentRect = { width: 10, height: 100 };
+        previousRect = { width: 20, height: 200 };
+        currentNodes = [
+          { type: 'line', x1: 20, x2: 20, y1: 10, y2: 210 },
+          { type: 'text', x: 20, y: 50 },
+        ];
+        axes[1].animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+        expect(currentNodes).to.deep.equal([
+          { type: 'line', x1: 10, x2: 10, y1: 10, y2: 110 },
+          { type: 'text', x: 10, y: 50 },
+        ]);
+      });
     });
   });
 });

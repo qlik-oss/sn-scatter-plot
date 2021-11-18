@@ -1,6 +1,8 @@
+/* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 import createSizeScale from '../../scales/size';
 import createBrush from '../../brush';
+import movePath from '../../../utils/move-path';
 
 export default function createPoint({ layoutService, colorService, chartModel }) {
   let windowSizeMultiplier;
@@ -30,6 +32,27 @@ export default function createPoint({ layoutService, colorService, chartModel })
     },
     beforeRender: ({ size }) => {
       windowSizeMultiplier = Math.min(size.height, size.width) / 300;
+    },
+    animations: {
+      enabled: () => viewHandler.animationEnabled,
+      compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
+        if (currentRect.x !== previousRect.x) {
+          const deltaX = currentRect.x - previousRect.x;
+          currentNodes.forEach((node) => {
+            switch (node.type) {
+              case 'circle':
+                node.cx -= deltaX;
+                break;
+              case 'path': {
+                node.d = movePath(node.d, -deltaX);
+                break;
+              }
+              default:
+                break;
+            }
+          });
+        }
+      },
     },
     rendererSettings: {
       transform,
