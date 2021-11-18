@@ -12,7 +12,9 @@ const useCore = ({ flags }) => {
   const [core, setCore] = useState();
 
   useEffect(() => {
-    if (!viewState) return undefined;
+    if (!viewState) {
+      return undefined;
+    }
 
     element.style.overflow = 'hidden';
     const picasso = configurePicasso();

@@ -3,8 +3,11 @@ import extend from 'extend';
 function areIntervalsEqual(min1, max1, min2, max2, e) {
   // e is the relative tolerance; d is the absolute tolerence
   let d;
-  if (e === undefined) d = 0;
-  else d = Math.abs(max1 - min1) * e;
+  if (e === undefined) {
+    d = 0;
+  } else {
+    d = Math.abs(max1 - min1) * e;
+  }
   return Math.abs(min2 - min1) <= d && Math.abs(max2 - max1) <= d;
 }
 

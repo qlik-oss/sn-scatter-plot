@@ -25,8 +25,12 @@ export default function getTicks({ scale, explicitType, distance, size, measure,
   ].sort((a, b) => a.value - b.value);
 
   // Post-processing min and max
-  if (explicitType === 'min') min = originalMin;
-  if (explicitType === 'max') max = originalMax;
+  if (explicitType === 'min') {
+    min = originalMin;
+  }
+  if (explicitType === 'max') {
+    max = originalMax;
+  }
   const minMax = [min, max];
 
   return { ticks, minMax };

@@ -3,7 +3,9 @@ import NUMBERS from '../../../constants/numbers';
 
 const tickHelper = {
   getTicksAndMinMax(scale, nicing, count, originalMin, originalMax) {
-    if (nicing) scale.nice(count).nice(count);
+    if (nicing) {
+      scale.nice(count).nice(count);
+    }
     let ticks = scale.ticks(count);
     let [min, max] = scale.domain();
 
@@ -20,7 +22,9 @@ const tickHelper = {
     // It is not valid if the space between two major ticks is smaller than 80% of the distance (i.e. too many ticks)
     const tolerance = 0.8;
     const space = (scale(ticks[1]) - scale(ticks[0])) * size;
-    if (space < distance * tolerance) return false;
+    if (space < distance * tolerance) {
+      return false;
+    }
 
     // It is also not valid if the axis labels overlap
     const labels = ticks.map(formatter);

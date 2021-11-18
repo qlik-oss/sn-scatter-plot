@@ -36,8 +36,9 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
     let axisMin = typeof source[`${axis}Min`] === 'number' ? source[`${axis}Min`] : minFromLayout;
     let axisMax = typeof source[`${axis}Max`] === 'number' ? source[`${axis}Max`] : maxFromLayout;
 
-    if (typeof source[`${axis}Min`] === 'number' && typeof source[`${axis}Max`] === 'number') explicitType = 'minMax';
-    else if (typeof source[`${axis}Min`] === 'number') {
+    if (typeof source[`${axis}Min`] === 'number' && typeof source[`${axis}Max`] === 'number') {
+      explicitType = 'minMax';
+    } else if (typeof source[`${axis}Min`] === 'number') {
       // Updating explicit type: merging the new explicit info. with the old one.
       switch (explicitType) {
         case 'max':
@@ -63,7 +64,9 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
     // Add 5% padding to the ends that are not explicit.
     let padding = (axisMax - axisMin) / 20;
     // Special case: padding === 0 because data has only one point and min/max are non-explicit
-    if (padding === 0) padding = Math.abs(axisMin) > 0 ? Math.abs(axisMin) / 10 : 10;
+    if (padding === 0) {
+      padding = Math.abs(axisMin) > 0 ? Math.abs(axisMin) / 10 : 10;
+    }
     switch (explicitType) {
       case 'minMax':
         if (axisMin === axisMax) {

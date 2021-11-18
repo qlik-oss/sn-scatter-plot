@@ -20,12 +20,16 @@ export function updateViewState({ viewState, viewStateOptions = {}, models }) {
   tickModel.command.updateFormatters(formatters);
 
   const viewHandler = chartModel.query.getViewHandler();
-  if (viewHandler.getMeta().isHomeState) extremumModel.command.resetExtrema();
+  if (viewHandler.getMeta().isHomeState) {
+    extremumModel.command.resetExtrema();
+  }
   const [xAxisMin, xAxisMax] = tickModel.query.getXMinMax();
   const [yAxisMin, yAxisMax] = tickModel.query.getYMinMax();
   viewState.preventSet('legendScrollOffset', source.legendScrollOffset || 0);
   viewState.preventSet('dataView', { xAxisMin, xAxisMax, yAxisMin, yAxisMax });
-  if (viewHandler.getMeta().isHomeState) viewHandler.setMeta({ homeStateDataView: viewState.get('dataView') });
+  if (viewHandler.getMeta().isHomeState) {
+    viewHandler.setMeta({ homeStateDataView: viewState.get('dataView') });
+  }
 }
 
 export function initializeViewState({ viewState, viewStateOptions = {}, models }) {

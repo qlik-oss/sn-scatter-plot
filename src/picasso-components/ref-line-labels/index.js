@@ -42,7 +42,9 @@ export default {
   render() {
     const { scale, rect, symbol } = this;
     const labels = labelHelper.resolveLabels(this.settings.labels);
-    if (scale.domain().length <= 0 || labels.length <= 0) return false;
+    if (scale.domain().length <= 0 || labels.length <= 0) {
+      return false;
+    }
     const { dock } = this.settings.layout;
     const { style, localeInfo } = this.settings;
     const { fontSize, fontFamily, font, lineHeight, gap, maxLabelWidth, maxNumLines, padding } = getLabelStyle(
@@ -129,7 +131,9 @@ export default {
 
     let lowerPosition = style.oob.size + lowerCircleSize / 2;
     let upperPosition = majorSize - (style.oob.size + upperCircleSize / 2);
-    if (majorAxis === 'y') [lowerPosition, upperPosition] = [upperPosition, lowerPosition];
+    if (majorAxis === 'y') {
+      [lowerPosition, upperPosition] = [upperPosition, lowerPosition];
+    }
 
     const renderedLowerOobs = oob.createOobs({
       alignment: 0,
