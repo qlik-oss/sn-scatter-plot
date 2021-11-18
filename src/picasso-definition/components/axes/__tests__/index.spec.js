@@ -72,7 +72,7 @@ describe('axes', () => {
     };
     themeService = { getStyles: () => style };
     isHomeState = false;
-    viewHandler = { getMeta: sandbox.stub().returns(isHomeState), getInteractionInProgress: sandbox.stub() };
+    viewHandler = { getMeta: sandbox.stub().returns(isHomeState), animationEnabled: false };
     chartModel = {
       query: {
         getViewHandler: () => viewHandler,
@@ -147,13 +147,13 @@ describe('axes', () => {
 
   describe('animations for x axis', () => {
     describe('enabled', () => {
-      it('should be true if interaction is not in progress', () => {
-        viewHandler.getInteractionInProgress.returns(false);
+      it('should be true if animation is enabled in viewHandler', () => {
+        viewHandler.animationEnabled = true;
         expect(axes[0].animations.enabled()).to.equal(true);
       });
 
-      it('should be false if interaction is in progress', () => {
-        viewHandler.getInteractionInProgress.returns(true);
+      it('should be false if animation is not enabled in viewHandler', () => {
+        viewHandler.animationEnabled = false;
         expect(axes[0].animations.enabled()).to.equal(false);
       });
     });
@@ -191,13 +191,13 @@ describe('axes', () => {
 
   describe('animations for y axis', () => {
     describe('enabled', () => {
-      it('should be true if interaction is not in progress', () => {
-        viewHandler.getInteractionInProgress.returns(false);
+      it('should be true if animation is enabled in viewHandler', () => {
+        viewHandler.animationEnabled = true;
         expect(axes[1].animations.enabled()).to.equal(true);
       });
 
-      it('should be false if interaction is in progress', () => {
-        viewHandler.getInteractionInProgress.returns(true);
+      it('should be false if animation is not enabled in viewHandler', () => {
+        viewHandler.animationEnabled = false;
         expect(axes[1].animations.enabled()).to.equal(false);
       });
     });

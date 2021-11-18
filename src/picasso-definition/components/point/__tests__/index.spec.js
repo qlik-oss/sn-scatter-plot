@@ -44,7 +44,7 @@ describe('point', () => {
       },
     };
     sizeScaleFn = createSizeScale(layoutService);
-    viewHandler = { redererSettings: 'renderer-settings', getInteractionInProgress: sandbox.stub() };
+    viewHandler = { redererSettings: 'renderer-settings', animationEnabled: false };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
     canvasBufferSizeStub = sandbox.stub();
     rect = {
@@ -156,13 +156,13 @@ describe('point', () => {
 
   describe('animation', () => {
     describe('enabled', () => {
-      it('should be true if interaction is not in progress', () => {
-        viewHandler.getInteractionInProgress.returns(false);
+      it('should be true if animation is enabled in viewHandler', () => {
+        viewHandler.animationEnabled = true;
         expect(create().animations.enabled()).to.equal(true);
       });
 
-      it('should be false if interaction is in progress', () => {
-        viewHandler.getInteractionInProgress.returns(true);
+      it('should be false if animation is not enabled in viewHandler', () => {
+        viewHandler.animationEnabled = false;
         expect(create().animations.enabled()).to.equal(false);
       });
     });

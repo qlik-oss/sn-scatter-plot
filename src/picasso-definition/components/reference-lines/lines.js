@@ -28,7 +28,7 @@ export default function createRefLines({ layoutService, chartModel, scale, key, 
       },
     },
     animations: {
-      enabled: () => !viewHandler.getInteractionInProgress(),
+      enabled: () => viewHandler.animationEnabled,
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         switch (scale) {
           case KEYS.SCALE.X:

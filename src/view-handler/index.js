@@ -1,4 +1,5 @@
 import extend from 'extend';
+import NUMBERS from '../constants/numbers';
 
 function areIntervalsEqual(min1, max1, min2, max2, e) {
   // e is the relative tolerance; d is the absolute tolerence
@@ -8,7 +9,7 @@ function areIntervalsEqual(min1, max1, min2, max2, e) {
   return Math.abs(min2 - min1) <= d && Math.abs(max2 - max1) <= d;
 }
 
-export default function createViewHandler({ viewState, extremumModel }) {
+export default function createViewHandler({ viewState, extremumModel, layoutService }) {
   const meta = { homeStateDataView: {}, scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1 };
   let interactionInProgress = false;
 
@@ -39,6 +40,10 @@ export default function createViewHandler({ viewState, extremumModel }) {
     },
 
     getInteractionInProgress: () => interactionInProgress,
+
+    get animationEnabled() {
+      return layoutService.getHyperCubeValue('qSize.qcy', 0) <= NUMBERS.MAX_NR_ANIMATION && !interactionInProgress;
+    },
 
     transform: () => {
       if (interactionInProgress) {

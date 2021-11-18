@@ -36,7 +36,7 @@ describe('createRefLines', () => {
         },
       },
     ]);
-    viewHandler = { getInteractionInProgress: sandbox.stub() };
+    viewHandler = { animationEnabled: false };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
   });
 
@@ -163,14 +163,14 @@ describe('createRefLines', () => {
     const minimumLayoutMode = 'min-layout-mode';
 
     describe('enabled', () => {
-      it('should be true if interaction is not in progress', () => {
-        viewHandler.getInteractionInProgress.returns(false);
+      it('should be true if animation is enabled in viewHandler', () => {
+        viewHandler.animationEnabled = true;
         const refLines = createRefLines({ layoutService, chartModel, scale, key, minimumLayoutMode });
         expect(refLines.animations.enabled()).to.equal(true);
       });
 
-      it('should be false if interaction is in progress', () => {
-        viewHandler.getInteractionInProgress.returns(true);
+      it('should be false if animation is not enabled in viewHandler', () => {
+        viewHandler.animationEnabled = false;
         const refLines = createRefLines({ layoutService, chartModel, scale, key, minimumLayoutMode });
         expect(refLines.animations.enabled()).to.equal(false);
       });

@@ -93,7 +93,7 @@ export default function createRefLineLabels({ models, context, scale, key, dock,
       },
     },
     animations: {
-      enabled: () => !viewHandler.getInteractionInProgress(),
+      enabled: () => viewHandler.animationEnabled,
       trackBy: (node) => `${node.labelID}: ${node.text}`,
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         const deltaX = currentRect.x - previousRect.x;

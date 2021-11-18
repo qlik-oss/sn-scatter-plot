@@ -53,7 +53,7 @@ export default function createGridLines(models) {
       strokeWidth: 1,
     },
     animations: {
-      enabled: () => !viewHandler.getInteractionInProgress(),
+      enabled: () => viewHandler.animationEnabled,
       trackBy: (node) => `${node.dir}: ${node.value}`,
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         const deltaWidth = currentRect.width - previousRect.width;

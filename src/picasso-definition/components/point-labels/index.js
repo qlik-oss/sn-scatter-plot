@@ -38,12 +38,16 @@ export default function createPointLabels({ layoutService, themeService, chartMo
       backgroundColor: style.backgroundColor,
     },
     animations: {
-      enabled: () => !viewHandler.getInteractionInProgress(),
+      enabled: () => viewHandler.animationEnabled,
       trackBy: (node) => {
         let id;
-        if (node.type === 'text') id = `label: ${node.pointValue}`;
-        else if (node.type === 'line') id = `line: ${node.pointValue}`;
-        else id = `rect: ${node.pointValue}`;
+        if (node.type === 'text') {
+          id = `label: ${node.pointValue}`;
+        } else if (node.type === 'line') {
+          id = `line: ${node.pointValue}`;
+        } else {
+          id = `rect: ${node.pointValue}`;
+        }
         return id;
       },
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {

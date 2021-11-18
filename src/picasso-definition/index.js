@@ -19,7 +19,7 @@ export default function createPicassoDefinition({
   flags,
 }) {
   const { chart, actions, picasso } = core;
-  const { chartModel, colorService, pluginService, layoutService } = models;
+  const { chartModel, colorService, pluginService } = models;
   const viewHandler = chartModel.query.getViewHandler();
   const viewState = chartModel.query.getViewState();
   const localeInfo = chartModel.query.getLocaleInfo();
@@ -41,15 +41,6 @@ export default function createPicassoDefinition({
   const selectables = createSelectables({ models, actions, scales, flags });
 
   const componentDefinitions = [...components, ...selectables.components];
-
-  // Disable animations if there are too many points
-  if (layoutService.getHyperCubeValue('qSize.qcy', 0) > NUMBERS.MAX_NR_ANIMATION) {
-    componentDefinitions.forEach((component) => {
-      if (component.animations) {
-        component.animations.enabled = false;
-      }
-    });
-  }
 
   return {
     interactions: createInteractions({

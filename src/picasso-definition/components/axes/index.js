@@ -11,7 +11,9 @@ export default function createAxes({ models, flags }) {
   const style = themeService.getStyles();
   const viewHandler = chartModel.query.getViewHandler();
   const trackBy = (node, i) => {
-    if (i === 0) return 'axis';
+    if (i === 0) {
+      return 'axis';
+    }
     if (node.type === 'text') {
       return `label: ${node.tickValue}`;
     }
@@ -48,7 +50,7 @@ export default function createAxes({ models, flags }) {
             paddingEnd: NUMBERS.AXIS.X.PADDING.END,
           },
           animations: {
-            enabled: () => !viewHandler.getInteractionInProgress(),
+            enabled: () => viewHandler.animationEnabled,
             trackBy,
             compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
               if (currentRect.width !== previousRect.width) {
@@ -98,7 +100,7 @@ export default function createAxes({ models, flags }) {
                     : NUMBERS.AXIS.Y.PADDING.END,
           },
           animations: {
-            enabled: () => !viewHandler.getInteractionInProgress(),
+            enabled: () => viewHandler.animationEnabled,
             trackBy,
             compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
               if (dockService.meta.y.dock === 'right') {

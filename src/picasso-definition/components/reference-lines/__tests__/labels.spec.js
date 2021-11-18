@@ -50,7 +50,7 @@ describe('createRefLineLabels', () => {
       getStyles: sandbox.stub().returns('theme'),
       getTheme: sandbox.stub().returns(theme),
     };
-    viewHandler = { getInteractionInProgress: sandbox.stub() };
+    viewHandler = { animationEnabled: false };
     models = {
       layoutService,
       themeService,
@@ -353,14 +353,14 @@ describe('createRefLineLabels', () => {
     let key;
 
     describe('enabled', () => {
-      it('should be true if interaction is not in progress', () => {
-        viewHandler.getInteractionInProgress.returns(false);
+      it('should be true if animation is enabled in viewHandler', () => {
+        viewHandler.animationEnabled = true;
         const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
         expect(refLineLabels.animations.enabled()).to.equal(true);
       });
 
-      it('should be false if interaction is in progress', () => {
-        viewHandler.getInteractionInProgress.returns(true);
+      it('should be false if animation is not enabled in viewHandler', () => {
+        viewHandler.animationEnabled = false;
         const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
         expect(refLineLabels.animations.enabled()).to.equal(false);
       });
