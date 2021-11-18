@@ -41,13 +41,8 @@
     "test:rendering": "node ./scripts/run-rendering-tests.js",
     "test:rendering:local": "aw puppet --glob 'test/**/*.spec.js' --mocha.bail false --mocha.timeout 10000",
     "prepublishOnly": "rm -rf dist && yarn run build",
-    "version": "yarn spec && git add api-specifications"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && lint-staged"
-    }
+    "version": "yarn spec && git add api-specifications",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.{js, jsx}": [
