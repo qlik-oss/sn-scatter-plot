@@ -11,6 +11,7 @@ describe('point', () => {
   let layoutValueStub;
   let hyperCubeValueStub;
   let canvasBufferSizeStub;
+  let dataHandler;
   let sizeScaleFn;
   let d;
   const wsm = 1;
@@ -42,8 +43,12 @@ describe('point', () => {
       },
     };
     sizeScaleFn = createSizeScale(layoutService);
-    chartModel = { query: { getViewHandler: sandbox.stub() } };
+    dataHandler = {
+      getMeta: sandbox.stub().returns({ isBinnedData: false }),
+    };
+    chartModel = { query: { getViewHandler: sandbox.stub(), getDataHandler: sandbox.stub() } };
     chartModel.query.getViewHandler.returns({ redererSettings: 'renderer-settings' });
+    chartModel.query.getDataHandler.returns(dataHandler);
     canvasBufferSizeStub = sandbox.stub();
     rect = {
       computedPhysical: {
@@ -95,6 +100,7 @@ describe('point', () => {
         'settings',
         'beforeRender',
         'rendererSettings',
+        'show',
       ]);
     });
 
@@ -105,6 +111,18 @@ describe('point', () => {
     describe('data', () => {
       it('should be correct', () => {
         expect(create().data.collection).to.equal('mainCollectionKey');
+      });
+    });
+
+    describe('show', () => {
+      it('should return false when is binned data', () => {
+        dataHandler.getMeta.returns({ isBinnedData: true });
+        expect(create().show()).to.equal(false);
+      });
+
+      it('should return true when is not binned data', () => {
+        dataHandler.getMeta.returns({ isBinnedData: false });
+        expect(create().show()).to.equal(true);
       });
     });
   });

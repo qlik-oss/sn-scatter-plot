@@ -7,6 +7,10 @@ export default function createHeatMap({ models, flags }) {
   let binWidthPx;
   let binHeightPx;
 
+  if (!(layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING'))) {
+    return false;
+  }
+
   return {
     key: KEYS.COMPONENT.HEAT_MAP,
     type: 'point',
@@ -24,7 +28,7 @@ export default function createHeatMap({ models, flags }) {
         },
       },
     },
-    show: () => layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING') && dataHandler.getMeta().isBinnedData,
+    show: () => dataHandler.getMeta().isBinnedData,
     brush: createBrush(),
     settings: {
       x: {

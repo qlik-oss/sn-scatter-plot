@@ -45,11 +45,11 @@ describe('heat-map', () => {
       },
       layoutService: {
         meta: {
-          isBigData: false,
+          isBigData: true,
         },
       },
     };
-    flags = { isEnabled: sandbox.stub().returns(false) };
+    flags = { isEnabled: sandbox.stub().returns(true) };
 
     create = () =>
       createHeatMap({
@@ -60,6 +60,16 @@ describe('heat-map', () => {
 
   afterEach(() => {
     sandbox.restore();
+  });
+
+  it('should return false if is not big data', () => {
+    models.layoutService.meta.isBigData = false;
+    expect(create()).to.be.false;
+  });
+
+  it('should return false if DATA_BINNING is not enabled', () => {
+    flags.isEnabled.returns(false);
+    expect(create()).to.be.false;
   });
 
   describe('object definition', () => {
@@ -97,28 +107,13 @@ describe('heat-map', () => {
     });
 
     describe('show', () => {
-      it('should return false when is not big data and flag DATA_BINNING is not enabled', () => {
-        expect(create().show()).to.equal(false);
-      });
-
-      it('should return false when is big data and flag DATA_BINNING is not enabled', () => {
-        models.layoutService.meta.isBigData = true;
-        expect(create().show()).to.equal(false);
-      });
-
-      it('should return false when is not big data and flag DATA_BINNING is enabled', () => {
-        flags.isEnabled.returns(true);
-        expect(create().show()).to.equal(false);
-      });
-
       it('should return false when is not binned data', () => {
         dataHandler.getMeta.returns({ isBinnedData: false });
         expect(create().show()).to.equal(false);
       });
 
-      it('should return true when is big data and flag DATA_BINNING is enabled', () => {
-        models.layoutService.meta.isBigData = true;
-        flags.isEnabled.returns(true);
+      it('should return true when is binned data', () => {
+        dataHandler.getMeta.returns({ isBinnedData: true });
         expect(create().show()).to.equal(true);
       });
     });
