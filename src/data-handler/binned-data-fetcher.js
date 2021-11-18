@@ -1,38 +1,11 @@
 import NUMBERS from '../constants/numbers';
+import populateBins from '../utils/bins-util';
 
 export default function createBinnedDataFetcher({ layoutService, extremumModel, model }) {
   const DEFAULT_RESOLUTION_LEVEL = 6;
   const MAX_RESOLUTION_LEVEL = 8;
   const bins = [];
   let maxBinDensity = 0;
-
-  const populateBins = (dp) => {
-    bins.length = 0;
-    const matrix = dp[0].qMatrix;
-    let i;
-
-    // Hack for snapshot
-    if (dp[0].reformatted) {
-      for (i = 1; i < matrix.length; i++) {
-        try {
-          bins.push(matrix[i][0]);
-        } catch (err) {
-          // console.log( err );
-        }
-      }
-    } else {
-      for (i = 1; i < matrix.length; i++) {
-        try {
-          matrix[i][0].qText = JSON.parse(matrix[i][0].qText);
-          bins.push(matrix[i][0]);
-        } catch (err) {
-          // console.log( err );
-        }
-      }
-      // eslint-disable-next-line no-param-reassign
-      dp[0].reformatted = true;
-    }
-  };
 
   const getBinnedData = (left, top, width, height, zoomLevel) => {
     const layout = layoutService.getLayout();
@@ -70,7 +43,7 @@ export default function createBinnedDataFetcher({ layoutService, extremumModel, 
       if (dataPages[0].qMatrix?.length) {
         layoutService.setLayoutValue('dataPages', dataPages);
         layoutService.setDataPages([]);
-        populateBins([dataPages[0]]);
+        populateBins([dataPages[0]], bins);
         maxBinDensity = dataPages[0].qMatrix[0][0].qNum;
       } else {
         layoutService.setLayoutValue('dataPages', undefined);

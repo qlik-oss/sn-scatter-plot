@@ -1,33 +1,6 @@
-/* eslint-disable no-param-reassign */
-const populateBins = (dataPages) => {
-  const bins = [];
-  const matrix = dataPages[0].qMatrix;
-  let i;
+import populateBins from '../../../utils/bins-util';
 
-  if (dataPages[0].reformatted) {
-    for (i = 1; i < matrix.length; i++) {
-      try {
-        bins.push(matrix[i][0]);
-      } catch (err) {
-        // console.log( err );
-      }
-    }
-  } else {
-    for (i = 1; i < matrix.length; i++) {
-      try {
-        matrix[i][0].qText = JSON.parse(matrix[i][0].qText);
-        bins.push(matrix[i][0]);
-      } catch (err) {
-        // console.log( err );
-      }
-    }
-    dataPages[0].reformatted = true;
-  }
-
-  return bins;
-};
-
-const mergeRectsByDim = (rects, dim) => {
+export function mergeRectsByDim(rects, dim) {
   if (rects.length === 0) {
     return [];
   }
@@ -78,10 +51,11 @@ const mergeRectsByDim = (rects, dim) => {
     }
   }
   return rects2;
-};
+}
 
-const getSelectedBins = ({ layout, values }) => {
-  const binArray = populateBins([layout.dataPages[0]]);
+export function getSelectedBins({ layout, values }) {
+  const bins = [];
+  const binArray = populateBins([layout.dataPages[0]], bins);
   const selectedBinArray = [];
   values.forEach((v) => {
     const selectBin = binArray.find(({ qElemNumber }) => qElemNumber === v);
@@ -90,7 +64,7 @@ const getSelectedBins = ({ layout, values }) => {
     }
   });
   return selectedBinArray;
-};
+}
 
 export default function calculateDataRects({ layout, values }) {
   const selectedBinArray = getSelectedBins({ layout, values });

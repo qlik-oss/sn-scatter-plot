@@ -4,6 +4,8 @@ import qBrush from './bin-selection/q-brush';
 
 export default function createService({ chart, actions, selections }) {
   const allowSimultaneous = [...Array(15)].map((d, i) => `qHyperCube/qMeasureInfo/${i}`);
+  allowSimultaneous.push('binData/binX');
+  allowSimultaneous.push('binData/binY');
 
   const service = createSelectionService({
     chart,
