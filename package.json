@@ -102,6 +102,6 @@
     "yargs": "17.0.1"
   },
   "peerDependencies": {
-    "@nebula.js/stardust": ">=1.2.0"
+    "@nebula.js/stardust": ">=2.2.0"
   }
 }
