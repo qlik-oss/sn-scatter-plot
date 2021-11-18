@@ -39,6 +39,7 @@
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js && scriptappy-from-jsdoc -c ./spec-configs/plugins.conf.js",
     "test:unit": "aw -c aw.config.js",
     "test:rendering": "node ./scripts/run-rendering-tests.js",
+    "test:rendering:local": "aw puppet --glob 'test/**/*.spec.js' --mocha.bail false --mocha.timeout 10000",
     "prepublishOnly": "rm -rf dist && yarn run build",
     "version": "yarn spec && git add api-specifications"
   },
@@ -94,7 +95,7 @@
     "pretty-quick": "3.1.0",
     "prop-types": "^15.7.2",
     "puppeteer": "2.0.0",
-    "qlik-chart-modules": "0.16.1",
+    "qlik-chart-modules": "0.17.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "scriptappy-from-jsdoc": "0.7.0",

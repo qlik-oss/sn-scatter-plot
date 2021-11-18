@@ -9743,10 +9743,10 @@ q@^1.1.2, q@^1.5.1:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
-qlik-chart-modules@0.16.1:
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.16.1.tgz#43c7b8e3990529e19a10a213e3ee8a9b09380000"
-  integrity sha512-RCIBlnyZgF4OVuAVrHQGsRxUWCD8hobW6UDmr1wXjwqxG8HdMv0SghpY8vD/ZVI6dqx1g3DisDLFoYBpPcEAlA==
+qlik-chart-modules@0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.17.0.tgz#73a62ca436ad3d460809fd75447a1a01852d9214"
+  integrity sha512-5shW2aldlAOO5x6Le2J4jdz2jTsU2rzGHtf7M/TlODDPlpZw6xcEoLxZMIWeGaNHJWy8KVXvb4NZBZjVgvE1eg==
 
 qs@6.7.0:
   version "6.7.0"
