@@ -82,7 +82,9 @@ describe('ext', () => {
         },
       });
     });
+  });
 
+  describe('exportProperties', () => {
     it('should call exportProperties of color chart with correct arguments', () => {
       create().exportProperties(propertyTree);
       expect(conversion.colorChart.exportProperties).to.have.been.calledWithExactly({
