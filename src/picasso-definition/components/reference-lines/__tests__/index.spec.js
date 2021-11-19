@@ -10,13 +10,12 @@ describe('createReferenceLines', () => {
   let dockService;
   let models;
   const layoutService = 'layoutService';
-  let themeService;
+  const chartModel = 'chart-model';
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     context = { rtl: 'some rtl', localeInfo: 'valid localeInfo' };
     dockService = { meta: { x: { opposite: 'top' }, y: { opposite: 'right' } } };
-    themeService = { getStyles: sandbox.stub().returns('themeStyle') };
     sandbox.stub(KEYS, 'default').value({
       SCALE: { X: 'X', Y: 'Y' },
       COMPONENT: {
@@ -29,7 +28,7 @@ describe('createReferenceLines', () => {
     sandbox.stub(MODES, 'REFERENCE_LINES').value('XSMALL');
     sandbox.stub(createLines, 'default');
     sandbox.stub(createLabels, 'default');
-    models = { layoutService, dockService, themeService };
+    models = { layoutService, dockService, chartModel };
   });
 
   afterEach(() => {
@@ -41,6 +40,7 @@ describe('createReferenceLines', () => {
     expect(
       createLines.default.withArgs({
         layoutService: 'layoutService',
+        chartModel: 'chart-model',
         scale: 'Y',
         key: 'ref-lines-y',
         minimumLayoutMode: 'XSMALL',
@@ -49,6 +49,7 @@ describe('createReferenceLines', () => {
     expect(
       createLines.default.withArgs({
         layoutService: 'layoutService',
+        chartModel: 'chart-model',
         scale: 'X',
         key: 'ref-lines-x',
         minimumLayoutMode: 'XSMALL',

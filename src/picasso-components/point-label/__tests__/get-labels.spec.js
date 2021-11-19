@@ -15,8 +15,8 @@ describe('getLabels', () => {
     sandbox = sinon.createSandbox();
     measureText = sandbox.stub().returns({ width: 2 });
     nodes = [
-      { localBounds: { x: 313, y: 230, width: 25, height: 25 } },
-      { localBounds: { x: 267, y: 279, width: 24, height: 24 } },
+      { localBounds: { x: 313, y: 230, width: 25, height: 25 }, data: { value: 0 } },
+      { localBounds: { x: 267, y: 279, width: 24, height: 24 }, data: { value: 1 } },
     ];
     label = sandbox.stub().returns('correct label');
     sandbox.stub(testRectRect, 'default');
@@ -38,8 +38,8 @@ describe('getLabels', () => {
     const result = getLabels({ measureText, mode, nodes, label, labelHeight, component });
     expect(result).to.deep.equal({
       topLabels: [
-        { ellipsed: 'correct label', cx: 325.5, topRect: { y2: 224 } },
-        { ellipsed: 'correct label', cx: 279, topRect: { y2: 273 } },
+        { ellipsed: 'correct label', cx: 325.5, topRect: { y2: 224 }, pointValue: 0 },
+        { ellipsed: 'correct label', cx: 279, topRect: { y2: 273 }, pointValue: 1 },
       ],
       bottomLabels: [],
     });
@@ -68,6 +68,7 @@ describe('getLabels', () => {
           ellipsed: 'correct label',
           isEllipsisChar: false,
           maxWidth: 465,
+          pointValue: 0,
         },
       ],
       bottomLabels: [
@@ -81,6 +82,7 @@ describe('getLabels', () => {
           ellipsed: 'correct label',
           isEllipsisChar: false,
           maxWidth: 558,
+          pointValue: 1,
         },
       ],
     });
@@ -108,6 +110,7 @@ describe('getLabels', () => {
           ellipsed: 'correct label',
           isEllipsisChar: false,
           maxWidth: 465,
+          pointValue: 0,
         },
       ],
     });

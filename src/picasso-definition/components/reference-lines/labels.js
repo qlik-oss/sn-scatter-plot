@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import extend from 'extend';
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
@@ -30,10 +31,11 @@ const getOobColors = (style, theme) => {
 };
 
 export default function createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode }) {
-  const { layoutService, themeService } = models;
+  const { layoutService, themeService, chartModel } = models;
   const { rtl, localeInfo } = context;
   const themeStyle = themeService.getStyles();
   const theme = themeService.getTheme();
+  const viewHandler = chartModel.query.getViewHandler();
 
   const path = scale === KEYS.SCALE.X ? 'refLine.refLinesX' : 'refLine.refLinesY';
   const refLineLabels = layoutService
@@ -88,6 +90,16 @@ export default function createRefLineLabels({ models, context, scale, key, dock,
             fill: oobColors.backgroundColor,
           },
         },
+      },
+    },
+    animations: {
+      enabled: () => viewHandler.animationEnabled,
+      trackBy: (node) => `${node.labelID}: ${node.text}`,
+      compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
+        const deltaX = currentRect.x - previousRect.x;
+        currentNodes.forEach((node) => {
+          node.x -= deltaX;
+        });
       },
     },
   };

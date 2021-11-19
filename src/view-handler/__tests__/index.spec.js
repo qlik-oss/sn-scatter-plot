@@ -1,3 +1,4 @@
+import * as NUMBERS from '../../constants/numbers';
 import createViewHandler from '..';
 
 describe('createViewHandler', () => {
@@ -7,6 +8,7 @@ describe('createViewHandler', () => {
   let viewHandler;
   let myDataView;
   let extremumModel;
+  let layoutService;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -18,12 +20,27 @@ describe('createViewHandler', () => {
         updateExtrema: sandbox.stub(),
       },
     };
-    create = () => createViewHandler({ viewState, extremumModel });
+    sandbox.stub(NUMBERS, 'default').value({ MAX_NR_ANIMATION: 10 });
+    layoutService = { getHyperCubeValue: sandbox.stub() };
+    create = () => createViewHandler({ viewState, extremumModel, layoutService });
     viewHandler = create();
   });
 
   afterEach(() => {
     sandbox.restore();
+  });
+
+  it('should return a view handler with all keys', () => {
+    expect(viewHandler).to.have.all.keys([
+      'setDataView',
+      'getDataView',
+      'setMeta',
+      'getMeta',
+      'setInteractionInProgress',
+      'getInteractionInProgress',
+      'animationEnabled',
+      'transform',
+    ]);
   });
 
   it('should return a view handler with proper getDataView method', () => {
@@ -76,5 +93,23 @@ describe('createViewHandler', () => {
       maxScale: 3,
       minScale: 4,
     });
+  });
+
+  it('should return a view handler with proper set and getInteractionInProgress method', () => {
+    expect(viewHandler.getInteractionInProgress()).to.equal(false);
+    viewHandler.setInteractionInProgress(true);
+    expect(viewHandler.getInteractionInProgress()).to.equal(true);
+  });
+
+  it('should return a view handler with proper get animationEnabled', () => {
+    layoutService.getHyperCubeValue.returns(5);
+    viewHandler.setInteractionInProgress(true);
+    expect(viewHandler.animationEnabled).to.equal(false);
+    layoutService.getHyperCubeValue.returns(11);
+    viewHandler.setInteractionInProgress(false);
+    expect(viewHandler.animationEnabled).to.equal(false);
+    layoutService.getHyperCubeValue.returns(10);
+    viewHandler.setInteractionInProgress(false);
+    expect(viewHandler.animationEnabled).to.equal(true);
   });
 });
