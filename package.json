@@ -96,6 +96,7 @@
     "prop-types": "^15.7.2",
     "puppeteer": "2.0.0",
     "qlik-chart-modules": "0.17.0",
+    "qlik-object-conversion": "0.8.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "scriptappy-from-jsdoc": "0.7.0",

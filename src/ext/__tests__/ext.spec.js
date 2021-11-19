@@ -1,15 +1,35 @@
 import * as pp from '../property-definition';
-import ext from '../ext';
+import * as dataDefinition from '../../qae/data-definition';
 
 describe('ext', () => {
   let sandbox;
   let env;
   let create;
+  let exportFormat;
+  let initialProperties;
+  let extension;
+  let conversion;
+  let ext;
 
   beforeEach(() => {
     env = 'correct env';
     sandbox = sinon.createSandbox();
     sandbox.stub(pp, 'default').withArgs('correct env').returns('correct def');
+
+    exportFormat = 'export-format';
+    initialProperties = 'initial-properties';
+    conversion = {
+      colorChart: {
+        importProperties: sandbox.stub(),
+        exportProperties: () => {},
+      },
+    };
+    [{ default: ext }] = aw.mock([['qlik-object-conversion', () => conversion]], ['../ext']);
+    sandbox.stub(dataDefinition, 'default').returns('data-definition');
+    extension = {
+      getDefaultDimensionProperties: sandbox.stub().returns('default-dimension'),
+      getDefaultMeasureProperties: sandbox.stub().returns('default-measure'),
+    };
     create = () => ext(env);
   });
 
@@ -18,7 +38,7 @@ describe('ext', () => {
   });
 
   it('should have correct properties', () => {
-    expect(create()).to.have.all.keys(['definition', 'support']);
+    expect(create()).to.have.all.keys(['definition', 'support', 'importProperties', 'exportProperties']);
   });
 
   describe('definition', () => {
@@ -44,6 +64,21 @@ describe('ext', () => {
         layout = { qHyperCube: { qSize: { qcy: 1 } } };
         const createdSnapshot = create().support.snapshot;
         expect(createdSnapshot(layout)).to.deep.equal(true);
+      });
+    });
+  });
+
+  describe('importProperties', () => {
+    it('should call importProperties of color chart with correct arguments', () => {
+      create().importProperties(exportFormat, initialProperties, extension);
+      expect(conversion.colorChart.importProperties).to.have.been.calledWithExactly({
+        exportFormat: 'export-format',
+        initialProperties: 'initial-properties',
+        dataDefinition: 'data-definition',
+        defaultPropertyValues: {
+          defaultDimension: 'default-dimension',
+          defaultMeasure: 'default-measure',
+        },
       });
     });
   });
