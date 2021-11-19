@@ -10,7 +10,17 @@ module.exports = {
     bail: false,
     reporter: 'min',
   },
-  mocks: [],
+  mocks: [
+    [
+      '**/dist/conversion.js',
+      `{
+      colorChart: {
+        importProperties() {},
+        exportProperties() {},
+      },
+    }`,
+    ],
+  ],
   babel: {
     options: {
       presets: [

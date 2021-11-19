@@ -10,6 +10,7 @@ describe('ext', () => {
   let extension;
   let conversion;
   let ext;
+  const propertyTree = 'property-tree';
 
   beforeEach(() => {
     env = 'correct env';
@@ -21,7 +22,7 @@ describe('ext', () => {
     conversion = {
       colorChart: {
         importProperties: sandbox.stub(),
-        exportProperties: () => {},
+        exportProperties: sandbox.stub(),
       },
     };
     [{ default: ext }] = aw.mock([['qlik-object-conversion', () => conversion]], ['../ext']);
@@ -79,6 +80,13 @@ describe('ext', () => {
           defaultDimension: 'default-dimension',
           defaultMeasure: 'default-measure',
         },
+      });
+    });
+
+    it('should call exportProperties of color chart with correct arguments', () => {
+      create().exportProperties(propertyTree);
+      expect(conversion.colorChart.exportProperties).to.have.been.calledWithExactly({
+        propertyTree: 'property-tree',
       });
     });
   });
