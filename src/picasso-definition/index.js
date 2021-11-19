@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import NUMBERS from '../constants/numbers';
 import createCollections from './collections';
 import createComponents from './components';

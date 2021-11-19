@@ -39,6 +39,7 @@
     "spec": "scriptappy-from-jsdoc -c ./spec-configs/props.conf.js && scriptappy-from-jsdoc -c ./spec-configs/plugins.conf.js",
     "test:unit": "aw -c aw.config.js",
     "test:rendering": "node ./scripts/run-rendering-tests.js",
+    "test:rendering:local": "aw puppet --glob 'test/**/*.spec.js' --mocha.bail false --mocha.timeout 10000",
     "prepublishOnly": "rm -rf dist && yarn run build",
     "version": "yarn spec && git add api-specifications"
   },
@@ -67,7 +68,7 @@
     "@nebula.js/cli": "1.4.0",
     "@nebula.js/cli-build": "1.5.0",
     "@nebula.js/cli-sense": "1.5.0",
-    "@nebula.js/cli-serve": "1.5.0",
+    "@nebula.js/cli-serve": "2.2.0",
     "babel-eslint": "10.1.0",
     "babel-plugin-istanbul": "^6.0.0",
     "d3-color": "1.4.1",
@@ -77,15 +78,15 @@
     "eslint-config-prettier": "7.2.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsx-a11y": "6.4.1",
-    "eslint-plugin-mocha": "8.0.0",
+    "eslint-plugin-mocha": "9.0.0",
     "eslint-plugin-prettier": "3.3.1",
     "eslint-plugin-react": "7.22.0",
     "eslint-plugin-react-hooks": "4.2.0",
     "extend": "3.0.2",
-    "fs-extra": "8.1.0",
+    "fs-extra": "10.0.0",
     "hammerjs": "2.0.8",
     "husky": "4.2.5",
-    "lint-staged": "10.2.2",
+    "lint-staged": "12.0.2",
     "mocha-junit-reporter": "2.0.0",
     "picasso-plugin-hammer": "1.2.2",
     "picasso-plugin-q": "1.2.2",
@@ -94,13 +95,13 @@
     "pretty-quick": "3.1.0",
     "prop-types": "^15.7.2",
     "puppeteer": "2.0.0",
-    "qlik-chart-modules": "0.16.0",
+    "qlik-chart-modules": "0.18.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "scriptappy-from-jsdoc": "0.7.0",
     "yargs": "17.0.1"
   },
   "peerDependencies": {
-    "@nebula.js/stardust": ">=1.2.0"
+    "@nebula.js/stardust": ">=2.2.0"
   }
 }
