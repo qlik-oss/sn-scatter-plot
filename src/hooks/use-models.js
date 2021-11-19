@@ -24,6 +24,7 @@ import createChartModel from '../models/chart-model';
 import createTickModel from '../models/tick-model';
 import createSelectionService from '../services/selection-service';
 import createColorService from '../services/color-service';
+import createTooltipService from '../services/tooltip-service';
 import getPluginArgs from '../services/plugin-service/plugin-args';
 import getLogicalSize from '../logical-size';
 import createExtremumModel from '../models/extremum-model';
@@ -70,6 +71,9 @@ const useModels = ({ core, flags }) => {
     }
 
     const { picassoInstance, chart, actions, viewState } = core;
+
+    const rtl = options.direction === 'rtl';
+
     const layoutService = createLayoutService({
       source: layout,
       metaAdditionsFn: layoutServiceMeta(flags),
@@ -80,7 +84,7 @@ const useModels = ({ core, flags }) => {
       layoutService,
       config: {
         logicalSize: logicalSize || rect,
-        rtl: options.direction === 'rtl',
+        rtl,
       },
       typeConfig: {
         type: 'x-y',
@@ -106,6 +110,16 @@ const useModels = ({ core, flags }) => {
       picasso: picassoInstance,
       viewState,
       dataHandler,
+    });
+
+    const tooltipService = createTooltipService({
+      chart,
+      actions,
+      translator,
+      rtl,
+      layoutService,
+      colorService,
+      themeService,
     });
 
     const chartModel = createChartModel({
@@ -135,6 +149,7 @@ const useModels = ({ core, flags }) => {
       disclaimerModel,
       colorService,
       extremumModel,
+      tooltipService,
     });
   }, [model, app, selectionService, layout, theme.name(), translator.language(), options.direction, options.viewState]);
 

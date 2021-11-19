@@ -19,10 +19,6 @@ function eventToLocalPoint(event, chart) {
 
 const tap = ({ targets, requireFailure, recognizeWith, components, eventName = 'tap' }, opts) => {
   let targetComponents;
-  const customTooltipUtils = opts.customTooltipModel?.utils;
-  const debouncedDisplayCustomTooltip = customTooltipUtils
-    ? opts.debouncer(customTooltipUtils.displayTooltip, customTooltipUtils.DEBOUNCE_THRESHOLD)
-    : undefined;
 
   return {
     key: 'event:tap',
@@ -38,7 +34,7 @@ const tap = ({ targets, requireFailure, recognizeWith, components, eventName = '
           return true;
         }
 
-        if (!opts.actions.select.enabled() && !opts.actions.tooltip.enabled()) {
+        if (!opts.actions.select.enabled()) {
           return false;
         }
 
@@ -62,10 +58,7 @@ const tap = ({ targets, requireFailure, recognizeWith, components, eventName = '
               components: targets.map((c) => ({ key: c })),
             });
 
-        const tooltip = this.chart.component('tooltip');
-        const doTooltip = e.pointerType !== 'mouse' && tooltip && tooltip.show;
-
-        const doSelect = !opts.isLocked(targetComponents) && !opts.tooltipOnly && opts.actions.select.enabled();
+        const doSelect = !opts.isLocked(targetComponents) && opts.actions.select.enabled();
 
         if (doSelect) {
           const compsAtPoint = this.chart.componentsFromPoint({ x: e.center.x, y: e.center.y });
@@ -85,24 +78,6 @@ const tap = ({ targets, requireFailure, recognizeWith, components, eventName = '
               components: comps,
             });
             opts.actions.select.emit('end', eventName);
-          }
-        }
-
-        if (tooltip && opts.actions.tooltip.enabled()) {
-          if (shapes.length) {
-            const { customTooltipModel } = opts;
-            if (
-              customTooltipModel &&
-              customTooltipModel.useCustomTooltip &&
-              customTooltipUtils.checkIfPromisesExist({ customTooltipModel })
-            ) {
-              const nodes = customTooltipUtils.getNodes(e, this.chart);
-              debouncedDisplayCustomTooltip(e, tooltip, { nodes, opts, customTooltipModel });
-            } else {
-              tooltip.emit('show', e, { nodes: shapes });
-            }
-          } else if (doTooltip) {
-            tooltip.emit('hide');
           }
         }
       },
