@@ -4,6 +4,7 @@ describe('interactions', () => {
   let create;
   let gestures;
   let colorService;
+  let tooltipService;
   let actions;
   let args;
   let chart;
@@ -40,6 +41,12 @@ describe('interactions', () => {
         legendInteractions: sandbox.stub().returns(['legend-i1', 'legend-i2']),
       },
     };
+    tooltipService = {
+      getInteractions: sandbox.stub().returns({
+        gestures: [{ key: 'tooltip-gesture-0' }, { key: 'tooltip-gesture-1' }],
+        native: { key: 'tooltip-native' },
+      }),
+    };
     actions = { key: 'actions' };
     args = {
       chart,
@@ -47,6 +54,7 @@ describe('interactions', () => {
       viewHandler,
       gestures,
       colorService,
+      tooltipService,
       models,
       rtl,
     };
@@ -71,6 +79,9 @@ describe('interactions', () => {
         key: 'native',
       },
       {
+        key: 'tooltip-native',
+      },
+      {
         type: 'hammer',
         enable: true,
         gestures: [
@@ -81,6 +92,8 @@ describe('interactions', () => {
           { key: 'gesture-3', prio: 1 },
           { key: 'panorama' },
           { key: 'pinchZoom' },
+          { key: 'tooltip-gesture-0' },
+          { key: 'tooltip-gesture-1' },
         ],
       },
     ]);
@@ -94,11 +107,15 @@ describe('interactions', () => {
       viewHandler,
       gestures,
       colorService,
+      tooltipService,
       models,
     };
     expect(create(args)).to.deep.equal([
       {
         key: 'native',
+      },
+      {
+        key: 'tooltip-native',
       },
       {
         type: 'hammer',
@@ -111,6 +128,8 @@ describe('interactions', () => {
           { key: 'gesture-3' },
           { key: 'panorama' },
           { key: 'pinchZoom' },
+          { key: 'tooltip-gesture-0' },
+          { key: 'tooltip-gesture-1' },
         ],
       },
     ]);
