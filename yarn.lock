@@ -2355,25 +2355,25 @@
     fs-extra "10.0.0"
     inquirer "8.1.2"
 
-"@nebula.js/cli-sense@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-sense/-/cli-sense-1.7.0.tgz#7d867f9936748ed8165dc4ed814b7435112d22b6"
-  integrity sha512-NrTqvgLx55EhKSJxdPjMn0xURs8aMPvlXtyRBszgRtsKCVA5NhuYFyVZUMEg3sXNC47s8BaoUZKTDSCmXpnzew==
+"@nebula.js/cli-sense@2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-sense/-/cli-sense-2.2.0.tgz#a12dcaf0d19cad5137d979ea055398fa017163df"
+  integrity sha512-C9vo0qlVBCzDsQtQwmoN2fn9dZsivtuC6kQ4/4Rj5g4ZAqNn9pL3to8h1FVUZZTmwHyDU/GpU/xTnT1/QbhiFQ==
   dependencies:
-    "@babel/cli" "7.14.8"
-    "@babel/core" "7.14.8"
-    "@babel/preset-env" "7.14.9"
-    "@nebula.js/stardust" "^1.7.0"
-    "@rollup/plugin-commonjs" "20.0.0"
-    "@rollup/plugin-node-resolve" "13.0.4"
+    "@babel/cli" "7.16.0"
+    "@babel/core" "7.16.0"
+    "@babel/preset-env" "7.16.0"
+    "@nebula.js/stardust" "^2.2.0"
+    "@rollup/plugin-commonjs" "21.0.1"
+    "@rollup/plugin-node-resolve" "13.0.6"
     "@rollup/plugin-replace" "3.0.0"
     extend "3.0.2"
     fs-extra "10.0.0"
     node-event-emitter "0.0.1"
-    rollup "2.55.1"
+    rollup "2.60.0"
     rollup-plugin-babel "4.4.0"
     rollup-plugin-terser "7.0.2"
-    yargs "17.0.1"
+    yargs "17.2.1"
 
 "@nebula.js/cli-serve@2.2.0":
   version "2.2.0"
@@ -2406,10 +2406,10 @@
     import-cwd "3.0.0"
     yargs "17.0.1"
 
-"@nebula.js/stardust@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-1.7.0.tgz#475d8e3bd4e55cb074aeb7e374e5569a309ad105"
-  integrity sha512-d+KE2IKoLud27BZQ4eTJtFbPRLq2JqQmz8uZaQ/BYWA9CxmntlTxiDDcaJlzBgk3YFUxUpvz2yvBHWP/YmPpyg==
+"@nebula.js/stardust@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/stardust/-/stardust-2.2.0.tgz#dc9f0a9c6769d429ebafa0590ee9bc6d2bfc2321"
+  integrity sha512-+qf+Z2J4yD9wnen65QiV3db8dPAYJS5zFB7TkebVOtjFUd+8zvpMiu02ZDe+Gjsw3rKKZCuhTuZRZqHxG7j1gA==
 
 "@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.2":
   version "2.1.8-no-fsevents.2"
