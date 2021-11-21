@@ -21,7 +21,7 @@ describe('keys', () => {
       'REFERENCE_LINE_LABELS_X',
       'REFERENCE_LINE_LABELS_Y',
       'POINT',
-      'POINT_TOOLTIP',
+      'TOOLTIP',
       'POINT_LABELS',
       'LEGEND',
       'LEGEND_CATEGORICAL',

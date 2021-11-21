@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import NUMBERS from '../constants/numbers';
 import createCollections from './collections';
 import createComponents from './components';
@@ -18,7 +19,7 @@ export default function createPicassoDefinition({
   flags,
 }) {
   const { chart, actions, picasso } = core;
-  const { chartModel, colorService, pluginService } = models;
+  const { chartModel, colorService, pluginService, tooltipService } = models;
   const viewHandler = chartModel.query.getViewHandler();
   const viewState = chartModel.query.getViewState();
   const localeInfo = chartModel.query.getLocaleInfo();
@@ -48,6 +49,7 @@ export default function createPicassoDefinition({
       viewHandler,
       gestures: [...selectables.gestures],
       colorService,
+      tooltipService,
       rtl: context.rtl,
     }),
     scales,

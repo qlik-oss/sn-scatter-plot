@@ -58,23 +58,16 @@ export default {
     labelHelper.addLabelPositions(labels, scale, majorSize);
 
     // filteredLabels: labels that are not out of bounds
-    const {
-      filteredLabels,
-      lowerOobs,
-      upperOobs,
-      lowerCircleSize,
-      upperCircleSize,
-      lowerOobSpace,
-      upperOobSpace,
-    } = oob.createOobsInfo({
-      labels,
-      minValue: scale.domain()[0],
-      maxValue: scale.domain()[1],
-      orientation,
-      style,
-      padding,
-      measureText: this.measureText,
-    });
+    const { filteredLabels, lowerOobs, upperOobs, lowerCircleSize, upperCircleSize, lowerOobSpace, upperOobSpace } =
+      oob.createOobsInfo({
+        labels,
+        minValue: scale.domain()[0],
+        maxValue: scale.domain()[1],
+        orientation,
+        style,
+        padding,
+        measureText: this.measureText,
+      });
 
     const [min, max] =
       majorAxis === 'x' ? [lowerOobSpace, majorSize - upperOobSpace] : [upperOobSpace, majorSize - lowerOobSpace];
@@ -95,7 +88,7 @@ export default {
     // filteredLabels2: filteredLabels whose segments are not out of bounds
     const filteredLabels2 = labelLayout.createLayout(filteredLabels, min, max, gap);
     let renderedLabels = [];
-    filteredLabels2.forEach((label) => {
+    filteredLabels2.forEach((label, index) => {
       const { lines } = label;
       const count = lines.length;
       const renderedTextLines = lines.map((line, idx) => {
@@ -120,6 +113,7 @@ export default {
           anchor: 'middle',
           [minorAxis]: minorCenter,
           [majorAxis]: label.segment.position,
+          labelID: `${majorAxis}-${index}`,
         };
 
         obj.y += (idx - (count - 1) / 2) * lineHeight;

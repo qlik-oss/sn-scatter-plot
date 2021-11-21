@@ -22,6 +22,7 @@ export default function createChartModel({
 
   const viewHandler = createViewHandler({
     extremumModel,
+    layoutService,
     viewState,
   });
 

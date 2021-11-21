@@ -6,14 +6,13 @@ import createHeatMap from './heat-map';
 import createHeatMapLabels from './heat-map-labels';
 import createReferenceLines from './reference-lines';
 import createPointLabels from './point-labels';
-import createTooltips from './tooltips';
 import createDisclaimer from './disclaimer';
 import createOutOfBounds from './out-of-bounds';
 import createHeatMapLegend from './heat-map-legend';
 import createMiniChart from './mini-chart';
 
 export default function createComponents({ context, models, flags, picasso, chart }) {
-  const { colorService, disclaimerModel, layoutService, themeService, chartModel } = models;
+  const { colorService, disclaimerModel, layoutService, themeService, chartModel, tooltipService } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
 
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
@@ -34,7 +33,7 @@ export default function createComponents({ context, models, flags, picasso, char
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
     ...createMiniChart({ models, flags }),
-    ...createTooltips({ models, context }),
+    ...tooltipService.getComponents(),
   ].filter(Boolean);
   // setDisplayOrder(components);
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 import NUMBERS from '../../../constants/numbers';
@@ -9,6 +10,15 @@ export default function createAxes({ models, flags }) {
 
   const style = themeService.getStyles();
   const viewHandler = chartModel.query.getViewHandler();
+  const trackBy = (node, i) => {
+    if (i === 0) {
+      return 'axis';
+    }
+    if (node.type === 'text') {
+      return `label: ${node.tickValue}`;
+    }
+    return `mark: ${node.tickValue}`;
+  };
 
   const xAxisDefinition =
     !xAxis || xAxis.show === 'none'
@@ -38,6 +48,19 @@ export default function createAxes({ models, flags }) {
               stroke: style.axis.line.minor.color,
             },
             paddingEnd: NUMBERS.AXIS.X.PADDING.END,
+          },
+          animations: {
+            enabled: () => viewHandler.animationEnabled,
+            trackBy,
+            compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
+              if (currentRect.width !== previousRect.width) {
+                const deltaX = currentRect.x - previousRect.x;
+                const deltaWidth = currentRect.width - previousRect.width;
+                // "Spread" x following the currentRect to avoid the gaps at two ends
+                currentNodes[0].x1 += deltaX;
+                currentNodes[0].x2 += deltaX + deltaWidth;
+              }
+            },
           },
         };
 
@@ -75,6 +98,28 @@ export default function createAxes({ models, flags }) {
                   yAxis.show === 'title' || viewHandler.getMeta().isHomeState === false
                     ? 0
                     : NUMBERS.AXIS.Y.PADDING.END,
+          },
+          animations: {
+            enabled: () => viewHandler.animationEnabled,
+            trackBy,
+            compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
+              if (dockService.meta.y.dock === 'right') {
+                return;
+              }
+              const deltaWidth = currentRect.width - previousRect.width;
+              // Move y axis to avoid it being outside of the currentRect
+              currentNodes.forEach((node) => {
+                if (node.type === 'line') {
+                  node.x1 += deltaWidth;
+                  node.x2 += deltaWidth;
+                  if (node.x1 === node.x2) {
+                    node.y2 = node.y1 + currentRect.height;
+                  }
+                } else if (node.type === 'text') {
+                  node.x += deltaWidth;
+                }
+              });
+            },
           },
         };
 

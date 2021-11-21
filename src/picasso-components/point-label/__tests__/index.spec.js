@@ -147,7 +147,14 @@ describe('component', () => {
       component.chart.findShapes.withArgs('circle').returns([{ key: 'pc' }]);
       helper.getLabels.returns({
         topLabels: [
-          { text: 'top label 1', cx: 0, topRect: { x1: 2, y1: 3, y2: 1 }, textWidth: 10, ellipsed: 'top label 1' },
+          {
+            text: 'top label 1',
+            cx: 0,
+            topRect: { x1: 2, y1: 3, y2: 1 },
+            textWidth: 10,
+            ellipsed: 'top label 1',
+            pointValue: 0,
+          },
         ],
         bottomLabels: [
           {
@@ -156,6 +163,7 @@ describe('component', () => {
             bottomRect: { x1: 12, y1: 13, y2: 11 },
             textWidth: 110,
             ellipsed: 'bottom label 1',
+            pointValue: 1,
           },
         ],
       });
@@ -171,6 +179,7 @@ describe('component', () => {
           fill: 'red',
           baseline: 'text-after-edge',
           anchor: 'middle',
+          pointValue: 0,
         },
         {
           type: 'text',
@@ -182,6 +191,7 @@ describe('component', () => {
           fill: 'red',
           baseline: 'text-before-edge',
           anchor: 'middle',
+          pointValue: 1,
         },
         {
           type: 'line',
@@ -191,6 +201,7 @@ describe('component', () => {
           y2: 3,
           stroke: 'red',
           strokeWidth: 1,
+          pointValue: 0,
         },
         {
           type: 'line',
@@ -200,6 +211,7 @@ describe('component', () => {
           y2: 13,
           stroke: 'red',
           strokeWidth: 1,
+          pointValue: 1,
         },
       ]);
     });

@@ -32,12 +32,7 @@ describe('minor', () => {
 
     it('should return correct minor ticks when major ticks are negative', () => {
       expect(getMinorTicks({ majorTicks: [-1, -2, -3], count })).to.deep.equal([
-        -1.25,
-        -1.5,
-        -1.75,
-        -2.25,
-        -2.5,
-        -2.75,
+        -1.25, -1.5, -1.75, -2.25, -2.5, -2.75,
       ]);
     });
 

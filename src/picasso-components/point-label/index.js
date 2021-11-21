@@ -69,6 +69,7 @@ export default {
       fill,
       baseline: 'text-after-edge',
       anchor: 'middle',
+      pointValue: node.pointValue,
     }));
     const rects1 =
       mode === 2 || !debugMode
@@ -80,6 +81,7 @@ export default {
             width: node.textWidth,
             height: labelHeight,
             fill: backgroundColor,
+            pointValue: node.pointValue,
           }));
     const lines1 = topLabels.map((node) => ({
       type: 'line',
@@ -89,6 +91,7 @@ export default {
       y2: node.topRect.y2 + DY,
       stroke: fill,
       strokeWidth: 1,
+      pointValue: node.pointValue,
     }));
     const labels2 = bottomLabels.map((node) => ({
       type: 'text',
@@ -100,6 +103,7 @@ export default {
       fill,
       baseline: 'text-before-edge',
       anchor: 'middle',
+      pointValue: node.pointValue,
     }));
     const rects2 =
       mode === 2 || !debugMode
@@ -111,6 +115,7 @@ export default {
             width: node.textWidth,
             height: labelHeight,
             fill: backgroundColor,
+            pointValue: node.pointValue,
           }));
     const lines2 = bottomLabels.map((node) => ({
       type: 'line',
@@ -120,6 +125,7 @@ export default {
       y2: node.bottomRect.y1,
       stroke: fill,
       strokeWidth: 1,
+      pointValue: node.pointValue,
     }));
     return [...rects1, ...rects2, ...labels1, ...labels2, ...lines1, ...lines2];
   },
