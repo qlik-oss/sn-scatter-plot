@@ -56,23 +56,16 @@ export default {
     labelHelper.addLabelPositions(labels, scale, majorSize);
 
     // filteredLabels: labels that are not out of bounds
-    const {
-      filteredLabels,
-      lowerOobs,
-      upperOobs,
-      lowerCircleSize,
-      upperCircleSize,
-      lowerOobSpace,
-      upperOobSpace,
-    } = oob.createOobsInfo({
-      labels,
-      minValue: scale.domain()[0],
-      maxValue: scale.domain()[1],
-      orientation,
-      style,
-      padding,
-      measureText: this.measureText,
-    });
+    const { filteredLabels, lowerOobs, upperOobs, lowerCircleSize, upperCircleSize, lowerOobSpace, upperOobSpace } =
+      oob.createOobsInfo({
+        labels,
+        minValue: scale.domain()[0],
+        maxValue: scale.domain()[1],
+        orientation,
+        style,
+        padding,
+        measureText: this.measureText,
+      });
 
     const [min, max] =
       majorAxis === 'x' ? [lowerOobSpace, majorSize - upperOobSpace] : [upperOobSpace, majorSize - lowerOobSpace];
