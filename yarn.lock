@@ -2345,15 +2345,15 @@
     rollup-plugin-terser "7.0.2"
     yargs "17.2.1"
 
-"@nebula.js/cli-create@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli-create/-/cli-create-1.7.0.tgz#e8921494f35c9640b9e4cd66136726d333eb6d14"
-  integrity sha512-IgvbZxU2tqzNfi0D9BMMgZOCncWgqWSW+M1320J8UKX3AA19/koxHJRO0RKzl4rID5pDahQEyjq8lKzVUXk0gA==
+"@nebula.js/cli-create@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli-create/-/cli-create-2.2.0.tgz#4810c87ccceddf69717933c1acef2a9bcb4eb771"
+  integrity sha512-DkwgZLBgV0YHDrIIupVsEicdg4TkRidWwj/o0mSmAkZgex4Fd7/qoYMMmPwANmA4Tss5g0jdg8vChogxjF9xXw==
   dependencies:
     chalk "4.1.2"
     ejs "3.1.6"
     fs-extra "10.0.0"
-    inquirer "8.1.2"
+    inquirer "8.2.0"
 
 "@nebula.js/cli-sense@1.7.0":
   version "1.7.0"
@@ -2397,14 +2397,14 @@
     ws "8.2.3"
     yargs "17.2.1"
 
-"@nebula.js/cli@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@nebula.js/cli/-/cli-1.7.0.tgz#316944f27ba8a51401838403fbe53b41533d139d"
-  integrity sha512-VSBnkM5eZ6wwlHjV3Dj0V3Lki0xbd/qw5ilIDZgTOkrr1npgOPVbfhtOtDnypg/II2G5PahgZOHjmLlguMZ7oQ==
+"@nebula.js/cli@2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@nebula.js/cli/-/cli-2.2.0.tgz#0a03315ea301abff4482f9f1737c5671cd131149"
+  integrity sha512-BCEI1wJX2yyPLUlN6T44zc+NuQVzp88zqC9E17Ytr9p4X/8Zaw2j0L5G9w2iKl98FmtRGwAIQvWRdll4snOeIQ==
   dependencies:
-    "@nebula.js/cli-create" "^1.7.0"
+    "@nebula.js/cli-create" "^2.2.0"
     import-cwd "3.0.0"
-    yargs "17.0.1"
+    yargs "17.2.1"
 
 "@nebula.js/stardust@^1.7.0":
   version "1.7.0"
@@ -6861,10 +6861,10 @@ inquirer@7.0.6:
     strip-ansi "^6.0.0"
     through "^2.3.6"
 
-inquirer@8.1.2:
-  version "8.1.2"
-  resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-8.1.2.tgz#65b204d2cd7fb63400edd925dfe428bafd422e3d"
-  integrity sha512-DHLKJwLPNgkfwNmsuEUKSejJFbkv0FMO9SMiQbjI3n5NQuCrSIBqP66ggqyz2a6t2qEolKrMjhQ3+W/xXgUQ+Q==
+inquirer@8.2.0:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-8.2.0.tgz#f44f008dd344bbfc4b30031f45d984e034a3ac3a"
+  integrity sha512-0crLweprevJ02tTuA6ThpoAERAGyVILC4sS74uib58Xf/zSr1/ZWtmm7D5CI+bSQEaA04f0K7idaHpQbSWgiVQ==
   dependencies:
     ansi-escapes "^4.2.1"
     chalk "^4.1.1"
@@ -6874,7 +6874,7 @@ inquirer@8.1.2:
     figures "^3.0.0"
     lodash "^4.17.21"
     mute-stream "0.0.8"
-    ora "^5.3.0"
+    ora "^5.4.1"
     run-async "^2.4.0"
     rxjs "^7.2.0"
     string-width "^4.1.0"
@@ -9010,7 +9010,7 @@ optionator@^0.9.1:
     type-check "^0.4.0"
     word-wrap "^1.2.3"
 
-ora@^5.3.0:
+ora@^5.4.1:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/ora/-/ora-5.4.1.tgz#1b2678426af4ac4a509008e5e4ac9e9959db9e18"
   integrity sha512-5b6Y85tPxZZ7QytO+BQzysW31HJku27cRIlkbAXaNx+BdcVi+LlRFmVXzeF6a7JCwJpyw5c4b+YSVImQIrBpuQ==
