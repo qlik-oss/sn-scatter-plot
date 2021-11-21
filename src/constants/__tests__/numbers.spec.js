@@ -9,6 +9,7 @@ describe('numbers', () => {
       'LEGEND_CAT',
       'LAYOUT_MODES',
       'MAX_NR_SCATTER',
+      'MAX_NR_ANIMATION',
       'MINI_CHART',
     ]);
   });
