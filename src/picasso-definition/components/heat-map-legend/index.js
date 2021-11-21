@@ -10,7 +10,11 @@ const heatMapLegend = ({ models, context, chart }) => {
     fontSize: '15px',
     color: '#595959',
   };
-  const { show: showLegend, dock: d, showTitle } = layoutService.getLayoutValue('legend', {
+  const {
+    show: showLegend,
+    dock: d,
+    showTitle,
+  } = layoutService.getLayoutValue('legend', {
     show: true,
     dock: 'auto',
     showTitle: true,
