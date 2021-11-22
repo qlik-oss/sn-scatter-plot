@@ -1,4 +1,4 @@
-FROM circleci/node:16.13-browsers
+FROM circleci/node:17.1-browsers
 
 USER root
 
