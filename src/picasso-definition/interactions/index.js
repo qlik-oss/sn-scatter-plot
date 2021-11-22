@@ -2,7 +2,9 @@ import native from './native';
 import pan from './pan';
 import pinch from './pinch';
 
-export default function create({ chart, actions, viewHandler, gestures, colorService, rtl }) {
+export default function create({ chart, actions, viewHandler, gestures, colorService, tooltipService, rtl }) {
+  const tooltipInteractions = tooltipService.getInteractions();
+
   const hammer = {
     type: 'hammer',
     enable: true,
@@ -12,8 +14,9 @@ export default function create({ chart, actions, viewHandler, gestures, colorSer
       ...[...gestures].sort((a, b) => (b.prio || 0) - (a.prio || 0)),
       pan({ chart, actions, viewHandler, rtl }),
       pinch({ chart, actions, viewHandler, rtl }),
+      ...tooltipInteractions.gestures,
     ],
   };
-  const interactions = [native({ chart, actions, viewHandler }), hammer];
+  const interactions = [native({ chart, actions, viewHandler }), tooltipInteractions.native, hammer];
   return interactions;
 }

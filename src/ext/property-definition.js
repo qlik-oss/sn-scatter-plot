@@ -438,15 +438,7 @@ export default function propertyDefinition(env) {
   };
 
   const data = {
-    uses:
-      'data' /* ,
-    dimensions: {
-        uses: "dimensions"/*,
-         items: {
-         nullSuppression: null // should not be available for scatter plot
-         // Well, it probably should be /tsm
-         } */,
-    // }
+    uses: 'data',
   };
 
   const addons = {
