@@ -1,12 +1,14 @@
 export default {
   require: ['renderer'],
   defaultSettings: {
-    style: { borderColor: 'black', background: 'red' },
-    rect: {
-      x: () => 100,
-      y: () => 100,
-      width: () => 100,
-      height: () => 100,
+    settings: {
+      style: { borderColor: 'black', background: 'red' },
+      rect: {
+        x: () => 100,
+        y: () => 100,
+        width: () => 100,
+        height: () => 100,
+      },
     },
   },
   renderer: 'dom',

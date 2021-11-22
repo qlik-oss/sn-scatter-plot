@@ -116,6 +116,10 @@ export default function createChartModel({
   };
   let { scale: currentScale } = viewHandler.getMeta();
   const handleDataViewUpdate = () => {
+    if (viewHandler.getInteractionInProgress()) {
+      updatePartial();
+      return;
+    }
     const binnedBeforeFetch = dataHandler.getMeta().isBinnedData;
     dataHandler
       .fetch()
