@@ -115,6 +115,10 @@ export default function createChartModel({
   };
 
   const handleDataViewUpdate = () => {
+    if (viewHandler.getInteractionInProgress()) {
+      updatePartial();
+      return;
+    }
     const binnedBeforeFetch = dataHandler.getMeta().isBinnedData;
     dataHandler
       .fetch()

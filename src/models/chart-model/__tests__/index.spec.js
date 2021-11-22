@@ -27,6 +27,7 @@ describe('chart-model', () => {
     ];
     viewHandler = {
       getMeta: sandbox.stub().returns('isHomeState'),
+      getInteractionInProgress: sandbox.stub(),
     };
     dataHandler = {
       getMeta: sandbox.stub().returns({ isBinnedData: false }),
@@ -228,6 +229,15 @@ describe('chart-model', () => {
             excludeFromUpdate: ['x-axis-title', 'y-axis-title'],
           })
         ).to.have.been.calledOnce;
+      });
+    });
+
+    describe('handle dataview update', () => {
+      it('should not fetch data if interaction is in progress', () => {
+        viewHandler.getInteractionInProgress.returns(true);
+        create();
+        viewState.dataView();
+        expect(dataHandler.getMeta).to.not.have.been.called;
       });
     });
   });
