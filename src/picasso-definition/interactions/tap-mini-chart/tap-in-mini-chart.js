@@ -1,7 +1,7 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 
-export default function updateDataView({ e, viewHandler, chart }) {
+export default function tapInMiniChart({ e, viewHandler, chart }) {
   // Handle tap/click in mini chart
   const { x, y, width: W, height: H } = chart.component(KEYS.COMPONENT.POINT).rect.computedPhysical;
 
@@ -20,7 +20,7 @@ export default function updateDataView({ e, viewHandler, chart }) {
   const u = X0 - Xmin;
   const v = Y0 - Ymin;
   const { scale, homeStateDataView } = viewHandler.getMeta();
-  const miniChartShown = scale < 1;
+  const miniChartShown = chart.component(KEYS.COMPONENT.MINI_CHART_POINT) && scale < 1;
   const tappedPointInsideMiniChart = u >= 0 && u <= W * ratio && v >= 0 && v <= H * ratio;
   if (miniChartShown && tappedPointInsideMiniChart) {
     const { xAxisMin: xMin0, xAxisMax: xMax0, yAxisMin: yMin0, yAxisMax: yMax0 } = homeStateDataView;
@@ -43,7 +43,7 @@ export default function updateDataView({ e, viewHandler, chart }) {
     };
 
     viewHandler.setDataView(dataView);
-    return 1;
+    return true;
   }
-  return 0;
+  return false;
 }

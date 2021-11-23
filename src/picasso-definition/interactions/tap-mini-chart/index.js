@@ -1,5 +1,5 @@
 import KEYS from '../../../constants/keys';
-import updateDataView from './update-data-view';
+import tapInMiniChart from './tap-in-mini-chart';
 
 const tap = ({ eventName = 'tap-mini-chart', viewHandler }) => {
   let targetComponents;
@@ -22,7 +22,7 @@ const tap = ({ eventName = 'tap-mini-chart', viewHandler }) => {
     events: {
       [eventName](e) {
         e.preventDefault();
-        updateDataView({ e, viewHandler, chart: this.chart });
+        tapInMiniChart({ e, viewHandler, chart: this.chart });
       },
     },
   };

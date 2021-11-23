@@ -1,6 +1,6 @@
 import KEYS from '../../../../constants/keys';
 import * as NUMBERS from '../../../../constants/numbers';
-import updateDataview from '../update-data-view';
+import updateDataview from '../tap-in-mini-chart';
 
 describe('tap in mini chart', () => {
   let sandbox;

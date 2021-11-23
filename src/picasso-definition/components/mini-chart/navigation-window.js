@@ -34,7 +34,7 @@ export default function createMiniChartNavigationWindow(chartModel) {
   return {
     key: KEYS.COMPONENT.MINI_CHART_NAVIGATION,
     type: 'mini-chart-window',
-    show: () => viewHandler.getMeta().scale < 1,
+    show: () => chartModel.query.miniChartEnabled(),
     settings: {
       style: { borderColor: 'red', background: 'rgba(200, 200, 200, 0.3)' },
       rect: {

@@ -10,7 +10,7 @@ export default function createMiniChartBackgroundWindow(chartModel) {
   return {
     key: KEYS.COMPONENT.MINI_CHART_BACKGROUND,
     type: 'mini-chart-window',
-    show: () => viewHandler.getMeta().scale < 1,
+    show: () => chartModel.query.miniChartEnabled(),
     settings: {
       style: { borderColor: 'black', background: 'rgba(255, 255, 255, 0.7)' },
       rect: {

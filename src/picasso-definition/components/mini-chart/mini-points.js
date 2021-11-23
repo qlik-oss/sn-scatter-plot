@@ -36,7 +36,7 @@ export default function createMiniChartPoints(chartModel) {
     data: {
       items: homeStateBins,
     },
-    show: () => viewHandler.getMeta().scale < 1,
+    show: () => chartModel.query.miniChartEnabled(),
     settings: {
       x: (d) => {
         const xValue = (d.datum.value.qText[0] + d.datum.value.qText[2]) / 2;
