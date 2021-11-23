@@ -108,6 +108,7 @@ describe('chart-model', () => {
         'getLocaleInfo',
         'isPrelayout',
         'getFormatter',
+        'miniChartEnabled',
       ]);
     });
 

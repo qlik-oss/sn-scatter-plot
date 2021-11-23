@@ -32,6 +32,7 @@ describe('createMiniChartPoints', () => {
       query: {
         getViewHandler: sandbox.stub().returns(viewHandler),
         getDataHandler: sandbox.stub().returns(dataHandler),
+        miniChartEnabled: sandbox.stub(),
       },
     };
     flags = { isEnabled: sandbox.stub() };
@@ -50,10 +51,16 @@ describe('createMiniChartPoints', () => {
   });
 
   describe('show', () => {
-    it('should not be true when scale is 1', () => {
-      viewHandler.getMeta.returns({ scale: 1 });
+    it('should not be true when mini chart is not enabled in chartModel', () => {
+      chartModel.query.miniChartEnabled.returns(false);
       const obj = create();
       expect(obj.show()).to.equal(false);
+    });
+
+    it('should be true when mini chart is enabled in chartModel', () => {
+      chartModel.query.miniChartEnabled.returns(true);
+      const obj = create();
+      expect(obj.show()).to.equal(true);
     });
   });
 

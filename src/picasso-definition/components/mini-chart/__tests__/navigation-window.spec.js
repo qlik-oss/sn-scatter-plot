@@ -23,7 +23,7 @@ describe('createMiniChartNavigationWindow', () => {
         .returns({ scale: 0.5, homeStateDataView: { xAxisMin: 0, xAxisMax: 40, yAxisMin: 0, yAxisMax: 20 } }),
       getDataView: sandbox.stub().returns({ xAxisMin: 10, xAxisMax: 30, yAxisMin: 5, yAxisMax: 15 }),
     };
-    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
+    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler), miniChartEnabled: sandbox.stub() } };
     flags = { isEnabled: sandbox.stub() };
     flags.isEnabled.withArgs('DATA_BINNING').returns(true);
     create = () => createMiniChartNavigationWindow(chartModel);
@@ -38,10 +38,16 @@ describe('createMiniChartNavigationWindow', () => {
   });
 
   describe('show', () => {
-    it('should not be true when scale is 1', () => {
-      viewHandler.getMeta.returns({ scale: 1 });
+    it('should not be true when mini chart is not enabled in chartModel', () => {
+      chartModel.query.miniChartEnabled.returns(false);
       const obj = create();
       expect(obj.show()).to.equal(false);
+    });
+
+    it('should be true when mini chart is enabled in chartModel', () => {
+      chartModel.query.miniChartEnabled.returns(true);
+      const obj = create();
+      expect(obj.show()).to.equal(true);
     });
   });
 

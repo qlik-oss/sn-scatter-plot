@@ -75,11 +75,10 @@ describe('pan', () => {
     });
 
     describe('areaPanstart', () => {
-      it('should add correct areaPan object to events, case 1: there is a mini chart and tap is inside the mini chart', () => {
+      it('should add correct areaPan object to events, case 1: tap is inside the mini chart', () => {
         viewHandler.getDataView.returns({ xAxisMin: 1, xAxisMax: 2, yAxisMin: 3, yAxisMax: 4 });
         panObject.events.pointAreaPanned = { rect: { width: 1, height: 2 } };
         e = { preventDefault: sandbox.stub() };
-        chart.component.returns('mini-chart-point');
         tapInMiniChart.default.returns(true);
         panObject.events.areaPanstart(e);
         expect(panObject.events.started).to.equal('areaPan');
@@ -90,42 +89,6 @@ describe('pan', () => {
           yAxisMin: 3,
           yAxisMax: 4,
           miniChart: { panInMiniChart: true, navWindowScale: 0.05 },
-        });
-      });
-
-      it('should add correct areaPan object to events, case 2: there is not a mini chart and tap is inside the mini chart', () => {
-        viewHandler.getDataView.returns({ xAxisMin: 1, xAxisMax: 2, yAxisMin: 3, yAxisMax: 4 });
-        panObject.events.pointAreaPanned = { rect: { width: 1, height: 2 } };
-        e = { preventDefault: sandbox.stub() };
-        chart.component.returns(null);
-        tapInMiniChart.default.returns(true);
-        panObject.events.areaPanstart(e);
-        expect(panObject.events.started).to.equal('areaPan');
-        expect(panObject.events.areaPan).to.deep.equal({
-          componentSize: { width: 1, height: 2 },
-          xAxisMin: 1,
-          xAxisMax: 2,
-          yAxisMin: 3,
-          yAxisMax: 4,
-          miniChart: { panInMiniChart: false, navWindowScale: 0.05 },
-        });
-      });
-
-      it('should add correct areaPan object to events, case 3: there is a mini chart but tap is outside of the mini chart', () => {
-        viewHandler.getDataView.returns({ xAxisMin: 1, xAxisMax: 2, yAxisMin: 3, yAxisMax: 4 });
-        panObject.events.pointAreaPanned = { rect: { width: 1, height: 2 } };
-        e = { preventDefault: sandbox.stub() };
-        chart.component.returns('mini-chart-point');
-        tapInMiniChart.default.returns(0);
-        panObject.events.areaPanstart(e);
-        expect(panObject.events.started).to.equal('areaPan');
-        expect(panObject.events.areaPan).to.deep.equal({
-          componentSize: { width: 1, height: 2 },
-          xAxisMin: 1,
-          xAxisMax: 2,
-          yAxisMin: 3,
-          yAxisMax: 4,
-          miniChart: { panInMiniChart: false, navWindowScale: 0.05 },
         });
       });
     });

@@ -6,7 +6,6 @@ export default function createMiniChartBackgroundWindow(chartModel) {
   const padding = NUMBERS.MINI_CHART.PADDING; // Padding from the bottom right corner
   let width;
   let height;
-  const viewHandler = chartModel.query.getViewHandler();
   return {
     key: KEYS.COMPONENT.MINI_CHART_BACKGROUND,
     type: 'mini-chart-window',

@@ -1,4 +1,4 @@
-import KEYS from '../../../../constants/keys';
+import * as KEYS from '../../../../constants/keys';
 import * as NUMBERS from '../../../../constants/numbers';
 import updateDataview from '../tap-in-mini-chart';
 
@@ -11,10 +11,11 @@ describe('tap in mini chart', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    sandbox.stub(KEYS, 'default').value({
+      COMPONENT: { POINT: 'p', MINI_CHART_POINT: 'mcp' },
+    });
     chart = { component: sandbox.stub() };
-    chart.component
-      .withArgs(KEYS.COMPONENT.POINT)
-      .returns({ rect: { computedPhysical: { x: 10, y: 12, width: 160, height: 200 } } });
+    chart.component.withArgs('p').returns({ rect: { computedPhysical: { x: 10, y: 12, width: 160, height: 200 } } });
     e = { pointers: [{ offsetX: 80, offsetY: 162 }], deltaX: 0, deltaY: 0 };
     viewHandler = { getMeta: sandbox.stub(), setDataView: sandbox.stub() };
     viewHandler.getMeta.returns({
@@ -31,16 +32,32 @@ describe('tap in mini chart', () => {
     sandbox.restore();
   });
 
-  it('should return 0 if the tapped point is outside of the mini chart', () => {
+  it('should return false if there is no mini chart', () => {
+    chart.component.withArgs('mcp').returns(null);
     const result = create();
-    expect(result).to.equal(0);
+    expect(result).to.equal(false);
     expect(viewHandler.setDataView).to.not.have.been.called;
   });
 
-  it('should return 1 if the tapped point is inside the mini chart', () => {
+  it('should return false if there is mini chart but its show function returns false', () => {
+    chart.component.withArgs('mcp').returns({ show: sandbox.stub().returns(false) });
+    const result = create();
+    expect(result).to.equal(false);
+    expect(viewHandler.setDataView).to.not.have.been.called;
+  });
+
+  it('should return false if the tapped point is outside of the mini chart', () => {
+    chart.component.withArgs('mcp').returns({ show: sandbox.stub().returns(true) });
+    const result = create();
+    expect(result).to.equal(false);
+    expect(viewHandler.setDataView).to.not.have.been.called;
+  });
+
+  it('should return true if the tapped point is inside the mini chart', () => {
+    chart.component.withArgs('mcp').returns({ show: sandbox.stub().returns(true) });
     e.pointers = [{ offsetX: 130, offsetY: 162 }];
     const result = create();
-    expect(result).to.equal(1);
+    expect(result).to.equal(true);
     expect(viewHandler.setDataView).to.have.been.calledWithExactly({
       xAxisMin: -5,
       xAxisMax: 5,
@@ -49,15 +66,5 @@ describe('tap in mini chart', () => {
       deltaX: 0,
       deltaY: 0,
     });
-  });
-
-  it('should return 0 if the tapped point is inside the mini chart but the scale is 1', () => {
-    e.pointers = [{ offsetX: 130, offsetY: 162 }];
-    viewHandler.getMeta.returns({
-      scale: 1,
-    });
-    const result = create();
-    expect(result).to.equal(0);
-    expect(viewHandler.setDataView).to.not.have.been.called;
   });
 });
