@@ -6,6 +6,7 @@ import refLineLabelsComponent from './picasso-components/ref-line-labels';
 import pointLabelComponent from './picasso-components/point-label';
 import renderer from './picasso-components/react-components/react-renderer';
 import disclaimer from './picasso-components/react-components/disclaimer';
+import dataTitle from './picasso-components/react-components/data-title-component';
 
 export default function configurePicasso() {
   const picasso = picassojs();
@@ -17,6 +18,7 @@ export default function configurePicasso() {
   picasso.component('reference-line-labels', refLineLabelsComponent);
   picasso.component('point-label', pointLabelComponent);
   picasso.component('disclaimer', disclaimer());
+  picasso.component('data-title', dataTitle());
 
   return picasso;
 }
