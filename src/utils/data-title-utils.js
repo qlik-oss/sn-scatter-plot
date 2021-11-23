@@ -1,4 +1,26 @@
 import extend from 'extend';
+import JSONPatch from './json-patch';
+
+function applyModifiers({ model, properties }) {
+  return model.modifiers ? model.modifiers.apply({ model, properties }) : Promise.resolve();
+}
+
+function applyPatches(model, prevEffectiveProperties, effectiveProperties) {
+  applyModifiers({ model, properties: effectiveProperties }).then(() => {
+    if (model.colorSupport) {
+      model.colorSupport.colorByUpdater(effectiveProperties, 'qHyperCubeDef.');
+    }
+    let patches = JSONPatch.generate(prevEffectiveProperties, effectiveProperties);
+    if (patches && patches.length) {
+      patches = patches.map((p) => ({
+        qOp: p.op,
+        qValue: JSON.stringify(p.value),
+        qPath: p.path,
+      }));
+      model.applyPatches(patches, true);
+    }
+  });
+}
 
 function changeTo(model, index, altIndex, listAttr, onChange, skipAttributeExpressions) {
   model.getEffectiveProperties().then((oldProperties) => {
@@ -13,6 +35,9 @@ function changeTo(model, index, altIndex, listAttr, onChange, skipAttributeExpre
     }
     newProperties.qHyperCubeDef[listAttr][index] = newItem;
     newProperties.qHyperCubeDef.qLayoutExclude.qHyperCubeDef[listAttr][altIndex] = oldItem;
+
+    // TODO: may need to recreate color expressions.
+    applyPatches(model, oldProperties, newProperties);
   });
 }
 

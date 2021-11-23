@@ -59,7 +59,7 @@ const FadeButton = (
   </Button>
 );
 
-export default function () {
+export default function createDataTitileComp() {
   function HyperDataItem({ title, selected, onClick }) {
     const localDir = rtlUtils.detectTextDirection(title);
     return (
@@ -386,7 +386,7 @@ export default function () {
         hyperCubeDef && hyperCubeDef.qLayoutExclude && hyperCubeDef.qLayoutExclude.qHyperCubeDef;
       const altList = (layoutExcludeCube && layoutExcludeCube.qMeasures) || [];
       const itemInfos = explicitItemInfos || hyperCube.qMeasureInfo;
-      const allowChangeOfAlternatives = model;
+      const allowChangeOfAlternatives = model && model.colorSupport && model.modifiers;
       const popover =
         allowChangeOfAlternatives &&
         getMeasurePopoverData({
