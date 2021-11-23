@@ -1,82 +1,66 @@
+import * as createXAxisTitle from '../xAxis';
+import * as createYAxisTitle from '../yAxis';
 import createAxisTitles from '../index';
-import KEYS from '../../../../constants/keys';
 
 describe('axis-titles', () => {
   let sandbox;
-  let dockService;
-  let layout;
-  let layoutService;
-  let themeService;
+  let context;
+  let models;
   let axisTitles;
-  let style;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    dockService = {
-      meta: {
-        x: {
-          dock: 'bottom',
-        },
-        y: {
-          dock: 'left',
-        },
-      },
+    sandbox.stub(createXAxisTitle, 'default').returns({ key: 'x-axis-title' });
+    sandbox.stub(createYAxisTitle, 'default').returns({ key: 'y-axis-title' });
+    context = {
+      translator: { key: 'translator' },
+      constraints: { key: 'constraints' },
+      rtl: true,
+      model: { app: { key: 'app' } },
     };
-    layout = {
-      xAxis: {
-        show: 'all',
-        label: 'auto',
-      },
-      yAxis: {
-        show: 'all',
-      },
+    models = {
+      layoutService: { key: 'layout-service' },
+      dockService: { key: 'dock-service' },
+      themeService: { key: 'theme-service' },
+      propertiesModel: { key: 'properties-model' },
     };
-    layoutService = {
-      getLayout: () => layout,
-      getHyperCubeValue: sandbox.stub(),
-    };
-    style = {
-      axis: {
-        title: {
-          color: '#595959',
-          fontFamily: "'Source Sans Pro', 'Arial', 'sans-serif'",
-          fontSize: '13px',
-        },
-      },
-    };
-    themeService = { getStyles: () => style };
-    axisTitles = createAxisTitles({ layoutService, dockService, themeService });
+
+    axisTitles = createAxisTitles({ models, context });
   });
 
   afterEach(() => {
     sandbox.restore();
   });
 
-  it('should create two axis titles', () => {
-    expect(axisTitles.length).to.equal(2);
-    expect(axisTitles[0].key).to.equal(KEYS.COMPONENT.X_AXIS_TITLE);
-    expect(axisTitles[1].key).to.equal(KEYS.COMPONENT.Y_AXIS_TITLE);
+  it('should create x axis title', () => {
+    expect(createXAxisTitle.default).to.have.been.calledOnceWith({
+      model: { app: { key: 'app' } },
+      app: { key: 'app' },
+      translator: { key: 'translator' },
+      constraints: { key: 'constraints' },
+      rtl: true,
+      layoutService: { key: 'layout-service' },
+      dockService: { key: 'dock-service' },
+      themeService: { key: 'theme-service' },
+      propertiesModel: { key: 'properties-model' },
+    });
   });
 
-  it('should have correct type proprty', () => {
-    expect(axisTitles[0].type).to.equal('text');
-    expect(axisTitles[1].type).to.equal('text');
+  it('should create y axis title', () => {
+    expect(createYAxisTitle.default).to.have.been.calledOnceWith({
+      model: { app: { key: 'app' } },
+      app: { key: 'app' },
+      translator: { key: 'translator' },
+      constraints: { key: 'constraints' },
+      rtl: true,
+      layoutService: { key: 'layout-service' },
+      dockService: { key: 'dock-service' },
+      themeService: { key: 'theme-service' },
+      propertiesModel: { key: 'properties-model' },
+    });
   });
 
-  it('should have correct text property', () => {
-    const xTitle = layoutService.getHyperCubeValue('qMeasureInfo.0.qFallbackTitle');
-    expect(axisTitles[0].text).to.equal(xTitle);
-    const yTitle = layoutService.getHyperCubeValue('qMeasureInfo.1.qFallbackTitle');
-    expect(axisTitles[1].text).to.equal(yTitle);
-  });
-
-  it('should have correct dock property', () => {
-    expect(axisTitles[0].layout.dock).to.equal(dockService.meta.x.dock);
-    expect(axisTitles[1].layout.dock).to.equal(dockService.meta.y.dock);
-  });
-
-  it('should have correct font size', () => {
-    expect(axisTitles[0].style.text.fontSize).to.equal(style.axis.title.fontSize);
-    expect(axisTitles[1].style.text.fontSize).to.equal(style.axis.title.fontSize);
+  it('should return axes titles', () => {
+    expect(axisTitles).to.deep.equal([{ key: 'x-axis-title' }, { key: 'y-axis-title' }]);
   });
 });
