@@ -235,9 +235,10 @@ describe('chart-model', () => {
     describe('handle dataview update', () => {
       it('should not fetch data if interaction is in progress', () => {
         viewHandler.getInteractionInProgress.returns(true);
+        dataHandler.fetch = sandbox.stub();
         create();
         viewState.dataView();
-        expect(dataHandler.getMeta).to.not.have.been.called;
+        expect(dataHandler.fetch).to.not.have.been.called;
       });
     });
   });
