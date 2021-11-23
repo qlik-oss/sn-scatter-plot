@@ -1,5 +1,5 @@
 import tap from '..';
-import * as updateDataview from '../update-data-view';
+import * as updateDataview from '../tap-in-mini-chart';
 
 describe('event', () => {
   let sandbox;

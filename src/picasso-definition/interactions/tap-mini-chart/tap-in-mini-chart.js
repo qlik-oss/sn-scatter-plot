@@ -20,7 +20,7 @@ export default function tapInMiniChart({ e, viewHandler, chart }) {
   const u = X0 - Xmin;
   const v = Y0 - Ymin;
   const { scale, homeStateDataView } = viewHandler.getMeta();
-  const miniChartShown = chart.component(KEYS.COMPONENT.MINI_CHART_POINT) && scale < 1;
+  const miniChartShown = chart.component(KEYS.COMPONENT.MINI_CHART_POINT)?.show();
   const tappedPointInsideMiniChart = u >= 0 && u <= W * ratio && v >= 0 && v <= H * ratio;
   if (miniChartShown && tappedPointInsideMiniChart) {
     const { xAxisMin: xMin0, xAxisMax: xMax0, yAxisMin: yMin0, yAxisMax: yMax0 } = homeStateDataView;

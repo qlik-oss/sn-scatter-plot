@@ -2,7 +2,7 @@ import extend from 'extend';
 import * as KEYS from '../../../constants/keys';
 import * as NUMBERS from '../../../constants/numbers';
 import pan from '../pan';
-import * as tapInMiniChart from '../tap-mini-chart/update-data-view';
+import * as tapInMiniChart from '../tap-mini-chart/tap-in-mini-chart';
 
 describe('pan', () => {
   let sandbox;
