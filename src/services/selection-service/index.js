@@ -1,7 +1,11 @@
+import picassoQ from 'picasso-plugin-q';
 import { selectionService as createSelectionService } from 'qlik-chart-modules';
+import qBrush from './bin-selection/q-brush';
 
 export default function createService({ chart, actions, selections }) {
   const allowSimultaneous = [...Array(15)].map((d, i) => `qHyperCube/qMeasureInfo/${i}`);
+  allowSimultaneous.push('binData/binX');
+  allowSimultaneous.push('binData/binY');
 
   const service = createSelectionService({
     chart,
@@ -18,6 +22,12 @@ export default function createService({ chart, actions, selections }) {
           }
           clearLegend();
         },
+      },
+      selectionsFn: (brush, qBrushOptions, layout) => {
+        if (layout.qHyperCube.qDataPages.length) {
+          return picassoQ.selections(brush, qBrushOptions, layout);
+        }
+        return qBrush(brush, qBrushOptions, layout);
       },
     },
   });

@@ -42,13 +42,23 @@ export default function createTap({ models, actions, flags }) {
 
   const isLocked = createIsLocked({ selectionService, colorService });
 
+  const getHitRadius = (components) => {
+    if (components.some((component) => component.key === KEYS.COMPONENT.POINT)) {
+      return 3;
+    }
+    if (components.some((component) => component.key === KEYS.COMPONENT.HEAT_MAP)) {
+      return 1;
+    }
+    return 0;
+  };
+
   const options = {
     debouncer,
     flags,
     customTooltipModel,
     actions,
     isLocked,
-    hitRadius: (components) => (components.some((component) => component.key === KEYS.COMPONENT.POINT) ? 3 : 0),
+    hitRadius: (components) => getHitRadius(components),
   };
 
   return tap(config, options);
