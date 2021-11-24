@@ -43,7 +43,7 @@ export default function navigationPanel() {
     },
     render() {
       const style = getStyle(this.rect);
-      const { padding, gridWidth: w } = this.settings.settings;
+      const { gridWidth: w } = this.settings.settings;
       const { buttonList } = this.settings;
       const cl = (text) => () => {
         console.log(text);

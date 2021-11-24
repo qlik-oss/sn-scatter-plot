@@ -12,6 +12,7 @@ export default function create({ chart, actions, viewHandler, gestures, colorSer
       // Note: the order of these gestures are important
       ...colorService.custom.legendInteractions(), // need higher priority than the tap in selectables.gestures
       ...[...gestures].sort((a, b) => (b.prio || 0) - (a.prio || 0)),
+      // tapNavigationPanel({ chart, actions, viewHandler }),
       pan({ chart, actions, viewHandler, rtl }),
       pinch({ chart, actions, viewHandler, rtl }),
       ...tooltipInteractions.gestures,

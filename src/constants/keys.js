@@ -31,6 +31,7 @@ export default {
     HEAT_MAP_TOOLTIP: 'heat-map-tooltip',
     HEAT_MAP_LABELS: 'heat-map-labels',
     OUT_OF_BOUNDS: 'out-of-bounds',
+    NAVIGATION_PANEL: 'navigation-panel',
   },
   COLLECTION: {
     MAIN: 'main-collection',

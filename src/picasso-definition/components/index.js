@@ -20,7 +20,6 @@ export default function createComponents({ context, models, flags, picasso, char
   }
 
   const components = [
-    createNavigationPanel({ layoutService, chartModel }),
     createGridLines(models),
     ...createReferenceLines({ models, context }),
     createPoint(models),
@@ -33,6 +32,7 @@ export default function createComponents({ context, models, flags, picasso, char
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
+    createNavigationPanel({ layoutService, chartModel }),
     ...tooltipService.getComponents(),
   ].filter(Boolean);
   // setDisplayOrder(components);
