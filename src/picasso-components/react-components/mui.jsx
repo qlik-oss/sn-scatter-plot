@@ -1,8 +1,8 @@
 import React from 'react';
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createTheme } from '@material-ui/core/styles';
 import { ThemeProvider, StylesProvider, createGenerateClassName } from '@material-ui/styles';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     text: {
       primary: 'rgba(89, 89, 89, 0.8)',

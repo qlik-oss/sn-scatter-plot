@@ -33,5 +33,8 @@ export default {
   },
 
   MAX_NR_SCATTER: 1000,
+
   MAX_NR_ANIMATION: 100,
+
+  NAVIGATION_PANEL: { PADDING: 10, GRID_WIDTH: 30 },
 };

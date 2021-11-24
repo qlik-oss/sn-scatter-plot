@@ -9,9 +9,10 @@ import createPointLabels from './point-labels';
 import createDisclaimer from './disclaimer';
 import createOutOfBounds from './out-of-bounds';
 import createHeatMapLegend from './heat-map-legend';
+import createNavigationPanel from './navigation-panel';
 
 export default function createComponents({ context, models, flags, picasso, chart }) {
-  const { colorService, disclaimerModel, layoutService, themeService, tooltipService } = models;
+  const { colorService, disclaimerModel, layoutService, themeService, tooltipService, chartModel } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
 
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
@@ -19,6 +20,7 @@ export default function createComponents({ context, models, flags, picasso, char
   }
 
   const components = [
+    createNavigationPanel({ layoutService, chartModel }),
     createGridLines(models),
     ...createReferenceLines({ models, context }),
     createPoint(models),
