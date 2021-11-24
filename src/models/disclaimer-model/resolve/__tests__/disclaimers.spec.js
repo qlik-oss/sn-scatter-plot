@@ -37,4 +37,10 @@ describe('disclaimers', () => {
       });
     });
   });
+
+  describe('OnlyNanData', () => {
+    it('should have all keys', () => {
+      expect(disclaimers[0]).to.have.all.keys(['key', 'alignment', 'condition']);
+    });
+  });
 });
