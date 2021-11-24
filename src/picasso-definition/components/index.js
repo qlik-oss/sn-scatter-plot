@@ -32,7 +32,7 @@ export default function createComponents({ context, models, flags, picasso, char
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
-    createNavigationPanel({ layoutService, chartModel }),
+    createNavigationPanel({ layoutService, chartModel, chart }),
     ...tooltipService.getComponents(),
   ].filter(Boolean);
   // setDisplayOrder(components);
