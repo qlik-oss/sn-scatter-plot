@@ -42,9 +42,12 @@ const tickHelper = {
   },
 
   getSize(dockService, chartModel, chart, dimension) {
+    const dataHandler = chartModel.query.getDataHandler();
     const size = chartModel.query.isPrelayout()
       ? dockService.meta.chart.size[dimension]
-      : chart.component(KEYS.COMPONENT.POINT).rect[dimension];
+      : chart.component(dataHandler.getMeta().isBinnedData ? KEYS.COMPONENT.HEAT_MAP : KEYS.COMPONENT.POINT).rect[
+          dimension
+        ];
     return size;
   },
 };

@@ -1,6 +1,6 @@
 const eventName = 'lasso';
 
-const lasso = ({ key, componentTargetKey, requireFailure, recognizeWith }, opts) => ({
+const lasso = ({ key, componentTargetKeys, requireFailure, recognizeWith }, opts) => ({
   key: `event:${key}`,
   type: 'Pan',
   requireFailure,
@@ -17,7 +17,7 @@ const lasso = ({ key, componentTargetKey, requireFailure, recognizeWith }, opts)
       }
 
       const components = this.chart.componentsFromPoint({ x: e.center.x, y: e.center.y });
-      return components.filter((c) => c.key === componentTargetKey).length > 0;
+      return components.filter((c) => componentTargetKeys.indexOf(c.key) !== -1);
     },
   },
   events: {

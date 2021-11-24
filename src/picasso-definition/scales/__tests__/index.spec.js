@@ -20,8 +20,9 @@ describe('scales', () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     sandbox.stub(KEYS, 'default').value({
-      FIELDS: { X: 'qDimensionInfo/0', Y: 'qDimensionInfo/1', SIZE: 'qMeasureInfo/0' },
-      SCALE: { HEAT_MAP_COLOR: 'heatMapColor' },
+      FIELDS: { X: 'qDimensionInfo/0', Y: 'qDimensionInfo/1', SIZE: 'qMeasureInfo/0', BIN_X: 'binX', BIN_Y: 'binY' },
+      SCALE: { HEAT_MAP_COLOR: 'heatMapColor', BIN_X: 'binX', BIN_Y: 'binY' },
+      DATA: { BIN: 'bin' },
     });
     sandbox.stub(color, 'makeBrighter').returns('brighter-red');
     sandbox.stub(color, 'makeDarker').returns('darker-red');
@@ -71,7 +72,7 @@ describe('scales', () => {
 
   it('should contain correct scales', () => {
     const scales = create();
-    expect(Object.keys(scales)).to.deep.equal(['x', 'y', 's1', 's2', 'heatMapColor']);
+    expect(Object.keys(scales)).to.deep.equal(['x', 'y', 'binX', 'binY', 's1', 's2', 'heatMapColor']);
   });
 
   it('scales should have proper properties', () => {
@@ -118,6 +119,66 @@ describe('scales', () => {
     const { y } = create();
     const res = y.max();
     expect(res).to.equal(30);
+  });
+
+  describe('bin data scale', () => {
+    it('scales should have proper properties', () => {
+      const { binX, binY } = create();
+      expect(typeof binX.ticks.values === 'function').to.equal(true);
+      expect(typeof binX.min === 'function').to.equal(true);
+      expect(typeof binX.max === 'function').to.equal(true);
+      expect(typeof binY.ticks.values === 'function').to.equal(true);
+      expect(typeof binY.min === 'function').to.equal(true);
+      expect(typeof binY.max === 'function').to.equal(true);
+    });
+
+    it('binX.data should correct bin data', () => {
+      const { binX } = create();
+      expect(binX.data.extract.source).to.equal('bin');
+      expect(binX.data.extract.field).to.equal('binX');
+    });
+
+    it('binX.min should return correct ticks', () => {
+      const { binX } = create();
+      const res = binX.min();
+      expect(res).to.equal(0);
+    });
+
+    it('binX.max should return correct ticks', () => {
+      const { binX } = create();
+      const res = binX.max();
+      expect(res).to.equal(10);
+    });
+
+    it('binX.ticks.values should return correct ticks', () => {
+      const { binX } = create();
+      const ticks = binX.ticks.values();
+      expect(ticks).to.deep.equal(['x1', 'x2']);
+    });
+
+    it('binY.data should correct bin data', () => {
+      const { binY } = create();
+      expect(binY.data.extract.source).to.equal('bin');
+      expect(binY.data.extract.field).to.equal('binY');
+    });
+
+    it('binY.min should return correct ticks', () => {
+      const { binY } = create();
+      const res = binY.min();
+      expect(res).to.equal(20);
+    });
+
+    it('binY.max should return correct ticks', () => {
+      const { binY } = create();
+      const res = binY.max();
+      expect(res).to.equal(30);
+    });
+
+    it('binY.ticks.values should return correct ticks', () => {
+      const { binY } = create();
+      const ticks = binY.ticks.values();
+      expect(ticks).to.deep.equal(['y1', 'y2', 'y3']);
+    });
   });
 
   describe('heatMapColor scale', () => {

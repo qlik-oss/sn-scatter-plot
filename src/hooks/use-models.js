@@ -137,7 +137,7 @@ const useModels = ({ core, flags }) => {
 
     const disclaimerModel = createDisclaimerModel({ layoutService, flags });
 
-    selectionService.setLayout(layout);
+    selectionService.setLayout(layoutService.getLayout());
     setModels({
       layoutService,
       tickModel,

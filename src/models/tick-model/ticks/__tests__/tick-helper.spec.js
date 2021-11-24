@@ -157,14 +157,17 @@ describe('getSize', () => {
   let chartModel;
   let chart;
   let dimension;
+  let dataHandler;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    chartModel = { query: { isPrelayout: sandbox.stub() } };
+    dataHandler = { getMeta: sandbox.stub().returns({ isBinnedData: false }) };
+    chartModel = { query: { isPrelayout: sandbox.stub(), getDataHandler: () => dataHandler } };
     dockService = { meta: { chart: { size: { width: 100, height: 50 } } } };
-    sandbox.stub(KEYS, 'COMPONENT').value({ POINT: 'point-component' });
+    sandbox.stub(KEYS, 'COMPONENT').value({ POINT: 'point-component', HEAT_MAP: 'heat-map' });
     chart = { component: sandbox.stub() };
     chart.component.withArgs('point-component').returns({ rect: { width: 80, height: 40 } });
+    chart.component.withArgs('heat-map').returns({ rect: { width: 100, height: 50 } });
     create = () => tickHelper.getSize(dockService, chartModel, chart, dimension);
   });
 
@@ -184,15 +187,29 @@ describe('getSize', () => {
     expect(create()).to.equal(50);
   });
 
-  it('should return correct size if prelayout is false and dimension is width', () => {
+  it('should return correct size if prelayout is false and dimension is width for nomal data', () => {
     chartModel.query.isPrelayout.returns(false);
     dimension = 'width';
     expect(create()).to.equal(80);
   });
 
-  it('should return correct size if prelayout is false and dimension is height', () => {
+  it('should return correct size if prelayout is false and dimension is height for nomal data', () => {
     chartModel.query.isPrelayout.returns(false);
     dimension = 'height';
     expect(create()).to.equal(40);
+  });
+
+  it('should return correct size if prelayout is false and dimension is width for bin data', () => {
+    chartModel.query.isPrelayout.returns(false);
+    dataHandler.getMeta.returns({ isBinnedData: true });
+    dimension = 'width';
+    expect(create()).to.equal(100);
+  });
+
+  it('should return correct size if prelayout is false and dimension is height for bin data', () => {
+    chartModel.query.isPrelayout.returns(false);
+    dataHandler.getMeta.returns({ isBinnedData: true });
+    dimension = 'height';
+    expect(create()).to.equal(50);
   });
 });
