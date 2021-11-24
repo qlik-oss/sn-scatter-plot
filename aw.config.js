@@ -11,6 +11,7 @@ module.exports = {
     reporter: 'min',
   },
   mocks: [
+    ['**/hammer.js', '{}'],
     [
       '**/dist/conversion.js',
       `{
