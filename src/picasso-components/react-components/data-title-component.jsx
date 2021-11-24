@@ -65,7 +65,7 @@ export default function createDataTitileComp() {
     return (
       <ListItem button onClick={onClick} style={{ textAlign: 'start' }}>
         <ListItemIcon style={{ minWidth: 32 }}>
-          <SVGIcon d={selected ? ICONS.tick.d : ''} />
+          <SVGIcon d={selected ? ICONS.TICK.d : ''} />
         </ListItemIcon>
         <ListItemText primaryTypographyProps={{ dir: localDir }}>{title}</ListItemText>
       </ListItem>
@@ -200,7 +200,7 @@ export default function createDataTitileComp() {
           title={b}
         >
           <span style={textStyle}>{b}</span>
-          <SVGIcon {...ICONS.triangleRight} size="small" style={{ margin: '0 8px' }} />
+          <SVGIcon {...ICONS.TRIANGLERIGHT} size="small" style={{ margin: '0 8px' }} />
         </FadeButton>
       ));
 
@@ -225,12 +225,12 @@ export default function createDataTitileComp() {
       const label = (
         <FadeButton style={style} onClick={disabledLabel ? undefined : onClick} title={titleData.text} tabIndex="-1">
           {titleData.locked && (
-            <SVGIcon {...ICONS.lock} size="small" title={translator.get('Tooltip.selections.locked')} />
+            <SVGIcon {...ICONS.LOCK} size="small" title={translator.get('Tooltip.selections.locked')} />
           )}
           <span style={textStyle} dir={dir}>
             {titleData.text}
           </span>
-          {popover && <SVGIcon {...ICONS.triangleDown} size="small" style={{ margin: '0 8px' }} />}
+          {popover && <SVGIcon {...ICONS.TRIANGLEDOWN} size="small" style={{ margin: '0 8px' }} />}
         </FadeButton>
       );
 
@@ -238,7 +238,7 @@ export default function createDataTitileComp() {
         <>
           {titleData.drilldown && (
             <SVGIcon
-              {...ICONS.drillDown}
+              {...ICONS.DRIILLDOWN}
               size="small"
               title={translator.get('Tooltip.dimensions.drilldown')}
               style={{ margin: '0 4px 0 0' }}
