@@ -1,6 +1,7 @@
 import KEYS from '../../constants/keys';
 import NUMBERS from '../../constants/numbers';
-import tapInMiniChart from './tap-mini-chart/tap-in-mini-chart';
+import getTapPosition from './tap-mini-chart/get-tap-position';
+import updateTapDataView from './tap-mini-chart/update-tap-data-view';
 
 const threshold = 10;
 const eventName = 'areaPan';
@@ -61,7 +62,8 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
 
       // Check if the pointer is inside the mini chart
       let panInMiniChart = false;
-      if (tapInMiniChart({ e, viewHandler, chart })) {
+      if (getTapPosition({ e, chart }) !== null) {
+        updateTapDataView({ e, chart, viewHandler });
         panInMiniChart = true;
       }
 

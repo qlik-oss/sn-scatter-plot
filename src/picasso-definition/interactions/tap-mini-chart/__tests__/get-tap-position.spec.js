@@ -1,6 +1,6 @@
 import * as KEYS from '../../../../constants/keys';
 import * as NUMBERS from '../../../../constants/numbers';
-import updateDataview from '../tap-in-mini-chart';
+import getTapPosition from '../get-tap-position';
 
 describe('tap in mini chart', () => {
   let sandbox;
@@ -26,46 +26,35 @@ describe('tap in mini chart', () => {
     sandbox.stub(NUMBERS, 'default').value({
       MINI_CHART: { RATIO: 0.5, PADDING: 0 },
     });
-    create = () => updateDataview({ e, viewHandler, chart });
+    create = () => getTapPosition({ e, viewHandler, chart });
   });
 
   afterEach(() => {
     sandbox.restore();
   });
 
-  it('should return false if there is no mini chart', () => {
+  it('should return null if there is no mini chart', () => {
     chart.component.withArgs('mcp').returns(null);
     const result = create();
-    expect(result).to.equal(false);
-    expect(viewHandler.setDataView).to.not.have.been.called;
+    expect(result).to.equal(null);
   });
 
-  it('should return false if there is mini chart but its show function returns false', () => {
+  it('should return null if there is mini chart but its show function returns false', () => {
     chart.component.withArgs('mcp').returns({ rect, show: sandbox.stub().returns(false) });
     const result = create();
-    expect(result).to.equal(false);
-    expect(viewHandler.setDataView).to.not.have.been.called;
+    expect(result).to.equal(null);
   });
 
-  it('should return false if the tapped point is outside of the mini chart', () => {
+  it('should return null if the tapped point is outside of the mini chart', () => {
     chart.component.withArgs('mcp').returns({ rect, show: sandbox.stub().returns(true) });
     const result = create();
-    expect(result).to.equal(false);
-    expect(viewHandler.setDataView).to.not.have.been.called;
+    expect(result).to.equal(null);
   });
 
-  it('should return true if the tapped point is inside the mini chart', () => {
+  it('should return correct position if the tapped point is inside the mini chart', () => {
     chart.component.withArgs('mcp').returns({ rect, show: sandbox.stub().returns(true) });
     e.pointers = [{ offsetX: 130, offsetY: 162 }];
     const result = create();
-    expect(result).to.equal(true);
-    expect(viewHandler.setDataView).to.have.been.calledWithExactly({
-      xAxisMin: -5,
-      xAxisMax: 5,
-      yAxisMin: -10,
-      yAxisMax: 10,
-      deltaX: 0,
-      deltaY: 0,
-    });
+    expect(result).to.deep.equal({ x: 40, y: 50 });
   });
 });

@@ -2,7 +2,8 @@ import extend from 'extend';
 import * as KEYS from '../../../constants/keys';
 import * as NUMBERS from '../../../constants/numbers';
 import pan from '../pan';
-import * as tapInMiniChart from '../tap-mini-chart/tap-in-mini-chart';
+import * as updateTapDataView from '../tap-mini-chart/update-tap-data-view';
+import * as getTapPosition from '../tap-mini-chart/get-tap-position';
 
 describe('pan', () => {
   let sandbox;
@@ -27,7 +28,8 @@ describe('pan', () => {
     chart = { componentsFromPoint: sandbox.stub(), component: sandbox.stub() };
     sandbox.stub(KEYS, 'default').value({ COMPONENT: { POINT: 'point-comp' } });
     sandbox.stub(NUMBERS, 'default').value({ MINI_CHART: { RATIO: 0.5 } });
-    sandbox.stub(tapInMiniChart, 'default').returns(true);
+    sandbox.stub(getTapPosition, 'default').returns({ x: 1, y: 1 });
+    sandbox.stub(updateTapDataView, 'default');
     panObject = pan({ chart, actions, viewHandler, rtl });
   });
 
@@ -79,7 +81,6 @@ describe('pan', () => {
         viewHandler.getDataView.returns({ xAxisMin: 1, xAxisMax: 2, yAxisMin: 3, yAxisMax: 4 });
         panObject.events.pointAreaPanned = { rect: { width: 1, height: 2 } };
         e = { preventDefault: sandbox.stub() };
-        tapInMiniChart.default.returns(true);
         panObject.events.areaPanstart(e);
         expect(panObject.events.started).to.equal('areaPan');
         expect(panObject.events.areaPan).to.deep.equal({

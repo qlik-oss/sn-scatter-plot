@@ -1,5 +1,5 @@
-import KEYS from '../../../constants/keys';
-import tapInMiniChart from './tap-in-mini-chart';
+import getTapPosition from './get-tap-position';
+import updateTapDataView from './update-tap-data-view';
 
 const tap = ({ eventName = 'tap-mini-chart', viewHandler }) => ({
   key: 'event:tap-mini-chart',
@@ -13,13 +13,13 @@ const tap = ({ eventName = 'tap-mini-chart', viewHandler }) => ({
         return true;
       }
 
-      return !!this.chart.component(KEYS.COMPONENT.MINI_CHART_POINT);
+      return getTapPosition({ e, chart: this.chart }) !== null;
     },
   },
   events: {
     [eventName](e) {
       e.preventDefault();
-      tapInMiniChart({ e, viewHandler, chart: this.chart });
+      updateTapDataView({ e, viewHandler, chart: this.chart });
     },
   },
 });
