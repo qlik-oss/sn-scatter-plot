@@ -29,6 +29,7 @@ import getPluginArgs from '../services/plugin-service/plugin-args';
 import getLogicalSize from '../logical-size';
 import createExtremumModel from '../models/extremum-model';
 import createDisclaimerModel from '../models/disclaimer-model';
+import createPropertiesModel from '../models/properties-model';
 import createDataHandler from '../data-handler';
 
 const useModels = ({ core, flags }) => {
@@ -137,7 +138,9 @@ const useModels = ({ core, flags }) => {
 
     const disclaimerModel = createDisclaimerModel({ layoutService, flags });
 
-    selectionService.setLayout(layout);
+    const propertiesModel = createPropertiesModel({ model, layoutService });
+
+    selectionService.setLayout(layoutService.getLayout());
     setModels({
       layoutService,
       tickModel,
@@ -150,6 +153,7 @@ const useModels = ({ core, flags }) => {
       colorService,
       extremumModel,
       tooltipService,
+      propertiesModel,
     });
   }, [model, app, selectionService, layout, theme.name(), translator.language(), options.direction, options.viewState]);
 

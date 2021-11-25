@@ -36,9 +36,9 @@ export default function createPicassoDefinition({
 
   const collections = createCollections(models);
 
-  const components = createComponents({ models, context, flags, picasso, model, chart });
+  const components = createComponents({ models, context, flags, picasso, chart });
 
-  const selectables = createSelectables({ models, actions, scales, flags });
+  const selectables = createSelectables({ models, actions, scales, flags, chart });
 
   const componentDefinitions = [...components, ...selectables.components];
 

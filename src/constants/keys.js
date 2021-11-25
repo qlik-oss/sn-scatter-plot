@@ -7,6 +7,8 @@ export default {
     COLOR: 'color',
     X: 'x',
     Y: 'y',
+    BIN_X: 'binX',
+    BIN_Y: 'binY',
     SIZE: 'size',
     HEAT_MAP_COLOR: 'heat-map-color',
   },

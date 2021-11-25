@@ -6,7 +6,7 @@ function onBubble(e, key) {
   return false;
 }
 
-const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith }, opts) => ({
+const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith, enableInteraction }, opts) => ({
   key: `event:${key}`,
   type: 'Pan',
   requireFailure,
@@ -14,6 +14,10 @@ const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith
   options: {
     event: eventName,
     enable(r, e) {
+      if (!enableInteraction()) {
+        return false;
+      }
+
       if (this.started === eventName || !e) {
         return true;
       }
