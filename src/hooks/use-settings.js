@@ -43,13 +43,14 @@ const useSettings = ({ core, models, flags }) => {
       return Promise.resolve();
     }
 
-    const { layoutService, chartModel, colorService, pluginService } = models;
+    const { layoutService, chartModel, colorService, pluginService, propertiesModel } = models;
     const { viewState } = core;
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
     const dataHandler = chartModel.query.getDataHandler();
 
     await dataHandler.fetch().catch(() => {}); // Promise rejected if trying to fetch same data window twice in a row
     await pluginService.initialize();
+    await propertiesModel.command.initialize();
     return colorService.initialize().finally(() => {
       colorService.custom.updateBrushAliases();
       colorService.custom.updateLegend();
