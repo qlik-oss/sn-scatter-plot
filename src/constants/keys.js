@@ -32,6 +32,9 @@ export default {
     HEAT_MAP: 'heat-map',
     HEAT_MAP_TOOLTIP: 'heat-map-tooltip',
     HEAT_MAP_LABELS: 'heat-map-labels',
+    MINI_CHART_BACKGROUND: 'mini-chart-background-rect',
+    MINI_CHART_NAVIGATION: 'mini-chart-navigation-rect',
+    MINI_CHART_POINT: 'mini-chart-points',
     OUT_OF_BOUNDS: 'out-of-bounds',
   },
   COLLECTION: {

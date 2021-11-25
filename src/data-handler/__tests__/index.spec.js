@@ -64,6 +64,12 @@ describe('createDataHandler', () => {
     expect(data).to.eql({ binnedData: 'binnedData' });
   });
 
+  it('should get correct home state bin arrays', () => {
+    expect(dataHandler.getHomeStateBins(false)).to.deep.equal(undefined);
+    expect(dataHandler.getHomeStateBins(true)).to.deep.equal([{ binArray: 'binned data' }]);
+    expect(dataHandler.getHomeStateBins(false)).to.deep.equal([{ binArray: 'binned data' }]);
+  });
+
   // TODO add test case for fetching data many times
   it.skip('should await ongoing request before sending new', async () => {});
 });
