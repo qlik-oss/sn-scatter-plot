@@ -2,32 +2,24 @@ import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 
 export default function createMiniChartPoints(chartModel) {
-  const ratio = NUMBERS.MINI_CHART.RATIO;
-  const padding = NUMBERS.MINI_CHART.PADDING; // Padding from the bottom right corner
+  const { RATIO, PADDING } = NUMBERS.MINI_CHART; // Padding from the bottom right corner
 
   // Padding, normalized to chart size
-  let px;
-  let py;
+  const padding = { x: 0, y: 0 };
 
   // Home state data view (corresponding the rect of the mini chart)
-  let xMin0;
-  let xMax0;
-  let yMin0;
-  let yMax0;
+  let homeStateDataView;
 
   // Sizes of the bin, in measure values and in pixels
-  let binWidth;
-  let binHeight;
-  let binWidthPx;
-  let binHeightPx;
+  const bin = { width: { value: 0, px: 0 }, height: { value: 0, px: 0 } };
 
   const viewHandler = chartModel.query.getViewHandler();
   const dataHandler = chartModel.query.getDataHandler();
   const homeStateBins = dataHandler.getHomeStateBins(viewHandler.getMeta().isHomeState);
   if (homeStateBins.length) {
     const firstBin = homeStateBins[0];
-    binWidth = Math.abs(firstBin.qText[0] - firstBin.qText[2]);
-    binHeight = Math.abs(firstBin.qText[1] - firstBin.qText[3]);
+    bin.width.value = Math.abs(firstBin.qText[0] - firstBin.qText[2]);
+    bin.height.value = Math.abs(firstBin.qText[1] - firstBin.qText[3]);
   }
 
   return {
@@ -40,11 +32,19 @@ export default function createMiniChartPoints(chartModel) {
     settings: {
       x: (d) => {
         const xValue = (d.datum.value.qText[0] + d.datum.value.qText[2]) / 2;
-        return ((xValue - xMin0) / (xMax0 - xMin0)) * ratio + (1 - ratio) - px;
+        return (
+          ((xValue - homeStateDataView.xAxisMin) / (homeStateDataView.xAxisMax - homeStateDataView.xAxisMin)) * RATIO +
+          (1 - RATIO) -
+          padding.x
+        );
       },
       y: (d) => {
         const yValue = (d.datum.value.qText[1] + d.datum.value.qText[3]) / 2;
-        return ((yMax0 - yValue) / (yMax0 - yMin0)) * ratio + (1 - ratio) - py;
+        return (
+          ((homeStateDataView.yAxisMax - yValue) / (homeStateDataView.yAxisMax - homeStateDataView.yAxisMin)) * RATIO +
+          (1 - RATIO) -
+          padding.y
+        );
       },
       fill: {
         scale: KEYS.SCALE.HEAT_MAP_COLOR,
@@ -52,18 +52,17 @@ export default function createMiniChartPoints(chartModel) {
       },
       shape: () => ({
         type: 'rect',
-        width: binWidthPx,
-        height: binHeightPx,
+        width: bin.width.px,
+        height: bin.height.px,
       }),
     },
     beforeRender: ({ size }) => {
-      const { homeStateDataView } = viewHandler.getMeta();
-      ({ xAxisMin: xMin0, xAxisMax: xMax0, yAxisMin: yMin0, yAxisMax: yMax0 } = homeStateDataView);
+      ({ homeStateDataView } = viewHandler.getMeta());
       const { width, height } = size;
-      binWidthPx = ((binWidth * width) / (xMax0 - xMin0)) * ratio;
-      binHeightPx = ((binHeight * height) / (yMax0 - yMin0)) * ratio;
-      px = padding / width;
-      py = padding / height;
+      bin.width.px = ((bin.width.value * width) / (homeStateDataView.xAxisMax - homeStateDataView.xAxisMin)) * RATIO;
+      bin.height.px = ((bin.height.value * height) / (homeStateDataView.yAxisMax - homeStateDataView.yAxisMin)) * RATIO;
+      padding.x = PADDING / width;
+      padding.y = PADDING / height;
     },
   };
 }

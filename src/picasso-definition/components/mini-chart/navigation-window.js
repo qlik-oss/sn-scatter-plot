@@ -1,35 +1,67 @@
+/* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 
 export default function createMiniChartNavigationWindow(chartModel) {
-  const ratio = NUMBERS.MINI_CHART.RATIO;
-  const padding = NUMBERS.MINI_CHART.PADDING; // Padding from the bottom right corner
+  const { RATIO, PADDING } = NUMBERS.MINI_CHART; // Padding from the bottom right corner
 
   // Home state data view (corresponding the rect of the mini chart)
-  let xAxisMin0;
-  let xAxisMax0;
-  let yAxisMin0;
-  let yAxisMax0;
+  let homeStateDataView;
 
   // Current data view (corresponding to the rect of the navigation window)
-  let xAxisMin;
-  let xAxisMax;
-  let yAxisMin;
-  let yAxisMax;
+  let dataView;
 
   // Width and height of the point component
-  let width;
-  let height;
+  let pointRect = { width: 0, height: 0 };
 
-  // Width and height of the navigation window
-  let navWidth;
-  let navHeight;
-
-  // The top left corner of the navigation window, relative to the mini chart
-  let navX;
-  let navY;
+  // Width, height and top left corner of the navigation window, relative to the mini chart
+  const navRect = { width: 0, height: 0, x: 0, y: 0 };
 
   const viewHandler = chartModel.query.getViewHandler();
+
+  const truncateNavigationWindow = ({ nav, point }) => {
+    // Left
+    if (nav.x <= 0) {
+      if (nav.x + nav.width <= 0) {
+        nav.width = 0;
+      } else {
+        nav.width += nav.x;
+      }
+
+      nav.x = 0;
+    }
+
+    // Right
+    if (nav.x + nav.width >= point.width * RATIO) {
+      if (nav.x >= point.width * RATIO) {
+        nav.x = point.width * RATIO;
+        nav.width = 0;
+      } else {
+        nav.width = point.width * RATIO - nav.x;
+      }
+    }
+
+    // Top
+    if (nav.y <= 0) {
+      if (nav.y + nav.height <= 0) {
+        nav.height = 0;
+      } else {
+        nav.height += nav.y;
+      }
+
+      nav.y = 0;
+    }
+
+    // Bottom
+    if (nav.y + nav.height >= point.height * RATIO) {
+      if (nav.y >= point.height * RATIO) {
+        nav.y = point.height * RATIO;
+        nav.height = 0;
+      } else {
+        nav.height = point.height * RATIO - nav.y;
+      }
+    }
+  };
 
   return {
     key: KEYS.COMPONENT.MINI_CHART_NAVIGATION,
@@ -38,65 +70,31 @@ export default function createMiniChartNavigationWindow(chartModel) {
     show: () => chartModel.query.miniChartEnabled(),
     settings: {
       rect: {
-        x: () => width * (1 - ratio) - padding + navX,
-        y: () => height * (1 - ratio) - padding + navY,
-        width: () => navWidth,
-        height: () => navHeight,
+        x: () => pointRect.width * (1 - RATIO) - PADDING + navRect.x,
+        y: () => pointRect.height * (1 - RATIO) - PADDING + navRect.y,
+        width: () => navRect.width,
+        height: () => navRect.height,
       },
     },
     beforeRender: ({ size }) => {
-      ({ width, height } = size);
-      const { homeStateDataView } = viewHandler.getMeta();
-      ({ xAxisMin: xAxisMin0, xAxisMax: xAxisMax0, yAxisMin: yAxisMin0, yAxisMax: yAxisMax0 } = homeStateDataView);
-      ({ xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getDataView());
-      navWidth = (width * ratio * (xAxisMax - xAxisMin)) / (xAxisMax0 - xAxisMin0);
-      navHeight = (height * ratio * (yAxisMax - yAxisMin)) / (yAxisMax0 - yAxisMin0);
-      navX = (width * ratio * (xAxisMin - xAxisMin0)) / (xAxisMax0 - xAxisMin0);
-      navY = (height * ratio * (yAxisMax0 - yAxisMax)) / (yAxisMax0 - yAxisMin0);
+      pointRect = size;
+      ({ homeStateDataView } = viewHandler.getMeta());
+      dataView = viewHandler.getDataView();
+      navRect.width =
+        (pointRect.width * RATIO * (dataView.xAxisMax - dataView.xAxisMin)) /
+        (homeStateDataView.xAxisMax - homeStateDataView.xAxisMin);
+      navRect.height =
+        (pointRect.height * RATIO * (dataView.yAxisMax - dataView.yAxisMin)) /
+        (homeStateDataView.yAxisMax - homeStateDataView.yAxisMin);
+      navRect.x =
+        (pointRect.width * RATIO * (dataView.xAxisMin - homeStateDataView.xAxisMin)) /
+        (homeStateDataView.xAxisMax - homeStateDataView.xAxisMin);
+      navRect.y =
+        (pointRect.height * RATIO * (homeStateDataView.yAxisMax - dataView.yAxisMax)) /
+        (homeStateDataView.yAxisMax - homeStateDataView.yAxisMin);
 
       // Handle the cases when the navigation window is partly outside of the minichart: we need to truncate the navigation window
-
-      // Left
-      if (navX <= 0) {
-        if (navX + navWidth <= 0) {
-          navWidth = 0;
-        } else {
-          navWidth += navX;
-        }
-
-        navX = 0;
-      }
-
-      // Right
-      if (navX + navWidth >= width * ratio) {
-        if (navX >= width * ratio) {
-          navX = width * ratio;
-          navWidth = 0;
-        } else {
-          navWidth = width * ratio - navX;
-        }
-      }
-
-      // Top
-      if (navY <= 0) {
-        if (navY + navHeight <= 0) {
-          navHeight = 0;
-        } else {
-          navHeight += navY;
-        }
-
-        navY = 0;
-      }
-
-      // Bottom
-      if (navY + navHeight >= height * ratio) {
-        if (navY >= height * ratio) {
-          navY = height * ratio;
-          navHeight = 0;
-        } else {
-          navHeight = height * ratio - navY;
-        }
-      }
+      truncateNavigationWindow({ nav: navRect, point: pointRect });
     },
   };
 }

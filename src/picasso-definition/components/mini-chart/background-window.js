@@ -2,8 +2,7 @@ import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 
 export default function createMiniChartBackgroundWindow(chartModel) {
-  const ratio = NUMBERS.MINI_CHART.RATIO;
-  const padding = NUMBERS.MINI_CHART.PADDING; // Padding from the bottom right corner
+  const { RATIO, PADDING } = NUMBERS.MINI_CHART; // Padding from the bottom right corner
   let width;
   let height;
   return {
@@ -13,10 +12,10 @@ export default function createMiniChartBackgroundWindow(chartModel) {
     style: { borderColor: 'black', background: 'rgba(255, 255, 255, 0.7)' },
     settings: {
       rect: {
-        x: () => width * (1 - ratio) - padding,
-        y: () => height * (1 - ratio) - padding,
-        width: () => width * ratio,
-        height: () => height * ratio,
+        x: () => width * (1 - RATIO) - PADDING,
+        y: () => height * (1 - RATIO) - PADDING,
+        width: () => width * RATIO,
+        height: () => height * RATIO,
       },
     },
     beforeRender: ({ size }) => {
