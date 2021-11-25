@@ -32,9 +32,9 @@ describe('custom rect', () => {
     it('should render correct rect', () => {
       miniChartWindow.settings = {
         show: sandbox.stub(),
+        style: { borderColor: 'red', background: 'white' },
         settings: {
           rect: { x: sandbox.stub(), y: sandbox.stub(), width: sandbox.stub(), height: sandbox.stub() },
-          style: { borderColor: 'red', background: 'white' },
         },
       };
       miniChartWindow.settings.settings.rect.x.returns(0);

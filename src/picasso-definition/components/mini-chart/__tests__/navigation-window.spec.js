@@ -34,7 +34,7 @@ describe('createMiniChartNavigationWindow', () => {
   });
 
   it('should return an object with correct keys', () => {
-    expect(create()).to.have.all.keys(['key', 'type', 'settings', 'show', 'beforeRender']);
+    expect(create()).to.have.all.keys(['key', 'type', 'settings', 'style', 'show', 'beforeRender']);
   });
 
   describe('show', () => {

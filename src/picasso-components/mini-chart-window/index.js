@@ -1,8 +1,8 @@
 export default {
   require: ['renderer'],
   defaultSettings: {
+    style: { borderColor: 'black', background: 'red' },
     settings: {
-      style: { borderColor: 'black', background: 'red' },
       rect: {
         x: () => 100,
         y: () => 100,
@@ -14,7 +14,7 @@ export default {
   renderer: 'dom',
   render(h) {
     const { x, y, width, height } = this.settings.settings.rect;
-    const { borderColor, background } = this.settings.settings.style;
+    const { borderColor, background } = this.settings.style;
     return [
       h('div', {
         style: {

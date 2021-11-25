@@ -34,7 +34,7 @@ describe('createMiniChartBackgroundWindow', () => {
   });
 
   it('should return an object with correct keys', () => {
-    expect(create()).to.have.all.keys(['key', 'type', 'show', 'settings', 'beforeRender']);
+    expect(create()).to.have.all.keys(['key', 'type', 'show', 'style', 'settings', 'beforeRender']);
   });
 
   describe('show', () => {
