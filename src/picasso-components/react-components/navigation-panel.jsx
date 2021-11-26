@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconButton } from '@material-ui/core'; // eslint-disable-line
 import SVGIcon from './icons/SVGIcon';
-import { home, left, right, up, down, zoomIn, zoomOut } from './icons';
+import * as icons from './icons';
 
 const NavigationButton = (
   { children, ...rest } // eslint-disable-line
@@ -15,7 +15,7 @@ const NavigationButton = (
     }}
     onClick={rest.callBack}
   >
-    <SVGIcon {...rest.icon} size="large" />
+    <SVGIcon {...icons[rest.name]} size="large" arialLabel={`navigation-button-${rest.name}`} />
   </IconButton>
 );
 
@@ -47,13 +47,13 @@ export default function navigationPanel() {
       const { buttonList } = this.settings;
       return (
         <div style={style}>
-          <NavigationButton top={1 * w} right={1 * w} icon={home} callBack={buttonList.home.callBack} />
-          <NavigationButton top={1 * w} right={2 * w} icon={left} callBack={buttonList.left.callBack} />
-          <NavigationButton top={1 * w} right={0 * w} icon={right} callBack={buttonList.right.callBack} />
-          <NavigationButton top={0 * w} right={1 * w} icon={up} callBack={buttonList.up.callBack} />
-          <NavigationButton top={2 * w} right={1 * w} icon={down} callBack={buttonList.down.callBack} />
-          <NavigationButton top={3 * w} right={1 * w} icon={zoomIn} callBack={buttonList.zoomIn.callBack} />
-          <NavigationButton top={4 * w} right={1 * w} icon={zoomOut} callBack={buttonList.zoomOut.callBack} />
+          <NavigationButton top={1 * w} right={1 * w} name="home" callBack={buttonList.home.callBack} />
+          <NavigationButton top={1 * w} right={2 * w} name="left" callBack={buttonList.left.callBack} />
+          <NavigationButton top={1 * w} right={0 * w} name="right" callBack={buttonList.right.callBack} />
+          <NavigationButton top={0 * w} right={1 * w} name="up" callBack={buttonList.up.callBack} />
+          <NavigationButton top={2 * w} right={1 * w} name="down" callBack={buttonList.down.callBack} />
+          <NavigationButton top={3 * w} right={1 * w} name="zoomIn" callBack={buttonList.zoomIn.callBack} />
+          <NavigationButton top={4 * w} right={1 * w} name="zoomOut" callBack={buttonList.zoomOut.callBack} />
         </div>
       );
     },

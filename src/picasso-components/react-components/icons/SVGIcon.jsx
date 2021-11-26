@@ -11,7 +11,7 @@ function getFontSize(size) {
   return '16px';
 }
 
-export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 24 24' }) {
+export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 24 24', arialLabel }) {
   const s = {
     fontSize: getFontSize(size),
     display: 'inline-block',
@@ -30,8 +30,15 @@ export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 24 24' }) 
   };
   return (
     <i style={s}>
-      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox={viewBox} fill="currentColor">
-        <path d={d} />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox={viewBox}
+        fill="currentColor"
+        aria-label={arialLabel}
+      >
+        <path d={d} pointerEvents="none" />
       </svg>
     </i>
   );
