@@ -129,6 +129,7 @@ export default function createChartModel({
           update(); // Switching between binned and not binned data - requires complete chart update.
         } else {
           updatePartial();
+          console.log('update partial');
         }
       });
   };

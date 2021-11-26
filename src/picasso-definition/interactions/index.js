@@ -1,6 +1,7 @@
 import native from './native';
 import pan from './pan';
 import pinch from './pinch';
+import tapNavigationPanel from './tap-navigation-panel';
 
 export default function create({ chart, actions, viewHandler, gestures, colorService, tooltipService, rtl }) {
   const tooltipInteractions = tooltipService.getInteractions();
@@ -11,8 +12,8 @@ export default function create({ chart, actions, viewHandler, gestures, colorSer
     gestures: [
       // Note: the order of these gestures are important
       ...colorService.custom.legendInteractions(), // need higher priority than the tap in selectables.gestures
+      tapNavigationPanel({ chart, actions, viewHandler }),
       ...[...gestures].sort((a, b) => (b.prio || 0) - (a.prio || 0)),
-      // tapNavigationPanel({ chart, actions, viewHandler }),
       pan({ chart, actions, viewHandler, rtl }),
       pinch({ chart, actions, viewHandler, rtl }),
       ...tooltipInteractions.gestures,

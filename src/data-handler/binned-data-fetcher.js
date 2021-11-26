@@ -5,6 +5,8 @@ export default function createBinnedDataFetcher({ layoutService, extremumModel, 
   const MAX_RESOLUTION_LEVEL = 8;
   const bins = [];
   let maxBinDensity = 0;
+  let nextInLine;
+  let requestInProgress;
 
   const populateBins = (dataPages) => {
     bins.length = 0;
@@ -95,12 +97,35 @@ export default function createBinnedDataFetcher({ layoutService, extremumModel, 
         return Promise.resolve(dataPages);
       }
 
+      // TODO: To improve performance further - introduce debouncer to avoid
+      // fetching data too often during interaction (pan/zoom).
+      if (requestInProgress) {
+        return new Promise((resolve, reject) => {
+          if (nextInLine) {
+            nextInLine.reject();
+            console.log('next in line reject');
+          }
+          nextInLine = { resolve, reject };
+        });
+      }
+
       const { xAxisMin, xAxisMax } = extremumModel.query.getXExtrema();
       const { yAxisMin, yAxisMax } = extremumModel.query.getYExtrema();
       const { qMin, qMax } = layoutService.getHyperCubeValue('qMeasureInfo.1', {});
       const zoomLevel = Math.floor(Math.sqrt((qMax - qMin) / (yAxisMax - yAxisMin)));
 
-      return getBinnedData(xAxisMin, yAxisMax, xAxisMax - xAxisMin, yAxisMax - yAxisMin, zoomLevel);
+      requestInProgress = getBinnedData(xAxisMin, yAxisMax, xAxisMax - xAxisMin, yAxisMax - yAxisMin, zoomLevel);
+
+      requestInProgress.then(() => {
+        requestInProgress = null;
+        if (nextInLine) {
+          const tempRef = nextInLine;
+          nextInLine = null;
+          tempRef.resolve(binnedDataFetcher.fetch());
+        }
+      });
+
+      return requestInProgress;
     },
   };
 

@@ -58,7 +58,7 @@ const tap = ({ targets, requireFailure, recognizeWith, components, eventName = '
               components: targets.map((c) => ({ key: c })),
             });
 
-        const doSelect = false;
+        const doSelect = !opts.isLocked(targetComponents) && opts.actions.select.enabled();
 
         if (doSelect) {
           const compsAtPoint = this.chart.componentsFromPoint({ x: e.center.x, y: e.center.y });

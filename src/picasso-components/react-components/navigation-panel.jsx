@@ -45,9 +45,6 @@ export default function navigationPanel() {
       const style = getStyle(this.rect);
       const { gridWidth: w } = this.settings.settings;
       const { buttonList } = this.settings;
-      const cl = (text) => () => {
-        console.log(text);
-      };
       return (
         <div style={style}>
           <NavigationButton top={1 * w} right={1 * w} icon={home} callBack={buttonList.home.callBack} />

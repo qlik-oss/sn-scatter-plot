@@ -62,7 +62,9 @@ export default function createNavigationPanel({ layoutService, chartModel, chart
     settings: { padding: NUMBERS.NAVIGATION_PANEL.PADDING, gridWidth: NUMBERS.NAVIGATION_PANEL.GRID_WIDTH },
     buttonList: {
       home: {
-        callBack: () => {
+        callBack: (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           viewHandler.setDataView(viewHandler.getMeta().homeStateDataView);
         },
       },
