@@ -15,7 +15,7 @@ const NavigationButton = (
     }}
     onClick={rest.callBack}
   >
-    <SVGIcon {...icons[rest.name]} size="large" arialLabel={`navigation-button-${rest.name}`} />
+    <SVGIcon {...icons[rest.name]} size="large" viewBox="0 0 24 24" arialLabel={`navigation-button-${rest.name}`} />
   </IconButton>
 );
 
