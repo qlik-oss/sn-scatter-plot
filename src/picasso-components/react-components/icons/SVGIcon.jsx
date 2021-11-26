@@ -11,13 +11,10 @@ function getFontSize(size) {
   return '16px';
 }
 
-export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 24 24', arialLabel }) {
+export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 16 16', arialLabel }) {
   const s = {
     fontSize: getFontSize(size),
     display: 'inline-block',
-    // position: 'absolute',
-    // top: '80px',
-    // right: '0',
     fontStyle: 'normal',
     lineHeight: '0',
     textAlign: 'center',

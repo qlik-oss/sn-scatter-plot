@@ -5,6 +5,7 @@ describe('heat-map', () => {
   let sandbox;
   let models;
   let flags;
+  let dataHandler;
   let create;
 
   beforeEach(() => {
@@ -29,9 +30,11 @@ describe('heat-map', () => {
     }));
     const viewHandler = {
       getDataView: sandbox.stub().returns({ xAxisMin: 0, xAxisMax: 4000, yAxisMin: 0, yAxisMax: 10 }),
+      transform: 'transform-function',
     };
-    const dataHandler = {
+    dataHandler = {
       binArray: [{ qText: [2100, 5, 2200, 4], qNum: 1, qElemNumber: 7964 }],
+      getMeta: sandbox.stub().returns({ isBinnedData: true }),
     };
     models = {
       chartModel: {
@@ -43,11 +46,11 @@ describe('heat-map', () => {
       },
       layoutService: {
         meta: {
-          isBigData: false,
+          isBigData: true,
         },
       },
     };
-    flags = { isEnabled: sandbox.stub().returns(false) };
+    flags = { isEnabled: sandbox.stub().returns(true) };
 
     create = () =>
       createHeatMap({
@@ -60,6 +63,16 @@ describe('heat-map', () => {
     sandbox.restore();
   });
 
+  it('should return false if is not big data', () => {
+    models.layoutService.meta.isBigData = false;
+    expect(create()).to.be.false;
+  });
+
+  it('should return false if DATA_BINNING is not enabled', () => {
+    flags.isEnabled.returns(false);
+    expect(create()).to.be.false;
+  });
+
   describe('object definition', () => {
     it('should return an object definition', () => {
       expect(create()).to.be.a('object');
@@ -70,7 +83,16 @@ describe('heat-map', () => {
     });
 
     it('should have correct properties', () => {
-      expect(create()).to.have.all.keys(['key', 'type', 'data', 'show', 'settings', 'beforeRender']);
+      expect(create()).to.have.all.keys([
+        'key',
+        'type',
+        'data',
+        'show',
+        'settings',
+        'beforeRender',
+        'rendererSettings',
+        'brush',
+      ]);
     });
 
     it('should have correct key', () => {
@@ -86,29 +108,22 @@ describe('heat-map', () => {
             x: { field: 'binX' },
             y: { field: 'binY' },
             binDensity: { field: 'binDensity' },
+            selectionDimension: {
+              field: 'bin',
+            },
           },
         });
       });
     });
 
     describe('show', () => {
-      it('should return false when is not big data and flag DATA_BINNING is not enabled', () => {
+      it('should return false when is not binned data', () => {
+        dataHandler.getMeta.returns({ isBinnedData: false });
         expect(create().show()).to.equal(false);
       });
 
-      it('should return false when is big data and flag DATA_BINNING is not enabled', () => {
-        models.layoutService.meta.isBigData = true;
-        expect(create().show()).to.equal(false);
-      });
-
-      it('should return false when is not big data and flag DATA_BINNING is enabled', () => {
-        flags.isEnabled.returns(true);
-        expect(create().show()).to.equal(false);
-      });
-
-      it('should return true when is big data and flag DATA_BINNING is enabled', () => {
-        models.layoutService.meta.isBigData = true;
-        flags.isEnabled.returns(true);
+      it('should return true when is binned data', () => {
+        dataHandler.getMeta.returns({ isBinnedData: true });
         expect(create().show()).to.equal(true);
       });
     });
@@ -142,6 +157,16 @@ describe('heat-map', () => {
     describe('beforeRender', () => {
       it('should be set with a function', () => {
         expect(create().beforeRender).to.be.a('function');
+      });
+    });
+
+    describe('rendererSettings', () => {
+      it('should have correct transform function', () => {
+        expect(create().rendererSettings.transform).to.equal('transform-function');
+      });
+      it('should have correct buffer size', () => {
+        const rect = { computedPhysical: { width: 200, height: 150 } };
+        expect(create().rendererSettings.canvasBufferSize(rect)).to.deep.equal({ width: 300, height: 250 });
       });
     });
   });

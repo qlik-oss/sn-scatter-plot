@@ -8,6 +8,7 @@ export default function createPoint({ layoutService, colorService, chartModel })
   let windowSizeMultiplier;
   const sizeScaleFn = createSizeScale(layoutService);
   const viewHandler = chartModel.query.getViewHandler();
+  const dataHandler = chartModel.query.getDataHandler();
   const { transform } = viewHandler;
   return {
     key: KEYS.COMPONENT.POINT,
@@ -15,6 +16,7 @@ export default function createPoint({ layoutService, colorService, chartModel })
     data: {
       collection: KEYS.COLLECTION.MAIN,
     },
+    show: () => !dataHandler.getMeta().isBinnedData,
     brush: createBrush(),
     settings: {
       x: {

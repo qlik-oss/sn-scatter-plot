@@ -9,7 +9,7 @@ export default function createLasso(cfg, opts) {
   //   };
   // }
 
-  if (!cfg.componentTargetKey) {
+  if (!cfg.componentTargetKeys.length) {
     throw new Error("Missing 'componentTargetKey' property");
   }
 

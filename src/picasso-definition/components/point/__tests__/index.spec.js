@@ -12,6 +12,7 @@ describe('point', () => {
   let layoutValueStub;
   let hyperCubeValueStub;
   let canvasBufferSizeStub;
+  let dataHandler;
   let sizeScaleFn;
   let d;
   const wsm = 1;
@@ -44,8 +45,13 @@ describe('point', () => {
       },
     };
     sizeScaleFn = createSizeScale(layoutService);
-    viewHandler = { redererSettings: 'renderer-settings', animationEnabled: false };
-    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
+    chartModel = { query: { getViewHandler: sandbox.stub(), getDataHandler: sandbox.stub() } };
+    dataHandler = {
+      getMeta: sandbox.stub().returns({ isBinnedData: false }),
+    };
+    chartModel.query.getDataHandler.returns(dataHandler);
+    viewHandler = { redererSettings: 'renderer-settings', animationEnabled: false, transform: 'transform-function' };
+    chartModel.query.getViewHandler.returns(viewHandler);
     canvasBufferSizeStub = sandbox.stub();
     rect = {
       computedPhysical: {
@@ -99,6 +105,7 @@ describe('point', () => {
         'settings',
         'beforeRender',
         'rendererSettings',
+        'show',
         'animations',
       ]);
     });
@@ -110,6 +117,18 @@ describe('point', () => {
     describe('data', () => {
       it('should be correct', () => {
         expect(create().data.collection).to.equal('mainCollectionKey');
+      });
+    });
+
+    describe('show', () => {
+      it('should return false when is binned data', () => {
+        dataHandler.getMeta.returns({ isBinnedData: true });
+        expect(create().show()).to.equal(false);
+      });
+
+      it('should return true when is not binned data', () => {
+        dataHandler.getMeta.returns({ isBinnedData: false });
+        expect(create().show()).to.equal(true);
       });
     });
   });
@@ -151,6 +170,16 @@ describe('point', () => {
   describe('beforeRender', () => {
     it('should be set with a function', () => {
       expect(create().beforeRender).to.be.a('function');
+    });
+  });
+
+  describe('rendererSettings', () => {
+    it('should have correct transform function', () => {
+      expect(create().rendererSettings.transform).to.equal('transform-function');
+    });
+    it('should have correct buffer size', () => {
+      const compRect = { computedPhysical: { width: 200, height: 150 } };
+      expect(create().rendererSettings.canvasBufferSize(compRect)).to.deep.equal({ width: 300, height: 250 });
     });
   });
 

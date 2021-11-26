@@ -79,7 +79,9 @@ const labelHelper = {
   // Reduce max num lines of a label if the vertical space is not enough
   reduceMaxNumLines({ labels, min, max, gap, lineHeight, epsilon }) {
     const n = labels.length - 1;
-    if (n < 0) return;
+    if (n < 0) {
+      return;
+    }
     let thisLabel;
     let nextLabel;
     [thisLabel] = labels;

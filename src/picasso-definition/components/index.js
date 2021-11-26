@@ -10,9 +10,10 @@ import createDisclaimer from './disclaimer';
 import createOutOfBounds from './out-of-bounds';
 import createHeatMapLegend from './heat-map-legend';
 import createNavigationPanel from './navigation-panel';
+import createMiniChart from './mini-chart';
 
 export default function createComponents({ context, models, flags, picasso, chart }) {
-  const { colorService, disclaimerModel, layoutService, themeService, tooltipService, chartModel } = models;
+  const { colorService, disclaimerModel, layoutService, themeService, chartModel, tooltipService } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
 
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
@@ -25,14 +26,15 @@ export default function createComponents({ context, models, flags, picasso, char
     createPoint(models),
     createHeatMap({ models, flags }),
     ...createAxes({ models, flags }),
-    ...createAxisTitles(models),
+    ...createAxisTitles({ models, context }),
     createPointLabels(models),
-    createHeatMapLabels({ themeService, picasso, context }),
+    createHeatMapLabels({ themeService, chartModel, picasso, context }),
     createOutOfBounds({ models, context }),
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
     createNavigationPanel({ layoutService, chartModel, chart }),
+    ...createMiniChart({ models, flags }),
     ...tooltipService.getComponents(),
   ].filter(Boolean);
   // setDisplayOrder(components);

@@ -1,6 +1,6 @@
 import { range } from '../../../interactive';
 
-export default function createLegendRange({ actions, selectionService, scales, legend }) {
+export default function createLegendRange({ actions, selectionService, scales, legend, enableInteraction }) {
   const [legendComponent] = legend || [];
 
   if (!legendComponent) {
@@ -33,6 +33,7 @@ export default function createLegendRange({ actions, selectionService, scales, l
       onEdited: () => {
         actions.select.emit('end', 'legendRange');
       },
+      enableInteraction,
     },
     {
       actions,
