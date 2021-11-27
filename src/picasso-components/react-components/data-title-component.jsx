@@ -238,7 +238,7 @@ export default function createDataTitileComp() {
         <>
           {titleData.drilldown && (
             <SVGIcon
-              {...ICONS.DRIILLDOWN}
+              {...ICONS.DRILLDOWN}
               size="small"
               title={translator.get('Tooltip.dimensions.drilldown')}
               style={{ margin: '0 4px 0 0' }}

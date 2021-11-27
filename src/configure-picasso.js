@@ -20,8 +20,8 @@ export default function configurePicasso() {
   picasso.component('reference-line-labels', refLineLabelsComponent);
   picasso.component('point-label', pointLabelComponent);
   picasso.component('disclaimer', disclaimer());
-  picasso.component('navigation-panel', navigationPanel());
   picasso.component('mini-chart-window', miniChartWindow);
+  picasso.component('navigation-panel', navigationPanel());
   picasso.component('data-title', dataTitle());
 
   return picasso;

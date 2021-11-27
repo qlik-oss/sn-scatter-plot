@@ -77,7 +77,6 @@ export default function createBinnedDataFetcher({ layoutService, extremumModel, 
         return new Promise((resolve, reject) => {
           if (nextInLine) {
             nextInLine.reject();
-            console.log('next in line reject');
           }
           nextInLine = { resolve, reject };
         });

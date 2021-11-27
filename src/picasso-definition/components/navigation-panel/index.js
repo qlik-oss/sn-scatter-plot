@@ -39,10 +39,10 @@ function zoom({ chart, viewHandler, zoomDirection }) {
   }
   const pointComponent = chart.component(KEYS.COMPONENT.POINT);
   const { width, height } = pointComponent.rect.computedPhysical;
-  const p = { x: width / 2, y: height / 2 };
+  const focusPoint = { x: width / 2, y: height / 2 };
   const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getDataView();
-  const [xMin, xMax] = transform(p.x / width, xAxisMin, xAxisMax, zoomFactor);
-  const [yMax, yMin] = transform(p.y / height, yAxisMax, yAxisMin, zoomFactor);
+  const [xMin, xMax] = transform(focusPoint.x / width, xAxisMin, xAxisMax, zoomFactor);
+  const [yMax, yMin] = transform(focusPoint.y / height, yAxisMax, yAxisMin, zoomFactor);
   viewHandler.setDataView({
     xAxisMin: xMin,
     xAxisMax: xMax,
@@ -59,13 +59,11 @@ export default function createNavigationPanel({ layoutService, chartModel, chart
     key: KEYS.COMPONENT.NAVIGATION_PANEL,
     type: 'navigation-panel',
     show: navigation,
-    settings: { padding: NUMBERS.NAVIGATION_PANEL.PADDING, gridWidth: NUMBERS.NAVIGATION_PANEL.GRID_WIDTH },
+    style: { padding: NUMBERS.NAVIGATION_PANEL.PADDING, gridWidth: NUMBERS.NAVIGATION_PANEL.GRID_WIDTH },
     buttonList: {
       home: {
         isDisabled: () => viewHandler.getMeta().isHomeState,
-        callBack: (e) => {
-          e.preventDefault();
-          e.stopPropagation();
+        callBack: () => {
           viewHandler.setDataView(viewHandler.getMeta().homeStateDataView);
         },
       },

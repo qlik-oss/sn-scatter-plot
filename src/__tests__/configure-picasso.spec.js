@@ -1,5 +1,6 @@
 import * as renderer from '../picasso-components/react-components/react-renderer';
 import * as disclaimer from '../picasso-components/react-components/disclaimer';
+import * as navigationPanel from '../picasso-components/react-components/navigation-panel';
 
 describe('configure-picasso', () => {
   let sandbox;
@@ -21,6 +22,8 @@ describe('configure-picasso', () => {
     renderer.default.returns('renderer');
     sandbox.stub(disclaimer, 'default');
     disclaimer.default.returns('disclaimer');
+    sandbox.stub(navigationPanel, 'default');
+    navigationPanel.default.returns('navigation-panel');
     configurePicasso = aw.mock(
       [
         ['**/dist/picasso.js', () => createPicassoJS],
@@ -65,6 +68,7 @@ describe('configure-picasso', () => {
     expect(picasso.component.getCall(1).calledWith('point-label', 'pointLabelComponent')).to.be.true;
     expect(picasso.component.getCall(2).calledWith('disclaimer', 'disclaimer')).to.be.true;
     expect(picasso.component.getCall(3).calledWith('mini-chart-window', 'miniChartWindow')).to.be.true;
+    expect(picasso.component.getCall(4).calledWith('navigation-panel', 'navigation-panel')).to.be.true;
   });
 
   it('should return picasso instance', () => {

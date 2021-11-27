@@ -26,18 +26,20 @@ const NavigationButton = (
 );
 
 export default function navigationPanel() {
-  function getStyle(rect) {
+  function getStyle({ rect, padding }) {
     return {
       pointerEvents: 'auto',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      width: `${rect.width}px`,
-      height: `${rect.height}px`,
+      top: `${padding}px`,
+      width: `${rect.width - padding}px`,
+      height: `${rect.height - padding}px`,
       color: '#595959',
       fontStyle: 'normal',
       fontSize: '1.2em',
       textAlign: 'center',
+      position: 'absolute',
     };
   }
 
@@ -48,8 +50,8 @@ export default function navigationPanel() {
       return 40;
     },
     render() {
-      const style = getStyle(this.rect);
-      const { gridWidth: w } = this.settings.settings;
+      const { gridWidth: w, padding } = this.settings.style;
+      const style = getStyle({ rect: this.rect, padding });
       const { buttonList } = this.settings;
       return (
         <div style={style}>

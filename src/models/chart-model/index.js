@@ -163,7 +163,6 @@ export default function createChartModel({
           update();
         } else {
           updatePartial();
-          console.log('update partial');
         }
       });
   };

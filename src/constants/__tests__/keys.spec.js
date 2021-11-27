@@ -38,6 +38,7 @@ describe('keys', () => {
       'MINI_CHART_BACKGROUND',
       'MINI_CHART_NAVIGATION',
       'MINI_CHART_POINT',
+      'NAVIGATION_PANEL',
     ]);
   });
 

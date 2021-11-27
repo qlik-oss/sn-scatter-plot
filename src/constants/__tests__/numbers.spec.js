@@ -11,6 +11,7 @@ describe('numbers', () => {
       'MAX_NR_SCATTER',
       'MAX_NR_ANIMATION',
       'MINI_CHART',
+      'NAVIGATION_PANEL',
     ]);
   });
 
@@ -36,5 +37,9 @@ describe('numbers', () => {
 
   it('should have correct mini chart keys', () => {
     expect(NUMBERS.MINI_CHART).to.have.all.keys(['RATIO', 'PADDING']);
+  });
+
+  it('should have correct navigation panel keys', () => {
+    expect(NUMBERS.NAVIGATION_PANEL).to.have.all.keys(['GRID_WIDTH', 'PADDING']);
   });
 });

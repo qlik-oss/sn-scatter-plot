@@ -1,4 +1,5 @@
 import * as tapMiniChart from '../tap-mini-chart';
+import * as tapNavigationPanel from '../tap-navigation-panel';
 
 describe('interactions', () => {
   let sandbox;
@@ -63,6 +64,9 @@ describe('interactions', () => {
     sandbox.stub(tapMiniChart, 'default').returns({
       key: 'event:tap-mini-chart',
     });
+    sandbox.stub(tapNavigationPanel, 'default').returns({
+      key: 'event:tap-navigation-panel',
+    });
   });
 
   afterEach(() => {
@@ -92,6 +96,7 @@ describe('interactions', () => {
         gestures: [
           'legend-i1',
           'legend-i2',
+          { key: 'event:tap-navigation-panel' },
           { key: 'event:tap-mini-chart' },
           { key: 'gesture-1', prio: 2 },
           { key: 'gesture-2', prio: 2 },
@@ -129,6 +134,7 @@ describe('interactions', () => {
         gestures: [
           'legend-i1',
           'legend-i2',
+          { key: 'event:tap-navigation-panel' },
           { key: 'event:tap-mini-chart' },
           { key: 'gesture-1' },
           { key: 'gesture-2' },
