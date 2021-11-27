@@ -62,6 +62,7 @@ export default function createNavigationPanel({ layoutService, chartModel, chart
     settings: { padding: NUMBERS.NAVIGATION_PANEL.PADDING, gridWidth: NUMBERS.NAVIGATION_PANEL.GRID_WIDTH },
     buttonList: {
       home: {
+        isDisabled: () => viewHandler.getMeta().isHomeState,
         callBack: (e) => {
           e.preventDefault();
           e.stopPropagation();

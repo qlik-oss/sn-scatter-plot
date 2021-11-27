@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconButton } from '@material-ui/core'; // eslint-disable-line
 import SVGIcon from './icons/SVGIcon';
-import * as icons from './icons';
+import icons from './icons';
 
 const NavigationButton = (
   { children, ...rest } // eslint-disable-line
@@ -15,7 +15,13 @@ const NavigationButton = (
     }}
     onClick={rest.callBack}
   >
-    <SVGIcon {...icons[rest.name]} size="large" viewBox="0 0 24 24" arialLabel={`navigation-button-${rest.name}`} />
+    <SVGIcon
+      {...icons[rest.name]}
+      size="large"
+      viewBox="0 0 24 24"
+      fill={() => (rest.isDisabled ? (rest.isDisabled() ? 'lightGray' : 'currentColor') : 'currentColor')}
+      arialLabel={`navigation-button-${rest.name}`}
+    />
   </IconButton>
 );
 
@@ -47,7 +53,13 @@ export default function navigationPanel() {
       const { buttonList } = this.settings;
       return (
         <div style={style}>
-          <NavigationButton top={1 * w} right={1 * w} name="home" callBack={buttonList.home.callBack} />
+          <NavigationButton
+            top={1 * w}
+            right={1 * w}
+            name="home"
+            callBack={buttonList.home.callBack}
+            isDisabled={buttonList.home.isDisabled}
+          />
           <NavigationButton top={1 * w} right={2 * w} name="left" callBack={buttonList.left.callBack} />
           <NavigationButton top={1 * w} right={0 * w} name="right" callBack={buttonList.right.callBack} />
           <NavigationButton top={0 * w} right={1 * w} name="up" callBack={buttonList.up.callBack} />
