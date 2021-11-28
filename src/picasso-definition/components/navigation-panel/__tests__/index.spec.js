@@ -206,6 +206,7 @@ describe('createNavigationPanel', () => {
                 yAxisMax: 2.75,
               })
             ).to.equal(true);
+
             viewHandler.getMeta.returns({ scale: viewHandler.mockStorage.currentScale, maxScale: 4.1, minScale: 0.9 });
             navigationPanel.buttonList.zoomIn.callBack(); // hitting minScale
             expect(
