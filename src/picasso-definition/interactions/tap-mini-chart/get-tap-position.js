@@ -8,9 +8,9 @@ export default function getTapPosition({ e, chart }) {
 
   const { x, y, width: W, height: H } = chart.component(KEYS.COMPONENT.MINI_CHART_POINT).rect.computedPhysical;
 
-  // Coordinate of the clicked spot, relative to the point component
-  const X0 = e.pointers[0].offsetX - x - e.deltaX;
-  const Y0 = e.pointers[0].offsetY - y - e.deltaY;
+  const bounds = chart.element.getBoundingClientRect();
+  const X0 = e.center.x - bounds.left - x - e.deltaX;
+  const Y0 = e.center.y - bounds.top - y - e.deltaY;
 
   const { RATIO, PADDING } = NUMBERS.MINI_CHART;
 
