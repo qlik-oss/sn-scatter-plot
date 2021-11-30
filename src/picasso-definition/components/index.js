@@ -23,7 +23,7 @@ export default function createComponents({ context, models, flags, picasso, char
     createGridLines(models),
     ...createReferenceLines({ models, context }),
     createPoint(models),
-    createHeatMap({ models, flags }),
+    createHeatMap(chartModel),
     ...createAxes({ models, flags }),
     ...createAxisTitles({ models, context }),
     createPointLabels(models),
