@@ -1,29 +1,40 @@
 import React from 'react';
-import { IconButton } from '@material-ui/core'; // eslint-disable-line
+import { makeStyles } from '@material-ui/core/styles';
+import { IconButton } from '@material-ui/core';
 import SVGIcon from './icons/SVGIcon';
 import icons from './icons';
 
-const NavigationButton = (
-  { children, ...rest } // eslint-disable-line
-) => (
-  <IconButton
-    style={{
-      position: 'absolute',
-      top: `${rest.top}px`,
-      right: `${rest.right}px`,
-      padding: '0',
-    }}
-    onClick={rest.callBack}
-  >
-    <SVGIcon
-      {...icons[rest.name]}
-      size="large"
-      viewBox="0 0 24 24"
-      fill={() => (rest.isDisabled ? (rest.isDisabled() ? 'lightGray' : 'currentColor') : 'currentColor')}
-      arialLabel={`navigation-button-${rest.name}`}
-    />
-  </IconButton>
-);
+const useStyles = makeStyles(() => ({
+  root: {
+    '&:focus': {
+      background: '#dddddd',
+    },
+  },
+}));
+
+const NavigationButton = ({ ...rest }) => {
+  const classes = useStyles();
+  return (
+    <IconButton
+      style={{
+        position: 'absolute',
+        top: `${rest.top}px`,
+        right: `${rest.right}px`,
+        padding: '0',
+      }}
+      className={classes.root}
+      onClick={rest.callBack}
+    >
+      <SVGIcon
+        {...icons[rest.name]}
+        size="large"
+        viewBox="0 0 24 24"
+        fill={() => (rest.isDisabled ? (rest.isDisabled() ? '#b0b0b0' : 'currentColor') : 'currentColor')}
+        arialLabel={`navigation-button-${rest.name}`}
+      />
+    </IconButton>
+  );
+};
 
 export default function navigationPanel() {
   function getStyle({ rect, padding }) {

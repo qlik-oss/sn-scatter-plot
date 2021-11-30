@@ -15,9 +15,12 @@ describe('tap in mini chart', () => {
     sandbox.stub(KEYS, 'default').value({
       COMPONENT: { MINI_CHART_POINT: 'mcp' },
     });
-    chart = { component: sandbox.stub() };
+    chart = {
+      component: sandbox.stub(),
+      element: { getBoundingClientRect: sandbox.stub().returns({ left: 5, top: 5 }) },
+    };
     chart.component.withArgs('mcp').returns({ rect });
-    e = { pointers: [{ offsetX: 80, offsetY: 162 }], deltaX: 0, deltaY: 0 };
+    e = { center: { x: 85, y: 167 }, deltaX: 0, deltaY: 0 };
     viewHandler = { getMeta: sandbox.stub(), setDataView: sandbox.stub() };
     viewHandler.getMeta.returns({
       scale: 0.5,
@@ -53,7 +56,7 @@ describe('tap in mini chart', () => {
 
   it('should return correct position if the tapped point is inside the mini chart', () => {
     chart.component.withArgs('mcp').returns({ rect, show: sandbox.stub().returns(true) });
-    e.pointers = [{ offsetX: 130, offsetY: 162 }];
+    e.center = { x: 135, y: 167 };
     const result = create();
     expect(result).to.deep.equal({ x: 40, y: 50 });
   });

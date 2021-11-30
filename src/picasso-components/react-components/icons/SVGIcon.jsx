@@ -11,7 +11,7 @@ function getFontSize(size) {
   return '16px';
 }
 
-export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 16 16', arialLabel, fill }) {
+export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 16 16', arialLabel = '', fill }) {
   const s = {
     fontSize: getFontSize(size),
     display: 'inline-block',
@@ -32,7 +32,7 @@ export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 16 16', ar
         width="1em"
         height="1em"
         viewBox={viewBox}
-        fill={fill()}
+        fill={fill ? fill() : 'currentColor'}
         aria-label={arialLabel}
       >
         <path d={d} pointerEvents="none" />

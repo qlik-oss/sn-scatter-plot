@@ -29,7 +29,7 @@ function transform(scale, start, end, factor) {
   return [newStart, newEnd];
 }
 
-function zoom({ chart, viewHandler, zoomDirection }) {
+function zoom({ viewHandler, zoomDirection }) {
   const { scale, maxScale, minScale } = viewHandler.getMeta();
   const zoomFactor = zoomDirection === 'in' ? 2 ** (-1 / 2) : 2 ** (1 / 2);
   const newScale = zoomFactor * scale;
@@ -37,12 +37,9 @@ function zoom({ chart, viewHandler, zoomDirection }) {
   if (newScale > maxScale || newScale < minScale) {
     return;
   }
-  const pointComponent = chart.component(KEYS.COMPONENT.POINT);
-  const { width, height } = pointComponent.rect.computedPhysical;
-  const focusPoint = { x: width / 2, y: height / 2 };
   const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getDataView();
-  const [xMin, xMax] = transform(focusPoint.x / width, xAxisMin, xAxisMax, zoomFactor);
-  const [yMax, yMin] = transform(focusPoint.y / height, yAxisMax, yAxisMin, zoomFactor);
+  const [xMin, xMax] = transform(0.5, xAxisMin, xAxisMax, zoomFactor);
+  const [yMax, yMin] = transform(0.5, yAxisMax, yAxisMin, zoomFactor);
   viewHandler.setDataView({
     xAxisMin: xMin,
     xAxisMax: xMax,
@@ -52,7 +49,7 @@ function zoom({ chart, viewHandler, zoomDirection }) {
   viewHandler.setMeta({ scale: newScale });
 }
 
-export default function createNavigationPanel({ layoutService, chartModel, chart }) {
+export default function createNavigationPanel({ layoutService, chartModel }) {
   const navigation = layoutService.getLayoutValue('navigation');
   const viewHandler = chartModel.query.getViewHandler();
   return {
@@ -90,13 +87,13 @@ export default function createNavigationPanel({ layoutService, chartModel, chart
 
       zoomIn: {
         callBack: () => {
-          zoom({ chart, viewHandler, zoomDirection: 'in' });
+          zoom({ viewHandler, zoomDirection: 'in' });
         },
       },
 
       zoomOut: {
         callBack: () => {
-          zoom({ chart, viewHandler, zoomDirection: 'out' });
+          zoom({ viewHandler, zoomDirection: 'out' });
         },
       },
     },
