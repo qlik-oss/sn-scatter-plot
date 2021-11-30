@@ -40,6 +40,7 @@
     "test:unit": "aw -c aw.config.js",
     "test:rendering": "node ./scripts/run-rendering-tests.js",
     "test:rendering:local": "aw puppet --glob 'test/**/*.spec.js' --mocha.bail false --mocha.timeout 10000",
+    "test:regression": "aw puppet --testExt '*.spec.js' --glob 'test/regression/**/*.spec.js' --mocha.bail false --mocha.timeout 30000",
     "prepublishOnly": "rm -rf dist && yarn run build",
     "version": "yarn spec && git add api-specifications",
     "prepare": "husky install"
