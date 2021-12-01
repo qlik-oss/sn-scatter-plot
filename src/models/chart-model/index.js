@@ -14,6 +14,7 @@ export default function createChartModel({
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
     KEYS.COMPONENT.Y_AXIS_TITLE,
+    KEYS.COMPONENT.MINI_CHART_POINT,
     // KEYS.COMPONENT.X_AXIS,
     // KEYS.COMPONENT.Y_AXIS,
     // KEYS.COMPONENT.GRID_LINES,
@@ -114,6 +115,33 @@ export default function createChartModel({
     });
   };
 
+  const miniChartEnabled = () => {
+    const homeStateBins = dataHandler.getHomeStateBins(viewHandler.getMeta().isHomeState);
+    if (homeStateBins.length) {
+      const binXValues = [];
+      const binYValues = [];
+      homeStateBins.forEach((bin) => {
+        binXValues.push(bin.qText[0], bin.qText[2]);
+        binYValues.push(bin.qText[1], bin.qText[3]);
+      });
+      const binsViewState = {
+        xAxisMin: Math.min(...binXValues),
+        xAxisMax: Math.max(...binXValues),
+        yAxisMin: Math.min(...binYValues),
+        yAxisMax: Math.max(...binYValues),
+      };
+      const isInside = (smallRect, largeRect) =>
+        smallRect.xAxisMin >= largeRect.xAxisMin &&
+        smallRect.xAxisMax <= largeRect.xAxisMax &&
+        smallRect.yAxisMin >= largeRect.yAxisMin &&
+        smallRect.yAxisMax <= largeRect.yAxisMax;
+      return !isInside(binsViewState, viewHandler.getDataView());
+    }
+    return false;
+  };
+
+  let miniChartOn = false;
+
   const handleDataViewUpdate = () => {
     if (viewHandler.getInteractionInProgress()) {
       updatePartial();
@@ -125,8 +153,14 @@ export default function createChartModel({
       // Promise rejected if trying to fetch same data window twice in a row
       .catch(() => {})
       .finally(() => {
-        if (binnedBeforeFetch !== dataHandler.getMeta().isBinnedData) {
-          update(); // Switching between binned and not binned data - requires complete chart update.
+        const miniChartWillBeOn = chart.component(KEYS.COMPONENT.MINI_CHART_POINT) && miniChartEnabled();
+        const miniChartIsToggled =
+          (!miniChartOn && miniChartWillBeOn) || // Off -> On
+          (miniChartOn && !miniChartWillBeOn); // On -> Off
+        miniChartOn = miniChartWillBeOn;
+        // Requires complete chart update when switching between binned and not binned data, or when show/hide mini chart
+        if (binnedBeforeFetch !== dataHandler.getMeta().isBinnedData || miniChartIsToggled) {
+          update();
         } else {
           updatePartial();
         }
@@ -145,6 +179,7 @@ export default function createChartModel({
       getLocaleInfo: () => localeInfo,
       getFormatter: (fieldName) => dataset.field(fieldName).formatter(),
       isPrelayout: () => state.isPrelayout,
+      miniChartEnabled,
     },
     command: {
       layoutComponents: ({ settings } = {}) => {

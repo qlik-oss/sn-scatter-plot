@@ -7,7 +7,9 @@ export default function createSizeScale(layoutService) {
 
   const getDotMeasureSize = (d, windowSizeMultiplier) => {
     const { value } = d.datum.size;
-    if (value === 'NaN') return undefined;
+    if (value === 'NaN') {
+      return undefined;
+    }
     return pointHelper.getDotMeasureSize({
       sizeDataMin,
       sizeDataMax,

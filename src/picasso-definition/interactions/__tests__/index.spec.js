@@ -1,3 +1,5 @@
+import * as tapMiniChart from '../tap-mini-chart';
+
 describe('interactions', () => {
   let sandbox;
   let createNative;
@@ -58,6 +60,9 @@ describe('interactions', () => {
       models,
       rtl,
     };
+    sandbox.stub(tapMiniChart, 'default').returns({
+      key: 'event:tap-mini-chart',
+    });
   });
 
   afterEach(() => {
@@ -87,6 +92,7 @@ describe('interactions', () => {
         gestures: [
           'legend-i1',
           'legend-i2',
+          { key: 'event:tap-mini-chart' },
           { key: 'gesture-1', prio: 2 },
           { key: 'gesture-2', prio: 2 },
           { key: 'gesture-3', prio: 1 },
@@ -123,6 +129,7 @@ describe('interactions', () => {
         gestures: [
           'legend-i1',
           'legend-i2',
+          { key: 'event:tap-mini-chart' },
           { key: 'gesture-1' },
           { key: 'gesture-2' },
           { key: 'gesture-3' },

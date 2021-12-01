@@ -7,9 +7,16 @@ export default function createDataHandler({ layoutService, model, extremumModel,
   const meta = {};
   let requestInProgress;
   let nextInLine;
+  let binArrayCache;
 
   const dataHandler = {
     getMeta: () => meta,
+    getHomeStateBins: (isHomeState) => {
+      if (isHomeState) {
+        binArrayCache = binnedDataFetcher.binArray.slice();
+      }
+      return binArrayCache;
+    },
     get binArray() {
       return binnedDataFetcher.binArray;
     },

@@ -30,6 +30,7 @@ describe('heat-map', () => {
     }));
     const viewHandler = {
       getDataView: sandbox.stub().returns({ xAxisMin: 0, xAxisMax: 4000, yAxisMin: 0, yAxisMax: 10 }),
+      transform: 'transform-function',
     };
     dataHandler = {
       binArray: [{ qText: [2100, 5, 2200, 4], qNum: 1, qElemNumber: 7964 }],
@@ -82,7 +83,16 @@ describe('heat-map', () => {
     });
 
     it('should have correct properties', () => {
-      expect(create()).to.have.all.keys(['key', 'type', 'data', 'show', 'settings', 'beforeRender', 'brush']);
+      expect(create()).to.have.all.keys([
+        'key',
+        'type',
+        'data',
+        'show',
+        'settings',
+        'beforeRender',
+        'rendererSettings',
+        'brush',
+      ]);
     });
 
     it('should have correct key', () => {
@@ -147,6 +157,16 @@ describe('heat-map', () => {
     describe('beforeRender', () => {
       it('should be set with a function', () => {
         expect(create().beforeRender).to.be.a('function');
+      });
+    });
+
+    describe('rendererSettings', () => {
+      it('should have correct transform function', () => {
+        expect(create().rendererSettings.transform).to.equal('transform-function');
+      });
+      it('should have correct buffer size', () => {
+        const rect = { computedPhysical: { width: 200, height: 150 } };
+        expect(create().rendererSettings.canvasBufferSize(rect)).to.deep.equal({ width: 300, height: 250 });
       });
     });
   });

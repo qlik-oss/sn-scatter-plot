@@ -10,7 +10,9 @@ function getSizeInLogarithmScale(d, layout) {
   const isNotNumber = (x) => typeof x !== 'number' || Number.isNaN(x);
   const { value } = d.datum.size;
   const { qMin, qMax } = layout.qHyperCube.qMeasureInfo[2];
-  if (isNotNumber(value) || isNotNumber(qMin) || isNotNumber(qMax)) return '8px';
+  if (isNotNumber(value) || isNotNumber(qMin) || isNotNumber(qMax)) {
+    return '8px';
+  }
   const absMax = Math.max(Math.abs(qMin), Math.abs(qMax));
   const absSize = Math.abs(value);
 
@@ -43,7 +45,11 @@ function getColorBasedOnMedian(d) {
   const data = d.data.items.map((item) => item.size.value);
   const median = getMedian(data);
   const { value } = d.datum.size;
-  if (!isNumber(value)) return 'grey';
-  if (value >= median) return 'coral';
+  if (!isNumber(value)) {
+    return 'grey';
+  }
+  if (value >= median) {
+    return 'coral';
+  }
   return 'skyBlue';
 }

@@ -3,6 +3,8 @@ import createBrush from '../../brush';
 
 export default function createHeatMap({ models, flags }) {
   const { layoutService, chartModel } = models;
+  const viewHandler = chartModel.query.getViewHandler();
+  const { transform } = viewHandler;
   const dataHandler = chartModel.query.getDataHandler();
   let binWidthPx;
   let binHeightPx;
@@ -49,7 +51,6 @@ export default function createHeatMap({ models, flags }) {
       }),
     },
     beforeRender: ({ size }) => {
-      const viewHandler = chartModel.query.getViewHandler();
       const dataView = viewHandler.getDataView();
 
       const bins = dataHandler.binArray;
@@ -61,6 +62,13 @@ export default function createHeatMap({ models, flags }) {
         binWidthPx = (binWidth * size.width) / (dataView.xAxisMax - dataView.xAxisMin) + 0.5;
         binHeightPx = (binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin) + 0.5;
       }
+    },
+    rendererSettings: {
+      transform,
+      canvasBufferSize: (rect) => ({
+        width: rect.computedPhysical.width + 100,
+        height: rect.computedPhysical.height + 100,
+      }),
     },
   };
 }
