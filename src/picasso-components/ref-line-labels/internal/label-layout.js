@@ -45,7 +45,9 @@ const labelLayout = {
   adjustPositionFromMax(segments, min, max, gap = 0) {
     const n = segments.length - 1;
     const d = Math.max(0, segments[n].position + segments[n].radius - max);
-    if (d === 0) return;
+    if (d === 0) {
+      return;
+    }
     let i;
     let segment;
     let prevSegment;
@@ -58,7 +60,9 @@ const labelLayout = {
       move -= Math.max(0, totalMove + move - d);
       totalMove += move;
       segment.move = move;
-      if (totalMove >= d) break;
+      if (totalMove >= d) {
+        break;
+      }
     }
     if (totalMove < d) {
       move = Math.max(0, prevSegment.position - prevSegment.radius - min);
@@ -78,7 +82,9 @@ const labelLayout = {
   createLayout(labels, min, max, gap = 0) {
     const segments = labels.map((label) => label.segment);
     const n = segments.length - 1;
-    if (n < 0) return [];
+    if (n < 0) {
+      return [];
+    }
     if (n === 0) {
       const segment = segments[0];
       segment.position = labelLayout.findSegmentPositionMeetMaxThenMin(segment, min, max);

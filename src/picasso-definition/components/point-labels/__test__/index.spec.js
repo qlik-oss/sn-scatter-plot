@@ -18,6 +18,7 @@ describe('point-labels', () => {
     viewHandler = {
       redererSettings: 'renderer-settings',
       animationEnabled: false,
+      transform: 'transform-function',
     };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
     create = () => createPointLabels({ layoutService, themeService, chartModel });
@@ -82,6 +83,16 @@ describe('point-labels', () => {
     describe('style', () => {
       it('should have correct properties', () => {
         expect(create().style).to.have.all.keys(['fontFamily', 'fontSize', 'fill', 'backgroundColor']);
+      });
+    });
+
+    describe('rendererSettings', () => {
+      it('should have correct transform function', () => {
+        expect(create().rendererSettings.transform).to.equal('transform-function');
+      });
+      it('should have correct buffer size', () => {
+        const compRect = { computedPhysical: { width: 200, height: 150 } };
+        expect(create().rendererSettings.canvasBufferSize(compRect)).to.deep.equal({ width: 300, height: 250 });
       });
     });
 

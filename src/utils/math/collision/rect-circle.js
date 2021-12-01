@@ -12,8 +12,14 @@ export default function testRectCircle(rect, circle) {
     bounds = { x1: x - r, x2: x + r, y1: y - r, y2: y + r };
     circle.bounds = bounds;
   }
-  if (!testRectRect(rect, bounds)) return false;
-  if (testRectPoint(rect, circle)) return true;
-  if (getPointRectXDistance(circle, rect) < r2) return true;
+  if (!testRectRect(rect, bounds)) {
+    return false;
+  }
+  if (testRectPoint(rect, circle)) {
+    return true;
+  }
+  if (getPointRectXDistance(circle, rect) < r2) {
+    return true;
+  }
   return getPointRectYDistance(circle, rect) < r2;
 }

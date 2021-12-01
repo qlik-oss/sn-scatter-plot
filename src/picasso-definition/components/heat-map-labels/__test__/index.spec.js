@@ -7,6 +7,7 @@ describe('heat-map-labels', () => {
   let picasso;
   let context;
   let create;
+  let chartModel;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -28,7 +29,8 @@ describe('heat-map-labels', () => {
         HEAT_MAP_LABELS: 'heat-map-labels',
       },
     });
-    create = () => createHeatMapLabels({ themeService, picasso, context });
+    chartModel = { query: { getViewHandler: sandbox.stub().returns({ transform: 'transform-function' }) } };
+    create = () => createHeatMapLabels({ themeService, chartModel, picasso, context });
   });
 
   afterEach(() => {
@@ -147,6 +149,16 @@ describe('heat-map-labels', () => {
                   expect(create().settings.sources[0].strategy.settings.labels[0].placements[0].justify).to.equal(0.5);
                 });
               });
+            });
+          });
+
+          describe('rendererSettings', () => {
+            it('should have correct transform function', () => {
+              expect(create().rendererSettings.transform).to.equal('transform-function');
+            });
+            it('should have correct buffer size', () => {
+              const rect = { computedPhysical: { width: 200, height: 150 } };
+              expect(create().rendererSettings.canvasBufferSize(rect)).to.deep.equal({ width: 300, height: 250 });
             });
           });
         });
