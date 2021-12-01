@@ -1,4 +1,4 @@
-import getTapPosition from './get-tap-position';
+import getTapPosition from './tap-position';
 import updateTapDataView from './update-tap-data-view';
 
 const tap = ({ eventName = 'tap-mini-chart', viewHandler }) => ({

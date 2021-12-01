@@ -1,3 +1,5 @@
+import KEYS from '../constants/keys';
+
 export default function createDataFetcher({ layoutService, model }) {
   let lastDataWindow;
 
@@ -17,7 +19,7 @@ export default function createDataFetcher({ layoutService, model }) {
       // Do not fetch same data window twice in a row (important for performance)
       const dataWindow = JSON.stringify(dataRect);
       if (lastDataWindow === dataWindow) {
-        return Promise.reject();
+        return Promise.reject(KEYS.REJECTION_TOKEN);
       }
 
       lastDataWindow = dataWindow;

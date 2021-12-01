@@ -39,8 +39,8 @@
       "ru-RU": "Выборки для данного измерения заблокированы"
     }
   },
-  "Tooltip_dimensions_drilldown": {
-    "id": "Tooltip.dimensions.drilldown",
+  "Tooltip_dimensions_DRILL_DOWN": {
+    "id": "Tooltip.dimensions.DRILL_DOWN",
     "locale": {
       "en-US": "Drill-down dimension",
       "zh-TW": "向下探查維度",
@@ -49,7 +49,7 @@
       "sv-SE": "Hierarkisk dimension",
       "it-IT": "Dimensione di drill-down",
       "es-ES": "Dimensión jerárquica",
-      "de-DE": "Drilldown-Dimension:",
+      "de-DE": "DRILL_DOWN-Dimension:",
       "pl-PL": "Wymiar hierarchiczny",
       "nl-NL": "Drill-downdimensie",
       "ko-KR": "드릴다운 차원",

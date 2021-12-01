@@ -106,7 +106,7 @@ export function getMeasurePopoverData({
 export function getMeasureTitleData(meaInfo, index) {
   return {
     breadcrumbs: [],
-    drilldown: false,
+    DRILL_DOWN: false,
     index,
     locked: false,
     text: meaInfo.qFallbackTitle,

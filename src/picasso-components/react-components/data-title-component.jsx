@@ -200,7 +200,7 @@ export default function createDataTitileComp() {
           title={b}
         >
           <span style={textStyle}>{b}</span>
-          <SVGIcon {...ICONS.TRIANGLERIGHT} size="small" style={{ margin: '0 8px' }} />
+          <SVGIcon {...ICONS.TRIANGLE_RIGHT} size="small" style={{ margin: '0 8px' }} />
         </FadeButton>
       ));
 
@@ -230,17 +230,17 @@ export default function createDataTitileComp() {
           <span style={textStyle} dir={dir}>
             {titleData.text}
           </span>
-          {popover && <SVGIcon {...ICONS.TRIANGLEDOWN} size="small" style={{ margin: '0 8px' }} />}
+          {popover && <SVGIcon {...ICONS.TRIANGLE_DOWN} size="small" style={{ margin: '0 8px' }} />}
         </FadeButton>
       );
 
       return (
         <>
-          {titleData.drilldown && (
+          {titleData.DRILL_DOWN && (
             <SVGIcon
-              {...ICONS.DRILLDOWN}
+              {...ICONS.DRILL_DOWN}
               size="small"
-              title={translator.get('Tooltip.dimensions.drilldown')}
+              title={translator.get('Tooltip.dimensions.DRILL_DOWN')}
               style={{ margin: '0 4px 0 0' }}
             />
           )}
@@ -276,7 +276,7 @@ export default function createDataTitileComp() {
     minWidth: PropTypes.string,
     titleData: PropTypes.shape({
       breadcrumbs: PropTypes.arrayOf(PropTypes.string).isRequired,
-      drilldown: PropTypes.bool.isRequired,
+      DRILL_DOWN: PropTypes.bool.isRequired,
       index: PropTypes.number.isRequired,
       locked: PropTypes.bool.isRequired,
       text: PropTypes.string.isRequired,

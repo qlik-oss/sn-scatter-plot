@@ -1,3 +1,4 @@
+import KEYS from '../constants/keys';
 import createDataFetcher from './data-fetcher';
 import createBinnedDataFetcher from './binned-data-fetcher';
 
@@ -33,7 +34,11 @@ export default function createDataHandler({ layoutService, model, extremumModel,
         .then(() => {
           meta.isBinnedData = !layoutService.getDataPages().length;
         })
-        .catch(() => {});
+        .catch((e) => {
+          if (e !== KEYS.REJECTION_TOKEN) {
+            throw e;
+          }
+        });
 
       return requestInProgress;
     },

@@ -1,3 +1,4 @@
+import KEYS from '../constants/keys';
 import NUMBERS from '../constants/numbers';
 import populateBins from '../utils/bins-util';
 
@@ -76,7 +77,7 @@ export default function createBinnedDataFetcher({ layoutService, extremumModel, 
       if (requestInProgress) {
         return new Promise((resolve, reject) => {
           if (nextInLine) {
-            nextInLine.reject();
+            nextInLine.reject(KEYS.REJECTION_TOKEN);
           }
           nextInLine = { resolve, reject };
         });

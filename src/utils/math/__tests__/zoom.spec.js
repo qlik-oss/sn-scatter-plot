@@ -11,6 +11,7 @@ describe('zoom', () => {
   let viewHandler;
   let dataView;
   let pinchZoomFactor;
+  let buttonZoomDirection;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -18,7 +19,7 @@ describe('zoom', () => {
     viewHandler.getMeta.returns({ scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1 });
     sandbox.stub(eventUtils, 'eventToComponentPoint');
     pointComponent = { rect: { computedPhysical: { width: 100, height: 100 } } };
-    create = () => zoom({ e, chart, pointComponent, viewHandler, pinchZoomFactor });
+    create = () => zoom({ e, chart, pointComponent, viewHandler, pinchZoomFactor, buttonZoomDirection });
   });
 
   afterEach(() => {
@@ -109,6 +110,38 @@ describe('zoom', () => {
       xAxisMax: 600,
       yAxisMin: 400,
       yAxisMax: 1600,
+    });
+  });
+
+  it('should update correct dataView for viewHandler, when buttonZoomDirection is "in"', () => {
+    buttonZoomDirection = 'in';
+    dataView = { xAxisMin: -1000, xAxisMax: 1000, yAxisMin: 0, yAxisMax: 2000 };
+    viewHandler.getDataView.returns(dataView);
+    viewHandler.setDataView = (newDataView) => {
+      extend(true, dataView, newDataView);
+    };
+    create();
+    expect(dataView).to.deep.equal({
+      xAxisMin: -1000 / Math.sqrt(2),
+      xAxisMax: 1000 / Math.sqrt(2),
+      yAxisMin: -1000 * Math.sqrt(1 / 2) + 1000,
+      yAxisMax: 1000 + 1000 / Math.sqrt(2),
+    });
+  });
+
+  it('should update correct dataView for viewHandler, when buttonZoomDirection is "out"', () => {
+    buttonZoomDirection = 'out';
+    dataView = { xAxisMin: -1000, xAxisMax: 1000, yAxisMin: 0, yAxisMax: 2000 };
+    viewHandler.getDataView.returns(dataView);
+    viewHandler.setDataView = (newDataView) => {
+      extend(true, dataView, newDataView);
+    };
+    create();
+    expect(dataView).to.deep.equal({
+      xAxisMin: -1000 * Math.sqrt(2),
+      xAxisMax: 1000 * Math.sqrt(2),
+      yAxisMin: 1000 - 1000 * Math.sqrt(2),
+      yAxisMax: 1000 + 1000 * Math.sqrt(2),
     });
   });
 });

@@ -1,12 +1,13 @@
 import * as NUMBERS from '../../../../constants/numbers';
 import * as KEYS from '../../../../constants/keys';
 import createNavigationPanel from '..';
+import * as translate from '../../../../utils/math/translate';
+import * as zoom from '../../../../utils/math/zoom';
 
 describe('createNavigationPanel', () => {
   let sandbox;
   let layoutService;
   let chartModel;
-  let chart;
   let viewHandler;
   let create;
   let navigationPanel;
@@ -15,29 +16,15 @@ describe('createNavigationPanel', () => {
     sandbox = sinon.createSandbox();
     layoutService = { getLayoutValue: sandbox.stub() };
     viewHandler = {
-      mockStorage: {
-        currentDataView: undefined,
-        currentScale: undefined,
-        getcurrentScale() {
-          return this.currentScale;
-        },
-      },
       getMeta: sandbox.stub().returns({ homeStateDataView: { xAxisMin: 0, xAxisMax: 1, yAxisMin: 2, yAxisMax: 3 } }),
-      setDataView(dataView) {
-        this.mockStorage.currentDataView = dataView;
-      },
-      getDataView() {
-        return this.mockStorage.currentDataView;
-      },
-      setMeta({ scale }) {
-        this.mockStorage.currentScale = scale;
-      },
+      setDataView: sandbox.stub(),
     };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
     sandbox.stub(NUMBERS, 'default').value({ NAVIGATION_PANEL: { PADDING: 1, GRID_WIDTH: 2 } });
     sandbox.stub(KEYS, 'default').value({ COMPONENT: { NAVIGATION_PANEL: 'nav-pan' } });
-    chart = { component: sandbox.stub().returns({ rect: { computedPhysical: { width: 5, height: 6 } } }) };
-    create = () => createNavigationPanel({ layoutService, chartModel, chart });
+    sandbox.stub(translate, 'default');
+    sandbox.stub(zoom, 'default');
+    create = () => createNavigationPanel({ layoutService, chartModel });
     navigationPanel = create();
   });
 
@@ -45,23 +32,9 @@ describe('createNavigationPanel', () => {
     sandbox.restore();
   });
 
-  const epsilon = 1e-6;
-
-  const closeEnough = (dataView1, dataView2) => {
-    if (
-      Math.abs(1 - dataView1.xAxisMin / dataView2.xAxisMin) < epsilon &&
-      Math.abs(1 - dataView1.xAxisMax / dataView2.xAxisMax) < epsilon &&
-      Math.abs(1 - dataView1.yAxisMin / dataView2.yAxisMin) < epsilon &&
-      Math.abs(1 - dataView1.yAxisMax / dataView2.yAxisMax) < epsilon
-    ) {
-      return true;
-    }
-    return false;
-  };
-
   describe('the returned navigation panel object', () => {
     it('should have all keys', () => {
-      expect(navigationPanel).to.have.all.keys(['key', 'type', 'show', 'style', 'buttonList']);
+      expect(navigationPanel).to.have.all.keys(['key', 'type', 'show', 'style', 'settings']);
     });
 
     it('should have correct key', () => {
@@ -86,168 +59,87 @@ describe('createNavigationPanel', () => {
       expect(navigationPanel.style).to.deep.equal({ padding: 1, gridWidth: 2 });
     });
 
-    describe('buttonList', () => {
+    describe('settings', () => {
       it('should have all keys', () => {
-        expect(navigationPanel.buttonList).to.have.all.keys([
-          'home',
-          'up',
-          'down',
-          'left',
-          'right',
-          'zoomIn',
-          'zoomOut',
-        ]);
+        expect(navigationPanel.settings).to.have.all.keys(['actions', 'isDisabled']);
       });
-
-      describe('home', () => {
+      describe('actions', () => {
         it('should have all keys', () => {
-          expect(navigationPanel.buttonList.home).to.have.all.keys(['isDisabled', 'callBack']);
+          expect(navigationPanel.settings.actions).to.have.all.keys([
+            'home',
+            'up',
+            'down',
+            'left',
+            'right',
+            'zoomIn',
+            'zoomOut',
+          ]);
+        });
+        describe('home', () => {
+          it('should set home state data view as the new data view', () => {
+            navigationPanel.settings.actions.home();
+            expect(viewHandler.setDataView).to.have.been.calledWithExactly({
+              xAxisMin: 0,
+              xAxisMax: 1,
+              yAxisMin: 2,
+              yAxisMax: 3,
+            });
+          });
         });
 
-        describe('isDisabled', () => {
+        describe('left', () => {
+          it('should call translate with correct parameters', () => {
+            navigationPanel.settings.actions.left();
+            expect(translate.default).to.have.been.calledWithExactly({ viewHandler, direction: 'x', percent: -10 });
+          });
+        });
+
+        describe('right', () => {
+          it('should call translate with correct parameters', () => {
+            navigationPanel.settings.actions.right();
+            expect(translate.default).to.have.been.calledWithExactly({ viewHandler, direction: 'x', percent: 10 });
+          });
+        });
+
+        describe('up', () => {
+          it('should call translate with correct parameters', () => {
+            navigationPanel.settings.actions.up();
+            expect(translate.default).to.have.been.calledWithExactly({ viewHandler, direction: 'y', percent: 10 });
+          });
+        });
+
+        describe('down', () => {
+          it('should call translate with correct parameters', () => {
+            navigationPanel.settings.actions.down();
+            expect(translate.default).to.have.been.calledWithExactly({ viewHandler, direction: 'y', percent: -10 });
+          });
+        });
+
+        describe('zoomIn', () => {
+          it('should call zoom with correct parameters', () => {
+            navigationPanel.settings.actions.zoomIn();
+            expect(zoom.default).to.have.been.calledWithExactly({ viewHandler, buttonZoomDirection: 'in' });
+          });
+        });
+
+        describe('zoomOut', () => {
+          it('should call zoom with correct parameters', () => {
+            navigationPanel.settings.actions.zoomOut();
+            expect(zoom.default).to.have.been.calledWithExactly({ viewHandler, buttonZoomDirection: 'out' });
+          });
+        });
+      });
+
+      describe('isDisabled', () => {
+        describe('home', () => {
           it('should return true if the view is at home state', () => {
             viewHandler.getMeta.returns({ isHomeState: true });
-            expect(navigationPanel.buttonList.home.isDisabled()).to.equal(true);
+            expect(navigationPanel.settings.isDisabled.home()).to.equal(true);
           });
 
           it('should return false if the view is not at home state', () => {
             viewHandler.getMeta.returns({ isHomeState: false });
-            expect(navigationPanel.buttonList.home.isDisabled()).to.equal(false);
-          });
-        });
-
-        describe('callBack', () => {
-          it('should set home state data view as the new data view', () => {
-            navigationPanel.buttonList.home.callBack();
-            expect(viewHandler.mockStorage.currentDataView).to.deep.equal({
-              xAxisMin: 0,
-              xAxisMax: 1,
-              yAxisMin: 2,
-              yAxisMax: 3,
-            });
-          });
-        });
-      });
-
-      describe('left', () => {
-        describe('callBack', () => {
-          it('should update data view correctly', () => {
-            viewHandler.mockStorage.currentDataView = { xAxisMin: 0, xAxisMax: 1, yAxisMin: 2, yAxisMax: 3 };
-            navigationPanel.buttonList.left.callBack();
-            expect(viewHandler.mockStorage.currentDataView).to.deep.equal({
-              xAxisMin: -0.1,
-              xAxisMax: 0.9,
-              yAxisMin: 2,
-              yAxisMax: 3,
-            });
-          });
-        });
-      });
-
-      describe('right', () => {
-        describe('callBack', () => {
-          it('should update data view correctly', () => {
-            viewHandler.mockStorage.currentDataView = { xAxisMin: 0, xAxisMax: 1, yAxisMin: 2, yAxisMax: 3 };
-            navigationPanel.buttonList.right.callBack();
-            expect(viewHandler.mockStorage.currentDataView).to.deep.equal({
-              xAxisMin: 0.1,
-              xAxisMax: 1.1,
-              yAxisMin: 2,
-              yAxisMax: 3,
-            });
-          });
-        });
-      });
-
-      describe('up', () => {
-        describe('callBack', () => {
-          it('should update data view correctly', () => {
-            viewHandler.mockStorage.currentDataView = { xAxisMin: 0, xAxisMax: 1, yAxisMin: 2, yAxisMax: 3 };
-            navigationPanel.buttonList.up.callBack();
-            expect(viewHandler.mockStorage.currentDataView).to.deep.equal({
-              xAxisMin: 0,
-              xAxisMax: 1,
-              yAxisMin: 2.1,
-              yAxisMax: 3.1,
-            });
-          });
-        });
-      });
-
-      describe('down', () => {
-        describe('callBack', () => {
-          it('should update data view correctly', () => {
-            viewHandler.mockStorage.currentDataView = { xAxisMin: 0, xAxisMax: 1, yAxisMin: 2, yAxisMax: 3 };
-            navigationPanel.buttonList.down.callBack();
-            expect(viewHandler.mockStorage.currentDataView).to.deep.equal({
-              xAxisMin: 0,
-              xAxisMax: 1,
-              yAxisMin: 1.9,
-              yAxisMax: 2.9,
-            });
-          });
-        });
-      });
-
-      describe('zoomIn', () => {
-        describe('callBack', () => {
-          it('should update data view correctly', () => {
-            viewHandler.mockStorage.currentDataView = { xAxisMin: 0, xAxisMax: 1, yAxisMin: 2, yAxisMax: 3 };
-            viewHandler.mockStorage.currentScale = 2;
-            viewHandler.getMeta.returns({ scale: viewHandler.mockStorage.currentScale, maxScale: 4.1, minScale: 0.9 });
-            navigationPanel.buttonList.zoomIn.callBack();
-            viewHandler.getMeta.returns({ scale: viewHandler.mockStorage.currentScale, maxScale: 4.1, minScale: 0.9 });
-            navigationPanel.buttonList.zoomIn.callBack();
-            expect(
-              closeEnough(viewHandler.mockStorage.currentDataView, {
-                xAxisMin: 0.25,
-                xAxisMax: 0.75,
-                yAxisMin: 2.25,
-                yAxisMax: 2.75,
-              })
-            ).to.equal(true);
-
-            viewHandler.getMeta.returns({ scale: viewHandler.mockStorage.currentScale, maxScale: 4.1, minScale: 0.9 });
-            navigationPanel.buttonList.zoomIn.callBack(); // hitting minScale
-            expect(
-              closeEnough(viewHandler.mockStorage.currentDataView, {
-                xAxisMin: 0.25,
-                xAxisMax: 0.75,
-                yAxisMin: 2.25,
-                yAxisMax: 2.75,
-              })
-            ).to.equal(true);
-          });
-        });
-      });
-
-      describe('zoomOut', () => {
-        describe('callBack', () => {
-          it('should update data view correctly', () => {
-            viewHandler.mockStorage.currentDataView = { xAxisMin: 0, xAxisMax: 1, yAxisMin: 2, yAxisMax: 3 };
-            viewHandler.mockStorage.currentScale = 2;
-            viewHandler.getMeta.returns({ scale: viewHandler.mockStorage.currentScale, maxScale: 4.1, minScale: 0.9 });
-            navigationPanel.buttonList.zoomOut.callBack();
-            viewHandler.getMeta.returns({ scale: viewHandler.mockStorage.currentScale, maxScale: 4.1, minScale: 0.9 });
-            navigationPanel.buttonList.zoomOut.callBack();
-            expect(
-              closeEnough(viewHandler.mockStorage.currentDataView, {
-                xAxisMin: -0.5,
-                xAxisMax: 1.5,
-                yAxisMin: 1.5,
-                yAxisMax: 3.5,
-              })
-            ).to.equal(true);
-            viewHandler.getMeta.returns({ scale: viewHandler.mockStorage.currentScale, maxScale: 4.1, minScale: 0.9 });
-            navigationPanel.buttonList.zoomOut.callBack(); // hitting maxScale
-            expect(
-              closeEnough(viewHandler.mockStorage.currentDataView, {
-                xAxisMin: -0.5,
-                xAxisMax: 1.5,
-                yAxisMin: 1.5,
-                yAxisMax: 3.5,
-              })
-            ).to.equal(true);
+            expect(navigationPanel.settings.isDisabled.home()).to.equal(false);
           });
         });
       });

@@ -1,6 +1,6 @@
 import * as KEYS from '../../../../constants/keys';
 import * as NUMBERS from '../../../../constants/numbers';
-import getTapPosition from '../get-tap-position';
+import getTapPosition from '../tap-position';
 
 describe('tap in mini chart', () => {
   let sandbox;

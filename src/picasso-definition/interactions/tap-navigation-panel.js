@@ -14,9 +14,7 @@ const tap = ({ eventName = 'tap-navigation-panel' }) => ({
     },
   },
   events: {
-    [eventName](e) {
-      e.preventDefault();
-    },
+    [eventName]() {},
   },
 });
 

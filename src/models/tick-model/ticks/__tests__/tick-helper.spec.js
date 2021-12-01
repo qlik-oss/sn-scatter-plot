@@ -198,15 +198,18 @@ describe('getSize', () => {
     expect(create()).to.equal(40);
   });
 
-  // it('should return correct size if prelayout is false and dimension is width for bin data', () => {
-  //   chartModel.query.isPrelayout.returns(false);
-  //   dimension = 'width';
-  //   expect(create()).to.equal(100);
-  // });
+  it('should return correct size if prelayout is false and dimension is width for bin data', () => {
+    chartModel.query.isPrelayout.returns(false);
+    dimension = 'width';
+    chart.component.withArgs('heat-map').returns({ rect: { computedPhysical: { width: 100, height: 50 } } });
+    expect(create()).to.equal(100);
+  });
 
-  // it('should return correct size if prelayout is false and dimension is height for bin data', () => {
-  //   chartModel.query.isPrelayout.returns(false);
-  //   dimension = 'height';
-  //   expect(create()).to.equal(50);
-  // });
+  it('should return correct size if prelayout is false and dimension is height for bin data', () => {
+    chartModel.query.isPrelayout.returns(false);
+    dimension = 'height';
+    chart.component.withArgs('point-component').returns({ rect: { computedPhysical: { width: 0, height: 0 } } });
+    chart.component.withArgs('heat-map').returns({ rect: { computedPhysical: { width: 100, height: 50 } } });
+    expect(create()).to.equal(50);
+  });
 });

@@ -43,11 +43,4 @@ describe('tap', () => {
       });
     });
   });
-
-  describe('event', () => {
-    it('should call preventDefault', () => {
-      tapObject.events.tap(e);
-      expect(e.preventDefault).to.have.been.calledOnce;
-    });
-  });
 });

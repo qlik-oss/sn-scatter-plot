@@ -1,6 +1,6 @@
 import tap from '..';
 import * as updateTapDataView from '../update-tap-data-view';
-import * as getTapPosition from '../get-tap-position';
+import * as getTapPosition from '../tap-position';
 
 describe('tap', () => {
   let sandbox;

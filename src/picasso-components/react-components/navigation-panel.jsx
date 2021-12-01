@@ -2,39 +2,36 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
 import SVGIcon from './icons/SVGIcon';
-import icons from './icons';
+import ICONS from './icons';
 
 const useStyles = makeStyles(() => ({
-  root: {
+  onFocus: {
     '&:focus': {
       background: '#dddddd',
     },
   },
 }));
 
-const NavigationButton = ({ ...rest }) => {
-  const classes = useStyles();
-  return (
-    <IconButton
-      style={{
-        position: 'absolute',
-        top: `${rest.top}px`,
-        right: `${rest.right}px`,
-        padding: '0',
-      }}
-      className={classes.root}
-      onClick={rest.callBack}
-    >
-      <SVGIcon
-        {...icons[rest.name]}
-        size="large"
-        viewBox="0 0 24 24"
-        fill={() => (rest.isDisabled ? (rest.isDisabled() ? '#b0b0b0' : 'currentColor') : 'currentColor')}
-        arialLabel={`navigation-button-${rest.name}`}
-      />
-    </IconButton>
-  );
-};
+const NavigationButton = ({ ...rest }) => (
+  <IconButton
+    style={{
+      position: 'absolute',
+      top: `${rest.top}px`,
+      right: `${rest.right}px`,
+      padding: '0',
+    }}
+    className={useStyles().onFocus}
+    onClick={rest.callback}
+  >
+    <SVGIcon
+      {...ICONS[rest.name]}
+      size="large"
+      viewBox="0 0 24 24"
+      fill={() => (rest.isDisabled ? (rest.isDisabled() ? '#b0b0b0' : 'currentColor') : 'currentColor')}
+      arialLabel={`navigation-button-${rest.name}`}
+    />
+  </IconButton>
+);
 
 export default function navigationPanel() {
   function getStyle({ rect, padding }) {
@@ -63,22 +60,22 @@ export default function navigationPanel() {
     render() {
       const { gridWidth: w, padding } = this.settings.style;
       const style = getStyle({ rect: this.rect, padding });
-      const { buttonList } = this.settings;
+      const { actions, isDisabled } = this.settings.settings;
       return (
         <div style={style}>
+          <NavigationButton top={0 * w} right={1 * w} name="UP" callback={actions.up} />
+          <NavigationButton top={1 * w} right={2 * w} name="LEFT" callback={actions.left} />
           <NavigationButton
             top={1 * w}
             right={1 * w}
-            name="home"
-            callBack={buttonList.home.callBack}
-            isDisabled={buttonList.home.isDisabled}
+            name="HOME"
+            callback={actions.home}
+            isDisabled={isDisabled.home}
           />
-          <NavigationButton top={1 * w} right={2 * w} name="left" callBack={buttonList.left.callBack} />
-          <NavigationButton top={1 * w} right={0 * w} name="right" callBack={buttonList.right.callBack} />
-          <NavigationButton top={0 * w} right={1 * w} name="up" callBack={buttonList.up.callBack} />
-          <NavigationButton top={2 * w} right={1 * w} name="down" callBack={buttonList.down.callBack} />
-          <NavigationButton top={3 * w} right={1 * w} name="zoomIn" callBack={buttonList.zoomIn.callBack} />
-          <NavigationButton top={4 * w} right={1 * w} name="zoomOut" callBack={buttonList.zoomOut.callBack} />
+          <NavigationButton top={1 * w} right={0 * w} name="RIGHT" callback={actions.right} />
+          <NavigationButton top={2 * w} right={1 * w} name="DOWN" callback={actions.down} />
+          <NavigationButton top={3 * w} right={1 * w} name="ZOOM_IN" callback={actions.zoomIn} />
+          <NavigationButton top={4 * w} right={1 * w} name="ZOOM_OUT" callback={actions.zoomOut} />
         </div>
       );
     },

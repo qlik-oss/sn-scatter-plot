@@ -56,4 +56,5 @@ export default {
     BIN_Y: 'binY',
     BIN_DENSITY: 'binDensity',
   },
+  REJECTION_TOKEN: 'rejected',
 };
