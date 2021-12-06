@@ -10,7 +10,7 @@ const paths = {
   fixtures: path.join(__dirname, '__fixtures__'),
 };
 
-describe('sn scatter plot: regression tests to test visual bugs', () => {
+describe('sn scatter plot: ui regression tests to test visual bugs', () => {
   let s;
   let puppet;
   let route;

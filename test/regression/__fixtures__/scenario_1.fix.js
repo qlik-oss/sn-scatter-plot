@@ -1,8 +1,5 @@
-// import scatterPlot from '../../../dist/sn-scatter-plot';
-
 export default () => ({
   type: 'sn-scatter-plot',
-  // load: async () => scatterPlot,
   genericObjects: [
     {
       getLayout: {
@@ -383,6 +380,7 @@ export default () => ({
           },
         },
       ],
+      getEffectiveProperties: {},
     },
   ],
 });
