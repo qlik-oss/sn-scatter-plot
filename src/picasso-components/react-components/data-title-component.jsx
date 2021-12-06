@@ -215,6 +215,27 @@ export default function createDataTitileComp() {
         lineHeight: !isDimension && disabledLabel && '20px',
         border: !isDimension && disabledLabel && 'none',
       };
+
+      if (this.state.open) {
+        style.background = 'rgba(0,0,0,0.08)';
+      }
+
+      const handleFocus = (event) => {
+        if (this.state.closeTime && Date.now() - this.state.closeTime < 20) {
+          return;
+        }
+        // eslint-disable-next-line no-param-reassign
+        event.currentTarget.style.border = '2px solid #177FE6';
+        // eslint-disable-next-line no-param-reassign
+        event.currentTarget.style.borderRadius = '2px';
+      };
+      const handleBlur = (event) => {
+        // eslint-disable-next-line no-param-reassign
+        event.currentTarget.style.border = !isDimension && disabledLabel && 'none';
+        // eslint-disable-next-line no-param-reassign
+        event.currentTarget.style.borderRadius = '0px';
+      };
+
       if (padding) {
         style.padding = padding;
       }
@@ -223,7 +244,14 @@ export default function createDataTitileComp() {
       }
       const dir = rtlUtils.detectTextDirection(titleData.text);
       const label = (
-        <FadeButton style={style} onClick={disabledLabel ? undefined : onClick} title={titleData.text} tabIndex="-1">
+        <FadeButton
+          style={style}
+          onClick={disabledLabel ? undefined : onClick}
+          title={titleData.text}
+          tabIndex={disabledLabel ? -1 : 0}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+        >
           {titleData.locked && (
             <SVGIcon {...ICONS.LOCK} size="small" title={translator.get('Tooltip.selections.locked')} />
           )}
