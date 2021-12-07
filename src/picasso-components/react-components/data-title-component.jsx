@@ -229,6 +229,7 @@ export default function createDataTitileComp() {
         // eslint-disable-next-line no-param-reassign
         event.currentTarget.style.borderRadius = '2px';
       };
+
       const handleBlur = (event) => {
         // eslint-disable-next-line no-param-reassign
         event.currentTarget.style.border = !isDimension && disabledLabel && 'none';
@@ -249,8 +250,8 @@ export default function createDataTitileComp() {
           onClick={disabledLabel ? undefined : onClick}
           title={titleData.text}
           tabIndex={disabledLabel ? -1 : 0}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          onFocus={disabledLabel ? undefined : handleFocus}
+          onBlur={disabledLabel ? undefined : handleBlur}
         >
           {titleData.locked && (
             <SVGIcon {...ICONS.LOCK} size="small" title={translator.get('Tooltip.selections.locked')} />
