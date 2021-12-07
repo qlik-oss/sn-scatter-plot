@@ -383,6 +383,7 @@ export default () => ({
           },
         },
       ],
+      getEffectiveProperties: {},
     },
   ],
 });
