@@ -225,14 +225,14 @@ export default function createDataTitileComp() {
           return;
         }
         // eslint-disable-next-line no-param-reassign
-        event.currentTarget.style.border = '2px solid #177FE6';
+        event.currentTarget.style.boxShadow = '0px 0px 0px 2px #177FE6 inset';
         // eslint-disable-next-line no-param-reassign
         event.currentTarget.style.borderRadius = '2px';
       };
 
       const handleBlur = (event) => {
         // eslint-disable-next-line no-param-reassign
-        event.currentTarget.style.border = !isDimension && disabledLabel && 'none';
+        event.currentTarget.style.boxShadow = 'none';
         // eslint-disable-next-line no-param-reassign
         event.currentTarget.style.borderRadius = '0px';
       };
