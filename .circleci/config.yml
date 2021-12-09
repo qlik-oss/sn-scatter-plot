@@ -63,9 +63,9 @@ jobs:
             fi
       - run:
           name: Rendering tests
-          command: yarn test:regression
+          command: yarn test:rendering
       - store_artifacts:
-          path: ./test/regression/artifacts
+          path: ./test/rendering/__artifacts__
       - persist_to_workspace:
           root: ~/scatter
           paths:
