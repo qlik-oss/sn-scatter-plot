@@ -221,6 +221,7 @@ export default function createDataTitileComp() {
       }
 
       const handleFocus = (event) => {
+        // Fixing show focus style when closing popover
         if (this.state.closeTime && Date.now() - this.state.closeTime < 20) {
           return;
         }
@@ -252,6 +253,9 @@ export default function createDataTitileComp() {
           tabIndex={disabledLabel ? -1 : 0}
           onFocus={disabledLabel ? undefined : handleFocus}
           onBlur={disabledLabel ? undefined : handleBlur}
+          onMouseDown={(event) => {
+            event.preventDefault();
+          }}
         >
           {titleData.locked && (
             <SVGIcon {...ICONS.LOCK} size="small" title={translator.get('Tooltip.selections.locked')} />
