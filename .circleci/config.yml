@@ -27,10 +27,8 @@ jobs:
       - restore_cache: *restore_yarn_cache
       - run: yarn install --frozen-lockfile
       - save_cache: *save_yarn_cache
-
       - store_artifacts:
           path: package.json
-
       - persist_to_workspace:
           root: ~/scatter
           paths:
@@ -40,10 +38,7 @@ jobs:
     <<: *defaults
     docker:
       - image: circleci/node:16.7-browsers
-      - image: qlikcore/engine:12.1126.0
-        command: -S AcceptEULA=yes
       - image: browserless/chrome:1.49.1-puppeteer-1.20.0
-
     steps:
       - attach_workspace:
           at: ~/scatter
@@ -66,13 +61,11 @@ jobs:
               yarn test:unit -- --mocha.bail false
               ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
             fi
-
       - run:
           name: Rendering tests
-          command: yarn test:regression
-
+          command: yarn test:rendering
       - store_artifacts:
-          path: ./test/rendering/artifacts
+          path: ./test/rendering/__artifacts__
       - persist_to_workspace:
           root: ~/scatter
           paths:
@@ -114,6 +107,7 @@ jobs:
               echo "Running >> npm publish"
               npm publish
             fi
+
   api-governance:
     machine: true
     working_directory: ~/project
@@ -134,6 +128,7 @@ jobs:
           name: API Governance Scatter Plot Plugins
           command: |
             ./.circleci/api-gov.sh ./api-specifications/plugins.json '/specs/plugins.json' 86d3d254-a759-433c-b235-c14b479b4521
+
 workflows:
   version: 2
   build-all:
