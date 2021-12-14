@@ -37,6 +37,7 @@ export default {
     MINI_CHART_NAVIGATION: 'mini-chart-navigation-rect',
     MINI_CHART_POINT: 'mini-chart-points',
     OUT_OF_BOUNDS: 'out-of-bounds',
+    TRENDLINES_TOOLTIP_OVERLAY: 'trend-lines-tooltip-overlay',
     NAVIGATION_PANEL: 'navigation-panel',
   },
   COLLECTION: {

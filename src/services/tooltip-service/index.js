@@ -10,6 +10,7 @@ export default function createTooltipService({
   layoutService,
   colorService,
   themeService,
+  trendLinesService,
   propertiesModel,
   custom,
 }) {
@@ -55,9 +56,27 @@ export default function createTooltipService({
             },
             placement: 'collectible',
           },
+          {
+            keys: [KEYS.COMPONENT.TRENDLINES_TOOLTIP_OVERLAY],
+            collect: {
+              from: 'single',
+            },
+            placement: 'collectible',
+          },
         ],
         section: ({ h, nodes, dataset, meta, create, util }) =>
-          createSection({ translator, custom, measureProperties, h, nodes, dataset, meta, create, util }),
+          createSection({
+            translator,
+            custom,
+            measureProperties,
+            h,
+            nodes,
+            dataset,
+            meta,
+            create,
+            util,
+            trendLinesService,
+          }),
         layout: {
           grouping: true,
         },

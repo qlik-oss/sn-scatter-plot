@@ -26,6 +26,7 @@ describe('section', () => {
     sandbox.stub(KEYS, 'default').get(() => ({
       COMPONENT: {
         HEAT_MAP: 'heat-map',
+        TRENDLINES_TOOLTIP_OVERLAY: 'trendlines',
       },
     }));
     getMeasureValue.default.callsFake((args) => `measure-value-${args.data.value}`);
