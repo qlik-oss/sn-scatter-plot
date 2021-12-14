@@ -1,4 +1,5 @@
 import createOutOfBounds from '../index';
+import * as createSizeScale from '../../../scales/size';
 import * as KEYS from '../../../../constants/keys';
 
 describe('out of bounds', () => {
@@ -32,13 +33,13 @@ describe('out of bounds', () => {
         getViewHandler: () => viewHandler,
       },
     };
-
     layoutService = {
       meta: {
         isBigData: false,
       },
     };
-
+    sandbox.stub(createSizeScale, 'default');
+    createSizeScale.default.returns(() => '10px');
     sandbox.stub(KEYS, 'default').get(() => ({
       COMPONENT: {
         OUT_OF_BOUNDS: 'oobComponentKey',
@@ -79,28 +80,40 @@ describe('out of bounds', () => {
     });
 
     it('should filter oob values', () => {
+      const oob = create();
+      const size = { width: 400, height: 200 };
+      oob.beforeRender({ size });
+
       const d = {
         x: { value: 56 },
         y: { value: 70 },
       };
-      expect(create().data.filter(d)).to.equal(false);
-      // y > yAxisMax
-      d.y.value = 80;
-      expect(create().data.filter(d)).to.equal(true);
+      expect(oob.data.filter(d)).to.equal(false);
+
       // x < xAxisMin
-      d.x.value = 30;
+      d.x.value = 54.4;
       d.y.value = 60;
-      expect(create().data.filter(d)).to.equal(true);
-      // x < xAxisMin and y > XAxisMax
-      d.y.value = 80;
-      expect(create().data.filter(d)).to.equal(true);
-      // y < yAxisMin
-      d.y.value = 50;
-      d.x.value = 60;
-      expect(create().data.filter(d)).to.equal(true);
+      expect(oob.data.filter(d)).to.equal(true);
+
       // x > xAxisMax
-      d.x.value = 100;
-      expect(create().data.filter(d)).to.equal(true);
+      d.x.value = 95.6;
+      d.y.value = 60;
+      expect(oob.data.filter(d)).to.equal(true);
+
+      // y < yAxisMin
+      d.x.value = 60;
+      d.y.value = 54.6;
+      expect(oob.data.filter(d)).to.equal(true);
+
+      // y > yAxisMax
+      d.x.value = 60;
+      d.y.value = 70.4;
+      expect(oob.data.filter(d)).to.equal(true);
+
+      // x < xAxisMin and y > XAxisMax
+      d.x.value = 54.4;
+      d.y.value = 70.4;
+      expect(oob.data.filter(d)).to.equal(true);
     });
   });
 
@@ -118,16 +131,19 @@ describe('out of bounds', () => {
 
   describe('dataView', () => {
     it('should filter correct values when dataView changes', () => {
+      const oob = create();
+      const size = { width: 400, height: 200 };
+      oob.beforeRender({ size });
       const d = {
         x: { value: 56 },
         y: { value: 70 },
       };
-      expect(create().data.filter(d)).to.equal(false);
+      expect(oob.data.filter(d)).to.equal(false);
       dataView.xAxisMax = 70;
       dataView.xAxisMin = 60;
       dataView.yAxisMin = 80;
       dataView.yAxisMax = 95;
-      expect(create().data.filter(d)).to.equal(true);
+      expect(oob.data.filter(d)).to.equal(true);
     });
   });
 });

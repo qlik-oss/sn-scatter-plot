@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
+import NUMBERS from '../../../constants/numbers';
 import createSizeScale from '../../scales/size';
 import createBrush from '../../brush';
 import movePath from '../../../utils/move-path';
@@ -33,7 +34,7 @@ export default function createPoint({ layoutService, colorService, chartModel })
       shape: (d) => (sizeScaleFn(d, windowSizeMultiplier) ? 'circle' : 'saltire'),
     },
     beforeRender: ({ size }) => {
-      windowSizeMultiplier = Math.min(size.height, size.width) / 300;
+      windowSizeMultiplier = Math.min(size.height, size.width) / NUMBERS.WINDOW_SIZE_BASE;
     },
     animations: {
       enabled: () => viewHandler.animationEnabled,

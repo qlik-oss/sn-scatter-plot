@@ -3,8 +3,7 @@ import * as KEYS from '../../../../constants/keys';
 
 describe('heat-map', () => {
   let sandbox;
-  let models;
-  let flags;
+  let chartModel;
   let dataHandler;
   let create;
 
@@ -36,41 +35,19 @@ describe('heat-map', () => {
       binArray: [{ qText: [2100, 5, 2200, 4], qNum: 1, qElemNumber: 7964 }],
       getMeta: sandbox.stub().returns({ isBinnedData: true }),
     };
-    models = {
-      chartModel: {
-        key: 'chart-model',
-        query: {
-          getViewHandler: () => viewHandler,
-          getDataHandler: () => dataHandler,
-        },
-      },
-      layoutService: {
-        meta: {
-          isBigData: true,
-        },
+    chartModel = {
+      key: 'chart-model',
+      query: {
+        getViewHandler: () => viewHandler,
+        getDataHandler: () => dataHandler,
       },
     };
-    flags = { isEnabled: sandbox.stub().returns(true) };
 
-    create = () =>
-      createHeatMap({
-        models,
-        flags,
-      });
+    create = () => createHeatMap(chartModel);
   });
 
   afterEach(() => {
     sandbox.restore();
-  });
-
-  it('should return false if is not big data', () => {
-    models.layoutService.meta.isBigData = false;
-    expect(create()).to.be.false;
-  });
-
-  it('should return false if DATA_BINNING is not enabled', () => {
-    flags.isEnabled.returns(false);
-    expect(create()).to.be.false;
   });
 
   describe('object definition', () => {
