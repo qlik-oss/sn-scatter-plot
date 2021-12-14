@@ -1,4 +1,5 @@
 import KEYS from '../../../constants/keys';
+import NUMBERS from '../../../constants/numbers';
 import createSizeScale from '../../scales/size';
 
 const OOB_SPACE = 10;
@@ -83,7 +84,7 @@ export default function createOutOfBounds({ models, context }) {
           },
         }),
         beforeRender: ({ size }) => {
-          windowSizeMultiplier = Math.min(size.height, size.width) / 300;
+          windowSizeMultiplier = Math.min(size.height, size.width) / NUMBERS.WINDOW_SIZE_BASE;
           ({ height, width } = size);
 
           // can be changed back to 2 * size.h (size.w) if we want to render it in the middle of the oob space;
