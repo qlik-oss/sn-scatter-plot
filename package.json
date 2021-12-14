@@ -88,7 +88,7 @@
     "prettier": "2.5.1",
     "pretty-quick": "3.1.2",
     "prop-types": "^15.7.2",
-    "puppeteer": "2.1.1",
+    "puppeteer": "13.0.0",
     "qlik-chart-modules": "0.20.1",
     "qlik-object-conversion": "0.8.0",
     "react": "^17.0.2",
