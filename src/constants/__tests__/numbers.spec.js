@@ -12,6 +12,7 @@ describe('numbers', () => {
       'MAX_NR_ANIMATION',
       'MINI_CHART',
       'NAVIGATION_PANEL',
+      'WINDOW_SIZE_BASE',
     ]);
   });
 

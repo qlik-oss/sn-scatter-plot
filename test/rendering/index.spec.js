@@ -1,80 +1,59 @@
-const fs = require('fs-extra');
-const { resolve } = require('path');
+import fs from 'fs';
+import path from 'path';
+import serve from '@nebula.js/cli-serve';
+import createPuppet from './utils/puppet';
+import events from './utils/events';
+import createNebulaRoutes from './utils/routes';
 
-const OPTS = {
-  artifactsPath: 'test/rendering/artifacts',
+const paths = {
+  artifacts: path.join(__dirname, '__artifacts__'),
+  fixtures: path.join(__dirname, '__fixtures__'),
 };
-const content = '.njs-viz';
 
-describe('rendering', () => {
-  let myBrowser;
-  let myPage;
+describe('sn scatter plot: ui regression tests to test visual bugs', () => {
+  let s;
+  let puppet;
+  let route;
 
-  const serve = require('@nebula.js/cli-serve'); // eslint-disable-line
-
-  if (!process.env.BASE_URL) {
-    let s;
-    before(async function run() {
-      this.timeout(10000);
-      s = await serve({
-        build: false,
-        open: false,
-      });
-
-      process.env.BASE_URL = s.url;
-
-      // eslint-disable-next-line global-require
-      const puppeteer = require('puppeteer');
-      myBrowser = await puppeteer.launch({ args: ['--no-sandbox'] });
-      // myBrowser = await puppeteer.launch({ args: ['--no-sandbox'], headless: false, slowMo: 500 });
-      myPage = await myBrowser.newPage();
-
-      myPage.on('pageerror', (e) => {
-        console.log('Error:', e.message, e.stack);
-      });
+  before(async () => {
+    s = await serve({
+      entry: path.resolve(__dirname, '../../'),
+      type: 'sn-scatter-plot',
+      open: false,
+      build: false,
+      themes: [],
+      fixturePath: 'test/rendering/__fixtures__',
     });
 
-    after(() => {
-      s.close();
-    });
-  }
+    puppet = createPuppet(page);
+    route = createNebulaRoutes(s.url);
+  });
 
   after(async () => {
-    await myBrowser.close();
+    s.close();
   });
 
-  const app = encodeURIComponent(process.env.APP_ID || '/apps/Executive_Dashboard.qvf');
-
-  async function takeScreenshot(elm) {
-    return myPage.screenshot({ clip: await elm.boundingBox() });
-  }
-
-  fs.readdirSync('test/rendering/data').forEach((file) => {
-    const name = file.replace('.json', '');
-    it(name, async function run() {
-      await myPage.goto(`${process.env.BASE_URL}/render/?app=${app}&render-config=${name}`, {
-        waitUntil: 'networkidle0',
-      });
-      const elm = await myPage.waitForSelector(content, { visible: true, timeout: 10000 });
-      this.timeout(10000);
-      const img = await takeScreenshot(elm);
-      return expect(img).to.matchImageOf(name, OPTS, 0.0005);
-    });
+  beforeEach(() => {
+    events.addListeners(page);
   });
 
-  const plugins = ['plugin_line', 'plugin_point', 'plugin_axes'];
+  afterEach(() => {
+    events.removeListeners(page);
+  });
 
-  plugins.forEach((plugin) => {
-    it(`should render ${plugin} correctly`, async function run() {
-      const absolutePath = resolve(__dirname, `../../examples/plugins/${plugin}.html`);
-      const localURL = `file://${absolutePath}`;
-      await myPage.goto(localURL, {
-        waitUntil: 'networkidle0',
-      });
-      const elm = await myPage.waitForSelector(content, { visible: true, timeout: 10000 });
-      this.timeout(10000);
-      const img = await takeScreenshot(elm);
-      return expect(img).to.matchImageOf(`${plugin}`, OPTS, 0.0005);
+  fs.readdirSync(paths.fixtures).forEach((file) => {
+    const name = file.replace('.fix.js', '');
+    const fixturePath = `./${file}`;
+
+    it(name, async () => {
+      const renderUrl = await route.renderFixture(fixturePath);
+      console.log({ renderUrl });
+      // Open page in Nebula which renders fixture
+      await puppet.open(renderUrl);
+      // Capture screenshot
+      const img = await puppet.screenshot();
+
+      expect(img).to.matchImageOf(name, { artifactsPath: paths.artifacts }, 0.03);
     });
   });
 });

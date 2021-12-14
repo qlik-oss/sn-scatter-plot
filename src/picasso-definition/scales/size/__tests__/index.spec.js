@@ -4,6 +4,8 @@ describe('size scale', () => {
   let layoutService;
   let layoutValueStub;
   let hyperCubeValueStub;
+  let d;
+  let windowSizeMultiplier;
   let sandbox;
 
   beforeEach(() => {
@@ -21,32 +23,50 @@ describe('size scale', () => {
         hasSizeMeasure: true,
       },
     };
+    d = {
+      datum: {
+        size: {
+          value: 5,
+        },
+      },
+    };
+    windowSizeMultiplier = 1;
   });
 
-  const d = {
-    datum: {
-      size: {
-        value: 5,
-      },
-    },
-  };
-  let windowSizeMultiplier = 1;
+  afterEach(() => {
+    sandbox.restore();
+  });
 
   it('should return a function', () => {
     expect(createSizeScale(layoutService)).to.be.a('Function');
   });
 
-  it('should return correctly calculated value of size when has measure size', () => {
-    expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('12px');
-    windowSizeMultiplier = 2;
-    expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('24px');
+  describe('getDotMeasureSize when has measure size', () => {
+    it('should return correctly calculated value of size when has d.datum.size', () => {
+      expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('12px');
+      windowSizeMultiplier = 2;
+      expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('24px');
+    });
+
+    it('should return correctly calculated value of size when has d.size', () => {
+      d = {
+        size: {
+          value: 5,
+        },
+      };
+      expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('12px');
+      windowSizeMultiplier = 2;
+      expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('24px');
+    });
   });
 
-  it('should return correctly calculated value of size when has NOT measure size', () => {
-    layoutService.meta.hasSizeMeasure = false;
-    windowSizeMultiplier = 1;
-    expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('10px');
-    windowSizeMultiplier = 2;
-    expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('20px');
+  describe('getDotSize when has NOT measure size', () => {
+    it('should return correctly calculated value of size', () => {
+      layoutService.meta.hasSizeMeasure = false;
+      windowSizeMultiplier = 1;
+      expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('10px');
+      windowSizeMultiplier = 2;
+      expect(createSizeScale(layoutService)(d, windowSizeMultiplier)).to.equal('20px');
+    });
   });
 });

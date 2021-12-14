@@ -1,4 +1,6 @@
 import KEYS from '../../../constants/keys';
+import NUMBERS from '../../../constants/numbers';
+import createSizeScale from '../../scales/size';
 
 const OOB_SPACE = 10;
 
@@ -6,6 +8,8 @@ export default function createOutOfBounds({ models, context }) {
   const { chartModel, colorService, layoutService } = models;
   const viewHandler = chartModel.query.getViewHandler();
   const { rtl } = context;
+  let windowSizeMultiplier;
+  const sizeScaleFn = createSizeScale(layoutService);
   const oobPositions = {
     xMin: -0.005,
     xMax: 1.005,
@@ -16,6 +20,8 @@ export default function createOutOfBounds({ models, context }) {
   let xAxisMin;
   let yAxisMax;
   let yAxisMin;
+  let height;
+  let width;
 
   const oobDefinition = !layoutService.meta.isBigData
     ? {
@@ -24,9 +30,17 @@ export default function createOutOfBounds({ models, context }) {
         data: {
           collection: KEYS.COLLECTION.MAIN,
           filter: (d) => {
+            const pointSize = parseInt(sizeScaleFn(d, windowSizeMultiplier), 10);
+            const xBuffer = (pointSize * (xAxisMax - xAxisMin)) / (width * 2);
+            const yBuffer = (pointSize * (yAxisMax - yAxisMin)) / (height * 2);
             // getting axis min/max from viewHandler here as dataView is not initialized
             ({ xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getDataView());
-            return d.x.value < xAxisMin || d.x.value > xAxisMax || d.y.value < yAxisMin || d.y.value > yAxisMax;
+            return (
+              d.x.value < xAxisMin - xBuffer ||
+              d.x.value > xAxisMax + xBuffer ||
+              d.y.value < yAxisMin - yBuffer ||
+              d.y.value > yAxisMax + yBuffer
+            );
           },
         },
         settings: {
@@ -70,6 +84,9 @@ export default function createOutOfBounds({ models, context }) {
           },
         }),
         beforeRender: ({ size }) => {
+          windowSizeMultiplier = Math.min(size.height, size.width) / NUMBERS.WINDOW_SIZE_BASE;
+          ({ height, width } = size);
+
           // can be changed back to 2 * size.h (size.w) if we want to render it in the middle of the oob space;
           // 1.5 * size.h (size.w) to render it near the edge of the oob space like for old scatterplot
           oobPositions.xMin = -OOB_SPACE / (1.5 * size.width);
