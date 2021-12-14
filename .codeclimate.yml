@@ -9,3 +9,4 @@ checks:
       threshold: 8
 exclude_patterns:
   - 'src/**/*.spec.js'
+  - 'test/**/__fixtures__/*.fix.js'
