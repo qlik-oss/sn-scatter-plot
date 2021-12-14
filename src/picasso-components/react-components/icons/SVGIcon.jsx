@@ -2,6 +2,9 @@
 import React from 'react';
 
 function getFontSize(size) {
+  if (size === 'extra-large') {
+    return '28px';
+  }
   if (size === 'large') {
     return '20px';
   }

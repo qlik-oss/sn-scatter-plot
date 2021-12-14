@@ -1,17 +1,17 @@
-export default function translate({ viewHandler, direction, percent }) {
+export default function translate({ viewHandler, direction, percent, rtl }) {
   const { xAxisMax, xAxisMin, yAxisMax, yAxisMin } = viewHandler.getDataView();
-  let deltaX = 0;
-  let deltaY = 0;
+  let xDiff = 0;
+  let yDiff = 0;
   if (direction === 'x') {
-    deltaX = ((xAxisMax - xAxisMin) * percent) / 100;
+    xDiff = ((xAxisMax - xAxisMin) * percent) / 100;
   } else {
-    deltaY = ((yAxisMax - yAxisMin) * percent) / 100;
+    yDiff = ((yAxisMax - yAxisMin) * percent) / 100;
   }
   const dataView = {
-    xAxisMin: xAxisMin + deltaX,
-    xAxisMax: xAxisMax + deltaX,
-    yAxisMax: yAxisMax + deltaY,
-    yAxisMin: yAxisMin + deltaY,
+    xAxisMin: rtl ? xAxisMin - xDiff : xAxisMin + xDiff,
+    xAxisMax: rtl ? xAxisMax - xDiff : xAxisMax + xDiff,
+    yAxisMax: yAxisMax + yDiff,
+    yAxisMin: yAxisMin + yDiff,
   };
   viewHandler.setDataView(dataView);
 }

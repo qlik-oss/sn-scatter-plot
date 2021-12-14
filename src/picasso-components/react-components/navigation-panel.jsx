@@ -7,7 +7,7 @@ import ICONS from './icons';
 const useStyles = makeStyles(() => ({
   onFocus: {
     '&:focus': {
-      background: '#dddddd',
+      background: 'rgba(240, 240, 240, 0.5)',
     },
   },
 }));
@@ -18,6 +18,9 @@ const NavigationButton = ({ ...rest }) => (
       position: 'absolute',
       top: `${rest.top}px`,
       right: `${rest.right}px`,
+      width: `${rest.width}px`,
+      height: `${rest.width}px`,
+      borderRadius: '2px',
       padding: '0',
     }}
     className={useStyles().onFocus}
@@ -25,7 +28,7 @@ const NavigationButton = ({ ...rest }) => (
   >
     <SVGIcon
       {...ICONS[rest.name]}
-      size="large"
+      size="extra-large"
       viewBox="0 0 24 24"
       fill={() => (rest.isDisabled ? (rest.isDisabled() ? '#b0b0b0' : 'currentColor') : 'currentColor')}
       arialLabel={`navigation-button-${rest.name}`}
@@ -54,28 +57,26 @@ export default function navigationPanel() {
   return {
     renderer: 'react',
     disableTriggers: true,
-    preferredSize: function preferredSize() {
-      return 40;
-    },
     render() {
       const { gridWidth: w, padding } = this.settings.style;
       const style = getStyle({ rect: this.rect, padding });
       const { actions, isDisabled } = this.settings.settings;
       return (
         <div style={style}>
-          <NavigationButton top={0 * w} right={1 * w} name="UP" callback={actions.up} />
-          <NavigationButton top={1 * w} right={2 * w} name="LEFT" callback={actions.left} />
+          <NavigationButton top={0 * w} right={1 * w} width={w} name="UP" callback={actions.up} />
+          <NavigationButton top={1 * w} right={2 * w} width={w} name="LEFT" callback={actions.left} />
           <NavigationButton
             top={1 * w}
             right={1 * w}
+            width={w}
             name="HOME"
             callback={actions.home}
             isDisabled={isDisabled.home}
           />
-          <NavigationButton top={1 * w} right={0 * w} name="RIGHT" callback={actions.right} />
-          <NavigationButton top={2 * w} right={1 * w} name="DOWN" callback={actions.down} />
-          <NavigationButton top={3 * w} right={1 * w} name="ZOOM_IN" callback={actions.zoomIn} />
-          <NavigationButton top={4 * w} right={1 * w} name="ZOOM_OUT" callback={actions.zoomOut} />
+          <NavigationButton top={1 * w} right={0 * w} width={w} name="RIGHT" callback={actions.right} />
+          <NavigationButton top={2 * w} right={1 * w} width={w} name="DOWN" callback={actions.down} />
+          <NavigationButton top={3 * w} right={1 * w} width={w} name="ZOOM_IN" callback={actions.zoomIn} />
+          <NavigationButton top={4 * w} right={1 * w} width={w} name="ZOOM_OUT" callback={actions.zoomOut} />
         </div>
       );
     },

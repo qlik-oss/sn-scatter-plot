@@ -11,6 +11,7 @@ describe('createNavigationPanel', () => {
   let viewHandler;
   let create;
   let navigationPanel;
+  let context;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -24,7 +25,8 @@ describe('createNavigationPanel', () => {
     sandbox.stub(KEYS, 'default').value({ COMPONENT: { NAVIGATION_PANEL: 'nav-pan' } });
     sandbox.stub(translate, 'default');
     sandbox.stub(zoom, 'default');
-    create = () => createNavigationPanel({ layoutService, chartModel });
+    context = { rtl: false };
+    create = () => createNavigationPanel({ layoutService, chartModel, context });
     navigationPanel = create();
   });
 
@@ -90,14 +92,24 @@ describe('createNavigationPanel', () => {
         describe('left', () => {
           it('should call translate with correct parameters', () => {
             navigationPanel.settings.actions.left();
-            expect(translate.default).to.have.been.calledWithExactly({ viewHandler, direction: 'x', percent: -10 });
+            expect(translate.default).to.have.been.calledWithExactly({
+              viewHandler,
+              direction: 'x',
+              percent: -10,
+              rtl: false,
+            });
           });
         });
 
         describe('right', () => {
           it('should call translate with correct parameters', () => {
             navigationPanel.settings.actions.right();
-            expect(translate.default).to.have.been.calledWithExactly({ viewHandler, direction: 'x', percent: 10 });
+            expect(translate.default).to.have.been.calledWithExactly({
+              viewHandler,
+              direction: 'x',
+              percent: 10,
+              rtl: false,
+            });
           });
         });
 
