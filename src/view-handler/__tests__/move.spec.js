@@ -1,6 +1,6 @@
-import translate from '../translate';
+import move from '../move';
 
-describe('translate', () => {
+describe('move', () => {
   let sandbox;
   let viewHandler;
   let direction;
@@ -25,9 +25,9 @@ describe('translate', () => {
     sandbox.restore();
   });
 
-  it('should translate the data view in x direction correctly', () => {
+  it('should move the data view in x direction correctly', () => {
     direction = 'x';
-    translate({ viewHandler, direction, percent, rtl });
+    move({ viewHandler, direction, percent, rtl });
     expect(viewHandler.setDataView).to.have.been.calledWithExactly({
       xAxisMin: 10,
       xAxisMax: 1010,
@@ -36,9 +36,9 @@ describe('translate', () => {
     });
   });
 
-  it('should translate the data view in x direction correctly, when rtl is true', () => {
+  it('should move the data view in x direction correctly, when rtl is true', () => {
     direction = 'x';
-    translate({ viewHandler, direction, percent, rtl: true });
+    move({ viewHandler, direction, percent, rtl: true });
     expect(viewHandler.setDataView).to.have.been.calledWithExactly({
       xAxisMin: -10,
       xAxisMax: 990,
@@ -47,9 +47,9 @@ describe('translate', () => {
     });
   });
 
-  it('should translate the data view in y direction correctly', () => {
+  it('should move the data view in y direction correctly', () => {
     direction = 'y';
-    translate({ viewHandler, direction, percent });
+    move({ viewHandler, direction, percent });
     expect(viewHandler.setDataView).to.have.been.calledWithExactly({
       xAxisMin: 0,
       xAxisMax: 1000,

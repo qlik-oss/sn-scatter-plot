@@ -1,6 +1,6 @@
 import extend from 'extend';
 import zoom from '../zoom';
-import * as eventUtils from '../../event-utils';
+import * as eventUtils from '../../utils/event-utils';
 
 describe('zoom', () => {
   let sandbox;

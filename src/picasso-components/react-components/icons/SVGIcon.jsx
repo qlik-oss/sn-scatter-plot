@@ -14,7 +14,7 @@ function getFontSize(size) {
   return '16px';
 }
 
-export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 16 16', arialLabel = '', fill }) {
+export default function SvgIcon({ d, size, buttonWidth, style = {}, viewBox = '0 0 16 16', fill }) {
   const s = {
     fontSize: getFontSize(size),
     display: 'inline-block',
@@ -26,6 +26,7 @@ export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 16 16', ar
     textRendering: 'optimizeLegibility',
     WebkitFontSmoothing: 'antialiased',
     MozOsxFontSmoothing: 'grayscale',
+    padding: `${(buttonWidth - parseInt(getFontSize(size), 10)) / 2}px`,
     ...style,
   };
   return (
@@ -36,9 +37,9 @@ export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 16 16', ar
         height="1em"
         viewBox={viewBox}
         fill={fill ? fill() : 'currentColor'}
-        aria-label={arialLabel}
+        pointerEvents="none"
       >
-        <path d={d} pointerEvents="none" />
+        <path d={d} />
       </svg>
     </i>
   );

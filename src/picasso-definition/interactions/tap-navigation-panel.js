@@ -10,7 +10,8 @@ const tap = ({ eventName = 'tap-navigation-panel' }) => ({
         return true;
       }
 
-      return e.target.ariaLabel?.includes('navigation-button');
+      // Navigation buttons are designed using icons
+      return e.target.tagName === 'I';
     },
   },
   events: {

@@ -1,7 +1,7 @@
 import * as KEYS from '../../../../constants/keys';
 import createNavigationPanel from '..';
-import * as translate from '../../../../utils/math/translate';
-import * as zoom from '../../../../utils/math/zoom';
+import * as move from '../../../../view-handler/move';
+import * as zoom from '../../../../view-handler/zoom';
 
 describe('createNavigationPanel', () => {
   let sandbox;
@@ -21,7 +21,7 @@ describe('createNavigationPanel', () => {
     };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
     sandbox.stub(KEYS, 'default').value({ COMPONENT: { NAVIGATION_PANEL: 'nav-pan' } });
-    sandbox.stub(translate, 'default');
+    sandbox.stub(move, 'default');
     sandbox.stub(zoom, 'default');
     context = { rtl: false };
     create = () => createNavigationPanel({ layoutService, chartModel, context });
@@ -84,9 +84,9 @@ describe('createNavigationPanel', () => {
         });
 
         describe('left', () => {
-          it('should call translate with correct parameters', () => {
+          it('should call move with correct parameters', () => {
             navigationPanel.settings.actions.left();
-            expect(translate.default).to.have.been.calledWithExactly({
+            expect(move.default).to.have.been.calledWithExactly({
               viewHandler,
               direction: 'x',
               percent: -10,
@@ -96,9 +96,9 @@ describe('createNavigationPanel', () => {
         });
 
         describe('right', () => {
-          it('should call translate with correct parameters', () => {
+          it('should call move with correct parameters', () => {
             navigationPanel.settings.actions.right();
-            expect(translate.default).to.have.been.calledWithExactly({
+            expect(move.default).to.have.been.calledWithExactly({
               viewHandler,
               direction: 'x',
               percent: 10,
@@ -108,16 +108,16 @@ describe('createNavigationPanel', () => {
         });
 
         describe('up', () => {
-          it('should call translate with correct parameters', () => {
+          it('should call move with correct parameters', () => {
             navigationPanel.settings.actions.up();
-            expect(translate.default).to.have.been.calledWithExactly({ viewHandler, direction: 'y', percent: 10 });
+            expect(move.default).to.have.been.calledWithExactly({ viewHandler, direction: 'y', percent: 10 });
           });
         });
 
         describe('down', () => {
-          it('should call translate with correct parameters', () => {
+          it('should call move with correct parameters', () => {
             navigationPanel.settings.actions.down();
-            expect(translate.default).to.have.been.calledWithExactly({ viewHandler, direction: 'y', percent: -10 });
+            expect(move.default).to.have.been.calledWithExactly({ viewHandler, direction: 'y', percent: -10 });
           });
         });
 

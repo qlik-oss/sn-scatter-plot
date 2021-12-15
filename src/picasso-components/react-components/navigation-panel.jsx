@@ -38,9 +38,9 @@ const NavigationButton = ({ ...rest }) => (
     <SVGIcon
       {...ICONS[rest.buttonName]}
       size="extra-large"
+      buttonWidth={buttonWidth}
       viewBox="0 0 24 24"
       fill={() => (rest.isDisabled ? (rest.isDisabled() ? '#b0b0b0' : 'currentColor') : 'currentColor')}
-      arialLabel={`navigation-button-${rest.buttonName}`}
     />
   </IconButton>
 );

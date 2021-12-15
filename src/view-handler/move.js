@@ -1,4 +1,4 @@
-export default function translate({ viewHandler, direction, percent, rtl }) {
+export default function move({ viewHandler, direction, percent, rtl }) {
   const { xAxisMax, xAxisMin, yAxisMax, yAxisMin } = viewHandler.getDataView();
   let xDiff = 0;
   let yDiff = 0;

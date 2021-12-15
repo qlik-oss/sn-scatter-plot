@@ -1,5 +1,5 @@
 import * as KEYS from '../../../constants/keys';
-import * as zoom from '../../../utils/math/zoom';
+import * as zoom from '../../../view-handler/zoom';
 import native from '../native';
 
 describe('native', () => {

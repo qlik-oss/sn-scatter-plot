@@ -1,4 +1,4 @@
-import { eventToComponentPoint } from '../event-utils';
+import { eventToComponentPoint } from '../utils/event-utils';
 
 const ZOOM_SCALE = 2 ** (1 / 2);
 

@@ -1,6 +1,6 @@
 import KEYS from '../../../constants/keys';
-import translate from '../../../utils/math/translate';
-import zoom from '../../../utils/math/zoom';
+import move from '../../../view-handler/move';
+import zoom from '../../../view-handler/zoom';
 
 export default function createNavigationPanel({ layoutService, chartModel, context }) {
   const navigation = layoutService.getLayoutValue('navigation');
@@ -16,16 +16,16 @@ export default function createNavigationPanel({ layoutService, chartModel, conte
           viewHandler.setDataView(viewHandler.getMeta().homeStateDataView);
         },
         left: () => {
-          translate({ viewHandler, direction: 'x', percent: -10, rtl });
+          move({ viewHandler, direction: 'x', percent: -10, rtl });
         },
         right: () => {
-          translate({ viewHandler, direction: 'x', percent: 10, rtl });
+          move({ viewHandler, direction: 'x', percent: 10, rtl });
         },
         up: () => {
-          translate({ viewHandler, direction: 'y', percent: 10 });
+          move({ viewHandler, direction: 'y', percent: 10 });
         },
         down: () => {
-          translate({ viewHandler, direction: 'y', percent: -10 });
+          move({ viewHandler, direction: 'y', percent: -10 });
         },
         zoomIn: () => {
           zoom({ viewHandler, buttonZoomDirection: 'in' });
