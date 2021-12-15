@@ -236,11 +236,11 @@ export default function createDataTitileComp() {
 
       return (
         <>
-          {titleData.DRILL_DOWN && (
+          {titleData.drilldown && (
             <SVGIcon
               {...ICONS.DRILL_DOWN}
               size="small"
-              title={translator.get('Tooltip.dimensions.DRILL_DOWN')}
+              title={translator.get('Tooltip.dimensions.drilldown')}
               style={{ margin: '0 4px 0 0' }}
             />
           )}
@@ -276,7 +276,7 @@ export default function createDataTitileComp() {
     minWidth: PropTypes.string,
     titleData: PropTypes.shape({
       breadcrumbs: PropTypes.arrayOf(PropTypes.string).isRequired,
-      DRILL_DOWN: PropTypes.bool.isRequired,
+      drilldown: PropTypes.bool.isRequired,
       index: PropTypes.number.isRequired,
       locked: PropTypes.bool.isRequired,
       text: PropTypes.string.isRequired,

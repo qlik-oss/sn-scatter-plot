@@ -2,7 +2,11 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
 import SVGIcon from './icons/SVGIcon';
+import NUMBERS from '../../constants/numbers';
 import ICONS from './icons';
+
+const buttonWidth = NUMBERS.NAVIGATION_PANEL.GRID_WIDTH;
+const padding = NUMBERS.NAVIGATION_PANEL.PADDING;
 
 const useStyles = makeStyles(() => ({
   onFocus: {
@@ -10,34 +14,39 @@ const useStyles = makeStyles(() => ({
       background: 'rgba(240, 240, 240, 0.5)',
     },
   },
+  common: {
+    position: 'absolute',
+    borderRadius: '2px',
+    padding: '0',
+    width: `${buttonWidth}px`,
+    height: `${buttonWidth}px`,
+  },
+  UP: { top: '0px', right: `${buttonWidth}px` },
+  LEFT: { top: `${buttonWidth}px`, right: `${2 * buttonWidth}px` },
+  HOME: { top: `${buttonWidth}px`, right: `${buttonWidth}px` },
+  RIGHT: { top: `${buttonWidth}px`, right: '0px' },
+  DOWN: { top: `${2 * buttonWidth}px`, right: `${buttonWidth}px` },
+  ZOOM_IN: { top: `${3 * buttonWidth}px`, right: `${buttonWidth}px` },
+  ZOOM_OUT: { top: `${4 * buttonWidth}px`, right: `${buttonWidth}px` },
 }));
 
 const NavigationButton = ({ ...rest }) => (
   <IconButton
-    style={{
-      position: 'absolute',
-      top: `${rest.top}px`,
-      right: `${rest.right}px`,
-      width: `${rest.width}px`,
-      height: `${rest.width}px`,
-      borderRadius: '2px',
-      padding: '0',
-    }}
-    className={useStyles().onFocus}
+    className={`${useStyles().onFocus} ${useStyles().common} ${useStyles()[rest.buttonName]}`}
     onClick={rest.callback}
   >
     <SVGIcon
-      {...ICONS[rest.name]}
+      {...ICONS[rest.buttonName]}
       size="extra-large"
       viewBox="0 0 24 24"
       fill={() => (rest.isDisabled ? (rest.isDisabled() ? '#b0b0b0' : 'currentColor') : 'currentColor')}
-      arialLabel={`navigation-button-${rest.name}`}
+      arialLabel={`navigation-button-${rest.buttonName}`}
     />
   </IconButton>
 );
 
 export default function navigationPanel() {
-  function getStyle({ rect, padding }) {
+  function getStyle({ rect }) {
     return {
       pointerEvents: 'auto',
       display: 'flex',
@@ -58,25 +67,17 @@ export default function navigationPanel() {
     renderer: 'react',
     disableTriggers: true,
     render() {
-      const { gridWidth: w, padding } = this.settings.style;
-      const style = getStyle({ rect: this.rect, padding });
+      const style = getStyle({ rect: this.rect });
       const { actions, isDisabled } = this.settings.settings;
       return (
         <div style={style}>
-          <NavigationButton top={0 * w} right={1 * w} width={w} name="UP" callback={actions.up} />
-          <NavigationButton top={1 * w} right={2 * w} width={w} name="LEFT" callback={actions.left} />
-          <NavigationButton
-            top={1 * w}
-            right={1 * w}
-            width={w}
-            name="HOME"
-            callback={actions.home}
-            isDisabled={isDisabled.home}
-          />
-          <NavigationButton top={1 * w} right={0 * w} width={w} name="RIGHT" callback={actions.right} />
-          <NavigationButton top={2 * w} right={1 * w} width={w} name="DOWN" callback={actions.down} />
-          <NavigationButton top={3 * w} right={1 * w} width={w} name="ZOOM_IN" callback={actions.zoomIn} />
-          <NavigationButton top={4 * w} right={1 * w} width={w} name="ZOOM_OUT" callback={actions.zoomOut} />
+          <NavigationButton buttonName="UP" callback={actions.up} />
+          <NavigationButton buttonName="LEFT" callback={actions.left} />
+          <NavigationButton buttonName="HOME" callback={actions.home} isDisabled={isDisabled.home} />
+          <NavigationButton buttonName="RIGHT" callback={actions.right} />
+          <NavigationButton buttonName="DOWN" callback={actions.down} />
+          <NavigationButton buttonName="ZOOM_IN" callback={actions.zoomIn} />
+          <NavigationButton buttonName="ZOOM_OUT" callback={actions.zoomOut} />
         </div>
       );
     },

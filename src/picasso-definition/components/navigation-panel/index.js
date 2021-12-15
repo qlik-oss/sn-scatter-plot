@@ -1,4 +1,3 @@
-import NUMBERS from '../../../constants/numbers';
 import KEYS from '../../../constants/keys';
 import translate from '../../../utils/math/translate';
 import zoom from '../../../utils/math/zoom';
@@ -11,7 +10,6 @@ export default function createNavigationPanel({ layoutService, chartModel, conte
     key: KEYS.COMPONENT.NAVIGATION_PANEL,
     type: 'navigation-panel',
     show: navigation,
-    style: { padding: NUMBERS.NAVIGATION_PANEL.PADDING, gridWidth: NUMBERS.NAVIGATION_PANEL.GRID_WIDTH },
     settings: {
       actions: {
         home: () => {

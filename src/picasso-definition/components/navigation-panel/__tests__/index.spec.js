@@ -1,4 +1,3 @@
-import * as NUMBERS from '../../../../constants/numbers';
 import * as KEYS from '../../../../constants/keys';
 import createNavigationPanel from '..';
 import * as translate from '../../../../utils/math/translate';
@@ -21,7 +20,6 @@ describe('createNavigationPanel', () => {
       setDataView: sandbox.stub(),
     };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
-    sandbox.stub(NUMBERS, 'default').value({ NAVIGATION_PANEL: { PADDING: 1, GRID_WIDTH: 2 } });
     sandbox.stub(KEYS, 'default').value({ COMPONENT: { NAVIGATION_PANEL: 'nav-pan' } });
     sandbox.stub(translate, 'default');
     sandbox.stub(zoom, 'default');
@@ -36,7 +34,7 @@ describe('createNavigationPanel', () => {
 
   describe('the returned navigation panel object', () => {
     it('should have all keys', () => {
-      expect(navigationPanel).to.have.all.keys(['key', 'type', 'show', 'style', 'settings']);
+      expect(navigationPanel).to.have.all.keys(['key', 'type', 'show', 'settings']);
     });
 
     it('should have correct key', () => {
@@ -55,10 +53,6 @@ describe('createNavigationPanel', () => {
       layoutService.getLayoutValue.returns(false);
       navigationPanel = create();
       expect(navigationPanel.show).to.equal(false);
-    });
-
-    it('should have correct style', () => {
-      expect(navigationPanel.style).to.deep.equal({ padding: 1, gridWidth: 2 });
     });
 
     describe('settings', () => {
