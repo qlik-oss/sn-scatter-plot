@@ -10,7 +10,7 @@ describe('createNavigationPanel', () => {
   let viewHandler;
   let create;
   let navigationPanel;
-  let context;
+  let rtl;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -23,8 +23,8 @@ describe('createNavigationPanel', () => {
     sandbox.stub(KEYS, 'default').value({ COMPONENT: { NAVIGATION_PANEL: 'nav-pan' } });
     sandbox.stub(move, 'default');
     sandbox.stub(zoom, 'default');
-    context = { rtl: false };
-    create = () => createNavigationPanel({ layoutService, chartModel, context });
+    rtl = false;
+    create = () => createNavigationPanel({ layoutService, chartModel, rtl });
     navigationPanel = create();
   });
 

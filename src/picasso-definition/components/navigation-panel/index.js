@@ -2,10 +2,9 @@ import KEYS from '../../../constants/keys';
 import move from '../../../view-handler/move';
 import zoom from '../../../view-handler/zoom';
 
-export default function createNavigationPanel({ layoutService, chartModel, context }) {
+export default function createNavigationPanel({ layoutService, chartModel, rtl }) {
   const navigation = layoutService.getLayoutValue('navigation');
   const viewHandler = chartModel.query.getViewHandler();
-  const { rtl } = context;
   return {
     key: KEYS.COMPONENT.NAVIGATION_PANEL,
     type: 'navigation-panel',

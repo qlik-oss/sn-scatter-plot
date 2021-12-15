@@ -15,6 +15,7 @@ import createMiniChart from './mini-chart';
 export default function createComponents({ context, models, flags, picasso, chart }) {
   const { colorService, disclaimerModel, layoutService, themeService, chartModel, tooltipService } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
+  const { rtl } = context;
 
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
     return [disclaimer];
@@ -33,7 +34,7 @@ export default function createComponents({ context, models, flags, picasso, char
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
-    createNavigationPanel({ layoutService, chartModel, context }),
+    createNavigationPanel({ layoutService, chartModel, rtl }),
     ...createMiniChart({ models, flags }),
     ...tooltipService.getComponents(),
   ].filter(Boolean);

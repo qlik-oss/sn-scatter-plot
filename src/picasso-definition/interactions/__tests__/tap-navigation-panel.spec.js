@@ -9,7 +9,7 @@ describe('tap', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    e = { preventDefault: sandbox.stub(), target: { ariaLabel: 'navigation-button-home' } };
+    e = { target: { tagName: 'I' } };
     create = () => tap({ eventName });
     tapObject = create();
   });
@@ -33,12 +33,12 @@ describe('tap', () => {
         expect(tapObject.options.enable(1, e)).to.equal(true);
       });
 
-      it('should return true if e is not undefined and the target is a navigation button', () => {
+      it('should return true if e is not undefined and the target is an icon', () => {
         expect(tapObject.options.enable(1, e)).to.equal(true);
       });
 
-      it('should return false if e is not undefined but the target is not a navigation button', () => {
-        e = { target: { ariaLabel: 'other-buttom' } };
+      it('should return false if e is not undefined but the target is not an icon', () => {
+        e = { target: { tagName: 'L' } };
         expect(tapObject.options.enable(1, e)).to.equal(false);
       });
     });
