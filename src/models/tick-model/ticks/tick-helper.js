@@ -51,16 +51,7 @@ const tickHelper = {
     }
     const pointDimension = chart.component(KEYS.COMPONENT.POINT)?.rect.computedPhysical[dimension];
     const heatMapDimension = chart.component(KEYS.COMPONENT.HEAT_MAP)?.rect.computedPhysical[dimension];
-    const findMax = (a, b) => {
-      if (!a) {
-        return b;
-      }
-      if (!b) {
-        return a;
-      }
-      return Math.max(a, b);
-    };
-    return findMax(pointDimension, heatMapDimension);
+    return Math.max(...[pointDimension, heatMapDimension].filter(Number.isFinite));
   },
 };
 
