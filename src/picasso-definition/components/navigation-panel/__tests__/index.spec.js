@@ -57,7 +57,7 @@ describe('createNavigationPanel', () => {
 
     describe('settings', () => {
       it('should have all keys', () => {
-        expect(navigationPanel.settings).to.have.all.keys(['actions', 'isDisabled']);
+        expect(navigationPanel.settings).to.have.all.keys(['actions', 'isDisabled', 'rtl']);
       });
       describe('actions', () => {
         it('should have all keys', () => {

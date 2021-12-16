@@ -36,6 +36,7 @@ export default function createNavigationPanel({ layoutService, chartModel, rtl }
       isDisabled: {
         home: () => viewHandler.getMeta().isHomeState,
       },
+      rtl,
     },
   };
 }
