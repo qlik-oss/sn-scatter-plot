@@ -131,74 +131,74 @@ describe('color-service', () => {
         });
       });
     });
+  });
 
-    describe('custom', () => {
-      let getCustom;
+  describe('custom', () => {
+    let getCustom;
 
-      beforeEach(() => {
-        getCustom = () => {
-          create();
-          const { custom } = chartModules.colorService.getCall(0).args[0];
-          return custom;
-        };
+    beforeEach(() => {
+      getCustom = () => {
+        create();
+        const { custom } = chartModules.colorService.getCall(0).args[0];
+        return custom;
+      };
+    });
+
+    it('should have all keys', () => {
+      expect(getCustom()).to.have.all.keys([
+        'wrappedScales',
+        'legendComponents',
+        'legendInteractions',
+        'updateBrushAliases',
+        'updateLegend',
+      ]);
+    });
+
+    describe('wrappedScales', () => {
+      it('should return correct wrappedScales from state', () => {
+        expect(getCustom().wrappedScales()).to.equal(undefined);
+      });
+    });
+
+    describe('legendComponents', () => {
+      it('should return correct legendComponents from state', () => {
+        expect(getCustom().legendComponents()).to.equal(undefined);
+      });
+    });
+
+    describe('legendInteractions', () => {
+      it('should return correct legendInteractions from state', () => {
+        expect(getCustom().legendInteractions()).to.equal(undefined);
+      });
+    });
+
+    describe('updateLegend', () => {
+      it('should update wrappedScales, legendComponents, and legendInteractions correctly', () => {
+        createLegend.default.returns({ components: 'comps', interactions: 'interactions', scales: 'scales' });
+        getCustom().updateLegend();
+        expect(getCustom().wrappedScales()).to.equal('scales');
+        expect(getCustom().legendComponents()).to.equal('comps');
+        expect(getCustom().legendInteractions()).to.equal('interactions');
+      });
+    });
+
+    describe('updateBrushAliases', () => {
+      it('should not update brush, when colorField is not "qAttrDimInfo"', () => {
+        chartModules.colorService.returns({ getSettings: sandbox.stub().returns({ field: '' }) });
+        const brush = { removeKeyAlias: sandbox.stub(), addKeyAlias: sandbox.stub() };
+        chart.brush.withArgs('selection').returns(brush);
+        getCustom().updateBrushAliases();
+        expect(brush.removeKeyAlias).to.not.have.been.called;
+        expect(brush.addKeyAlias).to.not.have.been.called;
       });
 
-      it('should have all keys', () => {
-        expect(getCustom()).to.have.all.keys([
-          'wrappedScales',
-          'legendComponents',
-          'legendInteractions',
-          'updateBrushAliases',
-          'updateLegend',
-        ]);
-      });
-
-      describe('wrappedScales', () => {
-        it('should return correct wrappedScales from state', () => {
-          expect(getCustom().wrappedScales()).to.equal(undefined);
-        });
-      });
-
-      describe('legendComponents', () => {
-        it('should return correct legendComponents from state', () => {
-          expect(getCustom().legendComponents()).to.equal(undefined);
-        });
-      });
-
-      describe('legendInteractions', () => {
-        it('should return correct legendInteractions from state', () => {
-          expect(getCustom().legendInteractions()).to.equal(undefined);
-        });
-      });
-
-      describe('updateLegend', () => {
-        it('should update wrappedScales, legendComponents, and legendInteractions correctly', () => {
-          createLegend.default.returns({ components: 'comps', interactions: 'interactions', scales: 'scales' });
-          getCustom().updateLegend();
-          expect(getCustom().wrappedScales()).to.equal('scales');
-          expect(getCustom().legendComponents()).to.equal('comps');
-          expect(getCustom().legendInteractions()).to.equal('interactions');
-        });
-      });
-
-      describe('updateBrushAliases', () => {
-        it('should not update brush, when colorField is not "qAttrDimInfo"', () => {
-          chartModules.colorService.returns({ getSettings: sandbox.stub().returns({ field: '' }) });
-          const brush = { removeKeyAlias: sandbox.stub(), addKeyAlias: sandbox.stub() };
-          chart.brush.withArgs('selection').returns(brush);
-          getCustom().updateBrushAliases();
-          expect(brush.removeKeyAlias).to.not.have.been.called;
-          expect(brush.addKeyAlias).to.not.have.been.called;
-        });
-
-        it('should update brush correctly, when colorField is "qAttrDimInfo"', () => {
-          chartModules.colorService.returns({ getSettings: sandbox.stub().returns({ field: 'qAttrDimInfo' }) });
-          const brush = { removeKeyAlias: sandbox.stub(), addKeyAlias: sandbox.stub() };
-          chart.brush.withArgs('selection').returns(brush);
-          getCustom().updateBrushAliases();
-          expect(brush.removeKeyAlias).to.have.been.calledTwice;
-          expect(brush.addKeyAlias).to.have.been.calledOnce;
-        });
+      it('should update brush correctly, when colorField is "qAttrDimInfo"', () => {
+        chartModules.colorService.returns({ getSettings: sandbox.stub().returns({ field: 'qAttrDimInfo' }) });
+        const brush = { removeKeyAlias: sandbox.stub(), addKeyAlias: sandbox.stub() };
+        chart.brush.withArgs('selection').returns(brush);
+        getCustom().updateBrushAliases();
+        expect(brush.removeKeyAlias).to.have.been.calledTwice;
+        expect(brush.addKeyAlias).to.have.been.calledOnce;
       });
     });
   });
