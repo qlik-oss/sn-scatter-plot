@@ -14,7 +14,7 @@ function getFontSize(size) {
   return '16px';
 }
 
-export default function SvgIcon({ d, size, buttonWidth, style = {}, viewBox = '0 0 16 16', fill }) {
+export default function SvgIcon({ d, size, width, style = {}, viewBox = '0 0 16 16', fill }) {
   const s = {
     fontSize: getFontSize(size),
     display: 'inline-block',
@@ -26,7 +26,7 @@ export default function SvgIcon({ d, size, buttonWidth, style = {}, viewBox = '0
     textRendering: 'optimizeLegibility',
     WebkitFontSmoothing: 'antialiased',
     MozOsxFontSmoothing: 'grayscale',
-    padding: `${(buttonWidth - parseInt(getFontSize(size), 10)) / 2}px`,
+    padding: `${(width - parseInt(getFontSize(size), 10)) / 2}px`,
     ...style,
   };
   return (
