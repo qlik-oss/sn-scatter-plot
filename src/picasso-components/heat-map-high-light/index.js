@@ -12,11 +12,11 @@ export default {
     // });
     const { rangeSelectionView } = this.settings.settings;
     const { x1, x2 } = rangeSelectionView();
-    const { x, y } = this.rect;
-    console.log(x, y);
+    // const { x, y } = this.rect;
+    // console.log(x, y);
     const a = Math.abs(x1 - 87);
     const b = Math.abs(x2 - 87);
-    console.log(a, b);
+    // console.log(a, b);
     const heatMapCanvas = element.querySelector(`[data-key=${KEYS.COMPONENT.HEAT_MAP}]`);
     const heatMapHighlightCanvas = element.querySelector(`[data-key=${KEYS.COMPONENT.HEAT_MAP_HIGH_LIGHT}]`);
 

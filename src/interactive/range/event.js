@@ -7,7 +7,7 @@ function onBubble(e, key) {
 }
 
 const range = (
-  { eventName, key, fillTargets = [], requireFailure, recognizeWith, enableInteraction, viewHandler, chartModel },
+  { eventName, key, fillTargets = [], requireFailure, recognizeWith, enableInteraction, viewHandler },
   opts
 ) => ({
   key: `event:${key}`,
