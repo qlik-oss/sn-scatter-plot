@@ -28,6 +28,18 @@ describe('custom rect', () => {
   it('should have correct object', () => {
     expect(miniChartWindow).to.have.all.keys(['require', 'defaultSettings', 'renderer', 'render']);
   });
+  describe('defaultSettings', () => {
+    describe('settings', () => {
+      describe('rect', () => {
+        it('should have correct default dimension', () => {
+          expect(miniChartWindow.defaultSettings.settings.rect.x()).to.equal(100);
+          expect(miniChartWindow.defaultSettings.settings.rect.y()).to.equal(100);
+          expect(miniChartWindow.defaultSettings.settings.rect.width()).to.equal(100);
+          expect(miniChartWindow.defaultSettings.settings.rect.height()).to.equal(100);
+        });
+      });
+    });
+  });
   describe('render', () => {
     it('should render correct rect', () => {
       miniChartWindow.settings = {
