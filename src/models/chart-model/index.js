@@ -20,10 +20,30 @@ export default function createChartModel({
     // KEYS.COMPONENT.GRID_LINES,
   ];
 
+  function updatePartial() {
+    requestAnimationFrame(() => {
+      // TODO: cancel requests as well to optimize???
+      // const startTime = Date.now();
+      chart.update({
+        partialData: true,
+        excludeFromUpdate: EXCLUDE,
+        // transforms: [
+        //   {
+        //     key: KEYS.COMPONENT.POINT,
+        //     transform: { a: 1, b: 0, c: 0, d: 1, e: x, f: y },
+        //   },
+        // ],
+      });
+      // TODO: debounce -> interactionInProgess = false
+      // console.log('chart rendered in ', Date.now() - startTime, ' ms');
+    });
+  }
+
   const viewHandler = createViewHandler({
     extremumModel,
     layoutService,
     viewState,
+    updatePartial,
   });
 
   const mainConfig = {
@@ -81,25 +101,6 @@ export default function createChartModel({
   };
 
   const dataset = picasso.data('q')(mainConfig);
-
-  function updatePartial() {
-    requestAnimationFrame(() => {
-      // TODO: cancel requests as well to optimize???
-      // const startTime = Date.now();
-      chart.update({
-        partialData: true,
-        excludeFromUpdate: EXCLUDE,
-        // transforms: [
-        //   {
-        //     key: KEYS.COMPONENT.POINT,
-        //     transform: { a: 1, b: 0, c: 0, d: 1, e: x, f: y },
-        //   },
-        // ],
-      });
-      // TODO: debounce -> interactionInProgess = false
-      // console.log('chart rendered in ', Date.now() - startTime, ' ms');
-    });
-  }
 
   const update = ({ settings } = {}) => {
     chart.update({
@@ -197,6 +198,7 @@ export default function createChartModel({
         state.isPrelayout = false;
       },
       update,
+      updatePartial,
     },
   };
 

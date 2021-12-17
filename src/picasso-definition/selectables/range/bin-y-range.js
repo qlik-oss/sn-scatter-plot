@@ -1,7 +1,14 @@
 import { range } from '../../../interactive';
 import KEYS from '../../../constants/keys';
 
-export default function createYRange({ actions, selectionService, dockService, chart, enableInteraction }) {
+export default function createYRange({
+  actions,
+  selectionService,
+  dockService,
+  chart,
+  enableInteraction,
+  viewHandler,
+}) {
   if (selectionService.getIsDimensionLocked()) {
     return false;
   }
@@ -22,6 +29,7 @@ export default function createYRange({ actions, selectionService, dockService, c
         return formatter(datum);
       },
       enableInteraction,
+      viewHandler,
     },
     {
       actions,

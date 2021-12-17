@@ -8,6 +8,7 @@ import renderer from './picasso-components/react-components/react-renderer';
 import disclaimer from './picasso-components/react-components/disclaimer';
 import miniChartWindow from './picasso-components/mini-chart-window';
 import dataTitle from './picasso-components/react-components/data-title-component';
+import heatMapHighLight from './picasso-components/heat-map-high-light';
 
 export default function configurePicasso() {
   const picasso = picassojs();
@@ -21,6 +22,7 @@ export default function configurePicasso() {
   picasso.component('disclaimer', disclaimer());
   picasso.component('mini-chart-window', miniChartWindow);
   picasso.component('data-title', dataTitle());
+  picasso.component('heat-map-high-light', heatMapHighLight);
 
   return picasso;
 }

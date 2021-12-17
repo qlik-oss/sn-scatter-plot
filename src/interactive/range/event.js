@@ -6,7 +6,10 @@ function onBubble(e, key) {
   return false;
 }
 
-const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith, enableInteraction }, opts) => ({
+const range = (
+  { eventName, key, fillTargets = [], requireFailure, recognizeWith, enableInteraction, viewHandler, chartModel },
+  opts
+) => ({
   key: `event:${key}`,
   type: 'Pan',
   requireFailure,
@@ -49,10 +52,23 @@ const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith
       opts.actions.select.emit('start', eventName);
       this.chart.component(key).emit('rangeStart', e);
       this.started = eventName;
+      this.start = key === 'bin-x-range-brush' ? e.center.x : e.center.y;
+      if (viewHandler) {
+        const { x1, x2, y1, y2 } = viewHandler.getRangeSelectionView();
+        key === 'bin-x-range-brush'
+          ? viewHandler.setRangeSelectionView({ x1: e.center.x, x2, y1, y2 })
+          : viewHandler.setRangeSelectionView({ x1, x2, y1: e.center.y, y2 });
+      }
     },
     [`${eventName}move`](e) {
       e.preventDefault();
       this.chart.component(key).emit('rangeMove', e);
+      if (viewHandler) {
+        const { x1, x2, y1, y2 } = viewHandler.getRangeSelectionView();
+        key === 'bin-x-range-brush'
+          ? viewHandler.setRangeSelectionView({ x1, x2: e.center.x, y1, y2 })
+          : viewHandler.setRangeSelectionView({ x1, x2, y1, y2: e.center.y });
+      }
     },
     [`${eventName}end`](e) {
       if (this.chart.brushSelectionIncludeMax === undefined) {
