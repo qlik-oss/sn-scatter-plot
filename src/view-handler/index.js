@@ -12,10 +12,9 @@ function areIntervalsEqual(min1, max1, min2, max2, e) {
   return Math.abs(min2 - min1) <= d && Math.abs(max2 - max1) <= d;
 }
 
-export default function createViewHandler({ viewState, extremumModel, layoutService, updatePartial }) {
+export default function createViewHandler({ viewState, extremumModel, layoutService }) {
   const meta = { homeStateDataView: {}, scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1, isHomeState: true };
   let interactionInProgress = false;
-  let rangeSelectionView = { x1: 0, x2: 0, y1: 0, y2: 0 };
 
   const viewHandler = {
     getDataView: () => viewState.get('dataView'),
@@ -37,13 +36,6 @@ export default function createViewHandler({ viewState, extremumModel, layoutServ
 
     setMeta(newMeta) {
       extend(true, meta, newMeta);
-    },
-
-    getRangeSelectionView: () => rangeSelectionView,
-
-    setRangeSelectionView: (rangeView) => {
-      rangeSelectionView = rangeView;
-      updatePartial();
     },
 
     setInteractionInProgress: (newState) => {

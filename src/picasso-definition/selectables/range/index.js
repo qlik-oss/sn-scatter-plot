@@ -16,7 +16,6 @@ export default function createRange({ models, actions, scales, chart }) {
   const legend = colorService.custom.legendComponents();
 
   const dataHandler = chartModel.query.getDataHandler();
-  const viewHandler = chartModel.query.getViewHandler();
 
   const xRange =
     createXRange({
@@ -32,7 +31,6 @@ export default function createRange({ models, actions, scales, chart }) {
       selectionService,
       dockService,
       chart,
-      viewHandler,
       chartModel,
       enableInteraction: () => dataHandler.getMeta().isBinnedData,
     }) || EMPTY;
@@ -51,7 +49,6 @@ export default function createRange({ models, actions, scales, chart }) {
       selectionService,
       dockService,
       chart,
-      viewHandler,
       enableInteraction: () => dataHandler.getMeta().isBinnedData,
     }) || EMPTY;
 

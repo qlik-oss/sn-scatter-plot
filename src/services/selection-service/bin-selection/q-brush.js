@@ -35,7 +35,7 @@ export function extractFieldFromId(id) {
  * @param {object} [layout] QIX data layout. Needed only when brushing on attribute expressions, to be able to calculate the measure index.
  * @return {object[]} An array of relevant selections
  */
-export default function qBrush(brush, opts = {}, layout) {
+export default function qBrush(brush, opts = {}, layout, actions) {
   const selections = [];
   const methods = {};
   const isActive = brush.isActive();
@@ -64,6 +64,7 @@ export default function qBrush(brush, opts = {}, layout) {
           })
         );
       }
+      actions.select.emit('binsRangeSelection', methods.rangeSelectHyperCubeValues.ranges);
     }
 
     if (b.type === 'value' && info.measureCount === 2) {

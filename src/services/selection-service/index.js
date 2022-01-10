@@ -15,10 +15,13 @@ export default function createService({ chart, actions, selections }) {
       allowSimultaneous,
       selectionActions: {
         clear: ({ clearMinor, clearLegend, selectionInfo, cleared }) => {
-          const isSelectingRanges = ['xRange', 'yRange'].includes(selectionInfo.event);
+          const isSelectingRanges = ['xRange', 'yRange', 'binXRange', 'binYRange'].includes(selectionInfo.event);
           if (cleared || !isSelectingRanges) {
             clearMinor({ eventName: 'xRange', componentName: 'x-range-brush' });
             clearMinor({ eventName: 'yRange', componentName: 'y-range-brush' });
+            clearMinor({ eventName: 'binXRange', componentName: 'bin-x-range-brush' });
+            clearMinor({ eventName: 'binYRange', componentName: 'bin-y-range-brush' });
+            actions.select.emit('binsRangeSelectionClear');
           }
           clearLegend();
         },
@@ -27,7 +30,7 @@ export default function createService({ chart, actions, selections }) {
         if (layout.qHyperCube.qDataPages.length) {
           return picassoQ.selections(brush, qBrushOptions, layout);
         }
-        return qBrush(brush, qBrushOptions, layout);
+        return qBrush(brush, qBrushOptions, layout, actions);
       },
     },
   });

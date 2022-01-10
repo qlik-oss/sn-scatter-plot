@@ -1,4 +1,4 @@
-import createBrush from '..';
+import createBrush from '../point-brush';
 
 describe('createBrush', () => {
   let sandbox;

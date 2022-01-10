@@ -12,7 +12,7 @@ import createHeatMapLegend from './heat-map-legend';
 import createMiniChart from './mini-chart';
 import createHeatMapHighLight from './heat-map-high-light';
 
-export default function createComponents({ context, models, flags, picasso, chart }) {
+export default function createComponents({ context, models, flags, picasso, chart, actions }) {
   const { colorService, disclaimerModel, layoutService, themeService, chartModel, tooltipService } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
 
@@ -35,7 +35,7 @@ export default function createComponents({ context, models, flags, picasso, char
     disclaimer,
     ...createMiniChart({ models, flags }),
     ...tooltipService.getComponents(),
-    createHeatMapHighLight(chartModel),
+    createHeatMapHighLight(chartModel, actions),
   ].filter(Boolean);
   // setDisplayOrder(components);
 
