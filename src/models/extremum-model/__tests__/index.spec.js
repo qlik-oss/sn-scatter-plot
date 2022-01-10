@@ -278,7 +278,35 @@ describe('createExtremumModel', () => {
       });
     });
 
-    it('should return correct extrema when xAxisMin is equal xAxisMax', () => {
+    it('should return correct extrema when minMax from layout service is undefined', () => {
+      layoutService.meta.isSnapshot = true;
+      layoutService.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({});
+
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMin', 0).returns(0.1);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qMax', 1).returns(601);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMin', 0).returns(-321);
+      layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qMax', 1).returns(0.9);
+      layoutService.getLayoutValue
+        .withArgs('xAxis')
+        .returns({ autoMinMax: false, minMax: undefined, min: 20, max: 20 });
+      layoutService.getLayoutValue
+        .withArgs('yAxis')
+        .returns({ autoMinMax: false, minMax: 'minMax', min: 0.2, max: 0.8 });
+      layoutService.getHyperCubeValue.withArgs('qDataPages.0.qMatrix', []).returns([]);
+
+      extremumModel = create();
+      result = { ...extremumModel.query.getXExtrema(), ...extremumModel.query.getYExtrema() };
+      expect(result).to.deep.equal({
+        xAxisMin: 20,
+        xAxisMax: 20,
+        yAxisMin: 0.2,
+        yAxisMax: 0.8,
+        xAxisExplicitType: undefined,
+        yAxisExplicitType: 'minMax',
+      });
+    });
+
+    it('should return correct extrema when xAxisMin equals xAxisMax', () => {
       layoutService.meta.isSnapshot = true;
       layoutService.getLayoutValue.withArgs('snapshotData.content.chartData', {}).returns({});
 
