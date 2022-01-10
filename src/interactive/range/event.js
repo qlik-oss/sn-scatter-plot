@@ -49,7 +49,6 @@ const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith
       opts.actions.select.emit('start', eventName);
       this.chart.component(key).emit('rangeStart', e);
       this.started = eventName;
-      this.start = key === 'bin-x-range-brush' ? e.center.x : e.center.y;
     },
     [`${eventName}move`](e) {
       e.preventDefault();

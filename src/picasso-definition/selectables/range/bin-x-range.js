@@ -1,7 +1,7 @@
 import { range } from '../../../interactive';
 import KEYS from '../../../constants/keys';
 
-export default function createXRange({ chart, actions, selectionService, dockService, enableInteraction, chartModel }) {
+export default function createXRange({ chart, actions, selectionService, dockService, enableInteraction }) {
   if (selectionService.getIsDimensionLocked()) {
     return false;
   }
@@ -22,7 +22,6 @@ export default function createXRange({ chart, actions, selectionService, dockSer
         return formatter(datum);
       },
       enableInteraction,
-      chartModel,
     },
     {
       actions,

@@ -31,7 +31,6 @@ export default function createRange({ models, actions, scales, chart }) {
       selectionService,
       dockService,
       chart,
-      chartModel,
       enableInteraction: () => dataHandler.getMeta().isBinnedData,
     }) || EMPTY;
 
