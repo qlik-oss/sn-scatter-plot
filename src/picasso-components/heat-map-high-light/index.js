@@ -26,38 +26,34 @@ export default {
       ctx.clearRect(0, 0, width, height);
     };
 
-    const handleRangesChange = (ranges) => {
+    const handleXRange = (range) => {
       clearRect();
-      if (ranges.length === 1) {
-        const { qMin, qMax } = ranges[0].qRange;
-        const isXRange = ranges[0].qMeasureIx === 0;
-        imageX = isXRange ? Math.abs((qMin - xAxisMin) / (xAxisMax - xAxisMin)) * width : 0;
-        imageWidth = isXRange ? Math.abs((qMax - qMin) / (xAxisMax - xAxisMin)) * width : width;
-        imageY = isXRange ? 0 : Math.abs((yAxisMax - qMax) / (yAxisMax - yAxisMin)) * height;
-        imageHeight = isXRange ? height : Math.abs((qMax - qMin) / (yAxisMax - yAxisMin)) * height;
-      }
+      const min = Math.min(...range);
+      const max = Math.max(...range);
+      imageX = (Math.abs((min - xAxisMin) / (xAxisMax - xAxisMin)) * width).toFixed(2);
+      imageWidth = (Math.abs((max - min) / (xAxisMax - xAxisMin)) * width).toFixed(2);
+      ctx.putImageData(imageData, 0, 0, imageX, imageY, imageWidth, imageHeight);
+    };
 
-      if (ranges.length === 2) {
-        ranges.forEach((r) => {
-          if (r.qMeasureIx === 0) {
-            imageX = Math.abs((r.qRange.qMin - xAxisMin) / (xAxisMax - xAxisMin)) * width;
-            imageWidth = Math.abs((r.qRange.qMax - r.qRange.qMin) / (xAxisMax - xAxisMin)) * width;
-          }
-          if (r.qMeasureIx === 1) {
-            imageY = Math.abs((yAxisMax - r.qRange.qMax) / (yAxisMax - yAxisMin)) * height;
-            imageHeight = Math.abs((r.qRange.qMax - r.qRange.qMin) / (yAxisMax - yAxisMin)) * height;
-          }
-        });
-      }
-
+    const handleYRange = (range) => {
+      clearRect();
+      const min = Math.min(...range);
+      const max = Math.max(...range);
+      imageY = (Math.abs((yAxisMax - max) / (yAxisMax - yAxisMin)) * height).toFixed(2);
+      imageHeight = (Math.abs((max - min) / (yAxisMax - yAxisMin)) * height).toFixed(2);
       ctx.putImageData(imageData, 0, 0, imageX, imageY, imageWidth, imageHeight);
     };
 
     const handleSelectionClear = () => {
       clearRect();
+      imageX = 0;
+      imageY = 0;
+      imageWidth = width;
+      imageHeight = height;
     };
 
-    actions.select.on('binsRangeSelection', handleRangesChange);
+    actions.select.on('binsXRange', handleXRange);
+    actions.select.on('binsYRange', handleYRange);
     actions.select.on('binsRangeSelectionClear', handleSelectionClear);
   },
 };

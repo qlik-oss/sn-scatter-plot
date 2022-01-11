@@ -30,7 +30,7 @@ export default function createService({ chart, actions, selections }) {
         if (layout.qHyperCube.qDataPages.length) {
           return picassoQ.selections(brush, qBrushOptions, layout);
         }
-        return qBrush(brush, qBrushOptions, layout, actions);
+        return qBrush(brush, qBrushOptions, layout);
       },
     },
   });
