@@ -19,6 +19,11 @@ describe('selection-service', () => {
       [['**/dist/picasso-q.js', () => ({ selections: picassoQSelections })]],
       ['../index.js']
     )[0].default;
+    actions = {
+      select: {
+        emit: sandbox.stub(),
+      },
+    };
     create = () => createSelectionService({ chart, actions, selections });
   });
 
@@ -64,10 +69,11 @@ describe('selection-service', () => {
           expect(clearLegend).to.have.been.calledOnce;
         });
 
-        it('should call clearMinor twice if cleared is true', () => {
+        it('should call clearMinor four times if cleared is true', () => {
           cleared = true;
           getConfig().selectionActions.clear({ clearMinor, clearLegend, selectionInfo, cleared });
-          expect(clearMinor).to.have.been.calledTwice;
+          expect(clearMinor.callCount).to.equal(4);
+          expect(actions.select.emit).to.have.been.calledWith('binsRangeSelectionClear');
         });
 
         it('should not call clearMinor cleared is false and xRange is being selected', () => {

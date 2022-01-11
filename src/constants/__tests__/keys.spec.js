@@ -35,6 +35,7 @@ describe('keys', () => {
       'LEGEND_HEAT_MAP',
       'HEAT_MAP_TOOLTIP',
       'HEAT_MAP_LABELS',
+      'HEAT_MAP_HIGHLIGHT',
       'MINI_CHART_BACKGROUND',
       'MINI_CHART_NAVIGATION',
       'MINI_CHART_POINT',
