@@ -7,7 +7,7 @@ export default {
   render() {
     const { element } = this.chart;
     const heatMapCanvas = element.querySelector(`[data-key=${KEYS.COMPONENT.HEAT_MAP}]`);
-    const heatMapHighlightCanvas = element.querySelector(`[data-key=${KEYS.COMPONENT.HEAT_MAP_HIGH_LIGHT}]`);
+    const heatMapHighlightCanvas = element.querySelector(`[data-key=${KEYS.COMPONENT.HEAT_MAP_HIGHLIGHT}]`);
     const { width, height } = this.rect;
     let imageX = 0;
     let imageY = 0;

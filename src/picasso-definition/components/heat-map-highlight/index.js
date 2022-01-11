@@ -5,8 +5,8 @@ export default function createHeatMapHighLight(chartModel, actions) {
   const viewHandler = chartModel.query.getViewHandler();
 
   return {
-    key: KEYS.COMPONENT.HEAT_MAP_HIGH_LIGHT,
-    type: 'heat-map-high-light',
+    key: KEYS.COMPONENT.HEAT_MAP_HIGHLIGHT,
+    type: 'heat-map-highlight',
     show: () => dataHandler.getMeta().isBinnedData,
     settings: {
       actions,
