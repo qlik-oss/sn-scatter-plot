@@ -1,4 +1,5 @@
 import KEYS from '../../constants/keys';
+import getImageData from './extract-image-data';
 
 export default {
   require: ['renderer', 'chart'],
@@ -9,12 +10,13 @@ export default {
     const heatMapCanvas = element.querySelector(`[data-key=${KEYS.COMPONENT.HEAT_MAP}]`);
     const heatMapHighlightCanvas = element.querySelector(`[data-key=${KEYS.COMPONENT.HEAT_MAP_HIGHLIGHT}]`);
     const { width, height } = this.rect;
-    let imageX = 0;
-    let imageY = 0;
-    let imageWidth = width;
-    let imageHeight = height;
+    const dirtyImageData = {
+      x: 0,
+      y: 0,
+      w: width,
+      h: height,
+    };
     const { actions, dataView } = this.settings.settings;
-    const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = dataView();
     const imageData = heatMapCanvas.getContext('2d').getImageData(0, 0, heatMapCanvas.width, heatMapCanvas.height);
     const pixels = imageData.data;
     for (let i = 3, n = heatMapCanvas.width * heatMapCanvas.height * 4; i < n; i += 4) {
@@ -22,34 +24,30 @@ export default {
     }
     const ctx = heatMapHighlightCanvas.getContext('2d');
 
-    const clearRect = () => {
+    const updateImageData = (range, axis) => {
       ctx.clearRect(0, 0, width, height);
+      const { x, y, w, h } = getImageData(range, axis, dataView, dirtyImageData, width, height);
+      dirtyImageData.x = x;
+      dirtyImageData.y = y;
+      dirtyImageData.w = w;
+      dirtyImageData.h = h;
+      ctx.putImageData(imageData, 0, 0, x, y, w, h);
     };
 
     const handleXRange = (range) => {
-      clearRect();
-      const min = Math.min(...range);
-      const max = Math.max(...range);
-      imageX = (Math.abs((min - xAxisMin) / (xAxisMax - xAxisMin)) * width).toFixed(2);
-      imageWidth = (Math.abs((max - min) / (xAxisMax - xAxisMin)) * width).toFixed(2);
-      ctx.putImageData(imageData, 0, 0, imageX, imageY, imageWidth, imageHeight);
+      updateImageData(range, 'x');
     };
 
     const handleYRange = (range) => {
-      clearRect();
-      const min = Math.min(...range);
-      const max = Math.max(...range);
-      imageY = (Math.abs((yAxisMax - max) / (yAxisMax - yAxisMin)) * height).toFixed(2);
-      imageHeight = (Math.abs((max - min) / (yAxisMax - yAxisMin)) * height).toFixed(2);
-      ctx.putImageData(imageData, 0, 0, imageX, imageY, imageWidth, imageHeight);
+      updateImageData(range, 'y');
     };
 
     const handleSelectionClear = () => {
-      clearRect();
-      imageX = 0;
-      imageY = 0;
-      imageWidth = width;
-      imageHeight = height;
+      ctx.clearRect(0, 0, width, height);
+      dirtyImageData.x = 0;
+      dirtyImageData.y = 0;
+      dirtyImageData.w = width;
+      dirtyImageData.h = height;
     };
 
     actions.select.on('binsXRange', handleXRange);
