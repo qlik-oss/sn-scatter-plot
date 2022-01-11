@@ -139,8 +139,10 @@ describe('bin-y-Range', () => {
       expect(
         config.toLabel({
           datum: 2,
+          data: [3, 10.6],
         })
       ).to.equal('2-formatted');
+      expect(actions.select.emit.withArgs('binsYRange', [3, 10.6])).to.have.been.calledOnce;
     });
 
     it('should have correct enableInteraction', () => {

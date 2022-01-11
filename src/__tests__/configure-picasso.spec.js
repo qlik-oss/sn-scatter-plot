@@ -1,5 +1,6 @@
 import * as renderer from '../picasso-components/react-components/react-renderer';
 import * as disclaimer from '../picasso-components/react-components/disclaimer';
+import * as dataTitle from '../picasso-components/react-components/data-title-component';
 
 describe('configure-picasso', () => {
   let sandbox;
@@ -21,6 +22,8 @@ describe('configure-picasso', () => {
     renderer.default.returns('renderer');
     sandbox.stub(disclaimer, 'default');
     disclaimer.default.returns('disclaimer');
+    sandbox.stub(dataTitle, 'default');
+    dataTitle.default.returns('dataTitle');
     configurePicasso = aw.mock(
       [
         ['**/dist/picasso.js', () => createPicassoJS],
@@ -30,6 +33,7 @@ describe('configure-picasso', () => {
         ['**/picasso-components/ref-line-labels/index.js', () => 'refLineLabelsComponent'],
         ['**/picasso-components/point-label/index.js', () => 'pointLabelComponent'],
         ['**/picasso-components/mini-chart-window/index.js', () => 'miniChartWindow'],
+        ['**/picasso-components/heat-map-highlight/index.js', () => 'heatMapHighlight'],
       ],
       ['../configure-picasso']
     )[0].default;
@@ -65,6 +69,8 @@ describe('configure-picasso', () => {
     expect(picasso.component.getCall(1).calledWith('point-label', 'pointLabelComponent')).to.be.true;
     expect(picasso.component.getCall(2).calledWith('disclaimer', 'disclaimer')).to.be.true;
     expect(picasso.component.getCall(3).calledWith('mini-chart-window', 'miniChartWindow')).to.be.true;
+    expect(picasso.component.getCall(4).calledWith('data-title', 'dataTitle')).to.be.true;
+    expect(picasso.component.getCall(5).calledWith('heat-map-highlight', 'heatMapHighlight')).to.be.true;
   });
 
   it('should return picasso instance', () => {
