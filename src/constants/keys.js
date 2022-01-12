@@ -56,4 +56,10 @@ export default {
     BIN_Y: 'binY',
     BIN_DENSITY: 'binDensity',
   },
+  BRUSH: {
+    X_RANGE: 'x-range-brush',
+    Y_RANGE: 'y-range-brush',
+    BIN_X_RANGE: 'bin-x-range-brush',
+    BIN_Y_RANGE: 'bin-y-range-brush',
+  },
 };

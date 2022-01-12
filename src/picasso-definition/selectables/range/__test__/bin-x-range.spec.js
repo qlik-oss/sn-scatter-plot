@@ -21,6 +21,9 @@ describe('bin-x-Range', () => {
             SCALE: { BIN_X: 'bin-x-scale' },
             COMPONENT: { X_AXIS: 'x-axis-key', HEAT_MAP: 'heat-map-key' },
             FORMATTER: { X: 'x-formatter' },
+            BRUSH: {
+              BIN_X_RANGE: 'bin-x-range-brush',
+            },
           }),
         ],
       ],

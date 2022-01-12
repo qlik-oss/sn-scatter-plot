@@ -2,7 +2,7 @@ import KEYS from '../keys';
 
 describe('keys', () => {
   it('should have correct group properties', () => {
-    expect(KEYS).to.have.all.keys(['DATA', 'SCALE', 'COMPONENT', 'COLLECTION', 'FORMATTER', 'FIELDS']);
+    expect(KEYS).to.have.all.keys(['DATA', 'SCALE', 'COMPONENT', 'COLLECTION', 'FORMATTER', 'FIELDS', 'BRUSH']);
   });
 
   it('should have correct data keys', () => {
@@ -52,5 +52,9 @@ describe('keys', () => {
 
   it('should have correct fields keys', () => {
     expect(KEYS.FIELDS).to.have.all.keys(['DIM', 'X', 'Y', 'SIZE', 'BIN', 'BIN_DENSITY', 'BIN_X', 'BIN_Y']);
+  });
+
+  it('should have correct brush keys', () => {
+    expect(KEYS.BRUSH).to.have.all.keys(['X_RANGE', 'Y_RANGE', 'BIN_X_RANGE', 'BIN_Y_RANGE']);
   });
 });

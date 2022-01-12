@@ -9,7 +9,7 @@ export default function createYRange({ actions, selectionService, dockService, e
   return range(
     {
       eventName: 'yRange',
-      key: 'y-range-brush',
+      key: KEYS.BRUSH.Y_RANGE,
       targets: [KEYS.COMPONENT.Y_AXIS, KEYS.COMPONENT.POINT],
       fillTargets: [KEYS.COMPONENT.Y_AXIS],
       dock: dockService.meta.y.dock,

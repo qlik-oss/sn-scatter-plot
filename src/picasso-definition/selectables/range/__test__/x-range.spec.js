@@ -19,6 +19,9 @@ describe('xRange', () => {
           () => ({
             SCALE: { X: 'x-scale' },
             COMPONENT: { X_AXIS: 'x-axis-key', POINT: 'point-key' },
+            BRUSH: {
+              X_RANGE: 'x-range-brush',
+            },
           }),
         ],
       ],
