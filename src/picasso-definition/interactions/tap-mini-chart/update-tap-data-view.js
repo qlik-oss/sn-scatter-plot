@@ -1,6 +1,6 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
-import getTapPosition from './get-tap-position';
+import getTapPosition from './tap-position';
 
 const { RATIO } = NUMBERS.MINI_CHART;
 
