@@ -23,6 +23,7 @@ export default {
       pixels[i] = pixels[i] === 0 ? 0 : 255;
     }
     const ctx = heatMapHighlightCanvas.getContext('2d');
+    ctx.clearRect(0, 0, width, height);
 
     const updateImageData = (range, axis) => {
       ctx.clearRect(0, 0, width, height);
