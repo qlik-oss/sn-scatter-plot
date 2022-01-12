@@ -75,12 +75,30 @@ describe('component', () => {
       expect(create()).to.deep.equal([]);
     });
 
-    it.skip('should return correct labels, rects, and lines', () => {
+    it('should return correct labels, rects, and lines', () => {
       component.chart.findShapes.withArgs('path').returns([]);
       component.chart.findShapes.withArgs('circle').returns([{ key: 'pc' }]);
       helper.getLabels.returns({
-        topLabels: [{ text: 'top label 1', cx: 0, topRect: { x1: 2, y1: 3, y2: 1 }, textWidth: 10 }],
-        bottomLabels: [{ text: 'bottom label 1', cx: 10, bottomRect: { x1: 12, y1: 13, y2: 11 }, textWidth: 110 }],
+        topLabels: [
+          {
+            text: 'top label 1',
+            cx: 0,
+            topRect: { x1: 2, y1: 3, y2: 1 },
+            textWidth: 10,
+            pointValue: 0,
+            ellipsed: 'top label 1',
+          },
+        ],
+        bottomLabels: [
+          {
+            text: 'bottom label 1',
+            cx: 10,
+            bottomRect: { x1: 12, y1: 13, y2: 11 },
+            textWidth: 110,
+            pointValue: 1,
+            ellipsed: 'bottom label 1',
+          },
+        ],
       });
       expect(create()).to.deep.equal([
         {
@@ -90,6 +108,7 @@ describe('component', () => {
           width: 10,
           height: 8,
           fill: 'white',
+          pointValue: 0,
         },
         {
           type: 'rect',
@@ -98,6 +117,7 @@ describe('component', () => {
           width: 110,
           height: 8,
           fill: 'white',
+          pointValue: 1,
         },
         {
           type: 'text',
@@ -109,6 +129,7 @@ describe('component', () => {
           fill: 'red',
           baseline: 'text-after-edge',
           anchor: 'middle',
+          pointValue: 0,
         },
         {
           type: 'text',
@@ -120,6 +141,7 @@ describe('component', () => {
           fill: 'red',
           baseline: 'text-before-edge',
           anchor: 'middle',
+          pointValue: 1,
         },
         {
           type: 'line',
@@ -129,6 +151,7 @@ describe('component', () => {
           y2: 3,
           stroke: 'red',
           strokeWidth: 1,
+          pointValue: 0,
         },
         {
           type: 'line',
@@ -138,6 +161,7 @@ describe('component', () => {
           y2: 13,
           stroke: 'red',
           strokeWidth: 1,
+          pointValue: 1,
         },
       ]);
     });

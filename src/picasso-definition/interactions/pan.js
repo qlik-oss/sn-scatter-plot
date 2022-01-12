@@ -1,6 +1,6 @@
 import KEYS from '../../constants/keys';
 import NUMBERS from '../../constants/numbers';
-import getTapPosition from './tap-mini-chart/get-tap-position';
+import getTapPosition from './tap-mini-chart/tap-position';
 import updateTapDataView from './tap-mini-chart/update-tap-data-view';
 
 const threshold = 10;

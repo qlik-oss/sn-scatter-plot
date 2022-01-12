@@ -1,6 +1,6 @@
 import extend from 'extend';
 import KEYS from '../../../constants/keys';
-import * as zoom from '../../../utils/math/zoom';
+import * as zoom from '../../../view-handler/zoom';
 import pinch from '../pinch';
 
 describe('pinch', () => {

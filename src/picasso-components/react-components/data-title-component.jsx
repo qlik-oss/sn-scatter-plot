@@ -200,7 +200,7 @@ export default function createDataTitileComp() {
           title={b}
         >
           <span style={textStyle}>{b}</span>
-          <SVGIcon {...ICONS.TRIANGLERIGHT} size="small" style={{ margin: '0 8px' }} />
+          <SVGIcon {...ICONS.TRIANGLE_RIGHT} size="small" style={{ margin: '0 8px' }} />
         </FadeButton>
       ));
 
@@ -263,7 +263,7 @@ export default function createDataTitileComp() {
           <span style={textStyle} dir={dir}>
             {titleData.text}
           </span>
-          {popover && <SVGIcon {...ICONS.TRIANGLEDOWN} size="small" style={{ margin: '0 8px' }} />}
+          {popover && <SVGIcon {...ICONS.TRIANGLE_DOWN} size="small" style={{ margin: '0 8px' }} />}
         </FadeButton>
       );
 
@@ -271,7 +271,7 @@ export default function createDataTitileComp() {
         <>
           {titleData.drilldown && (
             <SVGIcon
-              {...ICONS.DRIILLDOWN}
+              {...ICONS.DRILL_DOWN}
               size="small"
               title={translator.get('Tooltip.dimensions.drilldown')}
               style={{ margin: '0 4px 0 0' }}

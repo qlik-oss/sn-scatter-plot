@@ -1,5 +1,5 @@
 import KEYS from '../../constants/keys';
-import zoom from '../../utils/math/zoom';
+import zoom from '../../view-handler/zoom';
 
 export default function native({ chart, actions, viewHandler }) {
   function scrollLegend(e, comp) {

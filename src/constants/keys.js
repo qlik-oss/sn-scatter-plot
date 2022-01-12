@@ -37,6 +37,7 @@ export default {
     MINI_CHART_NAVIGATION: 'mini-chart-navigation-rect',
     MINI_CHART_POINT: 'mini-chart-points',
     OUT_OF_BOUNDS: 'out-of-bounds',
+    NAVIGATION_PANEL: 'navigation-panel',
   },
   COLLECTION: {
     MAIN: 'main-collection',
@@ -62,4 +63,5 @@ export default {
     BIN_X_RANGE: 'bin-x-range-brush',
     BIN_Y_RANGE: 'bin-y-range-brush',
   },
+  REJECTION_TOKEN: 'rejected',
 };

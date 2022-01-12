@@ -1,21 +1,16 @@
-import tap from '..';
-import * as updateTapDataView from '../update-tap-data-view';
-import * as getTapPosition from '../tap-position';
+import tap from '../tap-navigation-panel';
 
 describe('tap', () => {
   let sandbox;
   let create;
   const eventName = 'tap';
-  let viewHandler;
   let e;
   let tapObject;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    sandbox.stub(updateTapDataView, 'default');
-    sandbox.stub(getTapPosition, 'default');
-    e = { preventDefault: sandbox.stub() };
-    create = () => tap({ eventName, viewHandler });
+    e = { target: { tagName: 'I' } };
+    create = () => tap({ eventName });
     tapObject = create();
   });
 
@@ -38,24 +33,14 @@ describe('tap', () => {
         expect(tapObject.options.enable(1, e)).to.equal(true);
       });
 
-      it('should return true if e is not undefined and the tap is in miniChart', () => {
-        e = 'event';
-        getTapPosition.default.returns({ x: 1, y: 2 });
+      it('should return true if e is not undefined and the target is an icon', () => {
         expect(tapObject.options.enable(1, e)).to.equal(true);
       });
 
-      it('should return false if e is not undefined but the tap is not in miniChart', () => {
-        e = 'event';
-        getTapPosition.default.returns(null);
+      it('should return false if e is not undefined but the target is not an icon', () => {
+        e = { target: { tagName: 'L' } };
         expect(tapObject.options.enable(1, e)).to.equal(false);
       });
-    });
-  });
-
-  describe('event', () => {
-    it('should call updateTapDataView', () => {
-      tapObject.events.tap(e);
-      expect(updateTapDataView.default).to.have.been.calledOnce;
     });
   });
 });

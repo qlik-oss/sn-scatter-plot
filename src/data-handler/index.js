@@ -1,3 +1,4 @@
+import KEYS from '../constants/keys';
 import createDataFetcher from './data-fetcher';
 import createBinnedDataFetcher from './binned-data-fetcher';
 
@@ -6,7 +7,6 @@ export default function createDataHandler({ layoutService, model, extremumModel,
   const binnedDataFetcher = createBinnedDataFetcher({ layoutService, extremumModel, model });
   const meta = {};
   let requestInProgress;
-  let nextInLine;
   let binArrayCache;
 
   const dataHandler = {
@@ -24,17 +24,6 @@ export default function createDataHandler({ layoutService, model, extremumModel,
       return binnedDataFetcher.maxBinDensity;
     },
     fetch() {
-      // TODO: To improve performance further - introduce debouncer to avoid
-      // fetching data too often during interaction (pan/zoom).
-      if (requestInProgress) {
-        return new Promise((resolve, reject) => {
-          if (nextInLine) {
-            nextInLine.reject();
-          }
-          nextInLine = { resolve, reject };
-        });
-      }
-
       if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
         requestInProgress = binnedDataFetcher.fetch();
       } else {
@@ -43,15 +32,13 @@ export default function createDataHandler({ layoutService, model, extremumModel,
 
       requestInProgress
         .then(() => {
-          requestInProgress = null;
           meta.isBinnedData = !layoutService.getDataPages().length;
-          if (nextInLine) {
-            const tempRef = nextInLine;
-            nextInLine = null;
-            tempRef.resolve(dataHandler.fetch());
-          }
         })
-        .catch(() => {});
+        .catch((e) => {
+          if (e !== KEYS.REJECTION_TOKEN) {
+            throw e;
+          }
+        });
 
       return requestInProgress;
     },

@@ -29,6 +29,7 @@ describe('createDataHandler', () => {
       meta: {
         isBigData: false,
       },
+      getDataPages: sandbox.stub().returns([]),
     };
     flags = { isEnabled: sandbox.stub().returns(false) };
     create = () => createDataHandler({ layoutService, model, extremumModel, flags });

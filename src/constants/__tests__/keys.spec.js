@@ -2,7 +2,16 @@ import KEYS from '../keys';
 
 describe('keys', () => {
   it('should have correct group properties', () => {
-    expect(KEYS).to.have.all.keys(['DATA', 'SCALE', 'COMPONENT', 'COLLECTION', 'FORMATTER', 'FIELDS', 'BRUSH']);
+    expect(KEYS).to.have.all.keys([
+      'DATA',
+      'SCALE',
+      'COMPONENT',
+      'COLLECTION',
+      'FORMATTER',
+      'FIELDS',
+      'BRUSH',
+      'REJECTION_TOKEN',
+    ]);
   });
 
   it('should have correct data keys', () => {
@@ -39,6 +48,7 @@ describe('keys', () => {
       'MINI_CHART_BACKGROUND',
       'MINI_CHART_NAVIGATION',
       'MINI_CHART_POINT',
+      'NAVIGATION_PANEL',
     ]);
   });
 
