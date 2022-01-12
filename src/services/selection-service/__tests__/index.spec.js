@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import * as chartModules from 'qlik-chart-modules';
 import * as qBrush from '../bin-selection/q-brush';
+import * as KEYS from '../../../constants/keys';
 
 describe('selection-service', () => {
   let sandbox;
@@ -24,6 +25,15 @@ describe('selection-service', () => {
         emit: sandbox.stub(),
       },
     };
+    sandbox.stub(KEYS, 'default').value({
+      COMPONENT: { HEAT_MAP_HIGHLIGHT: 'heat-map-highlight' },
+      BRUSH: {
+        X_RANGE: 'x-range-brush',
+        Y_RANGE: 'y-range-brush',
+        BIN_X_RANGE: 'bin-x-range-brush',
+        BIN_Y_RANGE: 'bin-y-range-brush',
+      },
+    });
     create = () => createSelectionService({ chart, actions, selections });
   });
 
@@ -69,11 +79,80 @@ describe('selection-service', () => {
           expect(clearLegend).to.have.been.calledOnce;
         });
 
-        it('should call clearMinor four times if cleared is true', () => {
-          cleared = true;
-          getConfig().selectionActions.clear({ clearMinor, clearLegend, selectionInfo, cleared });
-          expect(clearMinor.callCount).to.equal(4);
-          expect(actions.select.emit).to.have.been.calledWith('binsRangeSelectionClear');
+        describe('cleared is true', () => {
+          it('should call clearMinor four times and not emit event when is normal data', () => {
+            cleared = true;
+            selectionInfo = { event: 'xRange', components: ['point'] };
+            getConfig().selectionActions.clear({ clearMinor, clearLegend, selectionInfo, cleared });
+            expect(clearMinor.callCount).to.equal(4);
+            expect(clearMinor).to.have.been.calledWith({ eventName: 'xRange', componentName: 'x-range-brush' });
+            expect(clearMinor).to.have.been.calledWith({ eventName: 'yRange', componentName: 'y-range-brush' });
+            expect(clearMinor).to.have.been.calledWith({
+              eventName: 'binXRange',
+              componentName: 'bin-x-range-brush',
+            });
+            expect(clearMinor).to.have.been.calledWith({
+              eventName: 'binYRange',
+              componentName: 'bin-y-range-brush',
+            });
+            expect(actions.select.emit).to.not.have.been.called;
+          });
+
+          it('should call clearMinor four times and emit event when is bin data', () => {
+            cleared = true;
+            selectionInfo = { event: 'xRange', components: ['heat-map-highlight'] };
+            getConfig().selectionActions.clear({ clearMinor, clearLegend, selectionInfo, cleared });
+            expect(clearMinor.callCount).to.equal(4);
+            expect(clearMinor).to.have.been.calledWith({ eventName: 'xRange', componentName: 'x-range-brush' });
+            expect(clearMinor).to.have.been.calledWith({ eventName: 'yRange', componentName: 'y-range-brush' });
+            expect(clearMinor).to.have.been.calledWith({
+              eventName: 'binXRange',
+              componentName: 'bin-x-range-brush',
+            });
+            expect(clearMinor).to.have.been.calledWith({
+              eventName: 'binYRange',
+              componentName: 'bin-y-range-brush',
+            });
+            expect(actions.select.emit).to.have.been.calledWith('binsRangeSelectionClear');
+          });
+        });
+
+        describe('isSelectingRanges is false', () => {
+          it('should call clearMinor four times and not emit event when is normal data', () => {
+            cleared = true;
+            selectionInfo = { event: 'range', components: ['point'] };
+            getConfig().selectionActions.clear({ clearMinor, clearLegend, selectionInfo, cleared });
+            expect(clearMinor.callCount).to.equal(4);
+            expect(clearMinor).to.have.been.calledWith({ eventName: 'xRange', componentName: 'x-range-brush' });
+            expect(clearMinor).to.have.been.calledWith({ eventName: 'yRange', componentName: 'y-range-brush' });
+            expect(clearMinor).to.have.been.calledWith({
+              eventName: 'binXRange',
+              componentName: 'bin-x-range-brush',
+            });
+            expect(clearMinor).to.have.been.calledWith({
+              eventName: 'binYRange',
+              componentName: 'bin-y-range-brush',
+            });
+            expect(actions.select.emit).to.not.have.been.called;
+          });
+
+          it('should call clearMinor four times and emit event when is bin data', () => {
+            cleared = true;
+            selectionInfo = { event: 'range', components: ['heat-map-highlight'] };
+            getConfig().selectionActions.clear({ clearMinor, clearLegend, selectionInfo, cleared });
+            expect(clearMinor.callCount).to.equal(4);
+            expect(clearMinor).to.have.been.calledWith({ eventName: 'xRange', componentName: 'x-range-brush' });
+            expect(clearMinor).to.have.been.calledWith({ eventName: 'yRange', componentName: 'y-range-brush' });
+            expect(clearMinor).to.have.been.calledWith({
+              eventName: 'binXRange',
+              componentName: 'bin-x-range-brush',
+            });
+            expect(clearMinor).to.have.been.calledWith({
+              eventName: 'binYRange',
+              componentName: 'bin-y-range-brush',
+            });
+            expect(actions.select.emit).to.have.been.calledWith('binsRangeSelectionClear');
+          });
         });
 
         it('should not call clearMinor cleared is false and xRange is being selected', () => {
