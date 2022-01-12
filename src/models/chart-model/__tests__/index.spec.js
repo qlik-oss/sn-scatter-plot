@@ -351,16 +351,17 @@ describe('chart-model', () => {
         });
       });
 
-      it('should not trigger chart.update if data fetching fails', async () => {
+      it('should trigger chart.update even if data fetching fails', async () => {
         sandbox.useFakeTimers();
         const { clock } = sandbox;
         dataHandler.fetch = sandbox.stub().rejects();
+        dataHandler.getHomeStateBins.returns([]);
         create();
 
         await viewState.dataView();
         await clock.tick(50);
 
-        expect(chart.update).to.not.have.been.called;
+        expect(chart.update).to.have.been.called;
       });
     });
   });
