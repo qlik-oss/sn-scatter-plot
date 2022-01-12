@@ -1,3 +1,4 @@
+import * as KEYS from '../../../constants/keys';
 import createChartModel from '..';
 import * as createViewHandler from '../../../view-handler';
 
@@ -20,7 +21,9 @@ describe('chart-model', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    global.requestAnimationFrame = (cb) => setTimeout(cb, 20);
+    global.requestAnimationFrame = (cb) => {
+      cb();
+    };
     dataPages = [
       { qElemNumber: 7954, qNum: 1, qState: 'L', qText: [1732, 6, 1765, 5] },
       { qElemNumber: 7946, qNum: 1, qState: 'L', qText: [1599, 5, 1632, 4] },
@@ -28,11 +31,13 @@ describe('chart-model', () => {
     viewHandler = {
       getMeta: sandbox.stub().returns('isHomeState'),
       getInteractionInProgress: sandbox.stub(),
+      getDataView: sandbox.stub(),
     };
     dataHandler = {
       getMeta: sandbox.stub().returns({ isBinnedData: false }),
       binArray: () => dataPages,
       fetch: () => Promise.resolve({ isBinnedData: true }),
+      getHomeStateBins: sandbox.stub(),
     };
     sandbox.stub(createViewHandler, 'default').returns(viewHandler);
     viewState = {
@@ -46,10 +51,17 @@ describe('chart-model', () => {
         this[key] = cb;
       },
     };
+    sandbox.stub(KEYS, 'default').value({
+      COMPONENT: { MINI_CHART_POINT: 'mcp', X_AXIS_TITLE: 'xat', Y_AXIS_TITLE: 'yat' },
+      DATA: { MAIN: 'dm', BIN: 'db' },
+      FIELDS: { BIN: 'fb', BIN_X: 'fbx', BIN_Y: 'fby', BIN_DENSITY: 'fbd' },
+    });
     chart = {
       update: sandbox.stub(),
       layoutComponents: sandbox.stub(),
+      component: sandbox.stub(),
     };
+    chart.component.withArgs('mcp').returns('mini-chart-component');
     localeInfo = { key: 'locale-info' };
     hyperCube = {
       dataPages: [{ key: 'page-0' }, { key: 'page-1' }],
@@ -91,7 +103,7 @@ describe('chart-model', () => {
   it('should prepare dataset properly', () => {
     create();
     expect(picassoDataFn).to.have.been.calledWith({
-      key: 'qHyperCube',
+      key: 'dm',
       data: hyperCube,
       config: {
         localeInfo,
@@ -121,6 +133,12 @@ describe('chart-model', () => {
     describe('getViewHandler', () => {
       it('should return correct view handler object', () => {
         expect(create().query.getViewHandler().getMeta()).to.equal('isHomeState');
+      });
+    });
+
+    describe('getDataHandler', () => {
+      it('should return correct data handler object', () => {
+        expect(create().query.getDataHandler()).to.have.all.keys(['getMeta', 'binArray', 'fetch', 'getHomeStateBins']);
       });
     });
 
@@ -177,7 +195,7 @@ describe('chart-model', () => {
 
         expect(chart.layoutComponents).to.have.been.calledOnce;
         expect(argsObject.data).to.be.an('array');
-        expect(argsObject.data[1].key).to.equal('binData');
+        expect(argsObject.data[1].key).to.equal('db');
         expect(argsObject.data[1].type).to.equal('matrix');
         expect(argsObject.data[1].data()).eql(dataPages);
         expect(argsObject.settings).eql({ key: 'settings' });
@@ -207,39 +225,142 @@ describe('chart-model', () => {
 
         expect(chart.update).to.have.been.calledOnce;
         expect(argsObject.data).to.be.an('array');
-        expect(argsObject.data[1].key).to.equal('binData');
+        expect(argsObject.data[1].key).to.equal('db');
         expect(argsObject.data[1].type).to.equal('matrix');
         expect(argsObject.data[1].data()).eql(dataPages);
         expect(argsObject.settings).eql({ key: 'settings' });
       });
+
+      describe('getBinnedDataConfig', () => {
+        describe('the returned object', () => {
+          it('should have correct config.parse.fields function', () => {
+            dataHandler.getMeta.returns({ isBinnedData: true });
+            create().command.update();
+            const binnedDataConfigObject = chart.update.args[0][0].data[1];
+            expect(binnedDataConfigObject.config.parse.fields()).to.deep.equal([
+              {
+                key: 'fb',
+                title: 'Bin',
+              },
+              {
+                key: 'fbx',
+                title: 'X',
+              },
+              {
+                key: 'fby',
+                title: 'Y',
+              },
+              {
+                key: 'fbd',
+                title: 'Density',
+              },
+            ]);
+          });
+
+          it('should have correct config.parse.row function', () => {
+            dataHandler.getMeta.returns({ isBinnedData: true });
+            create().command.update();
+            const binnedDataConfigObject = chart.update.args[0][0].data[1];
+            const d = { qElemNumber: 1, qText: [1, 2, 3, 4], qNum: 5 };
+            expect(binnedDataConfigObject.config.parse.row(d)).to.deep.equal({
+              bin: 1,
+              binX: 2,
+              binY: 3,
+              binDensity: 5,
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('handle dataview update', () => {
+    it('should not fetch data if interaction is in progress', () => {
+      viewHandler.getInteractionInProgress.returns(true);
+      dataHandler.fetch = sandbox.stub();
+      create();
+      viewState.dataView();
+      expect(dataHandler.fetch).to.not.have.been.called;
     });
 
-    describe('partial update', () => {
-      // TODO need to fix this test
-      // Add test case for fully update chart
-      it.skip('should trigger chart.update properly when dataView (viewState) change', async () => {
+    describe('updatePartial', () => {
+      it('should trigger chart.update properly (partial version), when not switching between binned and not binned data, and not toggling mini chart', async () => {
         sandbox.useFakeTimers();
         const { clock } = sandbox;
+        chart.component.withArgs('mcp').returns(false);
         create();
-        viewState.dataView();
+        await viewState.dataView();
         await clock.tick(50);
 
-        expect(
-          chart.update.withArgs({
-            partialData: true,
-            excludeFromUpdate: ['x-axis-title', 'y-axis-title'],
-          })
-        ).to.have.been.calledOnce;
+        expect(chart.update).to.have.been.calledWithExactly({
+          partialData: true,
+          excludeFromUpdate: ['xat', 'yat', 'mcp'],
+        });
       });
     });
 
-    describe('handle dataview update', () => {
-      it('should not fetch data if interaction is in progress', () => {
-        viewHandler.getInteractionInProgress.returns(true);
-        dataHandler.fetch = sandbox.stub();
+    describe('update', () => {
+      it('should trigger chart.update properly (full version), when mini chart is off then on, and on then off', async () => {
+        sandbox.useFakeTimers();
+        const { clock } = sandbox;
+        dataHandler.getHomeStateBins.returns([{ qText: [0, 2, 1, 5] }]);
+        viewHandler.getDataView.returns({ xAxisMin: -1, xAxisMax: 2, yAxisMin: 1, yAxisMax: 4 });
+        createViewHandler.default.returns(viewHandler);
         create();
-        viewState.dataView();
-        expect(dataHandler.fetch).to.not.have.been.called;
+        // off --> on
+        await viewState.dataView();
+        await clock.tick(50);
+
+        expect(chart.update).to.have.been.calledWithExactly({
+          data: [
+            {
+              type: 'q',
+              key: 'dm',
+              data: {
+                dataPages: [{ key: 'page-0' }, { key: 'page-1' }],
+              },
+              config: {
+                localeInfo: { key: 'locale-info' },
+              },
+            },
+            { colorData: 'oh yes' },
+          ],
+          settings: undefined,
+        });
+
+        // on --> off
+        dataHandler.getHomeStateBins.returns([]);
+        await viewState.dataView();
+        await clock.tick(50);
+
+        expect(chart.update).to.have.been.calledWithExactly({
+          data: [
+            {
+              type: 'q',
+              key: 'dm',
+              data: {
+                dataPages: [{ key: 'page-0' }, { key: 'page-1' }],
+              },
+              config: {
+                localeInfo: { key: 'locale-info' },
+              },
+            },
+            { colorData: 'oh yes' },
+          ],
+          settings: undefined,
+        });
+      });
+
+      it('should not trigger chart.update if data fetching fails', async () => {
+        sandbox.useFakeTimers();
+        const { clock } = sandbox;
+        dataHandler.fetch = sandbox.stub().rejects();
+        create();
+
+        await viewState.dataView();
+        await clock.tick(50);
+
+        expect(chart.update).to.not.have.been.called;
       });
     });
   });
