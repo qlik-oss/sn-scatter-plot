@@ -11,6 +11,7 @@ import * as createDisclaimer from '../disclaimer';
 import * as createOutOfBounds from '../out-of-bounds';
 import * as createHeatMapLegend from '../heat-map-legend';
 import * as createMiniChart from '../mini-chart';
+import * as createNavigationPanel from '../navigation-panel';
 import createComponents from '..';
 
 describe('createComponents', () => {
@@ -47,6 +48,7 @@ describe('createComponents', () => {
     sandbox.stub(createHeatMapLegend, 'default').returns('heat-map-legend');
     sandbox.stub(createDisclaimer, 'default').returns('disclaimer');
     sandbox.stub(createMiniChart, 'default').returns(['mini-chart-point', 'mini-chart-background', 'mini-chart-nav']);
+    sandbox.stub(createNavigationPanel, 'default').returns('navigation-panel');
   });
 
   afterEach(() => {
@@ -72,6 +74,7 @@ describe('createComponents', () => {
       'legend-component-2',
       'heat-map-legend',
       'disclaimer',
+      'navigation-panel',
       'mini-chart-point',
       'mini-chart-background',
       'mini-chart-nav',
