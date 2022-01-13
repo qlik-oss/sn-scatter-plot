@@ -10,6 +10,8 @@ describe('out of bounds', () => {
   let create;
   let viewHandler;
   let context;
+  let chart;
+
   const xAxisMin = 55;
   const xAxisMax = 95;
   const yAxisMin = 55;
@@ -39,6 +41,7 @@ describe('out of bounds', () => {
         isBigData: false,
       },
     };
+    chart = { component: sandbox.stub().returns({ rect: { width: 500, height: 500 } }) };
     sandbox.stub(createSizeScale, 'default');
     createSizeScale.default.returns(() => '10px');
     sandbox.stub(KEYS, 'default').get(() => ({
@@ -55,7 +58,7 @@ describe('out of bounds', () => {
     }));
     context = { rtl: false };
     const models = { colorService, chartModel, layoutService };
-    create = () => createOutOfBounds({ models, context });
+    create = () => createOutOfBounds({ models, context, chart });
   });
 
   afterEach(() => sandbox.restore());
