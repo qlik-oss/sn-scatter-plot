@@ -4,7 +4,7 @@ import createSizeScale from '../../scales/size';
 
 const OOB_SPACE = 10;
 
-export default function createOutOfBounds({ models, context }) {
+export default function createOutOfBounds({ models, context, chart }) {
   const { chartModel, colorService, layoutService } = models;
   const viewHandler = chartModel.query.getViewHandler();
   const { rtl } = context;
@@ -30,6 +30,10 @@ export default function createOutOfBounds({ models, context }) {
         data: {
           collection: KEYS.COLLECTION.MAIN,
           filter: (d) => {
+            const size = chart.component(KEYS.COMPONENT.POINT).rect;
+            if (!size) return true;
+            ({ height, width } = size);
+            windowSizeMultiplier = Math.min(height, width) / NUMBERS.WINDOW_SIZE_BASE;
             const pointSize = parseInt(sizeScaleFn(d, windowSizeMultiplier), 10);
             const xBuffer = (pointSize * (xAxisMax - xAxisMin)) / (width * 2);
             const yBuffer = (pointSize * (yAxisMax - yAxisMin)) / (height * 2);
