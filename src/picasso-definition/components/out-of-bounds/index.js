@@ -1,6 +1,6 @@
 import KEYS from '../../../constants/keys';
-import NUMBERS from '../../../constants/numbers';
 import createSizeScale from '../../scales/size';
+import isOob from './is-oob';
 
 const OOB_SPACE = 10;
 
@@ -8,7 +8,6 @@ export default function createOutOfBounds({ models, context, chart }) {
   const { chartModel, colorService, layoutService } = models;
   const viewHandler = chartModel.query.getViewHandler();
   const { rtl } = context;
-  let windowSizeMultiplier;
   const sizeScaleFn = createSizeScale(layoutService);
   const oobPositions = {
     xMin: -0.005,
@@ -16,12 +15,6 @@ export default function createOutOfBounds({ models, context, chart }) {
     yMin: 1.005,
     yMax: -0.005,
   };
-  let xAxisMax;
-  let xAxisMin;
-  let yAxisMax;
-  let yAxisMin;
-  let height;
-  let width;
 
   const oobDefinition = !layoutService.meta.isBigData
     ? {
@@ -29,28 +22,13 @@ export default function createOutOfBounds({ models, context, chart }) {
         type: 'point',
         data: {
           collection: KEYS.COLLECTION.MAIN,
-          filter: (d) => {
-            const size = chart.component(KEYS.COMPONENT.POINT).rect;
-            if (!size) return true;
-            ({ height, width } = size);
-            windowSizeMultiplier = Math.min(height, width) / NUMBERS.WINDOW_SIZE_BASE;
-            const pointSize = parseInt(sizeScaleFn(d, windowSizeMultiplier), 10);
-            const xBuffer = (pointSize * (xAxisMax - xAxisMin)) / (width * 2);
-            const yBuffer = (pointSize * (yAxisMax - yAxisMin)) / (height * 2);
-            // getting axis min/max from viewHandler here as dataView is not initialized
-            ({ xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getDataView());
-            return (
-              d.x.value < xAxisMin - xBuffer ||
-              d.x.value > xAxisMax + xBuffer ||
-              d.y.value < yAxisMin - yBuffer ||
-              d.y.value > yAxisMax + yBuffer
-            );
-          },
+          filter: (nodeData) => isOob({ nodeData, chart, sizeScaleFn, viewHandler }),
         },
         settings: {
           x: {
             scale: KEYS.SCALE.X,
             fn: ({ datum }) => {
+              const { xAxisMin, xAxisMax } = viewHandler.getDataView();
               if (datum.x.value < xAxisMin) {
                 return rtl ? oobPositions.xMax : oobPositions.xMin;
               }
@@ -65,6 +43,7 @@ export default function createOutOfBounds({ models, context, chart }) {
           y: {
             scale: KEYS.SCALE.Y,
             fn: ({ datum }) => {
+              const { yAxisMin, yAxisMax } = viewHandler.getDataView();
               if (datum.y.value < yAxisMin) {
                 return oobPositions.yMin;
               }
@@ -88,9 +67,6 @@ export default function createOutOfBounds({ models, context, chart }) {
           },
         }),
         beforeRender: ({ size }) => {
-          windowSizeMultiplier = Math.min(size.height, size.width) / NUMBERS.WINDOW_SIZE_BASE;
-          ({ height, width } = size);
-
           // can be changed back to 2 * size.h (size.w) if we want to render it in the middle of the oob space;
           // 1.5 * size.h (size.w) to render it near the edge of the oob space like for old scatterplot
           oobPositions.xMin = -OOB_SPACE / (1.5 * size.width);

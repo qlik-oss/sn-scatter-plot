@@ -3,6 +3,8 @@ import createPointLabels from '..';
 
 describe('point-labels', () => {
   let sandbox;
+  let layoutValueStub;
+  let hyperCubeValueStub;
   let layoutService;
   let themeService;
   let labels;
@@ -10,10 +12,22 @@ describe('point-labels', () => {
   let component;
   let chartModel;
   let viewHandler;
+  let models;
+  let chart;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    layoutService = { getLayoutValue: sandbox.stub() };
+    layoutValueStub = sandbox.stub();
+    hyperCubeValueStub = sandbox.stub();
+    hyperCubeValueStub.withArgs('qMeasureInfo.2', {}).returns({ qMin: 1, qMax: 10 });
+    layoutService = {
+      key: 'layout-model',
+      getLayoutValue: layoutValueStub,
+      getHyperCubeValue: hyperCubeValueStub,
+      meta: {
+        hasSizeMeasure: true,
+      },
+    };
     themeService = { getStyles: sandbox.stub() };
     viewHandler = {
       redererSettings: 'renderer-settings',
@@ -21,7 +35,9 @@ describe('point-labels', () => {
       transform: 'transform-function',
     };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
-    create = () => createPointLabels({ layoutService, themeService, chartModel });
+    models = { layoutService, themeService, chartModel };
+    chart = { component: sandbox.stub().returns({ rect: { width: 500, height: 500 } }) };
+    create = () => createPointLabels({ models, chart });
     labels = { mode: 1 };
     layoutService.getLayoutValue.withArgs('labels').returns(labels);
     themeService.getStyles.returns({ label: { value: { fontFamily: 'Sans serif', fontSize: '1px', color: 'red' } } });
@@ -69,7 +85,7 @@ describe('point-labels', () => {
 
     describe('settings', () => {
       it('should have correct properties', () => {
-        expect(create().settings).to.have.all.keys(['label', 'mode']);
+        expect(create().settings).to.have.all.keys(['label', 'mode', 'showLabel']);
       });
 
       describe('label', () => {

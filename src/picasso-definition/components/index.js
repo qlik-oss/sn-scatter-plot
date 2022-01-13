@@ -28,7 +28,7 @@ export default function createComponents({ context, models, flags, picasso, char
     createHeatMap(chartModel),
     ...createAxes({ models, flags }),
     ...createAxisTitles({ models, context }),
-    createPointLabels(models),
+    createPointLabels({ models, chart }),
     createHeatMapLabels({ themeService, chartModel, picasso, context }),
     createOutOfBounds({ models, context, chart }),
     ...colorService.custom.legendComponents(),
