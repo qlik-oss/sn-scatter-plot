@@ -70,7 +70,6 @@ describe('createComponents', () => {
       'axis-title-x',
       'axis-title-y',
       'point-labels',
-      'heat-map-labels',
       'oobs',
       'legend-component-1',
       'legend-component-2',
@@ -83,6 +82,7 @@ describe('createComponents', () => {
       'tooltip-1',
       'tooltip-2',
       'heat-map-highlight',
+      'heat-map-labels',
     ]);
   });
 

@@ -30,7 +30,6 @@ export default function createComponents({ context, models, flags, picasso, char
     ...createAxes({ models, flags }),
     ...createAxisTitles({ models, context }),
     createPointLabels({ models, chart }),
-    createHeatMapLabels({ themeService, chartModel, picasso, context }),
     createOutOfBounds({ models, context, chart }),
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
@@ -39,6 +38,7 @@ export default function createComponents({ context, models, flags, picasso, char
     ...createMiniChart({ models, flags }),
     ...tooltipService.getComponents(),
     createHeatMapHighLight(chartModel, actions),
+    createHeatMapLabels({ themeService, chartModel, picasso, context }),
   ].filter(Boolean);
   // setDisplayOrder(components);
 
