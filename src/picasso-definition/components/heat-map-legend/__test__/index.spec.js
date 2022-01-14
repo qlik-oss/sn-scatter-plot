@@ -41,7 +41,10 @@ describe('heat-map-legend', () => {
     };
     context = {
       theme: {
-        getStyle: sandbox.stub().returns({ title: { fontSize: '12px', color: '#000000' } }),
+        getStyle: sandbox.stub().returns({
+          title: { fontSize: '12px', color: '#000000' },
+          label: { fontSize: '12px', color: '#000000' },
+        }),
       },
       rtl: false,
       translator: {
@@ -153,6 +156,14 @@ describe('heat-map-legend', () => {
 
         it('should have correct fontFamily', () => {
           expect(create().settings.tick.fontFamily).to.equal('Sans serif');
+        });
+
+        it('should have correct fontSize', () => {
+          expect(create().settings.title.fontSize).to.equal('12px');
+        });
+
+        it('should have correct fill', () => {
+          expect(create().settings.title.fill).to.equal('#000000');
         });
       });
     });

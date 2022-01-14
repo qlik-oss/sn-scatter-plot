@@ -6,8 +6,12 @@ const heatMapLegend = ({ models, context, chart }) => {
   const dataHandler = chartModel.query.getDataHandler();
   const { translator, rtl, theme } = context;
   const { fontFamily } = themeService.getStyles().axis.label.name;
-  const legendStyle = theme.getStyle('object', '', 'legend')?.title || {
+  const titleStyle = theme.getStyle('object', '', 'legend')?.title || {
     fontSize: '15px',
+    color: '#595959',
+  };
+  const labelStyle = theme.getStyle('object', '', 'legend')?.label || {
+    fontSize: '13px',
     color: '#595959',
   };
   const {
@@ -31,8 +35,8 @@ const heatMapLegend = ({ models, context, chart }) => {
       title: {
         text: translator.get(`properties.compression.density`),
         fontFamily,
-        fontSize: legendStyle.fontSize,
-        fill: legendStyle.color,
+        fontSize: titleStyle.fontSize,
+        fill: titleStyle.color,
         padding: 10,
         anchor: (dock === 'top' || dock === 'bottom') && rtl ? 'right' : 'left',
         show: showTitle,
@@ -44,6 +48,8 @@ const heatMapLegend = ({ models, context, chart }) => {
           return density[index % 2];
         },
         fontFamily,
+        fontSize: labelStyle.fontSize,
+        fill: labelStyle.color,
       },
     },
     show: () => showLegend && dataHandler.getMeta().isBinnedData,
