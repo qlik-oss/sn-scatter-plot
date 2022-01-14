@@ -8,7 +8,7 @@ const heatMapLegend = ({ models, context, chart }) => {
   const { fontFamily } = themeService.getStyles().axis.label.name;
   const titleStyle = theme.getStyle('object', '', 'legend')?.title || {
     fontSize: '15px',
-    color: '#595959',
+    color: '#333333',
   };
   const labelStyle = theme.getStyle('object', '', 'legend')?.label || {
     fontSize: '13px',
