@@ -18,7 +18,7 @@ export default function createService({ chart, actions, selections }) {
           if (selectionInfo.event === 'binXRange' || selectionInfo.event === 'binYRange') {
             const brush = chart.brush('selection');
             const brushArray = brush.brushes();
-            if (actions?.select?.emit) {
+            if (brushArray?.length && actions?.select?.emit) {
               actions.select.emit(selectionInfo.event, brushArray[brushArray.length - 1].brush.ranges()[0]);
             }
           }
