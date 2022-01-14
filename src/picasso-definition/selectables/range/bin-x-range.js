@@ -17,9 +17,8 @@ export default function createXRange({ chart, actions, selectionService, dockSer
       onEdited() {
         actions.select.emit('end', 'binXRange');
       },
-      toLabel({ datum, data }) {
+      toLabel({ datum }) {
         const formatter = chart.formatter(KEYS.FORMATTER.X);
-        actions.select.emit('binsXRange', data);
         return formatter(datum);
       },
       enableInteraction,

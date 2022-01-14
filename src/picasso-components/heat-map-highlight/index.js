@@ -54,8 +54,8 @@ export default {
       dirtyImageData.h = height;
     };
 
-    actions.select.on('binsXRange', handleXRange);
-    actions.select.on('binsYRange', handleYRange);
+    actions.select.on('binXRange', handleXRange);
+    actions.select.on('binYRange', handleYRange);
     actions.select.on('binsRangeSelectionClear', handleSelectionClear);
   },
 };

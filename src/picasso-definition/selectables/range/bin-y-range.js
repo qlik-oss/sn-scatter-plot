@@ -17,9 +17,8 @@ export default function createYRange({ actions, selectionService, dockService, c
       onEdited() {
         actions.select.emit('end', 'binYRange');
       },
-      toLabel({ datum, data }) {
+      toLabel({ datum }) {
         const formatter = chart.formatter(KEYS.FORMATTER.Y);
-        actions.select.emit('binsYRange', data);
         return formatter(datum);
       },
       enableInteraction,

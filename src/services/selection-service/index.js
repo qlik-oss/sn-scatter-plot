@@ -13,6 +13,17 @@ export default function createService({ chart, actions, selections }) {
     actions,
     selections,
     config: {
+      brushEvents: {
+        update: ({ selectionInfo }) => {
+          if (selectionInfo.event === 'binXRange' || selectionInfo.event === 'binYRange') {
+            const brush = chart.brush('selection');
+            const brushArray = brush.brushes();
+            if (actions?.select?.emit) {
+              actions.select.emit(selectionInfo.event, brushArray[brushArray.length - 1].brush.ranges()[0]);
+            }
+          }
+        },
+      },
       allowSimultaneous,
       selectionActions: {
         clear: ({ clearMinor, clearLegend, selectionInfo, cleared }) => {

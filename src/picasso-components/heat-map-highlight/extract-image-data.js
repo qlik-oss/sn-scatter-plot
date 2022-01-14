@@ -1,8 +1,7 @@
 export default function imageData(range, axis, dataView, dirtyImageData, width, height) {
   let { x, y, w, h } = dirtyImageData;
   const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = dataView();
-  const min = Math.min(...range);
-  const max = Math.max(...range);
+  const { min, max } = range;
 
   if (axis === 'x') {
     x = Number((Math.abs((min - xAxisMin) / (xAxisMax - xAxisMin)) * width).toFixed(2));
