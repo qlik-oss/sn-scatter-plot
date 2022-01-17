@@ -61,7 +61,7 @@ export default function createHeatMap(chartModel) {
     animations: {
       enabled: () => viewHandler.animationEnabled,
       trackBy: (node, i) => {
-        if (dataHandler.binArray[i] && dataHandler.binArray[i].qElemNumber === node.data.value) {
+        if (dataHandler.binArray[i] !== undefined && dataHandler.binArray[i].qElemNumber === node.data.value) {
           return node.data.value;
         }
         return node.data.value + 0.5;
