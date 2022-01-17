@@ -9,7 +9,7 @@ export default {
   render() {
     const { element } = this.chart;
     const heatMapCanvas = element.querySelector(`[data-key=${KEYS.COMPONENT.HEAT_MAP}]`);
-    const heatMapHighlightCanvas = element.querySelector(`[data-key=${KEYS.COMPONENT.HEAT_MAP_HIGHLIGHT}]`);
+    const heatMapHighlightCanvas = this.renderer.element();
     const { width, height } = this.rect;
     const dirtyImageData = {
       x: 0,
