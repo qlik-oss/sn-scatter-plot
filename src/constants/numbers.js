@@ -36,6 +36,6 @@ export default {
 
   // Ratio = minichart_size/chart_size, Padding: away from the bottom right corner
   MINI_CHART: { RATIO: 0.15, PADDING: 10 },
-  MAX_NR_ANIMATION: 100,
+  MAX_NR_ANIMATION: 1000,
   WINDOW_SIZE_BASE: 300,
 };

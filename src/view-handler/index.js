@@ -12,7 +12,7 @@ function areIntervalsEqual(min1, max1, min2, max2, e) {
   return Math.abs(min2 - min1) <= d && Math.abs(max2 - max1) <= d;
 }
 
-export default function createViewHandler({ viewState, extremumModel, layoutService }) {
+export default function createViewHandler({ viewState, extremumModel, layoutService, flags }) {
   const meta = { homeStateDataView: {}, scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1, isHomeState: true };
   let interactionInProgress = false;
 
@@ -45,6 +45,14 @@ export default function createViewHandler({ viewState, extremumModel, layoutServ
     getInteractionInProgress: () => interactionInProgress,
 
     get animationEnabled() {
+      if (interactionInProgress) {
+        return false;
+      }
+
+      if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
+        return true;
+      }
+
       return layoutService.getHyperCubeValue('qSize.qcy', 0) <= NUMBERS.MAX_NR_ANIMATION && !interactionInProgress;
     },
 

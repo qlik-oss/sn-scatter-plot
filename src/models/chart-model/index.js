@@ -10,6 +10,7 @@ export default function createChartModel({
   viewState,
   extremumModel,
   dataHandler,
+  flags,
 }) {
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
@@ -24,6 +25,7 @@ export default function createChartModel({
     extremumModel,
     layoutService,
     viewState,
+    flags,
   });
 
   const mainConfig = {
