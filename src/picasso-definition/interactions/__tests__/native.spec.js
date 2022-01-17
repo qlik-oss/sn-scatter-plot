@@ -1,6 +1,7 @@
 import * as KEYS from '../../../constants/keys';
 import * as zoom from '../../../view-handler/zoom';
 import native from '../native';
+import * as clearMinor from '../clear-minor';
 
 describe('native', () => {
   let sandbox;
@@ -47,6 +48,7 @@ describe('native', () => {
       },
     };
     sandbox.stub(zoom, 'default');
+    sandbox.stub(clearMinor, 'default');
     create = () =>
       native({
         chart,
@@ -90,6 +92,7 @@ describe('native', () => {
           chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'point-component' }]);
           create().events.wheel(e);
           expect(zoom.default).to.have.been.calledOnce;
+          expect(clearMinor.default).to.have.been.calledOnce;
         });
 
         it('should not emit on zoom if zoom is not enabled to point component', () => {
@@ -103,6 +106,7 @@ describe('native', () => {
           chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'heat-map-component' }]);
           create().events.wheel(e);
           expect(zoom.default).to.have.been.calledOnce;
+          expect(clearMinor.default).to.have.been.calledOnce;
         });
 
         it('should not emit on zoom if zoom is not enabled to heat map component', () => {

@@ -11,6 +11,8 @@ describe('selection-service', () => {
   let selections;
   let createSelectionService;
   let picassoQSelections;
+  let selectionInfo;
+  let brushFn;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -34,6 +36,21 @@ describe('selection-service', () => {
         BIN_Y_RANGE: 'bin-y-range-brush',
       },
     });
+    brushFn = {
+      brushes: sandbox.stub().returns([
+        {
+          id: 'binData/binX',
+          brush: { ranges: () => [{ min: 200, max: 300 }] },
+        },
+        {
+          id: 'binData/binY',
+          brush: { ranges: () => [{ min: 10, max: 20 }] },
+        },
+      ]),
+    };
+    chart = {
+      brush: () => brushFn,
+    };
     create = () => createSelectionService({ chart, actions, selections });
   });
 
@@ -53,7 +70,27 @@ describe('selection-service', () => {
     });
 
     it('should have all keys', () => {
-      expect(getConfig()).to.have.all.keys(['allowSimultaneous', 'selectionActions', 'selectionsFn']);
+      expect(getConfig()).to.have.all.keys(['brushEvents', 'allowSimultaneous', 'selectionActions', 'selectionsFn']);
+    });
+
+    describe('brushEvents', () => {
+      it('should not emit event', () => {
+        selectionInfo = { event: 'xRange' };
+        getConfig().brushEvents.update({ selectionInfo });
+        expect(actions.select.emit).to.not.have.been.called;
+      });
+
+      it('should emit x range data when selection is bin x range selection', () => {
+        selectionInfo = { event: 'binXRange' };
+        getConfig().brushEvents.update({ selectionInfo });
+        expect(actions.select.emit.withArgs('binXRange', { min: 200, max: 300 })).to.have.been.calledOnce;
+      });
+
+      it('should emit y range data when selection is bin y range selection', () => {
+        selectionInfo = { event: 'binYRange' };
+        getConfig().brushEvents.update({ selectionInfo });
+        expect(actions.select.emit.withArgs('binYRange', { min: 10, max: 20 })).to.have.been.calledOnce;
+      });
     });
 
     describe('allowSimultaneous', () => {
@@ -66,7 +103,6 @@ describe('selection-service', () => {
       describe('clear', () => {
         let clearMinor;
         let clearLegend;
-        let selectionInfo;
         let cleared;
         beforeEach(() => {
           selectionInfo = { event: 'xRange' };

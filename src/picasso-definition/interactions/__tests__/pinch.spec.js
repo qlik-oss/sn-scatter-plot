@@ -2,6 +2,7 @@ import extend from 'extend';
 import KEYS from '../../../constants/keys';
 import * as zoom from '../../../view-handler/zoom';
 import pinch from '../pinch';
+import * as clearMinor from '../clear-minor';
 
 describe('pinch', () => {
   let sandbox;
@@ -21,6 +22,7 @@ describe('pinch', () => {
     rtl = false;
     sandbox.stub(KEYS, 'COMPONENT').value({ POINT: 'point-component' });
     sandbox.stub(zoom, 'default');
+    sandbox.stub(clearMinor, 'default');
     pinchObject = pinch({ chart, actions, viewHandler, rtl });
   });
 
@@ -78,6 +80,7 @@ describe('pinch', () => {
           yAxisMin: 3,
           yAxisMax: 4,
         });
+        expect(clearMinor.default).to.have.been.calledOnce;
       });
     });
 

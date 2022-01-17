@@ -145,7 +145,6 @@ describe('bin-x-Range', () => {
           data: [1, 10],
         })
       ).to.equal('2-formatted');
-      expect(actions.select.emit.withArgs('binsXRange', [1, 10])).to.have.been.calledOnce;
     });
 
     it('should have correct enableInteraction', () => {

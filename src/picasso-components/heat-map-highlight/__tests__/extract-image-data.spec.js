@@ -9,7 +9,7 @@ describe('image data', () => {
   let height;
 
   beforeEach(() => {
-    range = [100, 200];
+    range = { min: 100, max: 200 };
     axis = 'x';
     dataView = () => ({
       xAxisMin: 10,

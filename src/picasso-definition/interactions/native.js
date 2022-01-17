@@ -22,8 +22,6 @@ export default function native({ chart, actions, viewHandler }) {
             .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
           if (target) {
             clearMinor({ chart, actions });
-            // TODO
-            // use touch pad to zoom sometime gets console error, probbaly need to specify how much to zoom each time
             zoom({ e, chart, pointComponent: target, viewHandler });
             e.preventDefault();
           }

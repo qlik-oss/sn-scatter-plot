@@ -4,6 +4,7 @@ import * as NUMBERS from '../../../constants/numbers';
 import pan from '../pan';
 import * as updateTapDataView from '../tap-mini-chart/update-tap-data-view';
 import * as getTapPosition from '../tap-mini-chart/tap-position';
+import * as clearMinor from '../clear-minor';
 
 describe('pan', () => {
   let sandbox;
@@ -30,6 +31,7 @@ describe('pan', () => {
     sandbox.stub(NUMBERS, 'default').value({ MINI_CHART: { RATIO: 0.5 } });
     sandbox.stub(getTapPosition, 'default').returns({ x: 1, y: 1 });
     sandbox.stub(updateTapDataView, 'default');
+    sandbox.stub(clearMinor, 'default');
     panObject = pan({ chart, actions, viewHandler, rtl });
   });
 
@@ -91,6 +93,7 @@ describe('pan', () => {
           yAxisMax: 4,
           miniChart: { panInMiniChart: true, navWindowScale: 0.05 },
         });
+        expect(clearMinor.default).to.have.been.calledOnce;
       });
     });
 
