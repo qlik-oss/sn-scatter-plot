@@ -19,7 +19,14 @@ export default function createService({ chart, actions, selections }) {
             const brush = chart.brush('selection');
             const brushArray = brush.brushes();
             if (brushArray?.length && actions?.select?.emit) {
-              actions.select.emit(selectionInfo.event, brushArray[brushArray.length - 1].brush.ranges()[0]);
+              const res =
+                selectionInfo.event === 'binXRange'
+                  ? brushArray.filter((b) => b.id === 'binData/binX')
+                  : brushArray.filter((b) => b.id === 'binData/binY');
+
+              if (res?.length) {
+                actions.select.emit(selectionInfo.event, res[0].brush.ranges()[0]);
+              }
             }
           }
         },
