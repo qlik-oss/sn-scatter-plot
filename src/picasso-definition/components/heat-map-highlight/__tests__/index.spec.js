@@ -7,6 +7,8 @@ describe('heat-map-highlight', () => {
   let actions;
   let dataHandler;
   let viewHandler;
+  let layoutService;
+  let flags;
   let create;
 
   beforeEach(() => {
@@ -29,12 +31,29 @@ describe('heat-map-highlight', () => {
       },
     };
     actions = { key: 'actions' };
+    flags = { isEnabled: sandbox.stub().returns(true) };
+    layoutService = {
+      meta: {
+        isBigData: true,
+      },
+    };
 
-    create = () => createHeatMapHighlight(chartModel, actions);
+    create = () => createHeatMapHighlight({ chartModel, layoutService, actions, flags });
   });
 
   afterEach(() => {
     sandbox.restore();
+  });
+
+  it('should return false if is not bigData', () => {
+    layoutService.meta.isBigData = false;
+    expect(create()).to.be.false;
+  });
+
+  it('should return false if flag is not enabled', () => {
+    layoutService.meta.isBigData = true;
+    flags.isEnabled.returns(false);
+    expect(create()).to.be.false;
   });
 
   describe('object definition', () => {
@@ -43,7 +62,7 @@ describe('heat-map-highlight', () => {
     });
 
     it('should have correct properties', () => {
-      expect(create()).to.have.all.keys(['key', 'type', 'show', 'settings']);
+      expect(create()).to.have.all.keys(['key', 'type', 'settings']);
     });
 
     it('should have correct key', () => {
@@ -52,18 +71,6 @@ describe('heat-map-highlight', () => {
 
     it('should have correct type', () => {
       expect(create().type).to.equal('heat-map-highlight');
-    });
-
-    describe('show', () => {
-      it('should return false when is not binned data', () => {
-        dataHandler.getMeta.returns({ isBinnedData: false });
-        expect(create().show()).to.equal(false);
-      });
-
-      it('should return true when is binned data', () => {
-        dataHandler.getMeta.returns({ isBinnedData: true });
-        expect(create().show()).to.equal(true);
-      });
     });
 
     describe('settings', () => {

@@ -37,7 +37,7 @@ export default function createComponents({ context, models, flags, picasso, char
     createNavigationPanel({ layoutService, chartModel, rtl }),
     ...createMiniChart({ models, flags }),
     ...tooltipService.getComponents(),
-    createHeatMapHighLight(chartModel, actions),
+    createHeatMapHighLight({ chartModel, layoutService, actions, flags }),
     createHeatMapLabels({ themeService, chartModel, picasso, context }),
   ].filter(Boolean);
   // setDisplayOrder(components);
