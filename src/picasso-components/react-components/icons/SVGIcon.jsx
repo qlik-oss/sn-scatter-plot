@@ -2,6 +2,9 @@
 import React from 'react';
 
 function getFontSize(size) {
+  if (size === 'extra-large') {
+    return '28px';
+  }
   if (size === 'large') {
     return '20px';
   }
@@ -11,7 +14,7 @@ function getFontSize(size) {
   return '16px';
 }
 
-export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 16 16' }) {
+export default function SvgIcon({ d, size, width, style = {}, viewBox = '0 0 16 16', fill }) {
   const s = {
     fontSize: getFontSize(size),
     display: 'inline-block',
@@ -23,11 +26,19 @@ export default function SvgIcon({ d, size, style = {}, viewBox = '0 0 16 16' }) 
     textRendering: 'optimizeLegibility',
     WebkitFontSmoothing: 'antialiased',
     MozOsxFontSmoothing: 'grayscale',
+    padding: `${(width - parseInt(getFontSize(size), 10)) / 2}px`,
     ...style,
   };
   return (
     <i style={s}>
-      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox={viewBox} fill="currentColor">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox={viewBox}
+        fill={fill ? fill() : 'currentColor'}
+        pointerEvents="none"
+      >
         <path d={d} />
       </svg>
     </i>

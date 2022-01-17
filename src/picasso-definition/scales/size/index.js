@@ -6,8 +6,8 @@ export default function createSizeScale(layoutService) {
   const dotSize = layoutService.getLayoutValue('dataPoint.bubbleSizes');
 
   const getDotMeasureSize = (d, windowSizeMultiplier) => {
-    const { value } = d.datum?.size || d.size;
-    if (value === 'NaN') {
+    const { value } = d.datum?.size || d.size || {};
+    if (value === 'NaN' || value === undefined) {
       return undefined;
     }
     return pointHelper.getDotMeasureSize({

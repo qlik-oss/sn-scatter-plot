@@ -1,5 +1,5 @@
 import updateTapDataView from '../update-tap-data-view';
-import * as getTapPosition from '../get-tap-position';
+import * as getTapPosition from '../tap-position';
 import * as KEYS from '../../../../constants/keys';
 import * as NUMBERS from '../../../../constants/numbers';
 

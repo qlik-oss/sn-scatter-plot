@@ -46,13 +46,12 @@ const tickHelper = {
   },
 
   getSize(dockService, chartModel, chart, dimension) {
-    const dataHandler = chartModel.query.getDataHandler();
-    const size = chartModel.query.isPrelayout()
-      ? dockService.meta.chart.size[dimension]
-      : chart.component(dataHandler.getMeta().isBinnedData ? KEYS.COMPONENT.HEAT_MAP : KEYS.COMPONENT.POINT).rect[
-          dimension
-        ];
-    return size;
+    if (chartModel.query.isPrelayout()) {
+      return dockService.meta.chart.size[dimension];
+    }
+    const pointDimension = chart.component(KEYS.COMPONENT.POINT)?.rect.computedPhysical[dimension];
+    const heatMapDimension = chart.component(KEYS.COMPONENT.HEAT_MAP)?.rect.computedPhysical[dimension];
+    return Math.max(...[pointDimension, heatMapDimension].filter(Number.isFinite));
   },
 };
 

@@ -3,7 +3,7 @@ import * as KEYS from '../../../constants/keys';
 import * as NUMBERS from '../../../constants/numbers';
 import pan from '../pan';
 import * as updateTapDataView from '../tap-mini-chart/update-tap-data-view';
-import * as getTapPosition from '../tap-mini-chart/get-tap-position';
+import * as getTapPosition from '../tap-mini-chart/tap-position';
 
 describe('pan', () => {
   let sandbox;
