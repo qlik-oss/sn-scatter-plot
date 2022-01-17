@@ -39,7 +39,13 @@ describe('ext', () => {
   });
 
   it('should have correct properties', () => {
-    expect(create()).to.have.all.keys(['definition', 'support', 'importProperties', 'exportProperties']);
+    expect(create()).to.have.all.keys([
+      'definition',
+      'support',
+      'importProperties',
+      'exportProperties',
+      'softDefinition',
+    ]);
   });
 
   describe('definition', () => {

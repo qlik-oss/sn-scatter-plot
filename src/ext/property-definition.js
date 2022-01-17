@@ -1,10 +1,8 @@
-import { getValue, setValue } from 'qlik-chart-modules';
+import { getValue } from 'qlik-chart-modules';
+import showCompressionResolution from './show-compression-resolution';
+import colorModeOptions from './color-mode-options';
+import useDimValColShow from './use-dim-val-col-show';
 
-const COMPRESSION_THRESHOLD = 1000;
-function showCompressionResolution(layout) {
-  const dim = layout.qHyperCube.qDimensionInfo[0];
-  return dim?.qCardinal > COMPRESSION_THRESHOLD;
-}
 /*
 const nonCompProp = {
   component: 'text',
@@ -15,20 +13,7 @@ const nonCompProp = {
 };
 */
 
-const useDimValColShowFunc = (data) => {
-  // If we have an old chart where this property is never set to its default value, set it to false
-  if (getValue(data, 'color.useDimColVal') === undefined) {
-    setValue(data, 'color.useDimColVal', false);
-  }
-  return (
-    !getValue(data, 'color.auto') &&
-    getValue(data, 'color.mode') === 'byDimension' &&
-    getValue(data, 'color.byDimDef.type') === 'libraryItem'
-  );
-};
-
-const persistentColorsShowFunc = (data) =>
-  !getValue(data, 'color.auto') && getValue(data, 'color.mode') === 'byDimension';
+const persistentColorsShow = (data) => !getValue(data, 'color.auto') && getValue(data, 'color.mode') === 'byDimension';
 
 export default function propertyDefinition(env) {
   const settings = {
@@ -213,37 +198,15 @@ export default function propertyDefinition(env) {
             items: {
               persistentColors: {
                 show(data) {
-                  if (useDimValColShowFunc(data)) {
+                  if (useDimValColShow(data)) {
                     // If we allow dim value colors, then only show persistence settings if it is off
-                    return persistentColorsShowFunc(data) && !getValue(data, 'color.useDimColVal');
+                    return persistentColorsShow(data) && !getValue(data, 'color.useDimColVal');
                   }
-                  return persistentColorsShowFunc(data);
+                  return persistentColorsShow(data);
                 },
               },
               colorMode: {
-                options(data) {
-                  const colorOptions = [
-                    {
-                      value: 'primary',
-                      translation: 'properties.colorMode.primary',
-                    },
-                    {
-                      value: 'byDimension',
-                      translation: 'properties.colorMode.byDimension',
-                    },
-                    {
-                      value: 'byMeasure',
-                      translation: 'properties.colorMode.byMeasure',
-                    },
-                  ];
-                  if (data?.qHyperCubeDef?.qMeasures?.length > 0) {
-                    colorOptions.push({
-                      value: 'byExpression',
-                      translation: 'properties.colorMode.byExpression',
-                    });
-                  }
-                  return colorOptions;
-                },
+                options: colorModeOptions,
               },
             },
           },
