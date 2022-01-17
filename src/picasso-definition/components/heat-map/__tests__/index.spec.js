@@ -34,7 +34,7 @@ describe('heat-map', () => {
       animationEnabled: undefined,
     };
     dataHandler = {
-      binArray: [{ qText: [2100, 5, 2200, 4], qNum: 1, qElemNumber: 7964 }],
+      binArray: [{ qText: [2100, 5, 2200, 4], qNum: 10, qElemNumber: 7964 }],
       getMeta: sandbox.stub().returns({ isBinnedData: true }),
     };
     chartModel = {
@@ -155,8 +155,8 @@ describe('heat-map', () => {
 
       describe('trackBy', () => {
         it('should return correct node ID', () => {
-          expect(create().animations.trackBy({ data: { value: 7964 } }, 0)).to.equal(7964);
-          expect(create().animations.trackBy({ data: { value: 7965 } }, 1)).to.equal(7965.5);
+          expect(create().animations.trackBy({ data: { value: 7964, binDensity: { value: 10 } } }, 0)).to.equal(7964);
+          expect(create().animations.trackBy({ data: { value: 7965, binDensity: { value: 11 } } }, 1)).to.equal(7965.5);
         });
       });
     });
