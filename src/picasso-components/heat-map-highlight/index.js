@@ -26,10 +26,10 @@ export default {
       pixels[i] = pixels[i] === 0 ? 0 : 255;
     }
     const ctx = heatMapHighlightCanvas.getContext('2d');
-    ctx.clearRect(0, 0, width, height);
+    ctx.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
 
     const updateImageData = (range, axis) => {
-      ctx.clearRect(0, 0, width, height);
+      ctx.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
       const { x, y, w, h } = getImageData(range, axis, dataView, dirtyImageData, width, height);
       dirtyImageData.x = x;
       dirtyImageData.y = y;
@@ -47,7 +47,7 @@ export default {
     };
 
     const handleSelectionClear = () => {
-      ctx.clearRect(0, 0, width, height);
+      ctx.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
       dirtyImageData.x = 0;
       dirtyImageData.y = 0;
       dirtyImageData.w = width;
