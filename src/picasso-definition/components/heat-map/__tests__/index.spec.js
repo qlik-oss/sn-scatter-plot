@@ -6,6 +6,7 @@ describe('heat-map', () => {
   let chartModel;
   let dataHandler;
   let create;
+  let viewHandler;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -27,9 +28,10 @@ describe('heat-map', () => {
         BIN_DENSITY: 'binDensity',
       },
     }));
-    const viewHandler = {
+    viewHandler = {
       getDataView: sandbox.stub().returns({ xAxisMin: 0, xAxisMax: 4000, yAxisMin: 0, yAxisMax: 10 }),
       transform: 'transform-function',
+      animationEnabled: undefined,
     };
     dataHandler = {
       binArray: [{ qText: [2100, 5, 2200, 4], qNum: 1, qElemNumber: 7964 }],
@@ -67,6 +69,7 @@ describe('heat-map', () => {
         'show',
         'settings',
         'beforeRender',
+        'animations',
         'rendererSettings',
         'brush',
       ]);
@@ -134,6 +137,27 @@ describe('heat-map', () => {
     describe('beforeRender', () => {
       it('should be set with a function', () => {
         expect(create().beforeRender).to.be.a('function');
+      });
+    });
+
+    describe('animations', () => {
+      describe('enabled', () => {
+        it('should be true if animation is enabled in viewHandler', () => {
+          viewHandler.animationEnabled = true;
+          expect(create().animations.enabled()).to.equal(true);
+        });
+
+        it('should be false if animation is not enabled in viewHandler', () => {
+          viewHandler.animationEnabled = false;
+          expect(create().animations.enabled()).to.equal(false);
+        });
+      });
+
+      describe('trackBy', () => {
+        it('should return correct node ID', () => {
+          expect(create().animations.trackBy({ data: { value: 7964 } }, 0)).to.equal(7964);
+          expect(create().animations.trackBy({ data: { value: 7965 } }, 1)).to.equal(7965.5);
+        });
       });
     });
 

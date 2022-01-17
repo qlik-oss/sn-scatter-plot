@@ -132,6 +132,7 @@ const useModels = ({ core, flags }) => {
       colorService,
       extremumModel,
       dataHandler,
+      flags,
     });
 
     const tickModel = createTickModel({ layoutService, dockService, extremumModel, themeService, chartModel, chart });

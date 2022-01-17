@@ -58,6 +58,17 @@ export default function createHeatMap(chartModel) {
         binHeightPx = (binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin) + 0.5;
       }
     },
+
+    animations: {
+      enabled: () => viewHandler.animationEnabled,
+      trackBy: (node, i) => {
+        if (dataHandler.binArray[i] !== undefined && dataHandler.binArray[i].qElemNumber === node.data.value) {
+          return node.data.value;
+        }
+        return node.data.value + 0.5;
+      },
+    },
+
     rendererSettings: {
       transform,
       canvasBufferSize: (rect) => ({
