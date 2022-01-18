@@ -2,6 +2,7 @@ import KEYS from '../../constants/keys';
 import NUMBERS from '../../constants/numbers';
 import getTapPosition from './tap-mini-chart/tap-position';
 import updateTapDataView from './tap-mini-chart/update-tap-data-view';
+import clearMinor from '../../utils/clear-minor';
 
 const threshold = 10;
 const eventName = 'areaPan';
@@ -56,6 +57,7 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
   },
   events: {
     areaPanstart(e) {
+      clearMinor({ chart, actions });
       e.preventDefault();
       viewHandler.setInteractionInProgress(true);
       this.started = eventName;

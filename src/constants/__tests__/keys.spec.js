@@ -9,6 +9,7 @@ describe('keys', () => {
       'COLLECTION',
       'FORMATTER',
       'FIELDS',
+      'BRUSH',
       'REJECTION_TOKEN',
     ]);
   });
@@ -43,6 +44,7 @@ describe('keys', () => {
       'LEGEND_HEAT_MAP',
       'HEAT_MAP_TOOLTIP',
       'HEAT_MAP_LABELS',
+      'HEAT_MAP_HIGHLIGHT',
       'MINI_CHART_BACKGROUND',
       'MINI_CHART_NAVIGATION',
       'MINI_CHART_POINT',
@@ -60,5 +62,9 @@ describe('keys', () => {
 
   it('should have correct fields keys', () => {
     expect(KEYS.FIELDS).to.have.all.keys(['DIM', 'X', 'Y', 'SIZE', 'BIN', 'BIN_DENSITY', 'BIN_X', 'BIN_Y']);
+  });
+
+  it('should have correct brush keys', () => {
+    expect(KEYS.BRUSH).to.have.all.keys(['X_RANGE', 'Y_RANGE', 'BIN_X_RANGE', 'BIN_Y_RANGE']);
   });
 });

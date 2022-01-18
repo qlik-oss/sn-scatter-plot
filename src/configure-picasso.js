@@ -9,6 +9,7 @@ import disclaimer from './picasso-components/react-components/disclaimer';
 import navigationPanel from './picasso-components/react-components/navigation-panel';
 import miniChartWindow from './picasso-components/mini-chart-window';
 import dataTitle from './picasso-components/react-components/data-title-component';
+import heatMapHighLight from './picasso-components/heat-map-highlight';
 
 export default function configurePicasso() {
   const picasso = picassojs();
@@ -23,6 +24,7 @@ export default function configurePicasso() {
   picasso.component('mini-chart-window', miniChartWindow);
   picasso.component('navigation-panel', navigationPanel());
   picasso.component('data-title', dataTitle());
+  picasso.component('heat-map-highlight', heatMapHighLight);
 
   return picasso;
 }

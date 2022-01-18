@@ -1,5 +1,6 @@
 import KEYS from '../../constants/keys';
 import zoom from '../../view-handler/zoom';
+import clearMinor from '../../utils/clear-minor';
 
 const EVENT_NAME = 'zoom';
 
@@ -33,6 +34,7 @@ const pinch = ({ chart, actions, viewHandler, rtl }) => ({
   },
   events: {
     zoomstart(e) {
+      clearMinor({ chart, actions });
       e.preventDefault();
       lastScale = e.scale;
       this.started = EVENT_NAME;

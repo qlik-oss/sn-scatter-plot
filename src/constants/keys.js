@@ -32,6 +32,7 @@ export default {
     HEAT_MAP: 'heat-map',
     HEAT_MAP_TOOLTIP: 'heat-map-tooltip',
     HEAT_MAP_LABELS: 'heat-map-labels',
+    HEAT_MAP_HIGHLIGHT: 'heat-map-highlight',
     MINI_CHART_BACKGROUND: 'mini-chart-background-rect',
     MINI_CHART_NAVIGATION: 'mini-chart-navigation-rect',
     MINI_CHART_POINT: 'mini-chart-points',
@@ -55,6 +56,12 @@ export default {
     BIN_X: 'binX',
     BIN_Y: 'binY',
     BIN_DENSITY: 'binDensity',
+  },
+  BRUSH: {
+    X_RANGE: 'x-range-brush',
+    Y_RANGE: 'y-range-brush',
+    BIN_X_RANGE: 'bin-x-range-brush',
+    BIN_Y_RANGE: 'bin-y-range-brush',
   },
   REJECTION_TOKEN: 'rejected',
 };

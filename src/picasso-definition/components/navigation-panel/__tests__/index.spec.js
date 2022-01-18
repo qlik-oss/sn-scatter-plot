@@ -2,6 +2,7 @@ import * as KEYS from '../../../../constants/keys';
 import createNavigationPanel from '..';
 import * as move from '../../../../view-handler/move';
 import * as zoom from '../../../../view-handler/zoom';
+import * as clearMinor from '../../../../utils/clear-minor';
 
 describe('createNavigationPanel', () => {
   let sandbox;
@@ -23,6 +24,7 @@ describe('createNavigationPanel', () => {
     sandbox.stub(KEYS, 'default').value({ COMPONENT: { NAVIGATION_PANEL: 'nav-pan' } });
     sandbox.stub(move, 'default');
     sandbox.stub(zoom, 'default');
+    sandbox.stub(clearMinor, 'default');
     rtl = false;
     create = () => createNavigationPanel({ layoutService, chartModel, rtl });
     navigationPanel = create();
@@ -80,6 +82,7 @@ describe('createNavigationPanel', () => {
               yAxisMin: 2,
               yAxisMax: 3,
             });
+            expect(clearMinor.default).to.have.been.calledOnce;
           });
         });
 
@@ -92,6 +95,7 @@ describe('createNavigationPanel', () => {
               percent: -10,
               rtl: false,
             });
+            expect(clearMinor.default).to.have.been.calledOnce;
           });
         });
 
@@ -104,6 +108,7 @@ describe('createNavigationPanel', () => {
               percent: 10,
               rtl: false,
             });
+            expect(clearMinor.default).to.have.been.calledOnce;
           });
         });
 
@@ -111,6 +116,7 @@ describe('createNavigationPanel', () => {
           it('should call move with correct parameters', () => {
             navigationPanel.settings.actions.up();
             expect(move.default).to.have.been.calledWithExactly({ viewHandler, direction: 'y', percent: 10 });
+            expect(clearMinor.default).to.have.been.calledOnce;
           });
         });
 
@@ -118,6 +124,7 @@ describe('createNavigationPanel', () => {
           it('should call move with correct parameters', () => {
             navigationPanel.settings.actions.down();
             expect(move.default).to.have.been.calledWithExactly({ viewHandler, direction: 'y', percent: -10 });
+            expect(clearMinor.default).to.have.been.calledOnce;
           });
         });
 
@@ -125,6 +132,7 @@ describe('createNavigationPanel', () => {
           it('should call zoom with correct parameters', () => {
             navigationPanel.settings.actions.zoomIn();
             expect(zoom.default).to.have.been.calledWithExactly({ viewHandler, buttonZoomDirection: 'in' });
+            expect(clearMinor.default).to.have.been.calledOnce;
           });
         });
 
@@ -132,6 +140,7 @@ describe('createNavigationPanel', () => {
           it('should call zoom with correct parameters', () => {
             navigationPanel.settings.actions.zoomOut();
             expect(zoom.default).to.have.been.calledWithExactly({ viewHandler, buttonZoomDirection: 'out' });
+            expect(clearMinor.default).to.have.been.calledOnce;
           });
         });
       });

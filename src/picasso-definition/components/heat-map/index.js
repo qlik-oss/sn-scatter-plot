@@ -1,5 +1,5 @@
 import KEYS from '../../../constants/keys';
-import createBrush from '../../brush';
+import createBrush from '../../brush/heat-map-brush';
 
 export default function createHeatMap(chartModel) {
   const viewHandler = chartModel.query.getViewHandler();

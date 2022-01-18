@@ -1,5 +1,6 @@
 import KEYS from '../../constants/keys';
 import zoom from '../../view-handler/zoom';
+import clearMinor from '../../utils/clear-minor';
 
 export default function native({ chart, actions, viewHandler }) {
   function scrollLegend(e, comp) {
@@ -20,8 +21,7 @@ export default function native({ chart, actions, viewHandler }) {
             .componentsFromPoint(point)
             .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
           if (target) {
-            // TODO
-            // use touch pad to zoom sometime gets console error, probbaly need to specify how much to zoom each time
+            clearMinor({ chart, actions });
             zoom({ e, chart, pointComponent: target, viewHandler });
             e.preventDefault();
           }

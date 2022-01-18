@@ -9,7 +9,7 @@ export default function createXRange({ actions, selectionService, dockService, e
   return range(
     {
       eventName: 'xRange',
-      key: 'x-range-brush',
+      key: KEYS.BRUSH.X_RANGE,
       targets: [KEYS.COMPONENT.X_AXIS, KEYS.COMPONENT.POINT],
       fillTargets: [KEYS.COMPONENT.X_AXIS],
       dock: dockService.meta.x.dock,
