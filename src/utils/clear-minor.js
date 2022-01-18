@@ -1,7 +1,8 @@
+import isInBinRangeSelection from './is-in-bin-range-selection';
+
 export default function clearMinor({ chart, actions }) {
-  const brush = chart.brush('selection');
-  const brushArray = brush.brushes();
-  if (brushArray?.length && brushArray[0]?.type === 'range') {
+  if (isInBinRangeSelection(chart)) {
     actions.select.emit('start');
+    actions.select.emit('binRangeHighlightClear');
   }
 }
