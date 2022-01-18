@@ -20,15 +20,12 @@ export default {
     const { actions, dataView } = this.settings.settings;
     const heatMapCanvasContext = heatMapCanvas.getContext('2d');
     const pixelRatio = getPixelRatio(heatMapCanvasContext);
-    const imageData = heatMapCanvasContext.getImageData(0, 0, heatMapCanvas.width, heatMapCanvas.height);
-    const pixels = imageData.data;
-    for (let i = 3, n = heatMapCanvas.width * heatMapCanvas.height * 4; i < n; i += 4) {
-      pixels[i] = pixels[i] === 0 ? 0 : 255;
-    }
+    let imageData;
     const ctx = heatMapHighlightCanvas.getContext('2d');
     ctx.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
 
     const updateImageData = (range, axis) => {
+      if (!imageData) return;
       ctx.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
       const { x, y, w, h } = getImageData(range, axis, dataView, dirtyImageData, width, height);
       dirtyImageData.x = x;
@@ -36,6 +33,20 @@ export default {
       dirtyImageData.w = w;
       dirtyImageData.h = h;
       ctx.putImageData(imageData, 0, 0, x * pixelRatio, y * pixelRatio, w * pixelRatio, h * pixelRatio);
+    };
+
+    const onBinRangeStart = () => {
+      if (!imageData) {
+        imageData = heatMapCanvasContext.getImageData(0, 0, heatMapCanvas.width, heatMapCanvas.height);
+        const pixels = imageData.data;
+        for (let i = 3, n = heatMapCanvas.width * heatMapCanvas.height * 4; i < n; i += 4) {
+          pixels[i] = pixels[i] === 0 ? 0 : 255;
+        }
+      }
+    };
+
+    const onBinRangeHighlightClear = () => {
+      imageData = undefined;
     };
 
     const handleXRange = (range) => {
@@ -54,6 +65,8 @@ export default {
       dirtyImageData.h = height;
     };
 
+    actions.select.on('binRangeStart', onBinRangeStart);
+    actions.select.on('binRangeHighlightClear', onBinRangeHighlightClear);
     actions.select.on('binXRange', handleXRange);
     actions.select.on('binYRange', handleYRange);
     actions.select.on('binsRangeSelectionClear', handleSelectionClear);
