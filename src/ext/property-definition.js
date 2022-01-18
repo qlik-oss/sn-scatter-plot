@@ -1,7 +1,7 @@
 import { getValue } from 'qlik-chart-modules';
 import showCompressionResolution from './show-compression-resolution';
 import colorModeOptions from './color-mode-options';
-import useDimValColShow from './use-dim-val-col-show';
+import showUseDimValCol from './show-use-dim-val-col';
 
 /*
 const nonCompProp = {
@@ -198,7 +198,7 @@ export default function propertyDefinition(env) {
             items: {
               persistentColors: {
                 show(data) {
-                  if (useDimValColShow(data)) {
+                  if (showUseDimValCol(data)) {
                     // If we allow dim value colors, then only show persistence settings if it is off
                     return persistentColorsShow(data) && !getValue(data, 'color.useDimColVal');
                   }
