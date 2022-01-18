@@ -1,7 +1,7 @@
 import * as KEYS from '../../../constants/keys';
 import * as zoom from '../../../view-handler/zoom';
 import native from '../native';
-import * as clearMinor from '../clear-minor';
+import * as clearMinor from '../../../utils/clear-minor';
 
 describe('native', () => {
   let sandbox;

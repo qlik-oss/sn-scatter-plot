@@ -2,7 +2,7 @@ import KEYS from '../../constants/keys';
 import NUMBERS from '../../constants/numbers';
 import getTapPosition from './tap-mini-chart/tap-position';
 import updateTapDataView from './tap-mini-chart/update-tap-data-view';
-import clearMinor from './clear-minor';
+import clearMinor from '../../utils/clear-minor';
 
 const threshold = 10;
 const eventName = 'areaPan';

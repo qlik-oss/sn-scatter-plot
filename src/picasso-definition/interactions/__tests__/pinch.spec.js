@@ -2,7 +2,7 @@ import extend from 'extend';
 import KEYS from '../../../constants/keys';
 import * as zoom from '../../../view-handler/zoom';
 import pinch from '../pinch';
-import * as clearMinor from '../clear-minor';
+import * as clearMinor from '../../../utils/clear-minor';
 
 describe('pinch', () => {
   let sandbox;

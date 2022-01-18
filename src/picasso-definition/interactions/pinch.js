@@ -1,6 +1,6 @@
 import KEYS from '../../constants/keys';
 import zoom from '../../view-handler/zoom';
-import clearMinor from './clear-minor';
+import clearMinor from '../../utils/clear-minor';
 
 const EVENT_NAME = 'zoom';
 

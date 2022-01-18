@@ -4,7 +4,7 @@ import * as NUMBERS from '../../../constants/numbers';
 import pan from '../pan';
 import * as updateTapDataView from '../tap-mini-chart/update-tap-data-view';
 import * as getTapPosition from '../tap-mini-chart/tap-position';
-import * as clearMinor from '../clear-minor';
+import * as clearMinor from '../../../utils/clear-minor';
 
 describe('pan', () => {
   let sandbox;
