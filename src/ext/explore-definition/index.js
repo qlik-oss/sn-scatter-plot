@@ -1,10 +1,9 @@
-import showCompressionResolution from './show-compression-resolution';
-import colorModeOptions from './color-mode-options';
-import useDimValColShow from './use-dim-val-col-show';
-
-const getNumMeasures = (obj) => obj?.qHyperCubeDef?.qMeasures?.length || 0;
-
-const getDimensionLayouts = (layout) => layout?.qHyperCube?.qDimensionInfo || [];
+import showCompressionResolution from '../show-compression-resolution';
+import showBubbleSizes from './show-bubble-sizes';
+import showRangeBubbleSizes from './show-range-bubble-sizes';
+import colorModeOptions from '../color-mode-options';
+import showColorScheme from './show-color-scheme';
+import showPersistentColors from './show-persistent-colors';
 
 export default {
   type: 'items',
@@ -33,9 +32,9 @@ export default {
           ],
         },
         showLabels: {
-          component: 'radio-list',
-          translation: 'properties.labels',
           type: 'number',
+          translation: 'properties.labels',
+          component: 'radio-list',
           ref: 'labels.mode',
           options() {
             return [
@@ -56,33 +55,29 @@ export default {
         },
         bubbleSizes: {
           type: 'integer',
+          translation: 'properties.dataPoints.bubbleSizes',
           component: 'slider',
           ref: 'dataPoint.bubbleSizes',
-          translation: 'properties.dataPoints.bubbleSizes',
           min: 1,
           max: 20,
           step: 1,
-          show(data) {
-            return getNumMeasures(data) < 3;
-          },
+          show: showBubbleSizes,
         },
         rangeBubbleSizes: {
           type: 'array',
+          translation: 'properties.dataPoints.bubbleSizes',
           component: 'slider',
           ref: 'dataPoint.rangeBubbleSizes',
-          translation: 'properties.dataPoints.bubbleSizes',
           min: 1,
           max: 20,
           step: 1,
-          show(data) {
-            return getNumMeasures(data) > 2;
-          },
+          show: showRangeBubbleSizes,
         },
         queryLevel: {
           type: 'integer',
+          translation: 'properties.compression.resolution',
           component: 'slider',
           ref: 'compressionResolution',
-          translation: 'properties.compression.resolution',
           min: 4,
           max: 8,
           step: 1,
@@ -101,22 +96,10 @@ export default {
         dimension: {
           items: {
             colorScheme: {
-              show(data, layout) {
-                const dim = getDimensionLayouts(layout)[0];
-                const dimColVal =
-                  data.color && data.color.mode === 'byDimension' && data.color.useDimColVal && useDimValColShow(data);
-                return !((dim && dim.qCardinal <= 12) || dimColVal);
-              },
+              show: showColorScheme,
             },
             persistentColors: {
-              show(data) {
-                return !(
-                  data.color &&
-                  data.color.mode === 'byDimension' &&
-                  data.color.useDimColVal &&
-                  useDimValColShow(data)
-                );
-              },
+              show: showPersistentColors,
             },
           },
         },

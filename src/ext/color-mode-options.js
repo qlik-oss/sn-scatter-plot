@@ -1,4 +1,4 @@
-export default function options(data) {
+export default function colorModeOptions(data) {
   const colorOptions = [
     {
       value: 'primary',
