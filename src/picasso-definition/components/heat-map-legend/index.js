@@ -1,5 +1,6 @@
 import KEYS from '../../../constants/keys';
 import getDock from '../../../utils/dock-helper';
+import MODES from '../../../constants/modes';
 
 const heatMapLegend = ({ models, context, chart }) => {
   const { themeService, layoutService, chartModel } = models;
@@ -29,7 +30,9 @@ const heatMapLegend = ({ models, context, chart }) => {
     key: KEYS.COMPONENT.LEGEND_HEAT_MAP,
     type: 'legend-seq',
     dock,
+    minimumLayoutMode: MODES.HEAT_MAP_LEGEND,
     settings: {
+      length: 1,
       fill: KEYS.SCALE.HEAT_MAP_COLOR,
       major: KEYS.SCALE.HEAT_MAP_COLOR,
       title: {
