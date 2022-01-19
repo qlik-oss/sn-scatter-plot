@@ -1,4 +1,4 @@
-export default function getPixelRatio(canvasContext) {
+export default function getPixelRatio(canvasContext = {}) {
   const backingStoreRatio =
     canvasContext.webkitBackingStorePixelRatio ||
     canvasContext.mozBackingStorePixelRatio ||

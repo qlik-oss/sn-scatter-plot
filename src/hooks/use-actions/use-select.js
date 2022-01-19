@@ -1,7 +1,5 @@
 import { useConstraints, useState, useEffect } from '@nebula.js/stardust';
 
-const binEvents = ['binRangeStart', 'binRangeHighlightClear', 'binXRange', 'binYRange', 'binsRangeSelectionClear'];
-
 export default function useSelect() {
   const constraints = useConstraints();
   const [enabled, setEnabled] = useState(false);
@@ -31,13 +29,12 @@ export default function useSelect() {
         listeners[event].splice(idx, 1);
       }
     },
+    removeAllListeners: (event) => {
+      listeners[event] = undefined;
+    },
     on: (event, listener) => {
       if (Array.isArray(listeners[event])) {
-        if (binEvents.indexOf(event) > -1) {
-          listeners[event] = [listener];
-        } else {
-          listeners[event].push(listener);
-        }
+        listeners[event].push(listener);
       } else {
         listeners[event] = [listener];
       }

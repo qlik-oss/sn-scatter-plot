@@ -10,6 +10,9 @@ export default {
     const { element } = this.chart;
     const heatMapCanvas = element.querySelector(`[data-key=${KEYS.COMPONENT.HEAT_MAP}]`);
     const heatMapHighlightCanvas = this.renderer.element();
+    if (!heatMapCanvas || !heatMapHighlightCanvas) {
+      return;
+    }
     const { width, height } = this.rect;
     const dirtyImageData = {
       x: 0,
@@ -47,6 +50,7 @@ export default {
 
     const onBinRangeHighlightClear = () => {
       imageData = undefined;
+      ctx.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
     };
 
     const handleXRange = (range) => {
@@ -65,6 +69,11 @@ export default {
       dirtyImageData.h = height;
     };
 
+    actions.select.removeAllListeners('binRangeStart');
+    actions.select.removeAllListeners('binRangeHighlightClear');
+    actions.select.removeAllListeners('binXRange');
+    actions.select.removeAllListeners('binYRange');
+    actions.select.removeAllListeners('binsRangeSelectionClear');
     actions.select.on('binRangeStart', onBinRangeStart);
     actions.select.on('binRangeHighlightClear', onBinRangeHighlightClear);
     actions.select.on('binXRange', handleXRange);
