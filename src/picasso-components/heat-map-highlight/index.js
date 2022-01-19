@@ -48,20 +48,20 @@ export default {
       }
     };
 
+    const onBinXRange = (range) => {
+      updateImageData(range, 'x');
+    };
+
+    const onBinYRange = (range) => {
+      updateImageData(range, 'y');
+    };
+
     const onBinRangeHighlightClear = () => {
       imageData = undefined;
       ctx.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
     };
 
-    const handleXRange = (range) => {
-      updateImageData(range, 'x');
-    };
-
-    const handleYRange = (range) => {
-      updateImageData(range, 'y');
-    };
-
-    const handleSelectionClear = () => {
+    const onBinsRangeSelectionClear = () => {
       ctx.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
       dirtyImageData.x = 0;
       dirtyImageData.y = 0;
@@ -70,14 +70,14 @@ export default {
     };
 
     actions.select.removeAllListeners('binRangeStart');
-    actions.select.removeAllListeners('binRangeHighlightClear');
     actions.select.removeAllListeners('binXRange');
     actions.select.removeAllListeners('binYRange');
+    actions.select.removeAllListeners('binRangeHighlightClear');
     actions.select.removeAllListeners('binsRangeSelectionClear');
     actions.select.on('binRangeStart', onBinRangeStart);
+    actions.select.on('binXRange', onBinXRange);
+    actions.select.on('binYRange', onBinYRange);
     actions.select.on('binRangeHighlightClear', onBinRangeHighlightClear);
-    actions.select.on('binXRange', handleXRange);
-    actions.select.on('binYRange', handleYRange);
-    actions.select.on('binsRangeSelectionClear', handleSelectionClear);
+    actions.select.on('binsRangeSelectionClear', onBinsRangeSelectionClear);
   },
 };
