@@ -11,6 +11,7 @@ import {
   useRect,
   useSelections,
   usePlugins,
+  useEmbed,
 } from '@nebula.js/stardust';
 import {
   layoutService as createLayoutService,
@@ -24,6 +25,7 @@ import createChartModel from '../models/chart-model';
 import createTickModel from '../models/tick-model';
 import createSelectionService from '../services/selection-service';
 import createColorService from '../services/color-service';
+import createCustomTooltipService from '../custom-tooltip/service';
 import createTooltipService from '../services/tooltip-service';
 import getPluginArgs from '../services/plugin-service/plugin-args';
 import getLogicalSize from '../logical-size';
@@ -45,6 +47,7 @@ const useModels = ({ core, flags }) => {
   const plugins = usePlugins();
   const [selectionService, setSelectionService] = useState();
   const [models, setModels] = useState();
+  const embed = useEmbed();
 
   useEffect(() => {
     if (!core) {
@@ -113,6 +116,20 @@ const useModels = ({ core, flags }) => {
       dataHandler,
     });
 
+    const propertiesModel = createPropertiesModel({ model, layoutService });
+
+    const customTooltipService = createCustomTooltipService({
+      flags,
+      layout,
+      app,
+      model,
+      picasso: picassoInstance,
+      chart,
+      translator,
+      embed,
+      options,
+    });
+
     const tooltipService = createTooltipService({
       chart,
       actions,
@@ -121,6 +138,8 @@ const useModels = ({ core, flags }) => {
       layoutService,
       colorService,
       themeService,
+      propertiesModel,
+      custom: customTooltipService,
     });
 
     const chartModel = createChartModel({
@@ -137,8 +156,6 @@ const useModels = ({ core, flags }) => {
     const tickModel = createTickModel({ layoutService, dockService, extremumModel, themeService, chartModel, chart });
 
     const disclaimerModel = createDisclaimerModel({ layoutService, flags });
-
-    const propertiesModel = createPropertiesModel({ model, layoutService });
 
     selectionService.setLayout(layoutService.getLayout());
     setModels({

@@ -12,6 +12,8 @@ describe('tooltip-service', () => {
   let layoutService;
   let colorService;
   let themeService;
+  let propertiesModel;
+  let custom;
   let create;
 
   before(() => {
@@ -55,7 +57,41 @@ describe('tooltip-service', () => {
     themeService = {
       getStyles: sandbox.stub().returns({ fontFamily: 'font-family' }),
     };
-    create = () => createTooltipService({ chart, actions, translator, rtl, layoutService, colorService, themeService });
+    propertiesModel = {
+      query: {
+        getProperties: sandbox.stub().returns({ key: 'properties' }),
+      },
+    };
+    custom = {
+      isEnabled: sandbox.stub(),
+      hideBasic: sandbox.stub(),
+      getAttributes: sandbox.stub(),
+      hasImages: sandbox.stub(),
+      addImages: sandbox.stub(),
+      createImageRow: sandbox.stub(),
+      chart: {
+        isEnabled: sandbox.stub(),
+        hasLimitation: sandbox.stub(),
+        show: sandbox.stub(),
+        hasAlternateState: sandbox.stub(),
+        createLimitationRow: sandbox.stub(),
+        createContainer: sandbox.stub(),
+        hide: sandbox.stub(),
+        destroy: sandbox.stub(),
+      },
+    };
+    create = () =>
+      createTooltipService({
+        chart,
+        actions,
+        translator,
+        rtl,
+        layoutService,
+        colorService,
+        themeService,
+        propertiesModel,
+        custom,
+      });
   });
 
   after(() => {
@@ -128,6 +164,7 @@ describe('tooltip-service', () => {
           'triggers',
           'section',
           'layout',
+          'events',
         ]);
       });
 
@@ -172,39 +209,20 @@ describe('tooltip-service', () => {
       });
 
       describe('section', () => {
-        it('should create section correctly when does not have size measure', () => {
-          layoutService.meta.hasSizeMeasure = false;
+        it('should create section', () => {
+          const h = { key: 'h' };
           const nodes = { key: 'nodes' };
           const dataset = { key: 'dataset' };
           const meta = { key: 'meta' };
           const createApi = { key: 'create' };
           const util = { key: 'util' };
-          getConfig().main.section({ nodes, dataset, meta, create: createApi, util });
+          getConfig().main.section({ h, nodes, dataset, meta, create: createApi, util });
           expect(
             createSection.default.withArgs({
               translator,
+              custom,
               measureProperties: ['x', 'y'],
-              nodes,
-              dataset,
-              meta,
-              create: createApi,
-              util,
-            })
-          ).to.have.been.calledOnce;
-        });
-
-        it('should create section correctly when has size measure', () => {
-          layoutService.meta.hasSizeMeasure = true;
-          const nodes = { key: 'nodes' };
-          const dataset = { key: 'dataset' };
-          const meta = { key: 'meta' };
-          const createApi = { key: 'create' };
-          const util = { key: 'util' };
-          getConfig().main.section({ nodes, dataset, meta, create: createApi, util });
-          expect(
-            createSection.default.withArgs({
-              translator,
-              measureProperties: ['x', 'y', 'size'],
+              h,
               nodes,
               dataset,
               meta,
@@ -226,6 +244,144 @@ describe('tooltip-service', () => {
 
         it('should have correct grouping', () => {
           expect(getConfig().main.layout.grouping).to.be.true;
+        });
+      });
+
+      describe('events', () => {
+        it('should have correct properties', () => {
+          expect(getConfig().main.events).to.have.all.keys(['tooltip', 'interaction']);
+        });
+
+        describe('tooltip', () => {
+          it('should have correct properties', () => {
+            expect(getConfig().main.events.tooltip).to.have.all.keys(['beforeShow', 'afterShow']);
+          });
+
+          describe('beforeShow', () => {
+            it('should resolve undefined if custom is not enabled and custom does not have images', (done) => {
+              custom.isEnabled.returns(false);
+              custom.hasImages.returns(false);
+              getConfig()
+                .main.events.tooltip.beforeShow({ collectNodes: () => {} })
+                .then((result) => {
+                  expect(result).to.be.undefined;
+                  done();
+                });
+            });
+
+            it('should resolve undefined if custom is not enabled and custom has images ', (done) => {
+              custom.isEnabled.returns(false);
+              custom.hasImages.returns(true);
+              getConfig()
+                .main.events.tooltip.beforeShow({ collectNodes: () => {} })
+                .then((result) => {
+                  expect(result).to.be.undefined;
+                  done();
+                });
+            });
+
+            it('should resolve undefined if custom is enabled and custom does not have images ', (done) => {
+              custom.isEnabled.returns(true);
+              custom.hasImages.returns(false);
+              getConfig()
+                .main.events.tooltip.beforeShow({ collectNodes: () => {} })
+                .then((result) => {
+                  expect(result).to.be.undefined;
+                  done();
+                });
+            });
+
+            it('should add images if custom is enabled and custom has images', () => {
+              custom.isEnabled.returns(true);
+              custom.hasImages.returns(true);
+              getConfig().main.events.tooltip.beforeShow({ collectNodes: () => ({ key: 'collected' }) });
+              expect(
+                custom.addImages.withArgs({
+                  nodes: { key: 'collected' },
+                })
+              ).to.have.been.calledOnce;
+            });
+
+            it('should return correctly if custom is enabled and custom has images', () => {
+              custom.isEnabled.returns(true);
+              custom.hasImages.returns(true);
+              custom.addImages.returns({ key: 'images' });
+              expect(getConfig().main.events.tooltip.beforeShow({ collectNodes: () => {} })).to.deep.equal({
+                key: 'images',
+              });
+            });
+          });
+
+          describe('afterShow', () => {
+            it('should not show custom chart if custom chart is not enabled and custom chart has limitation', () => {
+              custom.chart.isEnabled.returns(false);
+              custom.chart.hasLimitation.returns(true);
+              getConfig().main.events.tooltip.afterShow({ nodes: undefined });
+              expect(custom.chart.show).not.to.have.been.called;
+            });
+
+            it('should not show custom chart if custom chart is not enabled and custom chart does not have limitation', () => {
+              custom.chart.isEnabled.returns(false);
+              custom.chart.hasLimitation.returns(false);
+              getConfig().main.events.tooltip.afterShow({ nodes: undefined });
+              expect(custom.chart.show).not.to.have.been.called;
+            });
+
+            it('should not show custom chart if custom chart is enabled and custom chart has limitation', () => {
+              custom.chart.isEnabled.returns(true);
+              custom.chart.hasLimitation.returns(true);
+              getConfig().main.events.tooltip.afterShow({ nodes: undefined });
+              expect(custom.chart.show).not.to.have.been.called;
+            });
+
+            it('should show custom chart if custom chart is enabled and custom chart does not have limitation', () => {
+              custom.chart.isEnabled.returns(true);
+              custom.chart.hasLimitation.returns(false);
+              getConfig().main.events.tooltip.afterShow({ nodes: { key: 'nodes' } });
+              expect(
+                custom.chart.show.withArgs({
+                  nodes: { key: 'nodes' },
+                  properties: { key: 'properties' },
+                })
+              ).to.have.been.calledOnce;
+            });
+          });
+        });
+
+        describe('interaction', () => {
+          it('should have correct properties', () => {
+            expect(getConfig().main.events.interaction).to.have.all.keys(['mouseleave']);
+          });
+
+          describe('mouseleave', () => {
+            it('should not hide custom chart if custom chart is not enabled and custom chart does not have alternate state', () => {
+              custom.chart.isEnabled.returns(false);
+              custom.chart.hasAlternateState.returns(false);
+              getConfig().main.events.interaction.mouseleave();
+              expect(custom.chart.hide).not.to.have.been.called;
+            });
+
+            it('should not hide custom chart if custom chart is not enabled and custom chart has alternate state', () => {
+              custom.chart.isEnabled.returns(false);
+              custom.chart.hasAlternateState.returns(true);
+              getConfig().main.events.interaction.mouseleave();
+              expect(custom.chart.hide).not.to.have.been.called;
+            });
+
+            it('should not hide custom chart if custom chart is enabled and custom chart does not have alternate state', () => {
+              custom.chart.isEnabled.returns(true);
+              custom.chart.hasAlternateState.returns(false);
+              getConfig().main.events.interaction.mouseleave();
+              expect(custom.chart.hide).not.to.have.been.called;
+            });
+
+            it('should hide custom chart if custom chart is enabled and custom chart has alternate state', () => {
+              custom.chart.isEnabled.returns(true);
+              custom.chart.hasAlternateState.returns(true);
+              getConfig().main.events.interaction.mouseleave();
+              expect(custom.chart.hide).to.have.been.calledOnce;
+            });
+          });
         });
       });
     });
