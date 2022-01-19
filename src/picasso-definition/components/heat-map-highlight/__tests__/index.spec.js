@@ -35,6 +35,7 @@ describe('heat-map-highlight', () => {
     layoutService = {
       meta: {
         isBigData: true,
+        isSnapshot: false,
       },
     };
 
@@ -53,6 +54,11 @@ describe('heat-map-highlight', () => {
   it('should return false if flag is not enabled', () => {
     layoutService.meta.isBigData = true;
     flags.isEnabled.returns(false);
+    expect(create()).to.be.false;
+  });
+
+  it('should return false if is snapshot', () => {
+    layoutService.meta.isSnapshot = true;
     expect(create()).to.be.false;
   });
 
