@@ -1,5 +1,5 @@
 import * as chartModules from 'qlik-chart-modules';
-import propertyPanelDef from '../property-definition';
+import propertyPanelDef from '..';
 
 describe('property panel definition', () => {
   const env = {

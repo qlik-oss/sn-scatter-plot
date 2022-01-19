@@ -1,17 +1,8 @@
 import { getValue } from 'qlik-chart-modules';
-import showCompressionResolution from './show-compression-resolution';
-import colorModeOptions from './color-mode-options';
-import showUseDimValCol from './show-use-dim-val-col';
-
-/*
-const nonCompProp = {
-  component: 'text',
-  translation: 'properties.compression.willNotAffect',
-  show(data, handler) {
-    return showCompressionResolution(handler.layout);
-  },
-};
-*/
+import showCompressionResolution from '../show-compression-resolution';
+import colorModeOptions from '../color-mode-options';
+import showUseDimValCol from '../show-use-dim-val-col';
+import compressionNoteProperties from './compression-note-properties';
 
 const persistentColorsShow = (data) => !getValue(data, 'color.auto') && getValue(data, 'color.mode') === 'byDimension';
 
@@ -91,7 +82,7 @@ export default function propertyDefinition(env) {
                   return data.qHyperCubeDef.qMeasures.length >= 3;
                 },
               },
-              // rangeBubbleCompressionNote: nonCompProp,
+              rangeBubbleCompressionNote: compressionNoteProperties,
             },
           },
           label: {
@@ -121,7 +112,7 @@ export default function propertyDefinition(env) {
                   tid: 'property-labels',
                 },
               },
-              // labelModeCompressionNote: nonCompProp,
+              labelModeCompressionNote: compressionNoteProperties,
             },
           },
           queryLevel: {
@@ -196,6 +187,10 @@ export default function propertyDefinition(env) {
         items: {
           colors: {
             items: {
+              colorsAnLegendCompressionNote: compressionNoteProperties,
+              colorMode: {
+                options: colorModeOptions,
+              },
               persistentColors: {
                 show(data) {
                   if (showUseDimValCol(data)) {
@@ -204,9 +199,6 @@ export default function propertyDefinition(env) {
                   }
                   return persistentColorsShow(data);
                 },
-              },
-              colorMode: {
-                options: colorModeOptions,
               },
             },
           },
