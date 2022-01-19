@@ -39,6 +39,7 @@ describe('heatMapHighlight', () => {
           actions: {
             select: {
               on: sandbox.stub(),
+              removeAllListeners: sandbox.stub(),
               emit: sandbox.stub(),
             },
           },
