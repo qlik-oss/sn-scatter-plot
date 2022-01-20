@@ -13,7 +13,7 @@ import createNavigationPanel from './navigation-panel';
 import createMiniChart from './mini-chart';
 import createHeatMapHighLight from './heat-map-highlight';
 
-export default function createComponents({ context, models, flags, picasso, chart, actions }) {
+export default function createComponents({ context, models, picasso, chart, actions }) {
   const { colorService, disclaimerModel, layoutService, themeService, chartModel, tooltipService } = models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
   const { rtl } = context;
@@ -27,7 +27,7 @@ export default function createComponents({ context, models, flags, picasso, char
     ...createReferenceLines({ models, context }),
     createPoint(models),
     createHeatMap(chartModel),
-    ...createAxes({ models, flags }),
+    ...createAxes({ models }),
     ...createAxisTitles({ models, context }),
     createPointLabels({ models, chart }),
     createOutOfBounds({ models, context, chart }),
@@ -35,9 +35,9 @@ export default function createComponents({ context, models, flags, picasso, char
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
     createNavigationPanel({ layoutService, chartModel, rtl, chart, actions }),
-    ...createMiniChart({ models, flags }),
+    ...createMiniChart({ models }),
     ...tooltipService.getComponents(),
-    createHeatMapHighLight({ chartModel, layoutService, actions, flags }),
+    createHeatMapHighLight({ chartModel, layoutService, actions }),
     createHeatMapLabels({ themeService, chartModel, picasso, context }),
   ].filter(Boolean);
   // setDisplayOrder(components);

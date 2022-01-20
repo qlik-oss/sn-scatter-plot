@@ -2,7 +2,7 @@ import KEYS from '../constants/keys';
 import createDataFetcher from './data-fetcher';
 import createBinnedDataFetcher from './binned-data-fetcher';
 
-export default function createDataHandler({ layoutService, model, extremumModel, flags }) {
+export default function createDataHandler({ layoutService, model, extremumModel }) {
   const dataFetcher = createDataFetcher({ layoutService, model });
   const binnedDataFetcher = createBinnedDataFetcher({ layoutService, extremumModel, model });
   const meta = {};
@@ -24,7 +24,7 @@ export default function createDataHandler({ layoutService, model, extremumModel,
       return binnedDataFetcher.maxBinDensity;
     },
     fetch() {
-      if (layoutService.meta.isBigData && flags.isEnabled('DATA_BINNING')) {
+      if (layoutService.meta.isBigData) {
         requestInProgress = binnedDataFetcher.fetch();
       } else {
         requestInProgress = dataFetcher.fetch();
