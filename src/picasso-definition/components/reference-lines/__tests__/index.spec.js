@@ -9,6 +9,7 @@ describe('createReferenceLines', () => {
   let context;
   let dockService;
   let models;
+  const colorService = 'colorService';
   const layoutService = 'layoutService';
   const chartModel = 'chart-model';
 
@@ -28,7 +29,7 @@ describe('createReferenceLines', () => {
     sandbox.stub(MODES, 'REFERENCE_LINES').value('XSMALL');
     sandbox.stub(createLines, 'default');
     sandbox.stub(createLabels, 'default');
-    models = { layoutService, dockService, chartModel };
+    models = { colorService, layoutService, dockService, chartModel };
   });
 
   afterEach(() => {
@@ -39,6 +40,7 @@ describe('createReferenceLines', () => {
     createReferenceLines({ models, context });
     expect(
       createLines.default.withArgs({
+        colorService: 'colorService',
         layoutService: 'layoutService',
         chartModel: 'chart-model',
         scale: 'Y',
@@ -48,6 +50,7 @@ describe('createReferenceLines', () => {
     ).to.have.been.calledOnce;
     expect(
       createLines.default.withArgs({
+        colorService: 'colorService',
         layoutService: 'layoutService',
         chartModel: 'chart-model',
         scale: 'X',

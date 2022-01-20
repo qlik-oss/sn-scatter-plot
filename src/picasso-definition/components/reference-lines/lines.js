@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 
-export default function createRefLines({ layoutService, chartModel, scale, key, minimumLayoutMode }) {
+export default function createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode }) {
   const viewHandler = chartModel.query.getViewHandler();
   const path = scale === KEYS.SCALE.X ? 'refLine.refLinesX' : 'refLine.refLinesY';
   const refLines = layoutService
@@ -11,6 +11,8 @@ export default function createRefLines({ layoutService, chartModel, scale, key, 
   if (!refLines.length) {
     return false;
   }
+
+  const colorModel = { resolveUIColor: colorService.getPaletteColor };
 
   const settings = {
     key,
@@ -58,8 +60,9 @@ export default function createRefLines({ layoutService, chartModel, scale, key, 
   refLines.forEach((refLineLayout) => {
     settings.lines[scale].push({
       line: {
-        stroke: refLineLayout.paletteColor.color,
-        strokeWidth: 2,
+        stroke: colorModel.resolveUIColor(refLineLayout.paletteColor || { index: refLineLayout.color }),
+        strokeWidth: refLineLayout.style?.lineThickness || 2,
+        strokeDasharray: refLineLayout.style?.lineType,
       },
       scale,
       value: refLineLayout.refLineExpr.value,

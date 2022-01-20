@@ -31,7 +31,7 @@ const getOobColors = (style, theme) => {
 };
 
 export default function createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode }) {
-  const { layoutService, themeService, chartModel } = models;
+  const { colorService, layoutService, themeService, chartModel } = models;
   const { rtl, localeInfo } = context;
   const themeStyle = themeService.getStyles();
   const theme = themeService.getTheme();
@@ -46,9 +46,13 @@ export default function createRefLineLabels({ models, context, scale, key, dock,
     return false;
   }
 
+  const colorModel = { resolveUIColor: colorService.getPaletteColor };
+
   const labels = refLineLabels.map((refLineLayout) => ({
     text: refLineLayout.label,
-    fill: refLineLayout.paletteColor.color,
+    fill: colorModel.resolveUIColor(refLineLayout.paletteColor || { index: refLineLayout.color }),
+    showValue: refLineLayout.showValue !== false,
+    showLabel: refLineLayout.showLabel !== false,
     value: refLineLayout.refLineExpr.value,
     valueLabel: refLineLayout.refLineExpr.label,
     scale,

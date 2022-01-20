@@ -1,4 +1,16 @@
 const labelHelper = {
+  getTitle(label) {
+    if (label.showValue !== false) {
+      if (label.showLabel !== false) {
+        return `${label.text} ${label.valueString}`;
+      }
+      return label.valueString;
+    }
+    if (label.showLabel !== false) {
+      return label.text;
+    }
+    return '';
+  },
   addLabelPositions(labels, scale, size) {
     for (let i = 0; i < labels.length; i++) {
       const label = labels[i];
@@ -49,7 +61,7 @@ const labelHelper = {
         valueString = formatter ? formatter(value) : value;
       }
       label.valueString = `(${valueString})`;
-      label.title = `${label.text} ${label.valueString}`;
+      label.title = labelHelper.getTitle(label);
     }
   },
 

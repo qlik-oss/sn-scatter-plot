@@ -4,10 +4,11 @@ import createLines from './lines';
 import createLabels from './labels';
 
 export default function createReferenceLines({ models, context }) {
-  const { layoutService, dockService, chartModel } = models;
+  const { colorService, layoutService, dockService, chartModel } = models;
 
   return [
     createLines({
+      colorService,
       layoutService,
       chartModel,
       scale: KEYS.SCALE.X,
@@ -15,6 +16,7 @@ export default function createReferenceLines({ models, context }) {
       minimumLayoutMode: MODES.REFERENCE_LINES,
     }),
     createLines({
+      colorService,
       layoutService,
       chartModel,
       scale: KEYS.SCALE.Y,
