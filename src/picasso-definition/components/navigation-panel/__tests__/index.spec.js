@@ -15,7 +15,10 @@ describe('createNavigationPanel', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    layoutService = { getLayoutValue: sandbox.stub() };
+    layoutService = {
+      getLayoutValue: sandbox.stub(),
+      meta: { isSnapshot: false },
+    };
     viewHandler = {
       getMeta: sandbox.stub().returns({ homeStateDataView: { xAxisMin: 0, xAxisMax: 1, yAxisMin: 2, yAxisMax: 3 } }),
       setDataView: sandbox.stub(),
@@ -32,6 +35,11 @@ describe('createNavigationPanel', () => {
 
   afterEach(() => {
     sandbox.restore();
+  });
+
+  it('should return false if is snapshot', () => {
+    layoutService.meta.isSnapshot = true;
+    expect(create()).to.be.false;
   });
 
   describe('the returned navigation panel object', () => {

@@ -14,7 +14,7 @@ describe('createMiniChart', () => {
     sandbox.stub(createMiniPoints, 'default').returns('mini-points');
     sandbox.stub(createBackgroundWindow, 'default').returns('background-window');
     sandbox.stub(createNavigationWindow, 'default').returns('nav-window');
-    models = { layoutService: { meta: { isBigData: true } } };
+    models = { layoutService: { meta: { isBigData: true, isSnapshot: false } } };
     flags = { isEnabled: sandbox.stub() };
     create = () => createMiniChart({ models, flags });
   });
@@ -32,6 +32,13 @@ describe('createMiniChart', () => {
     expect(create()).to.deep.equal([]);
     models.layoutService.meta.isBigData = false;
     flags.isEnabled.returns(false);
+    expect(create()).to.deep.equal([]);
+  });
+
+  it('should return empty array when is snapshot', () => {
+    models.layoutService.meta.isBigData = false;
+    flags.isEnabled.returns(true);
+    models.layoutService.meta.isSnapshot = true;
     expect(create()).to.deep.equal([]);
   });
 
