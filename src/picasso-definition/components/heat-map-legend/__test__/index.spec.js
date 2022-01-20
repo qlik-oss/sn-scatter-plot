@@ -1,4 +1,5 @@
 import * as KEYS from '../../../../constants/keys';
+import * as MODES from '../../../../constants/modes';
 import createHeatMapLegend from '..';
 import * as getDock from '../../../../utils/dock-helper';
 
@@ -59,6 +60,9 @@ describe('heat-map-legend', () => {
         HEAT_MAP_COLOR: 'heat-map-color',
       },
     });
+    sandbox.stub(MODES, 'default').value({
+      HEAT_MAP_LEGEND: 'medium',
+    });
     create = () => createHeatMapLegend({ models, context, chart });
   });
 
@@ -79,9 +83,17 @@ describe('heat-map-legend', () => {
       expect(create().dock).to.equal('right');
     });
 
+    it('should have correct minimumLayoutMode', () => {
+      expect(create().minimumLayoutMode).to.equal('medium');
+    });
+
     describe('settings', () => {
       it('should have correct properties', () => {
-        expect(create().settings).to.have.all.keys(['fill', 'major', 'title', 'tick']);
+        expect(create().settings).to.have.all.keys(['length', 'fill', 'major', 'title', 'tick']);
+      });
+
+      it('should have correct fill', () => {
+        expect(create().settings.length).to.equal(1);
       });
 
       it('should have correct fill', () => {
