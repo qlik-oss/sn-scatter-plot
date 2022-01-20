@@ -4,6 +4,9 @@ import zoom from '../../../view-handler/zoom';
 import clearMinor from '../../../utils/clear-minor';
 
 export default function createNavigationPanel({ layoutService, chartModel, rtl, chart, actions }) {
+  if (layoutService.meta.isSnapshot) {
+    return false;
+  }
   const navigation = layoutService.getLayoutValue('navigation');
   const viewHandler = chartModel.query.getViewHandler();
   return {
