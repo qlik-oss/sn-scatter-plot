@@ -34,7 +34,7 @@ const NavigationButton = ({ ...rest }) => {
     });
   const classes = useStyles(rest.rtl)();
   return (
-    <IconButton className={`${classes.common} ${classes[rest.name]}`} onClick={rest.callback}>
+    <IconButton className={`${classes.common} ${classes[rest.name]}`} onClick={rest.callback} title={rest.title}>
       <SVGIcon
         {...ICONS[rest.name]}
         size="extra-large"
@@ -73,13 +73,19 @@ export default function navigationPanel() {
       const { actions, isDisabled, rtl } = this.settings.settings;
       return (
         <div style={style}>
-          <NavigationButton name="UP" rtl={rtl} callback={actions.up} />
-          <NavigationButton name="LEFT" rtl={rtl} callback={actions.left} />
-          <NavigationButton name="HOME" rtl={rtl} callback={actions.home} isDisabled={isDisabled.home} />
-          <NavigationButton name="RIGHT" rtl={rtl} callback={actions.right} />
-          <NavigationButton name="DOWN" rtl={rtl} callback={actions.down} />
-          <NavigationButton name="ZOOM_IN" rtl={rtl} callback={actions.zoomIn} />
-          <NavigationButton name="ZOOM_OUT" rtl={rtl} callback={actions.zoomOut} />
+          <NavigationButton name="UP" rtl={rtl} callback={actions.up} title="Pan up" />
+          <NavigationButton name="LEFT" rtl={rtl} callback={actions.left} title="Pan left" />
+          <NavigationButton
+            name="HOME"
+            rtl={rtl}
+            callback={actions.home}
+            title="Reset zoom"
+            isDisabled={isDisabled.home}
+          />
+          <NavigationButton name="RIGHT" rtl={rtl} callback={actions.right} title="Pan right" />
+          <NavigationButton name="DOWN" rtl={rtl} callback={actions.down} title="Pan down" />
+          <NavigationButton name="ZOOM_IN" rtl={rtl} callback={actions.zoomIn} title="Zoom in" />
+          <NavigationButton name="ZOOM_OUT" rtl={rtl} callback={actions.zoomOut} title="Zoom out" />
         </div>
       );
     },
