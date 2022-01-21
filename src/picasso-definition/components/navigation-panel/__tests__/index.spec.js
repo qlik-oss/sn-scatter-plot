@@ -11,7 +11,9 @@ describe('createNavigationPanel', () => {
   let viewHandler;
   let create;
   let navigationPanel;
-  let rtl;
+  let context;
+  let chart;
+  let actions;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -28,8 +30,8 @@ describe('createNavigationPanel', () => {
     sandbox.stub(move, 'default');
     sandbox.stub(zoom, 'default');
     sandbox.stub(clearMinor, 'default');
-    rtl = false;
-    create = () => createNavigationPanel({ layoutService, chartModel, rtl });
+    context = { rtl: false, translator: 't' };
+    create = () => createNavigationPanel({ layoutService, chartModel, chart, actions, context });
     navigationPanel = create();
   });
 
@@ -67,7 +69,7 @@ describe('createNavigationPanel', () => {
 
     describe('settings', () => {
       it('should have all keys', () => {
-        expect(navigationPanel.settings).to.have.all.keys(['actions', 'isDisabled', 'rtl']);
+        expect(navigationPanel.settings).to.have.all.keys(['actions', 'isDisabled', 'rtl', 'translator']);
       });
       describe('actions', () => {
         it('should have all keys', () => {
@@ -164,6 +166,12 @@ describe('createNavigationPanel', () => {
             viewHandler.getMeta.returns({ isHomeState: false });
             expect(navigationPanel.settings.isDisabled.home()).to.equal(false);
           });
+        });
+      });
+
+      describe('translator', () => {
+        it('should have correct value', () => {
+          expect(navigationPanel.settings.translator).to.equal('t');
         });
       });
     });

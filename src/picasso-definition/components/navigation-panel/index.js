@@ -3,12 +3,13 @@ import move from '../../../view-handler/move';
 import zoom from '../../../view-handler/zoom';
 import clearMinor from '../../../utils/clear-minor';
 
-export default function createNavigationPanel({ layoutService, chartModel, rtl, chart, actions }) {
+export default function createNavigationPanel({ layoutService, chartModel, chart, actions, context }) {
   if (layoutService.meta.isSnapshot) {
     return false;
   }
   const navigation = layoutService.getLayoutValue('navigation');
   const viewHandler = chartModel.query.getViewHandler();
+  const { rtl, translator } = context;
   return {
     key: KEYS.COMPONENT.NAVIGATION_PANEL,
     type: 'navigation-panel',
@@ -48,6 +49,7 @@ export default function createNavigationPanel({ layoutService, chartModel, rtl, 
         home: () => viewHandler.getMeta().isHomeState,
       },
       rtl,
+      translator,
     },
   };
 }

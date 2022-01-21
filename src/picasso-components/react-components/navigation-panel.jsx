@@ -70,22 +70,52 @@ export default function navigationPanel() {
     disableTriggers: true,
     render() {
       const style = getStyle({ rect: this.rect });
-      const { actions, isDisabled, rtl } = this.settings.settings;
+      const { actions, isDisabled, rtl, translator } = this.settings.settings;
       return (
         <div style={style}>
-          <NavigationButton name="UP" rtl={rtl} callback={actions.up} title="Pan up" />
-          <NavigationButton name="LEFT" rtl={rtl} callback={actions.left} title="Pan left" />
+          <NavigationButton
+            name="UP"
+            rtl={rtl}
+            callback={actions.up}
+            title={translator.get('Object.Navigation.PanUp')}
+          />
+          <NavigationButton
+            name="LEFT"
+            rtl={rtl}
+            callback={actions.left}
+            title={translator.get('Object.Navigation.PanLeft')}
+          />
           <NavigationButton
             name="HOME"
             rtl={rtl}
             callback={actions.home}
-            title="Reset zoom"
+            title={translator.get('Object.Navigation.ResetZoom')}
             isDisabled={isDisabled.home}
           />
-          <NavigationButton name="RIGHT" rtl={rtl} callback={actions.right} title="Pan right" />
-          <NavigationButton name="DOWN" rtl={rtl} callback={actions.down} title="Pan down" />
-          <NavigationButton name="ZOOM_IN" rtl={rtl} callback={actions.zoomIn} title="Zoom in" />
-          <NavigationButton name="ZOOM_OUT" rtl={rtl} callback={actions.zoomOut} title="Zoom out" />
+          <NavigationButton
+            name="RIGHT"
+            rtl={rtl}
+            callback={actions.right}
+            title={translator.get('Object.Navigation.PanRight')}
+          />
+          <NavigationButton
+            name="DOWN"
+            rtl={rtl}
+            callback={actions.down}
+            title={translator.get('Object.Navigation.PanDown')}
+          />
+          <NavigationButton
+            name="ZOOM_IN"
+            rtl={rtl}
+            callback={actions.zoomIn}
+            title={translator.get('Object.Navigation.ZoomIn')}
+          />
+          <NavigationButton
+            name="ZOOM_OUT"
+            rtl={rtl}
+            callback={actions.zoomOut}
+            title={translator.get('Object.Navigation.ZoomOut')}
+          />
         </div>
       );
     },
