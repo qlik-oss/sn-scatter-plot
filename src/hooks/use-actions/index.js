@@ -2,15 +2,14 @@ import { useConstraints, useState } from '@nebula.js/stardust';
 import useLasso from './use-lasso';
 import useSelect from './use-select';
 
-export default function useActions({ flags }) {
+export default function useActions() {
   const constraints = useConstraints();
   const select = useSelect();
   const lasso = useLasso();
-  const enabledPanZoom = flags.isEnabled('panZoom');
 
   const [actions] = useState({});
   actions.zoom = {
-    enabled: () => enabledPanZoom && constraints && !constraints.active,
+    enabled: () => constraints && !constraints.active,
   };
   actions.scroll = {
     enabled: () => constraints && !constraints.active,

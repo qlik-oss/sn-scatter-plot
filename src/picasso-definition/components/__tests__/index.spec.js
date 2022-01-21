@@ -19,7 +19,6 @@ describe('createComponents', () => {
   let sandbox;
   let create;
   let models;
-  let flags;
   let picasso;
   let chart;
 
@@ -36,7 +35,7 @@ describe('createComponents', () => {
         query: { getHasSuppressingDisclaimer: sandbox.stub().returns(false) },
       },
     };
-    create = () => createComponents({ context, models, flags, picasso, chart });
+    create = () => createComponents({ context, models, picasso, chart });
     sandbox.stub(createGridLines, 'default').returns('grid-lines');
     sandbox.stub(createReferenceLines, 'default').returns(['ref-line-x', 'ref-line-y']);
     sandbox.stub(createPoint, 'default').returns('points');

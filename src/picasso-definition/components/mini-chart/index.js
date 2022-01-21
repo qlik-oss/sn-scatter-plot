@@ -2,9 +2,9 @@ import createMiniPoints from './mini-points';
 import createBackgroundWindow from './background-window';
 import createNavigationWindow from './navigation-window';
 
-export default function createMiniChart({ models, flags }) {
+export default function createMiniChart({ models }) {
   const { layoutService, chartModel } = models;
-  if (!layoutService.meta.isBigData || !flags.isEnabled('DATA_BINNING') || layoutService.meta.isSnapshot) {
+  if (!layoutService.meta.isBigData || layoutService.meta.isSnapshot) {
     return [];
   }
   const backgroundWindow = createBackgroundWindow(chartModel);
