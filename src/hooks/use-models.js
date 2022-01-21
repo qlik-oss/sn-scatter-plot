@@ -96,7 +96,7 @@ const useModels = ({ core, flags }) => {
     const pluginService = createPluginService({ picassoInstance, plugins, pluginArgs });
     const extremumModel = createExtremumModel(layoutService, options.viewState);
 
-    const dataHandler = createDataHandler({ layoutService, model, extremumModel, flags });
+    const dataHandler = createDataHandler({ layoutService, model, extremumModel });
 
     const colorService = createColorService({
       actions,
@@ -136,7 +136,7 @@ const useModels = ({ core, flags }) => {
 
     const tickModel = createTickModel({ layoutService, dockService, extremumModel, themeService, chartModel, chart });
 
-    const disclaimerModel = createDisclaimerModel({ layoutService, flags });
+    const disclaimerModel = createDisclaimerModel({ layoutService });
 
     const propertiesModel = createPropertiesModel({ model, layoutService });
 

@@ -12,7 +12,7 @@ export default function scatterplot(env) {
     qae: createQae(env),
     ext: ext(env),
     component() {
-      const core = useCore({ flags });
+      const core = useCore();
       const models = useModels({ core, flags });
       const settings = useSettings({ core, models, flags });
 

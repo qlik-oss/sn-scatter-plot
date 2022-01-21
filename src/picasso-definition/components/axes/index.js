@@ -3,10 +3,9 @@ import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 import NUMBERS from '../../../constants/numbers';
 
-export default function createAxes({ models, flags }) {
+export default function createAxes({ models }) {
   const { layoutService, dockService, themeService, chartModel } = models;
   const { xAxis, yAxis } = layoutService.getLayout();
-  const enabledPanZoom = flags.isEnabled('panZoom');
 
   const style = themeService.getStyles();
   const viewHandler = chartModel.query.getViewHandler();
@@ -92,12 +91,8 @@ export default function createAxes({ models, flags }) {
             minorTicks: {
               stroke: style.axis.line.minor.color,
             },
-            paddingEnd: !enabledPanZoom
-              ? undefined
-              : () =>
-                  yAxis.show === 'title' || viewHandler.getMeta().isHomeState === false
-                    ? 0
-                    : NUMBERS.AXIS.Y.PADDING.END,
+            paddingEnd: () =>
+              yAxis.show === 'title' || viewHandler.getMeta().isHomeState === false ? 0 : NUMBERS.AXIS.Y.PADDING.END,
           },
           animations: {
             enabled: () => viewHandler.animationEnabled,
