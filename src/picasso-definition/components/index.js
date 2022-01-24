@@ -14,7 +14,8 @@ import createMiniChart from './mini-chart';
 import createHeatMapHighLight from './heat-map-highlight';
 
 export default function createComponents({ context, models, picasso, chart, actions }) {
-  const { colorService, disclaimerModel, layoutService, themeService, chartModel, tooltipService } = models;
+  const { colorService, disclaimerModel, layoutService, themeService, chartModel, trendLinesService, tooltipService } =
+    models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
 
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
@@ -26,6 +27,7 @@ export default function createComponents({ context, models, picasso, chart, acti
     ...createReferenceLines({ models, context }),
     createPoint(models),
     createHeatMap(chartModel),
+    ...trendLinesService.getComponents(),
     ...createAxes({ models }),
     ...createAxisTitles({ models, context }),
     createPointLabels({ models, chart }),

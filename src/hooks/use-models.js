@@ -21,6 +21,7 @@ import {
 } from 'qlik-chart-modules';
 import themeStyleMatrix from '../services/theme-service/theme-style-matrix';
 import layoutServiceMeta from '../services/layout-service/meta';
+import createTrenslinesService from '../services/trendlines-service';
 import createChartModel from '../models/chart-model';
 import createTickModel from '../models/tick-model';
 import createSelectionService from '../services/selection-service';
@@ -116,6 +117,17 @@ const useModels = ({ core, flags }) => {
       dataHandler,
     });
 
+    let chartModel;
+    const trendLinesService = createTrenslinesService({
+      chart,
+      colorService,
+      enableAnimations: () => chartModel.query.getViewHandler().animationEnabled,
+      flags,
+      layoutService,
+      translator,
+      viewState,
+    });
+
     const propertiesModel = createPropertiesModel({ model, layoutService });
 
     const customTooltipService = createCustomTooltipService({
@@ -138,11 +150,12 @@ const useModels = ({ core, flags }) => {
       layoutService,
       colorService,
       themeService,
+      trendLinesService,
       propertiesModel,
       custom: customTooltipService,
     });
 
-    const chartModel = createChartModel({
+    chartModel = createChartModel({
       chart,
       localeInfo,
       layoutService,
@@ -151,6 +164,7 @@ const useModels = ({ core, flags }) => {
       colorService,
       extremumModel,
       dataHandler,
+      trendLinesService,
     });
 
     const tickModel = createTickModel({ layoutService, dockService, extremumModel, themeService, chartModel, chart });
@@ -171,6 +185,7 @@ const useModels = ({ core, flags }) => {
       extremumModel,
       tooltipService,
       propertiesModel,
+      trendLinesService,
     });
   }, [model, app, selectionService, layout, theme.name(), translator.language(), options.direction, options.viewState]);
 

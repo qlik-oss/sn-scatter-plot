@@ -1,5 +1,6 @@
 import KEYS from '../../../constants/keys';
 import getMeasureValue from './measure-value';
+import createTrendline from './trendline';
 
 export default function createSection({
   translator,
@@ -11,8 +12,13 @@ export default function createSection({
   meta,
   create,
   util,
+  trendLinesService,
 }) {
   const isHeatMap = meta.triggerer === KEYS.COMPONENT.HEAT_MAP;
+
+  if (meta.triggerer === KEYS.COMPONENT.TRENDLINES_TOOLTIP_OVERLAY) {
+    return createTrendline({ dataset, translator, nodes, create, h, trendLinesService });
+  }
 
   const [first] = nodes;
 

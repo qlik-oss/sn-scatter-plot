@@ -1,4 +1,5 @@
 import { getValue } from 'qlik-chart-modules';
+import trendlineDefinition from './trendlines-definition';
 import showCompressionResolution from '../show-compression-resolution';
 import colorModeOptions from '../color-mode-options';
 import showUseDimValCol from '../show-use-dim-val-col';
@@ -7,6 +8,8 @@ import compressionNoteProperties from './compression-note-properties';
 const persistentColorsShow = (data) => !getValue(data, 'color.auto') && getValue(data, 'color.mode') === 'byDimension';
 
 export default function propertyDefinition(env) {
+  const trendlines = trendlineDefinition(env);
+
   const settings = {
     uses: 'settings',
     items: {
@@ -429,6 +432,7 @@ export default function propertyDefinition(env) {
           },
         },
       },
+      trendlines,
     },
   };
 
