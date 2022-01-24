@@ -538,5 +538,145 @@
       "zh-TW": "密度",
       "ru-RU": "Плотность"
     }
+  },
+  "Object.Navigation.PanUp": {
+    "id": "Object.Navigation.PanUp",
+    "locale": {
+      "en-US": "Pan up",
+      "de-DE": "Nach oben schwenken",
+      "fr-FR": "Panoramique vers le haut",
+      "it-IT": "Panoramica su",
+      "ja-JP": "上にパン",
+      "ko-KR": "위로 이동",
+      "es-ES": "Desplazar arriba",
+      "nl-NL": "Omhoog schuiven",
+      "pl-PL": "Przesuń w górę",
+      "pt-BR": "Mover para cima",
+      "sv-SE": "Panorera uppåt",
+      "tr-TR": "Yukarı kaydır",
+      "zh-CN": "向上平移",
+      "zh-TW": "向上平移",
+      "ru-RU": "Панорамирование снизу вверх"
+    }
+  },
+  "Object.Navigation.PanDown": {
+    "id": "Object.Navigation.PanDown",
+    "locale": {
+      "en-US": "Pan down",
+      "de-DE": "Nach unten schwenken",
+      "fr-FR": "Panoramique vers le bas",
+      "it-IT": "Panoramica giù",
+      "ja-JP": "下にパン",
+      "ko-KR": "아래로 이동",
+      "es-ES": "Desplazar abajo",
+      "nl-NL": "Omlaag schuiven",
+      "pl-PL": "Przesuń w dół",
+      "pt-BR": "Mover para baixo",
+      "sv-SE": "Panorera nedåt",
+      "tr-TR": "Aşağı kaydır",
+      "zh-CN": "向下平移",
+      "zh-TW": "向下平移",
+      "ru-RU": "Панорамирование сверху вниз"
+    }
+  },
+  "Object.Navigation.PanLeft": {
+    "id": "Object.Navigation.PanLeft",
+    "locale": {
+      "en-US": "Pan left",
+      "de-DE": "Nach links schwenken",
+      "fr-FR": "Panoramique à gauche",
+      "it-IT": "Panoramica sinistra",
+      "ja-JP": "左にパン",
+      "ko-KR": "왼쪽으로 이동",
+      "es-ES": "Desplazar a la izquierda",
+      "nl-NL": "Naar links schuiven",
+      "pl-PL": "Przesuń w lewo",
+      "pt-BR": "Mover para a esquerda",
+      "sv-SE": "Panorera vänster",
+      "tr-TR": "Sola kaydır",
+      "zh-CN": "向左平移",
+      "zh-TW": "向左平移",
+      "ru-RU": "Панорамирование влево"
+    }
+  },
+  "Object.Navigation.PanRight": {
+    "id": "Object.Navigation.PanRight",
+    "locale": {
+      "en-US": "Pan right",
+      "de-DE": "Nach rechts schwenken",
+      "fr-FR": "Panoramique à droite",
+      "it-IT": "Panoramica destra",
+      "ja-JP": "右にパン",
+      "ko-KR": "오른쪽으로 이동",
+      "es-ES": "Desplazar a la derecha",
+      "nl-NL": "Naar rechts schuiven",
+      "pl-PL": "Przesuń w prawo",
+      "pt-BR": "Mover para a direita",
+      "sv-SE": "Panorera höger",
+      "tr-TR": "Sağa kaydır",
+      "zh-CN": "向右平移",
+      "zh-TW": "向右平移",
+      "ru-RU": "Панорамирование вправо"
+    }
+  },
+  "Object.Navigation.ResetZoom": {
+    "id": "Object.Navigation.ResetZoom",
+    "locale": {
+      "en-US": "Reset zoom",
+      "de-DE": "Zoom zurücksetzen",
+      "fr-FR": "Réinitialiser le zoom",
+      "it-IT": "Reimposta zoom",
+      "ja-JP": "ズームのリセット",
+      "ko-KR": "확대/축소 다시 설정",
+      "es-ES": "Restablecer zoom",
+      "nl-NL": "Zoom herstellen",
+      "pl-PL": "Resetuj powiększenie",
+      "pt-BR": "Restaurar zoom",
+      "sv-SE": "Återställ zoom",
+      "tr-TR": "Yakınlaştırmayı sıfırla",
+      "zh-CN": "重置缩放",
+      "zh-TW": "重設縮放比例",
+      "ru-RU": "Сброс настроек по увеличению/уменьшению"
+    }
+  },
+  "Object.Navigation.ZoomIn": {
+    "id": "Object.Navigation.ZoomIn",
+    "locale": {
+      "en-US": "Zoom in",
+      "de-DE": "Vergrößern",
+      "fr-FR": "Zoom avant",
+      "it-IT": "Zoom avanti",
+      "ja-JP": "ズームイン",
+      "ko-KR": "확대",
+      "es-ES": "Acercar",
+      "nl-NL": "Inzoomen",
+      "pl-PL": "Powiększ",
+      "pt-BR": "Mais zoom",
+      "sv-SE": "Zooma in",
+      "tr-TR": "Yakınlaştır",
+      "zh-CN": "放大",
+      "zh-TW": "放大",
+      "ru-RU": "Увеличение"
+    }
+  },
+  "Object.Navigation.ZoomOut": {
+    "id": "Object.Navigation.ZoomOut",
+    "locale": {
+      "en-US": "Zoom out",
+      "de-DE": "Verkleinern",
+      "fr-FR": "Zoom arrière",
+      "it-IT": "Zoom indietro",
+      "ja-JP": "ズームアウト",
+      "ko-KR": "축소",
+      "es-ES": "Alejar",
+      "nl-NL": "Uitzoomen",
+      "pl-PL": "Zmniejsz",
+      "pt-BR": "Menos zoom",
+      "sv-SE": "Zooma ut",
+      "tr-TR": "Uzaklaştır",
+      "zh-CN": "缩小",
+      "zh-TW": "縮小",
+      "ru-RU": "Уменьшение"
+    }
   }
 }
