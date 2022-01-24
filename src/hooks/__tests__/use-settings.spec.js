@@ -3,6 +3,7 @@ import * as stardust from '@nebula.js/stardust';
 import * as createPicassoDefinition from '../../picasso-definition';
 import * as getLogicalSize from '../../logical-size';
 import * as viewStateActions from '../view-state';
+import customTooltipMigrators from '../../custom-tooltip/migrators';
 import useSettings from '../use-settings';
 
 describe('use-settings', () => {
@@ -70,6 +71,7 @@ describe('use-settings', () => {
     sandbox.stub(getLogicalSize, 'default');
     sandbox.stub(viewStateActions, 'initializeViewState');
     sandbox.stub(viewStateActions, 'updateViewState');
+    sandbox.stub(customTooltipMigrators.attrExpr, 'updateProperties');
 
     create = () => useSettings({ core, models, flags });
   });

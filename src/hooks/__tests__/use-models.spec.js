@@ -12,6 +12,7 @@ import * as getLogicalSize from '../../logical-size';
 import * as createExtremumModel from '../../models/extremum-model';
 import * as createDisclaimerModel from '../../models/disclaimer-model';
 import * as createPropertiesModel from '../../models/properties-model';
+import * as createCustomTooltipService from '../../custom-tooltip/service';
 import * as createDataHandler from '../../data-handler';
 import useModels from '../use-models';
 
@@ -76,6 +77,7 @@ describe('use-models', () => {
     sandbox.stub(stardust, 'usePlugins').returns(plugins);
     sandbox.stub(stardust, 'useState');
     sandbox.stub(stardust, 'useEffect');
+    sandbox.stub(stardust, 'useEmbed');
     stardust.useState.onFirstCall().returns([selectionService, setSelectionService]);
     stardust.useState.onSecondCall().returns([models, setModels]);
     sandbox.stub(createSelectionService, 'default').returns(localSelectionService);
@@ -94,6 +96,7 @@ describe('use-models', () => {
     sandbox.stub(createTickModel, 'default');
     sandbox.stub(createDisclaimerModel, 'default');
     sandbox.stub(createPropertiesModel, 'default');
+    sandbox.stub(createCustomTooltipService, 'default');
 
     create = () => useModels({ core, flags });
   });
@@ -177,6 +180,7 @@ describe('use-models', () => {
         expect(createExtremumModel.default).to.have.been.calledOnce;
         expect(createDataHandler.default).to.have.been.calledOnce;
         expect(createColorService.default).to.have.been.calledOnce;
+        expect(createCustomTooltipService.default).to.have.been.calledOnce;
         expect(createTooltipService.default).to.have.been.calledOnce;
         expect(createChartModel.default).to.have.been.calledOnce;
         expect(createTickModel.default).to.have.been.calledOnce;
