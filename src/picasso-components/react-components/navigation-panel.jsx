@@ -34,7 +34,12 @@ const NavigationButton = ({ ...rest }) => {
     });
   const classes = useStyles(rest.rtl)();
   return (
-    <IconButton className={`${classes.common} ${classes[rest.name]}`} onClick={rest.callback} title={rest.title}>
+    <IconButton
+      className={`${classes.common} ${classes[rest.name]}`}
+      onClick={rest.callback}
+      title={rest.title}
+      aria-label={rest.title}
+    >
       <SVGIcon
         {...ICONS[rest.name]}
         size="extra-large"
