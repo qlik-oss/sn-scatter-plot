@@ -120,11 +120,11 @@ jobs:
           command: |
             docker pull ghcr.io/qlik-download/api-compliance
             docker create -v /specs --name specs alpine:3.4 /bin/true
-            ./.circleci/api-gov.sh ./api-specifications/properties.json '/specs/properties.json' 0395aa3a-3d13-439f-a0a6-3d47e0462a8f './package.json'
+            ./.circleci/api-gov.sh ./api-specifications/properties.json 'specs/properties.json' 0395aa3a-3d13-439f-a0a6-3d47e0462a8f './package.json'
       - run:
           name: API Governance Scatter Plot Plugins
           command: |
-            ./.circleci/api-gov.sh ./api-specifications/plugins.json '/specs/plugins.json' 86d3d254-a759-433c-b235-c14b479b4521 './package.json'
+            ./.circleci/api-gov.sh ./api-specifications/plugins.json 'specs/plugins.json' 86d3d254-a759-433c-b235-c14b479b4521 './package.json'
 
 workflows:
   version: 2
