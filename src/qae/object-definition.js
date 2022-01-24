@@ -340,6 +340,18 @@ const objectDefinition = () => {
        * @default
        */
       description: '',
+      /**
+       * The chart object is used to define the chart displayed by the custom tooltip.
+       * @type {MasterVisualizationChart}
+       * @default undefined
+       */
+      chart: undefined,
+      /**
+       * The imageComponents objects are used to define the images displayed by the custom tooltip.
+       * @type {ImageComponent[]}
+       * @default undefined
+       */
+      imageComponents: undefined,
     },
     /**
      * X-axis settings.
