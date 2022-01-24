@@ -340,6 +340,18 @@ const objectDefinition = () => {
        * @default
        */
       description: '',
+      /**
+       * The chart object is used to define the chart displayed by the custom tooltip.
+       * @type {MasterVisualizationChart}
+       * @default undefined
+       */
+      chart: undefined,
+      /**
+       * The imageComponents objects are used to define the images displayed by the custom tooltip.
+       * @type {ImageComponent[]}
+       * @default undefined
+       */
+      imageComponents: undefined,
     },
     /**
      * X-axis settings.
@@ -513,7 +525,7 @@ export default objectDefinition;
  */
 
 /**
- * @typedef {ColorAttributes} AttributeExpressionProperties
+ * @typedef {ColorAttributes|CustomTooltipAttributes} AttributeExpressionProperties
  */
 
 /**
@@ -521,4 +533,91 @@ export default objectDefinition;
  * @typedef {object} ColorAttributes
  * @extends NxAttrExprDef
  * @property {string} id - One of: `colorByAlternative`: colors the chart using different dimensions (can be used together with color.mode="byDimension") or `colorByExpression` together with color.mode="byExpression".
+ */
+
+/**
+ * Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.
+ * @typedef {object} CustomTooltipAttributes
+ * @extends NxAttrExprDef
+ * @property {'customTooltipTitle' | 'customTooltipDescription' | 'customTooltipExpression'} id - Indicates how the attribute expression will be interpreted by the chart.
+ * `customTooltipTitle`: additional title displayed on the custom tooltip
+ * `customTooltipDescription`: description displayed on the custom tooltip
+ * `customTooltipExpression`: measures displayed on the custom tooltip
+ * @example
+ * ```json
+ * "qAttributeExpressions": [{
+ *   "qExpression": "",
+ *   "qLibraryId": "",
+ *   "qAttribute": true,
+ *   "qNumFormat": {
+ *      "qType": "U",
+ *      "qnDec": 10,
+ *      "qUseThou": 0,
+ *      "qFmt": "",
+ *      "qDec": "",
+ *      "qThou": "",
+ *    }
+ *   "qLabel": "custom title",
+ *   "qLabelExpression": "",
+ *   "id": "customTooltipTitle"
+ * },
+ * {
+ *   "qExpression": "avg(population)",
+ *   "qLibraryId": "",
+ *   "qAttribute": true,
+ *   "qNumFormat": {
+ *      "qType": "U",
+ *      "qnDec": 10,
+ *      "qUseThou": 0,
+ *      "qFmt": "",
+ *      "qDec": "",
+ *      "qThou": "",
+ *    }
+ *   "qLabel": "",
+ *   "qLabelExpression": "",
+ *   "id": "customTooltipDescription"
+ * },
+ * {
+ *   "qExpression": "",
+ *   "qLibraryId": "zpDNMcg",
+ *   "qAttribute": true,
+ *   "qNumFormat": {
+ *      "qType": "U",
+ *      "qnDec": 10,
+ *      "qUseThou": 0,
+ *      "qFmt": "",
+ *      "qDec": "",
+ *      "qThou": "",
+ *    }
+ *   "qLabel": "",
+ *   "qLabelExpression": "",
+ *   "id": "customTooltipExpression"
+ * },
+ * {
+ *   "qExpression": "sum(population)",
+ *   "qLibraryId": "",
+ *   "qAttribute": true,
+ *   "qNumFormat": {
+ *      "qType": "M",
+ *      "qnDec": 2,
+ *      "qUseThou": 0,
+ *      "qFmt": "$#,##0.00;-$#,##0.00",
+ *      "qDec": ".",
+ *      "qThou": ",",
+ *    }
+ *   "qLabel": "",
+ *   "qLabelExpression": "=avg(population)",
+ *   "id": "customTooltipExpression"
+ * },
+ * {
+ *   "qExpression": "'https://my_url/'+sum(population)",
+ *   "qLibraryId": "",
+ *   "qAttribute": true,
+ *   "qNumFormat": null,
+ *   "qLabel": "",
+ *   "qLabelExpression": "",
+ *   "cId": "generatedUniqueId",
+ *   "id": "customTooltipImages"
+ * }]
+ * ```
  */
