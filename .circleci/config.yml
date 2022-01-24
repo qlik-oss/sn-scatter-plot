@@ -120,8 +120,8 @@ jobs:
           command: |
             docker pull ghcr.io/qlik-download/api-compliance
             docker create -v /specs --name specs alpine:3.4 /bin/true
-            docker cp ./project/api-specifications/properties.json  specs:/specs
-            docker cp ./project/api-specifications/plugins.json  specs:/specs
+            docker cp ./api-specifications/properties.json  specs:/specs
+            docker cp ./api-specifications/plugins.json  specs:/specs
 
       - run:
           name: Run API Compliance
