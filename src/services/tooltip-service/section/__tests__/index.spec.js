@@ -412,6 +412,14 @@ describe('section', () => {
           createAPI.measure.withArgs({
             label: 'properties.compression.density-translated',
             value: 'bin-density-label',
+            style: {
+              label: {
+                bold: true,
+              },
+              value: {
+                bold: true,
+              },
+            },
           })
         ).to.have.been.calledOnce;
       });
