@@ -4,6 +4,19 @@ import isOob from './is-oob';
 
 const OOB_SPACE = 10;
 
+export function createSpace({ models }) {
+  const { dockService } = models;
+
+  const space = (dock) => ({
+    key: `${KEYS.COMPONENT.OUT_OF_BOUNDS}-space-${dock}`,
+    type: 'container',
+    layout: { dock },
+    preferredSize: () => OOB_SPACE,
+  });
+
+  return [space(dockService.meta.x.opposite), space(dockService.meta.y.opposite)];
+}
+
 export default function createOutOfBounds({ models, context, chart }) {
   const { chartModel, colorService, layoutService } = models;
   const viewHandler = chartModel.query.getViewHandler();
