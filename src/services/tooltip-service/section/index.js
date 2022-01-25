@@ -93,6 +93,14 @@ export default function createSection({
         create.measure({
           label: translator.get('properties.compression.density'),
           value: first.data.binDensity.label,
+          style: {
+            label: {
+              bold: true,
+            },
+            value: {
+              bold: true,
+            },
+          },
         })
       );
     }
