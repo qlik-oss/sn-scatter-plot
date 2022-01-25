@@ -12,6 +12,7 @@ export default function createLayoutServiceMetaFn(flags) {
       isSnapshot,
       hasSizeMeasure,
       isBigData,
+      isContinuous: true,
     };
   };
 }

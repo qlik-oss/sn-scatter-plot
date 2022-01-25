@@ -13,7 +13,9 @@ describe('use-render', () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     settings = 'stngs';
-    models = { chartModel: { command: { update: sandbox.stub() } } };
+    models = {
+      chartModel: { command: { update: sandbox.stub() } },
+    };
     sandbox.stub(stardust, 'useEffect');
     create = () => useRender({ settings, models });
   });

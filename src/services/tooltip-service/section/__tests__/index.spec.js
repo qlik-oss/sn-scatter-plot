@@ -26,6 +26,7 @@ describe('section', () => {
     sandbox.stub(KEYS, 'default').get(() => ({
       COMPONENT: {
         HEAT_MAP: 'heat-map',
+        TRENDLINES_TOOLTIP_OVERLAY: 'trendlines',
       },
     }));
     getMeasureValue.default.callsFake((args) => `measure-value-${args.data.value}`);
@@ -411,6 +412,14 @@ describe('section', () => {
           createAPI.measure.withArgs({
             label: 'properties.compression.density-translated',
             value: 'bin-density-label',
+            style: {
+              label: {
+                bold: true,
+              },
+              value: {
+                bold: true,
+              },
+            },
           })
         ).to.have.been.calledOnce;
       });

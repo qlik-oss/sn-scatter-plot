@@ -12,6 +12,7 @@ describe('tooltip-service', () => {
   let layoutService;
   let colorService;
   let themeService;
+  let trendLinesService;
   let propertiesModel;
   let custom;
   let create;
@@ -26,6 +27,7 @@ describe('tooltip-service', () => {
         HEAT_MAP: 'heat-map',
         LEGEND_CAT_TOOLTIP: 'legend-tooltip',
         LEGEND_CATEGORICAL: 'legend',
+        TRENDLINES_TOOLTIP_OVERLAY: 'trendlines-tooltip',
       },
     }));
     sandbox.stub(createSection, 'default');
@@ -57,6 +59,7 @@ describe('tooltip-service', () => {
     themeService = {
       getStyles: sandbox.stub().returns({ fontFamily: 'font-family' }),
     };
+    trendLinesService = {};
     propertiesModel = {
       query: {
         getProperties: sandbox.stub().returns({ key: 'properties' }),
@@ -89,6 +92,7 @@ describe('tooltip-service', () => {
         layoutService,
         colorService,
         themeService,
+        trendLinesService,
         propertiesModel,
         custom,
       });
@@ -205,6 +209,13 @@ describe('tooltip-service', () => {
             },
             placement: 'collectible',
           },
+          {
+            keys: ['trendlines-tooltip'],
+            collect: {
+              from: 'single',
+            },
+            placement: 'collectible',
+          },
         ]);
       });
 
@@ -228,6 +239,7 @@ describe('tooltip-service', () => {
               meta,
               create: createApi,
               util,
+              trendLinesService,
             })
           ).to.have.been.calledOnce;
         });

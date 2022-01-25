@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-scatter-plot:properties",
     "description": "Scatter plot generic object definition",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
@@ -445,6 +445,11 @@
               "defaultValue": true,
               "type": "boolean"
             },
+            "chart": {
+              "description": "The chart object is used to define the chart displayed by the custom tooltip.",
+              "defaultValue": "undefined",
+              "type": "MasterVisualizationChart"
+            },
             "description": {
               "description": "Custom tooltip description.",
               "optional": true,
@@ -464,6 +469,14 @@
               "description": "Toggle for hiding basic information from custom tooltip",
               "defaultValue": false,
               "type": "boolean"
+            },
+            "imageComponents": {
+              "description": "The imageComponents objects are used to define the images displayed by the custom tooltip.",
+              "defaultValue": "undefined",
+              "kind": "array",
+              "items": {
+                "type": "ImageComponent"
+              }
             },
             "title": {
               "description": "Custom tooltip title.",

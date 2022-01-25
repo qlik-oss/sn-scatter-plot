@@ -2,7 +2,7 @@ import softProperties from '..';
 import * as showBubbleSizes from '../show-bubble-sizes';
 import * as showRangeBubbleSizes from '../show-range-bubble-sizes';
 import * as showCompressionResolution from '../../show-compression-resolution';
-import * as colorModeOptions from '../../color-mode-options';
+import * as colorModeOptions from '../color-mode-options';
 import * as showColorScheme from '../show-color-scheme';
 import * as showPersistentColors from '../show-persistent-colors';
 
