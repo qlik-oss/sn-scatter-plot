@@ -1,7 +1,7 @@
 import KEYS from '../../../constants/keys';
 
-export default function createHeatMapHighLight({ chartModel, layoutService, actions, flags }) {
-  if (!layoutService.meta.isBigData || !flags.isEnabled('DATA_BINNING') || layoutService.meta.isSnapshot) {
+export default function createHeatMapHighLight({ chartModel, layoutService, actions }) {
+  if (!layoutService.meta.isBigData || layoutService.meta.isSnapshot) {
     return false;
   }
 

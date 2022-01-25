@@ -8,7 +8,6 @@ import useCore from '../use-core';
 describe('use-core', () => {
   let sandbox;
   let create;
-  let flags;
   let core;
   let setCore;
   let picasso;
@@ -21,9 +20,8 @@ describe('use-core', () => {
     sandbox.stub(stardust, 'useElement');
     sandbox.stub(stardust, 'useOptions');
     sandbox.stub(stardust, 'useState');
-    flags = 'flgs';
     sandbox.stub(useActions, 'default');
-    useActions.default.withArgs({ flags: 'flgs' }).returns('actns');
+    useActions.default.withArgs().returns('actns');
     sandbox.stub(useViewState, 'default');
     sandbox.stub(configurePicasso, 'default');
     setCore = sandbox.stub();
@@ -38,7 +36,7 @@ describe('use-core', () => {
     picasso = sandbox.stub().returns(picassoInstance);
     configurePicasso.default.returns(picasso);
     stardust.useOptions.returns({ renderer: 'svg' });
-    create = () => useCore({ flags });
+    create = () => useCore();
   });
 
   afterEach(() => {

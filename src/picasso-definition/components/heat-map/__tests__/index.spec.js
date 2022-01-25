@@ -125,8 +125,8 @@ describe('heat-map', () => {
           const comp = create();
           const size = { width: 400, height: 200 };
           comp.beforeRender({ size });
-          expect(comp.settings.shape().width).to.equal(10.5);
-          expect(comp.settings.shape().height).to.equal(20.5);
+          expect(comp.settings.shape().width).to.equal(10);
+          expect(comp.settings.shape().height).to.equal(20);
         });
       });
     });

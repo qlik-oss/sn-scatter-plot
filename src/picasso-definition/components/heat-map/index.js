@@ -54,8 +54,8 @@ export default function createHeatMap(chartModel) {
         const binWidth = Math.abs(firstBin.qText[0] - firstBin.qText[2]);
         const binHeight = Math.abs(firstBin.qText[1] - firstBin.qText[3]);
 
-        binWidthPx = (binWidth * size.width) / (dataView.xAxisMax - dataView.xAxisMin) + 0.5;
-        binHeightPx = (binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin) + 0.5;
+        binWidthPx = (binWidth * size.width) / (dataView.xAxisMax - dataView.xAxisMin);
+        binHeightPx = (binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin);
       }
     },
     rendererSettings: {

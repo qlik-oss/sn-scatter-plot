@@ -8,7 +8,6 @@ describe('heat-map-highlight', () => {
   let dataHandler;
   let viewHandler;
   let layoutService;
-  let flags;
   let create;
 
   beforeEach(() => {
@@ -31,7 +30,6 @@ describe('heat-map-highlight', () => {
       },
     };
     actions = { key: 'actions' };
-    flags = { isEnabled: sandbox.stub().returns(true) };
     layoutService = {
       meta: {
         isBigData: true,
@@ -39,7 +37,7 @@ describe('heat-map-highlight', () => {
       },
     };
 
-    create = () => createHeatMapHighlight({ chartModel, layoutService, actions, flags });
+    create = () => createHeatMapHighlight({ chartModel, layoutService, actions });
   });
 
   afterEach(() => {
@@ -48,12 +46,6 @@ describe('heat-map-highlight', () => {
 
   it('should return false if is not bigData', () => {
     layoutService.meta.isBigData = false;
-    expect(create()).to.be.false;
-  });
-
-  it('should return false if flag is not enabled', () => {
-    layoutService.meta.isBigData = true;
-    flags.isEnabled.returns(false);
     expect(create()).to.be.false;
   });
 

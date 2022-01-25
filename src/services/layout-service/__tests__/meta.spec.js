@@ -29,6 +29,7 @@ describe('meta', () => {
       isSnapshot: true,
       hasSizeMeasure: true,
       isBigData: true,
+      isContinuous: true,
     });
   });
 
@@ -41,6 +42,7 @@ describe('meta', () => {
       isSnapshot: true,
       hasSizeMeasure: true,
       isBigData: true,
+      isContinuous: true,
     });
   });
 });
