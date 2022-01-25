@@ -9,11 +9,11 @@ export default function createNavigationPanel({ layoutService, chartModel, chart
   }
   const navigation = layoutService.getLayoutValue('navigation');
   const viewHandler = chartModel.query.getViewHandler();
-  const { rtl, translator } = context;
+  const { rtl, translator, model, constraints } = context;
+  const { element } = chart;
   return {
     key: KEYS.COMPONENT.NAVIGATION_PANEL,
     type: 'navigation-panel',
-    show: navigation,
     settings: {
       actions: {
         home: () => {
@@ -45,11 +45,17 @@ export default function createNavigationPanel({ layoutService, chartModel, chart
           zoom({ viewHandler, buttonZoomDirection: 'out' });
         },
       },
-      isDisabled: {
-        home: () => viewHandler.getMeta().isHomeState,
+      show: {
+        home: () => navigation || !viewHandler.getMeta().isHomeState,
+        panZoom: () => navigation,
+      },
+      disabled: {
+        home: () => viewHandler.getMeta().isHomeState || constraints.active || !model,
+        panZoom: () => constraints.active || !model,
       },
       rtl,
       translator,
+      element,
     },
   };
 }

@@ -27,6 +27,7 @@ export default {
   LAYOUT_MODES: {
     FULL: { width: 550, height: 450 },
     MEDIUM: { width: 400, height: 220 },
+    MEDIUM_NAV: { width: 400, height: 400 }, // special treatment for navigation buttons
     SMALL: { width: 300, height: 150 },
     XSMALL: { width: 150, height: 75 },
     SPARK: { width: 0, height: 0 },

@@ -18,7 +18,7 @@ describe('createNavigationPanel', () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     layoutService = {
-      getLayoutValue: sandbox.stub(),
+      getLayoutValue: sandbox.stub().returns(false),
       meta: { isSnapshot: false },
     };
     viewHandler = {
@@ -30,7 +30,8 @@ describe('createNavigationPanel', () => {
     sandbox.stub(move, 'default');
     sandbox.stub(zoom, 'default');
     sandbox.stub(clearMinor, 'default');
-    context = { rtl: false, translator: 't' };
+    context = { rtl: false, translator: 't', model: 'model', constraints: { active: false } };
+    chart = { element: 'elm' };
     create = () => createNavigationPanel({ layoutService, chartModel, chart, actions, context });
     navigationPanel = create();
   });
@@ -46,7 +47,7 @@ describe('createNavigationPanel', () => {
 
   describe('the returned navigation panel object', () => {
     it('should have all keys', () => {
-      expect(navigationPanel).to.have.all.keys(['key', 'type', 'show', 'settings']);
+      expect(navigationPanel).to.have.all.keys(['key', 'type', 'settings']);
     });
 
     it('should have correct key', () => {
@@ -57,19 +58,16 @@ describe('createNavigationPanel', () => {
       expect(navigationPanel.type).to.equal('navigation-panel');
     });
 
-    it('should have correct show', () => {
-      layoutService.getLayoutValue.returns(true);
-      navigationPanel = create();
-      expect(navigationPanel.show).to.equal(true);
-
-      layoutService.getLayoutValue.returns(false);
-      navigationPanel = create();
-      expect(navigationPanel.show).to.equal(false);
-    });
-
     describe('settings', () => {
       it('should have all keys', () => {
-        expect(navigationPanel.settings).to.have.all.keys(['actions', 'isDisabled', 'rtl', 'translator']);
+        expect(navigationPanel.settings).to.have.all.keys([
+          'actions',
+          'disabled',
+          'show',
+          'rtl',
+          'translator',
+          'element',
+        ]);
       });
       describe('actions', () => {
         it('should have all keys', () => {
@@ -155,16 +153,32 @@ describe('createNavigationPanel', () => {
         });
       });
 
-      describe('isDisabled', () => {
+      describe('show', () => {
         describe('home', () => {
-          it('should return true if the view is at home state', () => {
+          it('should return correct value', () => {
             viewHandler.getMeta.returns({ isHomeState: true });
-            expect(navigationPanel.settings.isDisabled.home()).to.equal(true);
+            expect(navigationPanel.settings.show.home()).to.equal(false);
           });
+        });
 
-          it('should return false if the view is not at home state', () => {
+        describe('panZoom', () => {
+          it('should return correct value', () => {
+            expect(navigationPanel.settings.show.panZoom()).to.equal(false);
+          });
+        });
+      });
+
+      describe('disabled', () => {
+        describe('home', () => {
+          it('should return correct value', () => {
             viewHandler.getMeta.returns({ isHomeState: false });
-            expect(navigationPanel.settings.isDisabled.home()).to.equal(false);
+            expect(navigationPanel.settings.disabled.home()).to.equal(false);
+          });
+        });
+
+        describe('panZoom', () => {
+          it('should return correct value', () => {
+            expect(navigationPanel.settings.disabled.panZoom()).to.equal(false);
           });
         });
       });
