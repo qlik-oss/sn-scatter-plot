@@ -7,7 +7,7 @@ describe('zoom', () => {
   let create;
   let e;
   let chart;
-  let pointComponent;
+  let componentSize;
   let viewHandler;
   let dataView;
   let pinchZoomFactor;
@@ -18,8 +18,8 @@ describe('zoom', () => {
     viewHandler = { getMeta: sandbox.stub(), getDataView: sandbox.stub(), setMeta: sandbox.stub() };
     viewHandler.getMeta.returns({ scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1 });
     sandbox.stub(eventUtils, 'eventToComponentPoint');
-    pointComponent = { rect: { computedPhysical: { width: 100, height: 100 } } };
-    create = () => zoom({ e, chart, pointComponent, viewHandler, pinchZoomFactor, buttonZoomDirection });
+    componentSize = { width: 100, height: 100 };
+    create = () => zoom({ e, chart, componentSize, viewHandler, pinchZoomFactor, buttonZoomDirection });
   });
 
   afterEach(() => {

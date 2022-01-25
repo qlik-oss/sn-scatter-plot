@@ -63,12 +63,12 @@ describe('pan', () => {
         expect(panObject.options.enable('', 'e')).to.equal(false);
       });
 
-      it('should return correct pointAreaPanned', () => {
+      it('should return true if has corresponding component ', () => {
         actions.zoom.enabled.returns(true);
         chart.componentsFromPoint
           .withArgs({ x: 200, y: 100 })
           .returns([{ key: 'point-comp' }, { key: 'point-comp', id: 'should-not-return-this' }]);
-        expect(panObject.options.enable('', { center: { x: 200, y: 100 } })).to.deep.equal({ key: 'point-comp' });
+        expect(panObject.options.enable('', { center: { x: 200, y: 100 } })).to.equal(true);
       });
     });
   });
@@ -81,7 +81,7 @@ describe('pan', () => {
     describe('areaPanstart', () => {
       it('should add correct areaPan object to events, case 1: tap is inside the mini chart', () => {
         viewHandler.getDataView.returns({ xAxisMin: 1, xAxisMax: 2, yAxisMin: 3, yAxisMax: 4 });
-        panObject.events.pointAreaPanned = { rect: { width: 1, height: 2 } };
+        panObject.events.componentSize = { width: 1, height: 2 };
         e = { preventDefault: sandbox.stub() };
         panObject.events.areaPanstart(e);
         expect(panObject.events.started).to.equal('areaPan');
@@ -100,6 +100,7 @@ describe('pan', () => {
     describe('areaPanmove', () => {
       it('should modify myDataView correctly', () => {
         e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20 };
+        panObject.events.areaPanstart(e);
         panObject.events.areaPan = {
           componentSize: { width: 100, height: 200 },
           xAxisMin: -1000,
@@ -125,6 +126,7 @@ describe('pan', () => {
 
       it('should modify myDataView correctly when panning inside mini chart', () => {
         e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20 };
+        panObject.events.areaPanstart(e);
         panObject.events.areaPan = {
           componentSize: { width: 100, height: 200 },
           xAxisMin: -1000,
@@ -152,6 +154,7 @@ describe('pan', () => {
         rtl = true;
         e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20 };
         panObject = pan({ chart, actions, viewHandler, rtl });
+        panObject.events.areaPanstart(e);
         panObject.events.areaPan = {
           componentSize: { width: 100, height: 200 },
           xAxisMin: -1000,
@@ -179,6 +182,7 @@ describe('pan', () => {
     describe('areaPanend', () => {
       it('should set events.started to false', () => {
         e = { preventDefault: sandbox.stub() };
+        panObject.events.areaPanstart(e);
         panObject.events.areaPan = {
           componentSize: { width: 100, height: 200 },
           xAxisMin: -1000,

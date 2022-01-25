@@ -5,6 +5,7 @@ import clearMinor from '../../utils/clear-minor';
 const EVENT_NAME = 'zoom';
 
 let lastScale = 0;
+let lastRectSize;
 
 function isWithinThreshold(diff) {
   return Math.abs(diff) > 0.01;
@@ -25,11 +26,24 @@ const pinch = ({ chart, actions, viewHandler, rtl }) => ({
         return false;
       }
 
-      [this.pointArea] = chart
+      this.area = chart
         .componentsFromPoint({ x: e.center.x, y: e.center.y })
         .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
 
-      return this.pointArea;
+      if (!this.area) {
+        return false;
+      }
+
+      const rectSize = this.area[0]?.rect?.computedPhysical;
+
+      if (rectSize?.height && rectSize?.width) {
+        this.componentSize = rectSize;
+        lastRectSize = rectSize;
+      } else {
+        this.componentSize = lastRectSize;
+      }
+
+      return true;
     },
   },
   events: {
@@ -40,7 +54,7 @@ const pinch = ({ chart, actions, viewHandler, rtl }) => ({
       this.started = EVENT_NAME;
       const initialDataView = viewHandler.getDataView();
       this[EVENT_NAME] = {
-        componentSize: this.pointArea.rect,
+        componentSize: this.componentSize,
         ...initialDataView,
       };
     },
@@ -54,7 +68,7 @@ const pinch = ({ chart, actions, viewHandler, rtl }) => ({
           zoom({
             e,
             chart,
-            pointComponent: this.pointArea,
+            componentSize: this.componentSize,
             viewHandler,
             pinchZoomFactor: lastScale / e.scale,
           });
