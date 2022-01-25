@@ -1,7 +1,7 @@
 import showCompressionResolution from '../show-compression-resolution';
 import showBubbleSizes from './show-bubble-sizes';
 import showRangeBubbleSizes from './show-range-bubble-sizes';
-import colorModeOptions from '../color-mode-options';
+import colorModeOptions from './color-mode-options';
 import showColorScheme from './show-color-scheme';
 import showPersistentColors from './show-persistent-colors';
 
