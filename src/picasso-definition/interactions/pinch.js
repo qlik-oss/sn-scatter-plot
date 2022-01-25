@@ -51,12 +51,13 @@ const pinch = ({ chart, actions, viewHandler, rtl }) => ({
         const diff = e.scale - lastScale;
 
         if (isWithinThreshold(diff)) {
+          const zoomFactor = lastScale / e.scale;
           zoom({
             e,
             chart,
             pointComponent: this.pointArea,
             viewHandler,
-            pinchZoomFactor: lastScale / e.scale,
+            pinchZoomFactor: zoomFactor > 0 ? zoomFactor ** (1 / 2) : 1 / zoomFactor ** (1 / 2),
           });
           lastScale = e.scale;
         }

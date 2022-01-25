@@ -32,7 +32,7 @@ const updateDataView = ({ event, props, viewHandler, rtl }) => {
   viewHandler.setDataView(dataView);
 };
 
-const pan = ({ chart, actions, viewHandler, rtl }) => ({
+const pan = ({ chart, actions, viewHandler, rtl, layoutService }) => ({
   type: 'Pan',
   key: 'panorama',
   options: {
@@ -85,7 +85,9 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
     areaPanend(e) {
       e.preventDefault();
       viewHandler.setInteractionInProgress(false);
-      updateDataView({ event: e, props: this[eventName], viewHandler, rtl });
+      if (this[eventName] && layoutService.meta.isBigData) {
+        updateDataView({ event: e, props: this[eventName], viewHandler, rtl });
+      }
       this.started = false;
     },
     areaPancancel(e) {

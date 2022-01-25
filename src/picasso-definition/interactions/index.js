@@ -4,7 +4,16 @@ import pinch from './pinch';
 import tapNavigationPanel from './tap-navigation-panel';
 import tapMiniChart from './tap-mini-chart';
 
-export default function create({ chart, actions, viewHandler, gestures, colorService, tooltipService, rtl }) {
+export default function create({
+  chart,
+  actions,
+  viewHandler,
+  gestures,
+  colorService,
+  tooltipService,
+  rtl,
+  layoutService,
+}) {
   const tooltipInteractions = tooltipService.getInteractions();
 
   const hammer = {
@@ -16,7 +25,7 @@ export default function create({ chart, actions, viewHandler, gestures, colorSer
       tapNavigationPanel({ chart, actions, viewHandler }),
       tapMiniChart({ chart, actions, viewHandler }),
       ...[...gestures].sort((a, b) => (b.prio || 0) - (a.prio || 0)),
-      pan({ chart, actions, viewHandler, rtl }),
+      pan({ chart, actions, viewHandler, rtl, layoutService }),
       pinch({ chart, actions, viewHandler, rtl }),
       ...tooltipInteractions.gestures,
     ],

@@ -19,17 +19,21 @@ export default function createViewHandler({ viewState, extremumModel, layoutServ
   const viewHandler = {
     getDataView: () => viewState.get('dataView'),
     setDataView(dataView) {
-      // Update isHomeState
       const { xAxisMin: xMin1, xAxisMax: xMax1, yAxisMin: yMin1, yAxisMax: yMax1 } = dataView;
-      const { xAxisMin: xMin2, xAxisMax: xMax2, yAxisMin: yMin2, yAxisMax: yMax2 } = meta.homeStateDataView;
-      const e = 1e-4;
-      if (areIntervalsEqual(xMin1, xMax1, xMin2, xMax2, e) && areIntervalsEqual(yMin1, yMax1, yMin2, yMax2, e)) {
-        meta.isHomeState = true;
+      if (Number.isNaN(xMin1) || Number.isNaN(xMax1) || Number.isNaN(yMin1) || Number.isNaN(yMax1)) {
+        viewState.set('dataView', viewHandler.getDataView());
       } else {
-        meta.isHomeState = false;
+        // Update isHomeState
+        const { xAxisMin: xMin2, xAxisMax: xMax2, yAxisMin: yMin2, yAxisMax: yMax2 } = meta.homeStateDataView;
+        const e = 1e-4;
+        if (areIntervalsEqual(xMin1, xMax1, xMin2, xMax2, e) && areIntervalsEqual(yMin1, yMax1, yMin2, yMax2, e)) {
+          meta.isHomeState = true;
+        } else {
+          meta.isHomeState = false;
+        }
+        extremumModel.command.updateExtrema(dataView, meta.isHomeState);
+        viewState.set('dataView', dataView);
       }
-      extremumModel.command.updateExtrema(dataView, meta.isHomeState);
-      viewState.set('dataView', dataView);
     },
 
     getMeta: () => meta,
