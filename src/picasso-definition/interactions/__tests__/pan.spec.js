@@ -63,6 +63,12 @@ describe('pan', () => {
         expect(panObject.options.enable('', 'e')).to.equal(false);
       });
 
+      it('should return false if has no corresponding component ', () => {
+        actions.zoom.enabled.returns(true);
+        chart.componentsFromPoint.withArgs({ x: 200, y: 100 }).returns([]);
+        expect(panObject.options.enable('', { center: { x: 200, y: 100 } })).to.equal(false);
+      });
+
       it('should return true if has corresponding component ', () => {
         actions.zoom.enabled.returns(true);
         chart.componentsFromPoint
@@ -98,6 +104,21 @@ describe('pan', () => {
     });
 
     describe('areaPanmove', () => {
+      it('should not modify myDataView if pan is not started', () => {
+        e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20 };
+        panObject.events.areaPan = {
+          componentSize: { width: 100, height: 200 },
+          xAxisMin: -1000,
+          xAxisMax: 1000,
+          yAxisMin: 0,
+          yAxisMax: 2000,
+          miniChart: { panInMiniChart: false, navWindowScale: 0.05 },
+        };
+        myDataView = {};
+        panObject.events.areaPanmove(e);
+        expect(myDataView).to.deep.equal({});
+      });
+
       it('should modify myDataView correctly', () => {
         e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20 };
         panObject.events.areaPanstart(e);
@@ -180,6 +201,22 @@ describe('pan', () => {
     });
 
     describe('areaPanend', () => {
+      it('should not update dataview and set events.started if pan is not started', () => {
+        e = { preventDefault: sandbox.stub() };
+        panObject.events.areaPan = {
+          componentSize: { width: 100, height: 200 },
+          xAxisMin: -1000,
+          xAxisMax: 1000,
+          yAxisMin: 0,
+          yAxisMax: 2000,
+          miniChart: { panInMiniChart: false, navWindowScale: 0.05 },
+        };
+        myDataView = {};
+        panObject.events.areaPanend(e);
+        expect(myDataView).to.deep.equal({});
+        expect(panObject.events.started).to.equal(undefined);
+      });
+
       it('should set events.started to false', () => {
         e = { preventDefault: sandbox.stub() };
         panObject.events.areaPanstart(e);

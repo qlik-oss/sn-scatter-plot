@@ -53,7 +53,7 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
         .componentsFromPoint({ x: e.center.x, y: e.center.y })
         .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
 
-      if (!this.area) {
+      if (!this.area.length) {
         return false;
       }
 

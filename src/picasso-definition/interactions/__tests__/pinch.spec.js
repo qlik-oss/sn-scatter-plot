@@ -49,6 +49,12 @@ describe('pinch', () => {
         expect(pinchObject.options.enable('', 'e')).to.equal(false);
       });
 
+      it('should return false if has no corresponding component', () => {
+        actions.zoom.enabled.returns(true);
+        chart.componentsFromPoint.withArgs({ x: 200, y: 100 }).returns([]);
+        expect(pinchObject.options.enable('', { center: { x: 200, y: 100 } })).to.equal(false);
+      });
+
       it('should return true if has corresponding component', () => {
         actions.zoom.enabled.returns(true);
         chart.componentsFromPoint
