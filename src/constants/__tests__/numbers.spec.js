@@ -41,6 +41,6 @@ describe('numbers', () => {
   });
 
   it('should have correct navigation panel keys', () => {
-    expect(NUMBERS.NAVIGATION_PANEL).to.have.all.keys(['GRID_WIDTH', 'PADDING']);
+    expect(NUMBERS.NAVIGATION_PANEL).to.have.all.keys(['BUTTON_WIDTH']);
   });
 });

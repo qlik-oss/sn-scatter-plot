@@ -52,7 +52,7 @@ describe('createComponents', () => {
     sandbox.stub(createDisclaimer, 'default').returns('disclaimer');
     sandbox.stub(createMiniChart, 'default').returns(['mini-chart-point', 'mini-chart-background', 'mini-chart-nav']);
     sandbox.stub(createHeatMapHighLight, 'default').returns('heat-map-highlight');
-    sandbox.stub(createNavigationPanel, 'default').returns('navigation-panel');
+    sandbox.stub(createNavigationPanel, 'default').returns(['home', 'up']);
   });
 
   afterEach(() => {
@@ -78,7 +78,8 @@ describe('createComponents', () => {
       'legend-component-2',
       'heat-map-legend',
       'disclaimer',
-      'navigation-panel',
+      'home',
+      'up',
       'mini-chart-point',
       'mini-chart-background',
       'mini-chart-nav',

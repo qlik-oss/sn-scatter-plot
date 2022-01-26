@@ -1,4 +1,5 @@
 import * as KEYS from '../../../../constants/keys';
+import * as NUMBERS from '../../../../constants/numbers';
 import createNavigationPanel from '..';
 import * as move from '../../../../view-handler/move';
 import * as zoom from '../../../../view-handler/zoom';
@@ -10,7 +11,6 @@ describe('createNavigationPanel', () => {
   let chartModel;
   let viewHandler;
   let create;
-  let navigationPanel;
   let context;
   let chart;
   let actions;
@@ -22,18 +22,23 @@ describe('createNavigationPanel', () => {
       meta: { isSnapshot: false },
     };
     viewHandler = {
-      getMeta: sandbox.stub().returns({ homeStateDataView: { xAxisMin: 0, xAxisMax: 1, yAxisMin: 2, yAxisMax: 3 } }),
+      getMeta: sandbox
+        .stub()
+        .returns({ homeStateDataView: { xAxisMin: 0, xAxisMax: 1, yAxisMin: 2, yAxisMax: 3 }, isHomeState: false }),
       setDataView: sandbox.stub(),
     };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
     sandbox.stub(KEYS, 'default').value({ COMPONENT: { NAVIGATION_PANEL: 'nav-pan' } });
+    sandbox
+      .stub(NUMBERS, 'default')
+      .value({ NAVIGATION_PANEL: { BUTTON_WIDTH: 100 }, LAYOUT_MODES: { MEDIUM_NAV: { width: 10, height: 20 } } });
     sandbox.stub(move, 'default');
     sandbox.stub(zoom, 'default');
     sandbox.stub(clearMinor, 'default');
-    context = { rtl: false, translator: 't', model: 'model', constraints: { active: false } };
-    chart = { element: 'elm' };
+    context = { rtl: false, translator: { get: sandbox.stub() }, model: 'model', constraints: { active: false } };
+    chart = { element: { clientWidth: 11, clientHeight: 21 } };
     create = () => createNavigationPanel({ layoutService, chartModel, chart, actions, context });
-    navigationPanel = create();
+    create();
   });
 
   afterEach(() => {
@@ -45,148 +50,105 @@ describe('createNavigationPanel', () => {
     expect(create()).to.be.false;
   });
 
-  describe('the returned navigation panel object', () => {
-    it('should have all keys', () => {
-      expect(navigationPanel).to.have.all.keys(['key', 'type', 'settings']);
+  describe('the returned buttons', () => {
+    describe('UP', () => {
+      it('should have correct callback', () => {
+        chartModel.query.getViewHandler.returns('vh');
+        create()[0].settings.callback();
+        expect(move.default).to.have.been.calledWithExactly({ viewHandler: 'vh', direction: 'y', percent: 10 });
+      });
     });
 
-    it('should have correct key', () => {
-      expect(navigationPanel.key).to.equal('nav-pan');
+    describe('LEFT', () => {
+      it('should have correct callback', () => {
+        chartModel.query.getViewHandler.returns('vh');
+        create()[1].settings.callback();
+        expect(move.default).to.have.been.calledWithExactly({
+          viewHandler: 'vh',
+          direction: 'x',
+          percent: -10,
+          rtl: false,
+        });
+      });
+
+      it('should have correct horizontal coordinate', () => {
+        expect(create()[1].settings.presentation.horizontal).to.equal(200);
+        context.rtl = true;
+        expect(create()[1].settings.presentation.horizontal).to.equal(0);
+      });
     });
 
-    it('should have correct type', () => {
-      expect(navigationPanel.type).to.equal('navigation-panel');
+    describe('HOME', () => {
+      it('should have correct disabled function (returning false when it is not home state, not constrained, and model is defined)', () => {
+        expect(create()[2].settings.disabled()).to.equal(false);
+      });
+
+      it('should have correct callback function', () => {
+        create()[2].settings.callback();
+        expect(viewHandler.setDataView).to.have.been.calledWithExactly({
+          xAxisMin: 0,
+          xAxisMax: 1,
+          yAxisMin: 2,
+          yAxisMax: 3,
+        });
+      });
+
+      it('should have correct show function (returning false if navigation is off and the chart is at home state', () => {
+        viewHandler.getMeta.returns({ isHomeState: true });
+        expect(create()[2].settings.show()).to.equal(false);
+      });
+
+      it('should have correct vertical and horizontal coordinates', () => {
+        layoutService.getLayoutValue.returns(true);
+        expect(create()[2].settings.presentation.vertical).to.equal(100);
+        expect(create()[2].settings.presentation.horizontal).to.equal(100);
+      });
     });
 
-    describe('settings', () => {
-      it('should have all keys', () => {
-        expect(navigationPanel.settings).to.have.all.keys([
-          'actions',
-          'disabled',
-          'show',
-          'rtl',
-          'translator',
-          'element',
-        ]);
+    describe('RIGHT', () => {
+      it('should have correct disabled function', () => {
+        expect(create()[3].settings.disabled()).to.equal(false);
       });
-      describe('actions', () => {
-        it('should have all keys', () => {
-          expect(navigationPanel.settings.actions).to.have.all.keys([
-            'home',
-            'up',
-            'down',
-            'left',
-            'right',
-            'zoomIn',
-            'zoomOut',
-          ]);
-        });
-        describe('home', () => {
-          it('should set home state data view as the new data view', () => {
-            navigationPanel.settings.actions.home();
-            expect(viewHandler.setDataView).to.have.been.calledWithExactly({
-              xAxisMin: 0,
-              xAxisMax: 1,
-              yAxisMin: 2,
-              yAxisMax: 3,
-            });
-            expect(clearMinor.default).to.have.been.calledOnce;
-          });
-        });
 
-        describe('left', () => {
-          it('should call move with correct parameters', () => {
-            navigationPanel.settings.actions.left();
-            expect(move.default).to.have.been.calledWithExactly({
-              viewHandler,
-              direction: 'x',
-              percent: -10,
-              rtl: false,
-            });
-            expect(clearMinor.default).to.have.been.calledOnce;
-          });
-        });
-
-        describe('right', () => {
-          it('should call move with correct parameters', () => {
-            navigationPanel.settings.actions.right();
-            expect(move.default).to.have.been.calledWithExactly({
-              viewHandler,
-              direction: 'x',
-              percent: 10,
-              rtl: false,
-            });
-            expect(clearMinor.default).to.have.been.calledOnce;
-          });
-        });
-
-        describe('up', () => {
-          it('should call move with correct parameters', () => {
-            navigationPanel.settings.actions.up();
-            expect(move.default).to.have.been.calledWithExactly({ viewHandler, direction: 'y', percent: 10 });
-            expect(clearMinor.default).to.have.been.calledOnce;
-          });
-        });
-
-        describe('down', () => {
-          it('should call move with correct parameters', () => {
-            navigationPanel.settings.actions.down();
-            expect(move.default).to.have.been.calledWithExactly({ viewHandler, direction: 'y', percent: -10 });
-            expect(clearMinor.default).to.have.been.calledOnce;
-          });
-        });
-
-        describe('zoomIn', () => {
-          it('should call zoom with correct parameters', () => {
-            navigationPanel.settings.actions.zoomIn();
-            expect(zoom.default).to.have.been.calledWithExactly({ viewHandler, buttonZoomDirection: 'in' });
-            expect(clearMinor.default).to.have.been.calledOnce;
-          });
-        });
-
-        describe('zoomOut', () => {
-          it('should call zoom with correct parameters', () => {
-            navigationPanel.settings.actions.zoomOut();
-            expect(zoom.default).to.have.been.calledWithExactly({ viewHandler, buttonZoomDirection: 'out' });
-            expect(clearMinor.default).to.have.been.calledOnce;
-          });
+      it('should have correct callback', () => {
+        chartModel.query.getViewHandler.returns('vh');
+        create()[3].settings.callback();
+        expect(move.default).to.have.been.calledWithExactly({
+          viewHandler: 'vh',
+          direction: 'x',
+          percent: 10,
+          rtl: false,
         });
       });
 
-      describe('show', () => {
-        describe('home', () => {
-          it('should return correct value', () => {
-            viewHandler.getMeta.returns({ isHomeState: true });
-            expect(navigationPanel.settings.show.home()).to.equal(false);
-          });
-        });
-
-        describe('panZoom', () => {
-          it('should return correct value', () => {
-            expect(navigationPanel.settings.show.panZoom()).to.equal(false);
-          });
-        });
+      it('should have correct horizontal coordinate', () => {
+        expect(create()[3].settings.presentation.horizontal).to.equal(0);
+        context.rtl = true;
+        expect(create()[3].settings.presentation.horizontal).to.equal(200);
       });
+    });
 
-      describe('disabled', () => {
-        describe('home', () => {
-          it('should return correct value', () => {
-            viewHandler.getMeta.returns({ isHomeState: false });
-            expect(navigationPanel.settings.disabled.home()).to.equal(false);
-          });
-        });
-
-        describe('panZoom', () => {
-          it('should return correct value', () => {
-            expect(navigationPanel.settings.disabled.panZoom()).to.equal(false);
-          });
-        });
+    describe('DOWN', () => {
+      it('should have correct callback', () => {
+        chartModel.query.getViewHandler.returns('vh');
+        create()[4].settings.callback();
+        expect(move.default).to.have.been.calledWithExactly({ viewHandler: 'vh', direction: 'y', percent: -10 });
       });
+    });
 
-      describe('translator', () => {
-        it('should have correct value', () => {
-          expect(navigationPanel.settings.translator).to.equal('t');
-        });
+    describe('ZOOM_IN', () => {
+      it('should have correct callback', () => {
+        chartModel.query.getViewHandler.returns('vh');
+        create()[5].settings.callback();
+        expect(zoom.default).to.have.been.calledWithExactly({ viewHandler: 'vh', buttonZoomDirection: 'in' });
+      });
+    });
+
+    describe('ZOOM_OUT', () => {
+      it('should have correct callback', () => {
+        chartModel.query.getViewHandler.returns('vh');
+        create()[6].settings.callback();
+        expect(zoom.default).to.have.been.calledWithExactly({ viewHandler: 'vh', buttonZoomDirection: 'out' });
       });
     });
   });
