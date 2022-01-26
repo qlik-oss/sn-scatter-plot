@@ -14,13 +14,28 @@ export default function createSection({
   util,
   trendLinesService,
 }) {
-  const isHeatMap = meta.triggerer === KEYS.COMPONENT.HEAT_MAP;
-
   if (meta.triggerer === KEYS.COMPONENT.TRENDLINES_TOOLTIP_OVERLAY) {
     return createTrendline({ dataset, translator, nodes, create, h, trendLinesService });
   }
 
   const [first] = nodes;
+
+  if (meta.triggerer === KEYS.COMPONENT.HEAT_MAP) {
+    return [
+      create.measure({
+        label: translator.get('properties.compression.density'),
+        value: first.data.binDensity.label,
+        style: {
+          label: {
+            bold: true,
+          },
+          value: {
+            bold: true,
+          },
+        },
+      }),
+    ];
+  }
 
   const {
     title: customTitle,
@@ -51,7 +66,7 @@ export default function createSection({
 
   const hideBasic = custom.hideBasic();
 
-  if (!isHeatMap && (!hideBasic || customMeasures.length || (!customTitle && !customDescription))) {
+  if (!hideBasic || customMeasures.length || (!customTitle && !customDescription)) {
     section.push(
       create.text({
         value: first.data.label,
@@ -63,47 +78,30 @@ export default function createSection({
   }
 
   if (!hideBasic) {
-    if (!isHeatMap) {
-      section.push(
-        create.color({
-          nodes,
-          property: 'color',
-        })
-      );
+    section.push(
+      create.color({
+        nodes,
+        property: 'color',
+      })
+    );
 
-      section.push(
-        ...nodes
-          .map((node) =>
-            measureProperties
-              .map((property) => {
-                const data = node.data[property];
-                const { key, field } = data.source;
+    section.push(
+      ...nodes
+        .map((node) =>
+          measureProperties
+            .map((property) => {
+              const data = node.data[property];
+              const { key, field } = data.source;
 
-                return create.measure({
-                  label: util.dataset.title(key, field),
-                  value: getMeasureValue({ dataset, data }),
-                });
-              })
-              .flat()
-          )
-          .flat()
-      );
-    } else {
-      section.push(
-        create.measure({
-          label: translator.get('properties.compression.density'),
-          value: first.data.binDensity.label,
-          style: {
-            label: {
-              bold: true,
-            },
-            value: {
-              bold: true,
-            },
-          },
-        })
-      );
-    }
+              return create.measure({
+                label: util.dataset.title(key, field),
+                value: getMeasureValue({ dataset, data }),
+              });
+            })
+            .flat()
+        )
+        .flat()
+    );
   }
 
   if (customMeasures) {

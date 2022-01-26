@@ -270,11 +270,22 @@ describe('tooltip-service', () => {
           });
 
           describe('beforeShow', () => {
+            it('should resolve undefined if custom is enabled, custom has images and triggerer is not point', (done) => {
+              custom.isEnabled.returns(true);
+              custom.hasImages.returns(true);
+              getConfig()
+                .main.events.tooltip.beforeShow({ collectNodes: () => {}, meta: { triggerer: 'heat-map' } })
+                .then((result) => {
+                  expect(result).to.be.undefined;
+                  done();
+                });
+            });
+
             it('should resolve undefined if custom is not enabled and custom does not have images', (done) => {
               custom.isEnabled.returns(false);
               custom.hasImages.returns(false);
               getConfig()
-                .main.events.tooltip.beforeShow({ collectNodes: () => {} })
+                .main.events.tooltip.beforeShow({ collectNodes: () => {}, meta: { triggerer: 'point' } })
                 .then((result) => {
                   expect(result).to.be.undefined;
                   done();
@@ -285,7 +296,7 @@ describe('tooltip-service', () => {
               custom.isEnabled.returns(false);
               custom.hasImages.returns(true);
               getConfig()
-                .main.events.tooltip.beforeShow({ collectNodes: () => {} })
+                .main.events.tooltip.beforeShow({ collectNodes: () => {}, meta: { triggerer: 'point' } })
                 .then((result) => {
                   expect(result).to.be.undefined;
                   done();
@@ -296,7 +307,7 @@ describe('tooltip-service', () => {
               custom.isEnabled.returns(true);
               custom.hasImages.returns(false);
               getConfig()
-                .main.events.tooltip.beforeShow({ collectNodes: () => {} })
+                .main.events.tooltip.beforeShow({ collectNodes: () => {}, meta: { triggerer: 'point' } })
                 .then((result) => {
                   expect(result).to.be.undefined;
                   done();
@@ -306,7 +317,10 @@ describe('tooltip-service', () => {
             it('should add images if custom is enabled and custom has images', () => {
               custom.isEnabled.returns(true);
               custom.hasImages.returns(true);
-              getConfig().main.events.tooltip.beforeShow({ collectNodes: () => ({ key: 'collected' }) });
+              getConfig().main.events.tooltip.beforeShow({
+                collectNodes: () => ({ key: 'collected' }),
+                meta: { triggerer: 'point' },
+              });
               expect(
                 custom.addImages.withArgs({
                   nodes: { key: 'collected' },
@@ -318,38 +332,57 @@ describe('tooltip-service', () => {
               custom.isEnabled.returns(true);
               custom.hasImages.returns(true);
               custom.addImages.returns({ key: 'images' });
-              expect(getConfig().main.events.tooltip.beforeShow({ collectNodes: () => {} })).to.deep.equal({
+              expect(
+                getConfig().main.events.tooltip.beforeShow({ collectNodes: () => {}, meta: { triggerer: 'point' } })
+              ).to.deep.equal({
                 key: 'images',
               });
             });
           });
 
           describe('afterShow', () => {
+            it('should not show custom chart if triggerer is heat-map, custom chart is enabled and does not have limitation', () => {
+              custom.chart.isEnabled.returns(true);
+              custom.chart.hasLimitation.returns(false);
+              getConfig().main.events.tooltip.afterShow({ nodes: undefined, meta: { triggerer: 'heat-map' } });
+              expect(custom.chart.show).not.to.have.been.called;
+            });
+
+            it('should not show custom chart if triggerer is trendlines overlay, custom chart is enabled and does not have limitation', () => {
+              custom.chart.isEnabled.returns(true);
+              custom.chart.hasLimitation.returns(false);
+              getConfig().main.events.tooltip.afterShow({
+                nodes: undefined,
+                meta: { triggerer: 'trendlines-tooltip' },
+              });
+              expect(custom.chart.show).not.to.have.been.called;
+            });
+
             it('should not show custom chart if custom chart is not enabled and custom chart has limitation', () => {
               custom.chart.isEnabled.returns(false);
               custom.chart.hasLimitation.returns(true);
-              getConfig().main.events.tooltip.afterShow({ nodes: undefined });
+              getConfig().main.events.tooltip.afterShow({ nodes: undefined, meta: { triggerer: 'point' } });
               expect(custom.chart.show).not.to.have.been.called;
             });
 
             it('should not show custom chart if custom chart is not enabled and custom chart does not have limitation', () => {
               custom.chart.isEnabled.returns(false);
               custom.chart.hasLimitation.returns(false);
-              getConfig().main.events.tooltip.afterShow({ nodes: undefined });
+              getConfig().main.events.tooltip.afterShow({ nodes: undefined, meta: { triggerer: 'point' } });
               expect(custom.chart.show).not.to.have.been.called;
             });
 
             it('should not show custom chart if custom chart is enabled and custom chart has limitation', () => {
               custom.chart.isEnabled.returns(true);
               custom.chart.hasLimitation.returns(true);
-              getConfig().main.events.tooltip.afterShow({ nodes: undefined });
+              getConfig().main.events.tooltip.afterShow({ nodes: undefined, meta: { triggerer: 'point' } });
               expect(custom.chart.show).not.to.have.been.called;
             });
 
             it('should show custom chart if custom chart is enabled and custom chart does not have limitation', () => {
               custom.chart.isEnabled.returns(true);
               custom.chart.hasLimitation.returns(false);
-              getConfig().main.events.tooltip.afterShow({ nodes: { key: 'nodes' } });
+              getConfig().main.events.tooltip.afterShow({ nodes: { key: 'nodes' }, meta: { triggerer: 'point' } });
               expect(
                 custom.chart.show.withArgs({
                   nodes: { key: 'nodes' },
