@@ -13,7 +13,7 @@ const Button = ({ ...rest }) => {
         width: `${rest.presentation.width}px`,
         height: `${rest.presentation.width}px`,
         '&:focus': {
-          color: '#111111',
+          color: '#1A1A1A',
         },
       },
     }));
@@ -32,7 +32,7 @@ const Button = ({ ...rest }) => {
         size="extra-large"
         width={rest.presentation.width}
         viewBox="0 0 24 24"
-        fill={() => (rest.disabled() ? '#ebebeb' : 'currentColor')}
+        fill={() => (rest.disabled() ? '#E6E6E6' : 'currentColor')}
       />
     </IconButton>
   );
