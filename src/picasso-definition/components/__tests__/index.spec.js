@@ -78,13 +78,13 @@ describe('createComponents', () => {
       'legend-component-2',
       'heat-map-legend',
       'disclaimer',
+      'heat-map-highlight',
       'navigation-panel',
       'mini-chart-point',
       'mini-chart-background',
       'mini-chart-nav',
       'tooltip-1',
       'tooltip-2',
-      'heat-map-highlight',
       'heat-map-labels',
     ]);
   });
