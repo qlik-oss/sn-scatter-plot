@@ -9,6 +9,7 @@ export default function native({ chart, actions, viewHandler }) {
     const dir = delta >= 0 ? 'next' : 'prev';
     comp.emit(dir);
   }
+  let componentSize;
   return {
     type: 'native',
     events: {
@@ -22,7 +23,11 @@ export default function native({ chart, actions, viewHandler }) {
             .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
           if (target) {
             clearMinor({ chart, actions });
-            zoom({ e, chart, pointComponent: target, viewHandler });
+            const rectSize = target.rect?.computedPhysical;
+            if (rectSize?.height && rectSize?.width) {
+              componentSize = { ...rectSize };
+            }
+            zoom({ e, chart, componentSize, viewHandler });
             e.preventDefault();
           }
         }

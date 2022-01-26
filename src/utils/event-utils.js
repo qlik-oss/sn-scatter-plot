@@ -12,8 +12,8 @@ export function eventToChartPoint(event, chart) {
   };
 }
 
-export function eventToComponentPoint(event, chart, component) {
+export function eventToComponentPoint(event, chart, componentSize) {
   const p = eventToChartPoint(event, chart);
-  const { x, y } = component.rect.computedPhysical;
+  const { x, y } = componentSize;
   return { x: p.x - x, y: p.y - y };
 }
