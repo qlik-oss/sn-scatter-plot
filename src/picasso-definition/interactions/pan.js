@@ -60,10 +60,10 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
       const rectSize = this.area[0]?.rect?.computedPhysical;
 
       if (rectSize?.height && rectSize?.width) {
-        this.componentSize = rectSize;
-        lastRectSize = rectSize;
+        this.componentSize = { ...rectSize };
+        lastRectSize = { ...rectSize };
       } else {
-        this.componentSize = lastRectSize;
+        this.componentSize = { ...lastRectSize };
       }
 
       return true;

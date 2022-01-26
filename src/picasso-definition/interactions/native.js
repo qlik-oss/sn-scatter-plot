@@ -25,7 +25,7 @@ export default function native({ chart, actions, viewHandler }) {
             clearMinor({ chart, actions });
             const rectSize = target.rect?.computedPhysical;
             if (rectSize?.height && rectSize?.width) {
-              componentSize = rectSize;
+              componentSize = { ...rectSize };
             }
             zoom({ e, chart, componentSize, viewHandler });
             e.preventDefault();
