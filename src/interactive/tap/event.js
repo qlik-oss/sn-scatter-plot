@@ -68,6 +68,7 @@ const tap = ({ targets, requireFailure, recognizeWith, components, eventName = '
             this.chart.brushSelectionIncludeMax = false;
             opts.actions.select.brushSelectionIncludeMax = false; // eslint-disable-line no-param-reassign
             opts.actions.select.emit('start', eventName, compsAtPoint);
+            opts.actions.select.emit('selectionStart');
           }
 
           if (shapes.length && components) {
