@@ -51,7 +51,9 @@ export default function createButton() {
     disableTriggers: true,
     render() {
       const { callback, disabled, presentation, title, show } = this.settings.settings;
-      if (show && !show()) return null;
+      if (show && !show()) {
+        return false;
+      }
       return <Button callback={callback} title={title} disabled={disabled} presentation={presentation} />;
     },
   };
