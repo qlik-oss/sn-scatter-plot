@@ -1,5 +1,5 @@
-const tap = ({ eventName = 'tap-navigation-panel' }) => ({
-  key: 'event:tap-navigation-panel',
+const tap = ({ eventName = 'tap-button' }) => ({
+  key: 'event:tap-button',
   type: 'Tap',
   options: {
     event: eventName,
@@ -10,7 +10,7 @@ const tap = ({ eventName = 'tap-navigation-panel' }) => ({
         return true;
       }
 
-      // Navigation buttons are designed using icons
+      // Buttons are designed using icons
       return e.target.tagName === 'I';
     },
   },

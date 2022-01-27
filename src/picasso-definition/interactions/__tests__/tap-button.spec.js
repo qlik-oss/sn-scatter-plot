@@ -1,4 +1,4 @@
-import tap from '../tap-navigation-panel';
+import tap from '../tap-button';
 
 describe('tap', () => {
   let sandbox;

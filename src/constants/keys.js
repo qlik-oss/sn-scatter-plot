@@ -38,7 +38,15 @@ export default {
     MINI_CHART_POINT: 'mini-chart-points',
     OUT_OF_BOUNDS: 'out-of-bounds',
     TRENDLINES_TOOLTIP_OVERLAY: 'trend-lines-tooltip-overlay',
-    NAVIGATION_PANEL: 'navigation-panel',
+    NAVIGATION_PANEL: {
+      HOME: 'home-button',
+      UP: 'up-button',
+      LEFT: 'left-button',
+      RIGHT: 'right-button',
+      DOWN: 'down-button',
+      ZOOM_IN: 'zoom-in-button',
+      ZOOM_OUT: 'zoom-out-button',
+    },
   },
   COLLECTION: {
     MAIN: 'main-collection',

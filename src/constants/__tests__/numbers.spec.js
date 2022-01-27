@@ -33,7 +33,7 @@ describe('numbers', () => {
   });
 
   it('should have correct layout mode keys', () => {
-    expect(NUMBERS.LAYOUT_MODES).to.have.all.keys(['FULL', 'MEDIUM', 'SMALL', 'XSMALL', 'SPARK']);
+    expect(NUMBERS.LAYOUT_MODES).to.have.all.keys(['FULL', 'MEDIUM', 'MEDIUM_NAV', 'SMALL', 'XSMALL', 'SPARK']);
   });
 
   it('should have correct mini chart keys', () => {
@@ -41,6 +41,6 @@ describe('numbers', () => {
   });
 
   it('should have correct navigation panel keys', () => {
-    expect(NUMBERS.NAVIGATION_PANEL).to.have.all.keys(['GRID_WIDTH', 'PADDING']);
+    expect(NUMBERS.NAVIGATION_PANEL).to.have.all.keys(['BUTTON_WIDTH']);
   });
 });
