@@ -1,6 +1,7 @@
 import KEYS from '../../constants/keys';
 import zoom from '../../view-handler/zoom';
 import clearMinor from '../../utils/clear-minor';
+import isInBinValueSelection from '../../utils/is-in-bin-value-selection';
 
 const EVENT_NAME = 'zoom';
 
@@ -23,6 +24,9 @@ const pinch = ({ chart, actions, viewHandler, rtl }) => ({
         return true;
       }
       if (!actions.zoom.enabled()) {
+        return false;
+      }
+      if (isInBinValueSelection(chart)) {
         return false;
       }
 
