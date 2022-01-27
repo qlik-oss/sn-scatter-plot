@@ -6,17 +6,24 @@ import ICONS from './icons';
 
 const Button = ({ ...rest }) => {
   const useStyles = () =>
-    makeStyles(() => ({
-      button: {
-        position: 'absolute',
-        borderRadius: '2px',
-        width: `${rest.presentation.width}px`,
-        height: `${rest.presentation.width}px`,
-        '&:focus': {
-          color: '#1A1A1A',
+    makeStyles(() => {
+      const { rtl, vertical, horizontal, width } = rest.presentation;
+      const horizontalStartSide = rtl ? 'left' : 'right';
+      return {
+        button: {
+          position: 'absolute',
+          borderRadius: '2px',
+          width: `${width}px`,
+          height: `${width}px`,
+          top: `${vertical}px`,
+          [horizontalStartSide]: `${horizontal}px`,
+          pointerEvents: 'auto',
+          '&:focus': {
+            color: '#1A1A1A',
+          },
         },
-      },
-    }));
+      };
+    });
   const classes = useStyles(rest.rtl)();
   return (
     <IconButton
@@ -39,38 +46,13 @@ const Button = ({ ...rest }) => {
 };
 
 export default function createButton() {
-  function getStyle({ presentation }) {
-    const { rtl, vertical, horizontal, width } = presentation;
-    const horizontalStart = rtl ? 'left' : 'right';
-    return {
-      pointerEvents: 'auto',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      top: `${vertical}px`,
-      [horizontalStart]: `${horizontal}px`,
-      width: `${width}px`,
-      height: `${width}px`,
-      color: '#595959',
-      fontStyle: 'normal',
-      fontSize: '1.2em',
-      textAlign: 'center',
-      position: 'absolute',
-    };
-  }
-
   return {
     renderer: 'react',
     disableTriggers: true,
     render() {
       const { callback, disabled, presentation, title, show } = this.settings.settings;
       if (show && !show()) return null;
-      const style = getStyle({ presentation });
-      return (
-        <div style={style}>
-          <Button callback={callback} title={title} disabled={disabled} presentation={presentation} />
-        </div>
-      );
+      return <Button callback={callback} title={title} disabled={disabled} presentation={presentation} />;
     },
   };
 }
