@@ -49,14 +49,18 @@ describe('pinch', () => {
         expect(pinchObject.options.enable('', 'e')).to.equal(false);
       });
 
-      it('should return correct pointAreaPinched', () => {
+      it('should return false if has no corresponding component', () => {
+        actions.zoom.enabled.returns(true);
+        chart.componentsFromPoint.withArgs({ x: 200, y: 100 }).returns([]);
+        expect(pinchObject.options.enable('', { center: { x: 200, y: 100 } })).to.equal(false);
+      });
+
+      it('should return true if has corresponding component', () => {
         actions.zoom.enabled.returns(true);
         chart.componentsFromPoint
           .withArgs({ x: 200, y: 100 })
           .returns([{ key: 'point-component' }, { key: 'point-component', id: 'should-not-return-this' }]);
-        expect(pinchObject.options.enable('', { center: { x: 200, y: 100 } })).to.deep.equal({
-          key: 'point-component',
-        });
+        expect(pinchObject.options.enable('', { center: { x: 200, y: 100 } })).to.equal(true);
       });
     });
   });
@@ -69,7 +73,7 @@ describe('pinch', () => {
     describe('zoomstart', () => {
       it('should add correct zoom object to events', () => {
         viewHandler.getDataView.returns({ xAxisMin: 1, xAxisMax: 2, yAxisMin: 3, yAxisMax: 4 });
-        pinchObject.events.pointArea = { rect: { width: 1, height: 2 } };
+        pinchObject.events.componentSize = { width: 1, height: 2 };
         e = { preventDefault: sandbox.stub() };
         pinchObject.events.zoomstart(e);
         expect(pinchObject.events.started).to.equal('zoom');

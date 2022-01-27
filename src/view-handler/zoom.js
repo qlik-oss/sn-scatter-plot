@@ -10,7 +10,7 @@ function transform(scale, start, end, factor) {
   return [newStart, newEnd];
 }
 
-export default function zoom({ e, chart, pointComponent, viewHandler, pinchZoomFactor, buttonZoomDirection }) {
+export default function zoom({ e, chart, componentSize, viewHandler, pinchZoomFactor, buttonZoomDirection }) {
   const { scale, maxScale, minScale } = viewHandler.getMeta();
   const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getDataView();
   let zoomFactor;
@@ -20,8 +20,8 @@ export default function zoom({ e, chart, pointComponent, viewHandler, pinchZoomF
     fixedPoint = { normX: 0.5, normY: 0.5 };
   } else {
     zoomFactor = pinchZoomFactor || (e.deltaY > 0 ? ZOOM_SCALE : 1 / ZOOM_SCALE);
-    const p = eventToComponentPoint(e, chart, pointComponent);
-    const { width, height } = pointComponent.rect.computedPhysical;
+    const p = eventToComponentPoint(e, chart, componentSize);
+    const { width, height } = componentSize;
     fixedPoint = { normX: p.x / width, normY: p.y / height };
   }
   const newScale = zoomFactor * scale;

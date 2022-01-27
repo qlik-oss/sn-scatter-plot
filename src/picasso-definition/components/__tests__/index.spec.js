@@ -48,6 +48,7 @@ describe('createComponents', () => {
     sandbox.stub(createPointLabels, 'default').returns('point-labels');
     sandbox.stub(createHeatMapLabels, 'default').returns('heat-map-labels');
     sandbox.stub(createOutOfBounds, 'default').returns('oobs');
+    sandbox.stub(createOutOfBounds, 'createSpace').returns(['oobs-space']);
     sandbox.stub(createHeatMapLegend, 'default').returns('heat-map-legend');
     sandbox.stub(createDisclaimer, 'default').returns('disclaimer');
     sandbox.stub(createMiniChart, 'default').returns(['mini-chart-point', 'mini-chart-background', 'mini-chart-nav']);
@@ -62,6 +63,7 @@ describe('createComponents', () => {
   it('should return correct components', () => {
     const components = create();
     expect(components).to.deep.equal([
+      'oobs-space',
       'grid-lines',
       'ref-line-x',
       'ref-line-y',
@@ -78,6 +80,7 @@ describe('createComponents', () => {
       'legend-component-2',
       'heat-map-legend',
       'disclaimer',
+      'heat-map-highlight',
       'home',
       'up',
       'mini-chart-point',
@@ -85,7 +88,6 @@ describe('createComponents', () => {
       'mini-chart-nav',
       'tooltip-1',
       'tooltip-2',
-      'heat-map-highlight',
       'heat-map-labels',
     ]);
   });

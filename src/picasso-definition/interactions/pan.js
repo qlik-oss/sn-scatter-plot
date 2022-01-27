@@ -6,6 +6,7 @@ import clearMinor from '../../utils/clear-minor';
 
 const threshold = 10;
 const eventName = 'areaPan';
+let lastRectSize;
 
 const updateDataView = ({ event, props, viewHandler, rtl }) => {
   const { componentSize, xAxisMin, xAxisMax, yAxisMax, yAxisMin, miniChart } = props;
@@ -48,11 +49,22 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
         return false;
       }
 
-      [this.pointAreaPanned] = chart
+      this.area = chart
         .componentsFromPoint({ x: e.center.x, y: e.center.y })
         .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
 
-      return this.pointAreaPanned;
+      if (!this.area.length) {
+        return false;
+      }
+
+      const rectSize = this.area[0]?.rect?.computedPhysical;
+
+      if (rectSize?.height && rectSize?.width) {
+        lastRectSize = { ...rectSize };
+      }
+      this.componentSize = lastRectSize;
+
+      return true;
     },
   },
   events: {
@@ -73,16 +85,18 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
       const navWindowScale = scale * NUMBERS.MINI_CHART.RATIO;
       const initialDataView = viewHandler.getDataView();
       this[eventName] = {
-        componentSize: this.pointAreaPanned.rect,
+        componentSize: this.componentSize,
         ...initialDataView,
         miniChart: { panInMiniChart, navWindowScale },
       };
     },
     areaPanmove(e) {
+      if (!this.started) return;
       e.preventDefault();
       updateDataView({ event: e, props: this[eventName], viewHandler, rtl });
     },
     areaPanend(e) {
+      if (!this.started) return;
       e.preventDefault();
       viewHandler.setInteractionInProgress(false);
       updateDataView({ event: e, props: this[eventName], viewHandler, rtl });

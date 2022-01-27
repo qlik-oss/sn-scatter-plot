@@ -7,7 +7,7 @@ import createHeatMapLabels from './heat-map-labels';
 import createReferenceLines from './reference-lines';
 import createPointLabels from './point-labels';
 import createDisclaimer from './disclaimer';
-import createOutOfBounds from './out-of-bounds';
+import createOutOfBounds, { createSpace as createOutOfBoundsSpace } from './out-of-bounds';
 import createHeatMapLegend from './heat-map-legend';
 import createNavigationPanel from './navigation-panel';
 import createMiniChart from './mini-chart';
@@ -23,6 +23,7 @@ export default function createComponents({ context, models, picasso, chart, acti
   }
 
   const components = [
+    ...createOutOfBoundsSpace({ models }),
     createGridLines(models),
     ...createReferenceLines({ models, context }),
     createPoint(models),
@@ -35,10 +36,10 @@ export default function createComponents({ context, models, picasso, chart, acti
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
+    createHeatMapHighLight({ chartModel, layoutService, actions }),
     ...createNavigationPanel({ layoutService, chartModel, chart, actions, context }),
     ...createMiniChart({ models }),
     ...tooltipService.getComponents(),
-    createHeatMapHighLight({ chartModel, layoutService, actions }),
     createHeatMapLabels({ themeService, chartModel, picasso, context }),
   ].filter(Boolean);
   // setDisplayOrder(components);

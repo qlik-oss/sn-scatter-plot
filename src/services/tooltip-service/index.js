@@ -82,15 +82,19 @@ export default function createTooltipService({
         },
         events: {
           tooltip: {
-            beforeShow: ({ collectNodes }) => {
-              if (!custom.isEnabled() || !custom.hasImages()) {
+            beforeShow: ({ collectNodes, meta }) => {
+              if (meta.triggerer !== KEYS.COMPONENT.POINT || !custom.isEnabled() || !custom.hasImages()) {
                 return Promise.resolve();
               }
 
               return custom.addImages({ nodes: collectNodes() });
             },
-            afterShow: ({ nodes }) => {
-              if (custom.chart.isEnabled() && !custom.chart.hasLimitation()) {
+            afterShow: ({ nodes, meta }) => {
+              if (
+                meta.triggerer === KEYS.COMPONENT.POINT &&
+                custom.chart.isEnabled() &&
+                !custom.chart.hasLimitation()
+              ) {
                 custom.chart.show({
                   nodes,
                   properties: propertiesModel.query.getProperties(),

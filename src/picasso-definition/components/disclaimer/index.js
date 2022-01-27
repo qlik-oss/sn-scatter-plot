@@ -18,7 +18,7 @@ export default function createDisclaimer({ disclaimerModel, context, layoutServi
         disclaimer.key === 'OverviewData'
           ? translator.get(
               'properties.compression.providingOverviewOf',
-              formatter('#.#A')(layoutService.getHyperCubeValue('qSize.qcy', 0))
+              formatter('#.#', undefined, undefined, 'U')(layoutService.getHyperCubeValue('qSize.qcy', 0))
             )
           : translator.get(`Object.Disclaimer.${disclaimer.key}`),
       rtl,
