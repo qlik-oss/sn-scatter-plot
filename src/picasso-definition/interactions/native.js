@@ -1,6 +1,7 @@
 import KEYS from '../../constants/keys';
 import zoom from '../../view-handler/zoom';
 import clearMinor from '../../utils/clear-minor';
+import isInBinValueSelection from '../../utils/is-in-bin-value-selection';
 
 export default function native({ chart, actions, viewHandler }) {
   function scrollLegend(e, comp) {
@@ -16,6 +17,10 @@ export default function native({ chart, actions, viewHandler }) {
       wheel(e) {
         const point = { x: e.clientX, y: e.clientY };
         let target;
+
+        if (isInBinValueSelection(chart)) {
+          return;
+        }
 
         if (actions.zoom.enabled()) {
           [target] = chart

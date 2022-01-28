@@ -38,7 +38,7 @@ export default {
       ctx.putImageData(imageData, 0, 0, x * pixelRatio, y * pixelRatio, w * pixelRatio, h * pixelRatio);
     };
 
-    const onBinRangeStart = () => {
+    const onSelectionStart = () => {
       if (!imageData) {
         imageData = heatMapCanvasContext.getImageData(0, 0, heatMapCanvas.width, heatMapCanvas.height);
         const pixels = imageData.data;
@@ -69,12 +69,12 @@ export default {
       dirtyImageData.h = height;
     };
 
-    actions.select.removeAllListeners('binRangeStart');
+    actions.select.removeAllListeners('selectionStart');
     actions.select.removeAllListeners('binXRange');
     actions.select.removeAllListeners('binYRange');
     actions.select.removeAllListeners('binRangeHighlightClear');
     actions.select.removeAllListeners('binsRangeSelectionClear');
-    actions.select.on('binRangeStart', onBinRangeStart);
+    actions.select.on('selectionStart', onSelectionStart);
     actions.select.on('binXRange', onBinXRange);
     actions.select.on('binYRange', onBinYRange);
     actions.select.on('binRangeHighlightClear', onBinRangeHighlightClear);

@@ -48,7 +48,7 @@ const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith
       e.preventDefault();
       opts.actions.select.emit('start', eventName);
       if (['binXRange', 'binYRange'].indexOf(eventName) > -1) {
-        opts.actions.select.emit('binRangeStart', eventName);
+        opts.actions.select.emit('selectionStart');
       }
       this.chart.component(key).emit('rangeStart', e);
       this.started = eventName;

@@ -5,6 +5,7 @@ import pan from '../pan';
 import * as updateTapDataView from '../tap-mini-chart/update-tap-data-view';
 import * as getTapPosition from '../tap-mini-chart/tap-position';
 import * as clearMinor from '../../../utils/clear-minor';
+import * as isInBinValueSelection from '../../../utils/is-in-bin-value-selection';
 
 describe('pan', () => {
   let sandbox;
@@ -32,6 +33,7 @@ describe('pan', () => {
     sandbox.stub(getTapPosition, 'default').returns({ x: 1, y: 1 });
     sandbox.stub(updateTapDataView, 'default');
     sandbox.stub(clearMinor, 'default');
+    sandbox.stub(isInBinValueSelection, 'default').returns(false);
     panObject = pan({ chart, actions, viewHandler, rtl });
   });
 
@@ -60,6 +62,11 @@ describe('pan', () => {
 
       it('should return false if actions zoom is not enabled', () => {
         actions.zoom.enabled.returns(false);
+        expect(panObject.options.enable('', 'e')).to.equal(false);
+      });
+
+      it('should return false if is in bin vaule selection', () => {
+        isInBinValueSelection.default.returns(true);
         expect(panObject.options.enable('', 'e')).to.equal(false);
       });
 

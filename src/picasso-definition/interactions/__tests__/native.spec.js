@@ -2,6 +2,7 @@ import * as KEYS from '../../../constants/keys';
 import * as zoom from '../../../view-handler/zoom';
 import native from '../native';
 import * as clearMinor from '../../../utils/clear-minor';
+import * as isInBinValueSelection from '../../../utils/is-in-bin-value-selection';
 
 describe('native', () => {
   let sandbox;
@@ -49,6 +50,7 @@ describe('native', () => {
     };
     sandbox.stub(zoom, 'default');
     sandbox.stub(clearMinor, 'default');
+    sandbox.stub(isInBinValueSelection, 'default').returns(false);
     create = () =>
       native({
         chart,
@@ -83,6 +85,14 @@ describe('native', () => {
       });
 
       describe('wheel', () => {
+        it('should not zoom if is in bin value selection', () => {
+          chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'point-component' }]);
+          isInBinValueSelection.default.returns(true);
+          create().events.wheel(e);
+          expect(zoom.default).not.to.have.been.called;
+          expect(clearMinor.default).not.to.have.been.called;
+        });
+
         it('should get components', () => {
           create().events.wheel(e);
           expect(chart.componentsFromPoint.withArgs({ x: 50, y: 100 })).to.have.been.called;

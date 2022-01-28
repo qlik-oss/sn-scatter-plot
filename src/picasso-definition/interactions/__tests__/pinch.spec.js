@@ -3,6 +3,7 @@ import KEYS from '../../../constants/keys';
 import * as zoom from '../../../view-handler/zoom';
 import pinch from '../pinch';
 import * as clearMinor from '../../../utils/clear-minor';
+import * as isInBinValueSelection from '../../../utils/is-in-bin-value-selection';
 
 describe('pinch', () => {
   let sandbox;
@@ -23,6 +24,7 @@ describe('pinch', () => {
     sandbox.stub(KEYS, 'COMPONENT').value({ POINT: 'point-component' });
     sandbox.stub(zoom, 'default');
     sandbox.stub(clearMinor, 'default');
+    sandbox.stub(isInBinValueSelection, 'default').returns(false);
     pinchObject = pinch({ chart, actions, viewHandler, rtl });
   });
 
@@ -46,6 +48,11 @@ describe('pinch', () => {
 
       it('should return false if actions zoom is not enabled', () => {
         actions.zoom.enabled.returns(false);
+        expect(pinchObject.options.enable('', 'e')).to.equal(false);
+      });
+
+      it('should return false if is in bin vaule selection', () => {
+        isInBinValueSelection.default.returns(true);
         expect(pinchObject.options.enable('', 'e')).to.equal(false);
       });
 

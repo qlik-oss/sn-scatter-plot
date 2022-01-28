@@ -3,6 +3,7 @@ import NUMBERS from '../../constants/numbers';
 import getTapPosition from './tap-mini-chart/tap-position';
 import updateTapDataView from './tap-mini-chart/update-tap-data-view';
 import clearMinor from '../../utils/clear-minor';
+import isInBinValueSelection from '../../utils/is-in-bin-value-selection';
 
 const threshold = 10;
 const eventName = 'areaPan';
@@ -46,6 +47,10 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
       }
 
       if (!actions.zoom.enabled()) {
+        return false;
+      }
+
+      if (isInBinValueSelection(chart)) {
         return false;
       }
 
