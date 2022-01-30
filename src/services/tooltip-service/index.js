@@ -79,6 +79,11 @@ export default function createTooltipService({
           }),
         layout: {
           grouping: true,
+          single: ({ meta }) =>
+            !!(
+              meta.triggerer === KEYS.COMPONENT.POINT &&
+              ((custom.isEnabled() && custom.hasImages()) || custom.chart.isEnabled())
+            ),
         },
         events: {
           tooltip: {

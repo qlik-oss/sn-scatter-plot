@@ -251,11 +251,44 @@ describe('tooltip-service', () => {
 
       describe('layout', () => {
         it('should have correct properties', () => {
-          expect(getConfig().main.layout).to.have.all.keys(['grouping']);
+          expect(getConfig().main.layout).to.have.all.keys(['grouping', 'single']);
         });
 
         it('should have correct grouping', () => {
           expect(getConfig().main.layout.grouping).to.be.true;
+        });
+
+        describe('single', () => {
+          it('should return false if triggerer is not point', () => {
+            const meta = { triggerer: 'heat-map' };
+            expect(getConfig().main.layout.single({ meta })).to.be.false;
+          });
+
+          it('should return false if triggerer is point and custom is not enabled', () => {
+            const meta = { triggerer: 'point' };
+            custom.isEnabled.returns(false);
+            expect(getConfig().main.layout.single({ meta })).to.be.false;
+          });
+
+          it('should return false if triggerer is point, custom is enabled and does not have custom images', () => {
+            const meta = { triggerer: 'point' };
+            custom.isEnabled.returns(true);
+            custom.hasImages.returns(false);
+            expect(getConfig().main.layout.single({ meta })).to.be.false;
+          });
+
+          it('should return true if triggerer is point, custom is enabled and has custom images', () => {
+            const meta = { triggerer: 'point' };
+            custom.isEnabled.returns(true);
+            custom.hasImages.returns(true);
+            expect(getConfig().main.layout.single({ meta })).to.be.true;
+          });
+
+          it('should return true if triggerer is point and custom chart is enabled', () => {
+            const meta = { triggerer: 'point' };
+            custom.chart.isEnabled.returns(true);
+            expect(getConfig().main.layout.single({ meta })).to.be.true;
+          });
         });
       });
 
