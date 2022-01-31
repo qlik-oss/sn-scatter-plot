@@ -10,7 +10,7 @@ export default function createChartModel({
   viewState,
   extremumModel,
   dataHandler,
-  flags,
+  trendLinesService,
 }) {
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
@@ -25,7 +25,6 @@ export default function createChartModel({
     extremumModel,
     layoutService,
     viewState,
-    flags,
   });
 
   const mainConfig = {
@@ -88,6 +87,7 @@ export default function createChartModel({
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???
       // const startTime = Date.now();
+      trendLinesService.update();
       chart.update({
         partialData: true,
         excludeFromUpdate: EXCLUDE,
@@ -103,16 +103,20 @@ export default function createChartModel({
     });
   }
 
+  const getData = () => [
+    {
+      type: 'q',
+      ...mainConfig,
+    },
+    ...getBinnedDataConfig(),
+    ...colorService.getData(),
+    ...trendLinesService.getData(),
+  ];
+
   const update = ({ settings } = {}) => {
+    trendLinesService.update();
     chart.update({
-      data: [
-        {
-          type: 'q',
-          ...mainConfig,
-        },
-        ...getBinnedDataConfig(),
-        ...colorService.getData(),
-      ],
+      data: getData(),
       settings,
     });
   };
@@ -186,14 +190,7 @@ export default function createChartModel({
     command: {
       layoutComponents: ({ settings } = {}) => {
         chart.layoutComponents({
-          data: [
-            {
-              type: 'q',
-              ...mainConfig,
-            },
-            ...getBinnedDataConfig(),
-            ...colorService.getData(),
-          ],
+          data: getData(),
           settings,
         });
         state.isPrelayout = false;

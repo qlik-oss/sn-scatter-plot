@@ -12,6 +12,9 @@ describe('tooltip-service', () => {
   let layoutService;
   let colorService;
   let themeService;
+  let trendLinesService;
+  let propertiesModel;
+  let custom;
   let create;
 
   before(() => {
@@ -24,6 +27,7 @@ describe('tooltip-service', () => {
         HEAT_MAP: 'heat-map',
         LEGEND_CAT_TOOLTIP: 'legend-tooltip',
         LEGEND_CATEGORICAL: 'legend',
+        TRENDLINES_TOOLTIP_OVERLAY: 'trendlines-tooltip',
       },
     }));
     sandbox.stub(createSection, 'default');
@@ -55,7 +59,43 @@ describe('tooltip-service', () => {
     themeService = {
       getStyles: sandbox.stub().returns({ fontFamily: 'font-family' }),
     };
-    create = () => createTooltipService({ chart, actions, translator, rtl, layoutService, colorService, themeService });
+    trendLinesService = {};
+    propertiesModel = {
+      query: {
+        getProperties: sandbox.stub().returns({ key: 'properties' }),
+      },
+    };
+    custom = {
+      isEnabled: sandbox.stub(),
+      hideBasic: sandbox.stub(),
+      getAttributes: sandbox.stub(),
+      hasImages: sandbox.stub(),
+      addImages: sandbox.stub(),
+      createImageRow: sandbox.stub(),
+      chart: {
+        isEnabled: sandbox.stub(),
+        hasLimitation: sandbox.stub(),
+        show: sandbox.stub(),
+        hasAlternateState: sandbox.stub(),
+        createLimitationRow: sandbox.stub(),
+        createContainer: sandbox.stub(),
+        hide: sandbox.stub(),
+        destroy: sandbox.stub(),
+      },
+    };
+    create = () =>
+      createTooltipService({
+        chart,
+        actions,
+        translator,
+        rtl,
+        layoutService,
+        colorService,
+        themeService,
+        trendLinesService,
+        propertiesModel,
+        custom,
+      });
   });
 
   after(() => {
@@ -128,6 +168,7 @@ describe('tooltip-service', () => {
           'triggers',
           'section',
           'layout',
+          'events',
         ]);
       });
 
@@ -168,48 +209,37 @@ describe('tooltip-service', () => {
             },
             placement: 'collectible',
           },
+          {
+            keys: ['trendlines-tooltip'],
+            collect: {
+              from: 'single',
+            },
+            placement: 'collectible',
+          },
         ]);
       });
 
       describe('section', () => {
-        it('should create section correctly when does not have size measure', () => {
-          layoutService.meta.hasSizeMeasure = false;
+        it('should create section', () => {
+          const h = { key: 'h' };
           const nodes = { key: 'nodes' };
           const dataset = { key: 'dataset' };
           const meta = { key: 'meta' };
           const createApi = { key: 'create' };
           const util = { key: 'util' };
-          getConfig().main.section({ nodes, dataset, meta, create: createApi, util });
+          getConfig().main.section({ h, nodes, dataset, meta, create: createApi, util });
           expect(
             createSection.default.withArgs({
               translator,
+              custom,
               measureProperties: ['x', 'y'],
+              h,
               nodes,
               dataset,
               meta,
               create: createApi,
               util,
-            })
-          ).to.have.been.calledOnce;
-        });
-
-        it('should create section correctly when has size measure', () => {
-          layoutService.meta.hasSizeMeasure = true;
-          const nodes = { key: 'nodes' };
-          const dataset = { key: 'dataset' };
-          const meta = { key: 'meta' };
-          const createApi = { key: 'create' };
-          const util = { key: 'util' };
-          getConfig().main.section({ nodes, dataset, meta, create: createApi, util });
-          expect(
-            createSection.default.withArgs({
-              translator,
-              measureProperties: ['x', 'y', 'size'],
-              nodes,
-              dataset,
-              meta,
-              create: createApi,
-              util,
+              trendLinesService,
             })
           ).to.have.been.calledOnce;
         });
@@ -221,11 +251,215 @@ describe('tooltip-service', () => {
 
       describe('layout', () => {
         it('should have correct properties', () => {
-          expect(getConfig().main.layout).to.have.all.keys(['grouping']);
+          expect(getConfig().main.layout).to.have.all.keys(['grouping', 'single']);
         });
 
         it('should have correct grouping', () => {
           expect(getConfig().main.layout.grouping).to.be.true;
+        });
+
+        describe('single', () => {
+          it('should return false if triggerer is not point', () => {
+            const meta = { triggerer: 'heat-map' };
+            expect(getConfig().main.layout.single({ meta })).to.be.false;
+          });
+
+          it('should return false if triggerer is point and custom is not enabled', () => {
+            const meta = { triggerer: 'point' };
+            custom.isEnabled.returns(false);
+            expect(getConfig().main.layout.single({ meta })).to.be.false;
+          });
+
+          it('should return false if triggerer is point, custom is enabled and does not have custom images', () => {
+            const meta = { triggerer: 'point' };
+            custom.isEnabled.returns(true);
+            custom.hasImages.returns(false);
+            expect(getConfig().main.layout.single({ meta })).to.be.false;
+          });
+
+          it('should return true if triggerer is point, custom is enabled and has custom images', () => {
+            const meta = { triggerer: 'point' };
+            custom.isEnabled.returns(true);
+            custom.hasImages.returns(true);
+            expect(getConfig().main.layout.single({ meta })).to.be.true;
+          });
+
+          it('should return true if triggerer is point and custom chart is enabled', () => {
+            const meta = { triggerer: 'point' };
+            custom.chart.isEnabled.returns(true);
+            expect(getConfig().main.layout.single({ meta })).to.be.true;
+          });
+        });
+      });
+
+      describe('events', () => {
+        it('should have correct properties', () => {
+          expect(getConfig().main.events).to.have.all.keys(['tooltip', 'interaction']);
+        });
+
+        describe('tooltip', () => {
+          it('should have correct properties', () => {
+            expect(getConfig().main.events.tooltip).to.have.all.keys(['beforeShow', 'afterShow']);
+          });
+
+          describe('beforeShow', () => {
+            it('should resolve undefined if custom is enabled, custom has images and triggerer is not point', (done) => {
+              custom.isEnabled.returns(true);
+              custom.hasImages.returns(true);
+              getConfig()
+                .main.events.tooltip.beforeShow({ collectNodes: () => {}, meta: { triggerer: 'heat-map' } })
+                .then((result) => {
+                  expect(result).to.be.undefined;
+                  done();
+                });
+            });
+
+            it('should resolve undefined if custom is not enabled and custom does not have images', (done) => {
+              custom.isEnabled.returns(false);
+              custom.hasImages.returns(false);
+              getConfig()
+                .main.events.tooltip.beforeShow({ collectNodes: () => {}, meta: { triggerer: 'point' } })
+                .then((result) => {
+                  expect(result).to.be.undefined;
+                  done();
+                });
+            });
+
+            it('should resolve undefined if custom is not enabled and custom has images ', (done) => {
+              custom.isEnabled.returns(false);
+              custom.hasImages.returns(true);
+              getConfig()
+                .main.events.tooltip.beforeShow({ collectNodes: () => {}, meta: { triggerer: 'point' } })
+                .then((result) => {
+                  expect(result).to.be.undefined;
+                  done();
+                });
+            });
+
+            it('should resolve undefined if custom is enabled and custom does not have images ', (done) => {
+              custom.isEnabled.returns(true);
+              custom.hasImages.returns(false);
+              getConfig()
+                .main.events.tooltip.beforeShow({ collectNodes: () => {}, meta: { triggerer: 'point' } })
+                .then((result) => {
+                  expect(result).to.be.undefined;
+                  done();
+                });
+            });
+
+            it('should add images if custom is enabled and custom has images', () => {
+              custom.isEnabled.returns(true);
+              custom.hasImages.returns(true);
+              getConfig().main.events.tooltip.beforeShow({
+                collectNodes: () => ({ key: 'collected' }),
+                meta: { triggerer: 'point' },
+              });
+              expect(
+                custom.addImages.withArgs({
+                  nodes: { key: 'collected' },
+                })
+              ).to.have.been.calledOnce;
+            });
+
+            it('should return correctly if custom is enabled and custom has images', () => {
+              custom.isEnabled.returns(true);
+              custom.hasImages.returns(true);
+              custom.addImages.returns({ key: 'images' });
+              expect(
+                getConfig().main.events.tooltip.beforeShow({ collectNodes: () => {}, meta: { triggerer: 'point' } })
+              ).to.deep.equal({
+                key: 'images',
+              });
+            });
+          });
+
+          describe('afterShow', () => {
+            it('should not show custom chart if triggerer is heat-map, custom chart is enabled and does not have limitation', () => {
+              custom.chart.isEnabled.returns(true);
+              custom.chart.hasLimitation.returns(false);
+              getConfig().main.events.tooltip.afterShow({ nodes: undefined, meta: { triggerer: 'heat-map' } });
+              expect(custom.chart.show).not.to.have.been.called;
+            });
+
+            it('should not show custom chart if triggerer is trendlines overlay, custom chart is enabled and does not have limitation', () => {
+              custom.chart.isEnabled.returns(true);
+              custom.chart.hasLimitation.returns(false);
+              getConfig().main.events.tooltip.afterShow({
+                nodes: undefined,
+                meta: { triggerer: 'trendlines-tooltip' },
+              });
+              expect(custom.chart.show).not.to.have.been.called;
+            });
+
+            it('should not show custom chart if custom chart is not enabled and custom chart has limitation', () => {
+              custom.chart.isEnabled.returns(false);
+              custom.chart.hasLimitation.returns(true);
+              getConfig().main.events.tooltip.afterShow({ nodes: undefined, meta: { triggerer: 'point' } });
+              expect(custom.chart.show).not.to.have.been.called;
+            });
+
+            it('should not show custom chart if custom chart is not enabled and custom chart does not have limitation', () => {
+              custom.chart.isEnabled.returns(false);
+              custom.chart.hasLimitation.returns(false);
+              getConfig().main.events.tooltip.afterShow({ nodes: undefined, meta: { triggerer: 'point' } });
+              expect(custom.chart.show).not.to.have.been.called;
+            });
+
+            it('should not show custom chart if custom chart is enabled and custom chart has limitation', () => {
+              custom.chart.isEnabled.returns(true);
+              custom.chart.hasLimitation.returns(true);
+              getConfig().main.events.tooltip.afterShow({ nodes: undefined, meta: { triggerer: 'point' } });
+              expect(custom.chart.show).not.to.have.been.called;
+            });
+
+            it('should show custom chart if custom chart is enabled and custom chart does not have limitation', () => {
+              custom.chart.isEnabled.returns(true);
+              custom.chart.hasLimitation.returns(false);
+              getConfig().main.events.tooltip.afterShow({ nodes: { key: 'nodes' }, meta: { triggerer: 'point' } });
+              expect(
+                custom.chart.show.withArgs({
+                  nodes: { key: 'nodes' },
+                  properties: { key: 'properties' },
+                })
+              ).to.have.been.calledOnce;
+            });
+          });
+        });
+
+        describe('interaction', () => {
+          it('should have correct properties', () => {
+            expect(getConfig().main.events.interaction).to.have.all.keys(['mouseleave']);
+          });
+
+          describe('mouseleave', () => {
+            it('should not hide custom chart if custom chart is not enabled and custom chart does not have alternate state', () => {
+              custom.chart.isEnabled.returns(false);
+              custom.chart.hasAlternateState.returns(false);
+              getConfig().main.events.interaction.mouseleave();
+              expect(custom.chart.hide).not.to.have.been.called;
+            });
+
+            it('should not hide custom chart if custom chart is not enabled and custom chart has alternate state', () => {
+              custom.chart.isEnabled.returns(false);
+              custom.chart.hasAlternateState.returns(true);
+              getConfig().main.events.interaction.mouseleave();
+              expect(custom.chart.hide).not.to.have.been.called;
+            });
+
+            it('should not hide custom chart if custom chart is enabled and custom chart does not have alternate state', () => {
+              custom.chart.isEnabled.returns(true);
+              custom.chart.hasAlternateState.returns(false);
+              getConfig().main.events.interaction.mouseleave();
+              expect(custom.chart.hide).not.to.have.been.called;
+            });
+
+            it('should hide custom chart if custom chart is enabled and custom chart has alternate state', () => {
+              custom.chart.isEnabled.returns(true);
+              custom.chart.hasAlternateState.returns(true);
+              getConfig().main.events.interaction.mouseleave();
+              expect(custom.chart.hide).to.have.been.calledOnce;
+            });
+          });
         });
       });
     });

@@ -13,6 +13,10 @@ export default function createSettings({ colorService }) {
         type: 'circle',
         size: NUMBERS.LEGEND_CAT.SYMBOL.SIZE,
       },
+      label: {
+        wordBreak: 'break-word',
+        maxLines: 2,
+      },
     },
   };
 }

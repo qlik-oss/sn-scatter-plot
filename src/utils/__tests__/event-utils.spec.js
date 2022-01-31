@@ -22,14 +22,14 @@ describe('eventToChartPoint', () => {
 
 describe('eventToComponentPoint', () => {
   let sandbox;
-  let component;
+  let componentSize;
   let chart;
   let event;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     event = { clientX: 1, clientY: 2 };
-    component = { rect: { computedPhysical: { x: 3, y: 4 } } };
+    componentSize = { x: 3, y: 4 };
     chart = { element: { getBoundingClientRect: sandbox.stub().returns({ left: 5, top: 6 }) } };
   });
 
@@ -38,6 +38,6 @@ describe('eventToComponentPoint', () => {
   });
 
   it('should return correct coordinate relative to component', () => {
-    expect(eventUtils.eventToComponentPoint(event, chart, component)).to.deep.equal({ x: -7, y: -8 });
+    expect(eventUtils.eventToComponentPoint(event, chart, componentSize)).to.deep.equal({ x: -7, y: -8 });
   });
 });

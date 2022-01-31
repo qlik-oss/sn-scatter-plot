@@ -4,6 +4,8 @@ import * as NUMBERS from '../../../constants/numbers';
 import pan from '../pan';
 import * as updateTapDataView from '../tap-mini-chart/update-tap-data-view';
 import * as getTapPosition from '../tap-mini-chart/tap-position';
+import * as clearMinor from '../../../utils/clear-minor';
+import * as isInBinValueSelection from '../../../utils/is-in-bin-value-selection';
 
 describe('pan', () => {
   let sandbox;
@@ -30,6 +32,8 @@ describe('pan', () => {
     sandbox.stub(NUMBERS, 'default').value({ MINI_CHART: { RATIO: 0.5 } });
     sandbox.stub(getTapPosition, 'default').returns({ x: 1, y: 1 });
     sandbox.stub(updateTapDataView, 'default');
+    sandbox.stub(clearMinor, 'default');
+    sandbox.stub(isInBinValueSelection, 'default').returns(false);
     panObject = pan({ chart, actions, viewHandler, rtl });
   });
 
@@ -61,12 +65,23 @@ describe('pan', () => {
         expect(panObject.options.enable('', 'e')).to.equal(false);
       });
 
-      it('should return correct pointAreaPanned', () => {
+      it('should return false if is in bin vaule selection', () => {
+        isInBinValueSelection.default.returns(true);
+        expect(panObject.options.enable('', 'e')).to.equal(false);
+      });
+
+      it('should return false if has no corresponding component ', () => {
+        actions.zoom.enabled.returns(true);
+        chart.componentsFromPoint.withArgs({ x: 200, y: 100 }).returns([]);
+        expect(panObject.options.enable('', { center: { x: 200, y: 100 } })).to.equal(false);
+      });
+
+      it('should return true if has corresponding component ', () => {
         actions.zoom.enabled.returns(true);
         chart.componentsFromPoint
           .withArgs({ x: 200, y: 100 })
           .returns([{ key: 'point-comp' }, { key: 'point-comp', id: 'should-not-return-this' }]);
-        expect(panObject.options.enable('', { center: { x: 200, y: 100 } })).to.deep.equal({ key: 'point-comp' });
+        expect(panObject.options.enable('', { center: { x: 200, y: 100 } })).to.equal(true);
       });
     });
   });
@@ -79,7 +94,7 @@ describe('pan', () => {
     describe('areaPanstart', () => {
       it('should add correct areaPan object to events, case 1: tap is inside the mini chart', () => {
         viewHandler.getDataView.returns({ xAxisMin: 1, xAxisMax: 2, yAxisMin: 3, yAxisMax: 4 });
-        panObject.events.pointAreaPanned = { rect: { width: 1, height: 2 } };
+        panObject.events.componentSize = { width: 1, height: 2 };
         e = { preventDefault: sandbox.stub() };
         panObject.events.areaPanstart(e);
         expect(panObject.events.started).to.equal('areaPan');
@@ -91,12 +106,29 @@ describe('pan', () => {
           yAxisMax: 4,
           miniChart: { panInMiniChart: true, navWindowScale: 0.05 },
         });
+        expect(clearMinor.default).to.have.been.calledOnce;
       });
     });
 
     describe('areaPanmove', () => {
+      it('should not modify myDataView if pan is not started', () => {
+        e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20 };
+        panObject.events.areaPan = {
+          componentSize: { width: 100, height: 200 },
+          xAxisMin: -1000,
+          xAxisMax: 1000,
+          yAxisMin: 0,
+          yAxisMax: 2000,
+          miniChart: { panInMiniChart: false, navWindowScale: 0.05 },
+        };
+        myDataView = {};
+        panObject.events.areaPanmove(e);
+        expect(myDataView).to.deep.equal({});
+      });
+
       it('should modify myDataView correctly', () => {
         e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20 };
+        panObject.events.areaPanstart(e);
         panObject.events.areaPan = {
           componentSize: { width: 100, height: 200 },
           xAxisMin: -1000,
@@ -122,6 +154,7 @@ describe('pan', () => {
 
       it('should modify myDataView correctly when panning inside mini chart', () => {
         e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20 };
+        panObject.events.areaPanstart(e);
         panObject.events.areaPan = {
           componentSize: { width: 100, height: 200 },
           xAxisMin: -1000,
@@ -149,6 +182,7 @@ describe('pan', () => {
         rtl = true;
         e = { preventDefault: sandbox.stub(), deltaX: 10, deltaY: 20 };
         panObject = pan({ chart, actions, viewHandler, rtl });
+        panObject.events.areaPanstart(e);
         panObject.events.areaPan = {
           componentSize: { width: 100, height: 200 },
           xAxisMin: -1000,
@@ -174,8 +208,25 @@ describe('pan', () => {
     });
 
     describe('areaPanend', () => {
+      it('should not update dataview and set events.started if pan is not started', () => {
+        e = { preventDefault: sandbox.stub() };
+        panObject.events.areaPan = {
+          componentSize: { width: 100, height: 200 },
+          xAxisMin: -1000,
+          xAxisMax: 1000,
+          yAxisMin: 0,
+          yAxisMax: 2000,
+          miniChart: { panInMiniChart: false, navWindowScale: 0.05 },
+        };
+        myDataView = {};
+        panObject.events.areaPanend(e);
+        expect(myDataView).to.deep.equal({});
+        expect(panObject.events.started).to.equal(undefined);
+      });
+
       it('should set events.started to false', () => {
         e = { preventDefault: sandbox.stub() };
+        panObject.events.areaPanstart(e);
         panObject.events.areaPan = {
           componentSize: { width: 100, height: 200 },
           xAxisMin: -1000,

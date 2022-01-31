@@ -28,7 +28,7 @@ export default function createHeatMapLabels({ themeService, chartModel, picasso,
               fontFamily,
               labels: [
                 {
-                  label: ({ node }) => formatter('#.#A')(node.data.binDensity.value),
+                  label: ({ node }) => formatter('#.#', undefined, undefined, 'U')(node.data.binDensity.value),
                   placements: [
                     {
                       position: 'inside',

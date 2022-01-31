@@ -11,6 +11,7 @@ import * as createDisclaimer from '../disclaimer';
 import * as createOutOfBounds from '../out-of-bounds';
 import * as createHeatMapLegend from '../heat-map-legend';
 import * as createMiniChart from '../mini-chart';
+import * as createHeatMapHighLight from '../heat-map-highlight';
 import * as createNavigationPanel from '../navigation-panel';
 import createComponents from '..';
 
@@ -18,7 +19,6 @@ describe('createComponents', () => {
   let sandbox;
   let create;
   let models;
-  let flags;
   let picasso;
   let chart;
 
@@ -34,8 +34,11 @@ describe('createComponents', () => {
       disclaimerModel: {
         query: { getHasSuppressingDisclaimer: sandbox.stub().returns(false) },
       },
+      trendLinesService: {
+        getComponents: sandbox.stub().returns(['trendlines-component']),
+      },
     };
-    create = () => createComponents({ context, models, flags, picasso, chart });
+    create = () => createComponents({ context, models, picasso, chart });
     sandbox.stub(createGridLines, 'default').returns('grid-lines');
     sandbox.stub(createReferenceLines, 'default').returns(['ref-line-x', 'ref-line-y']);
     sandbox.stub(createPoint, 'default').returns('points');
@@ -45,10 +48,12 @@ describe('createComponents', () => {
     sandbox.stub(createPointLabels, 'default').returns('point-labels');
     sandbox.stub(createHeatMapLabels, 'default').returns('heat-map-labels');
     sandbox.stub(createOutOfBounds, 'default').returns('oobs');
+    sandbox.stub(createOutOfBounds, 'createSpace').returns(['oobs-space']);
     sandbox.stub(createHeatMapLegend, 'default').returns('heat-map-legend');
     sandbox.stub(createDisclaimer, 'default').returns('disclaimer');
     sandbox.stub(createMiniChart, 'default').returns(['mini-chart-point', 'mini-chart-background', 'mini-chart-nav']);
-    sandbox.stub(createNavigationPanel, 'default').returns('navigation-panel');
+    sandbox.stub(createHeatMapHighLight, 'default').returns('heat-map-highlight');
+    sandbox.stub(createNavigationPanel, 'default').returns(['home', 'up']);
   });
 
   afterEach(() => {
@@ -58,28 +63,32 @@ describe('createComponents', () => {
   it('should return correct components', () => {
     const components = create();
     expect(components).to.deep.equal([
+      'oobs-space',
       'grid-lines',
       'ref-line-x',
       'ref-line-y',
       'points',
       'heat-map',
+      'trendlines-component',
       'axis-x',
       'axis-y',
       'axis-title-x',
       'axis-title-y',
       'point-labels',
-      'heat-map-labels',
       'oobs',
       'legend-component-1',
       'legend-component-2',
       'heat-map-legend',
       'disclaimer',
-      'navigation-panel',
+      'heat-map-highlight',
+      'home',
+      'up',
       'mini-chart-point',
       'mini-chart-background',
       'mini-chart-nav',
       'tooltip-1',
       'tooltip-2',
+      'heat-map-labels',
     ]);
   });
 

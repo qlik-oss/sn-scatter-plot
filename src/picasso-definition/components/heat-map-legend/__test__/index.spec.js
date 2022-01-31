@@ -1,4 +1,5 @@
 import * as KEYS from '../../../../constants/keys';
+import * as MODES from '../../../../constants/modes';
 import createHeatMapLegend from '..';
 import * as getDock from '../../../../utils/dock-helper';
 
@@ -41,7 +42,10 @@ describe('heat-map-legend', () => {
     };
     context = {
       theme: {
-        getStyle: sandbox.stub().returns({ title: { fontSize: '12px', color: '#000000' } }),
+        getStyle: sandbox.stub().returns({
+          title: { fontSize: '12px', color: '#000000' },
+          label: { fontSize: '12px', color: '#000000' },
+        }),
       },
       rtl: false,
       translator: {
@@ -55,6 +59,9 @@ describe('heat-map-legend', () => {
       SCALE: {
         HEAT_MAP_COLOR: 'heat-map-color',
       },
+    });
+    sandbox.stub(MODES, 'default').value({
+      HEAT_MAP_LEGEND: 'medium',
     });
     create = () => createHeatMapLegend({ models, context, chart });
   });
@@ -76,9 +83,17 @@ describe('heat-map-legend', () => {
       expect(create().dock).to.equal('right');
     });
 
+    it('should have correct minimumLayoutMode', () => {
+      expect(create().minimumLayoutMode).to.equal('medium');
+    });
+
     describe('settings', () => {
       it('should have correct properties', () => {
-        expect(create().settings).to.have.all.keys(['fill', 'major', 'title', 'tick']);
+        expect(create().settings).to.have.all.keys(['length', 'fill', 'major', 'title', 'tick']);
+      });
+
+      it('should have correct fill', () => {
+        expect(create().settings.length).to.equal(1);
       });
 
       it('should have correct fill', () => {
@@ -153,6 +168,14 @@ describe('heat-map-legend', () => {
 
         it('should have correct fontFamily', () => {
           expect(create().settings.tick.fontFamily).to.equal('Sans serif');
+        });
+
+        it('should have correct fontSize', () => {
+          expect(create().settings.title.fontSize).to.equal('12px');
+        });
+
+        it('should have correct fill', () => {
+          expect(create().settings.title.fill).to.equal('#000000');
         });
       });
     });

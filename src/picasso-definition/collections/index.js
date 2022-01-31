@@ -1,4 +1,5 @@
 import KEYS from '../../constants/keys';
+import customTooltipNodes from '../../custom-tooltip/picasso-definitions/nodes';
 
 export default function createCollections({ layoutService, colorService }) {
   const collectionDef = {
@@ -14,6 +15,7 @@ export default function createCollections({ layoutService, colorService }) {
             field: KEYS.FIELDS.DIM,
           },
           ...colorService.getDatumProps(0),
+          customTooltipAttrExps: customTooltipNodes.getNode(layoutService.getLayout(), { dimensionCount: 1 }),
         },
       },
     },

@@ -82,7 +82,14 @@ describe('use-select', () => {
     });
 
     it('should have all keys', () => {
-      expect(object).to.have.all.keys(['enabled', 'emit', 'removeListener', 'on', 'getBrushOptions']);
+      expect(object).to.have.all.keys([
+        'enabled',
+        'emit',
+        'removeListener',
+        'removeAllListeners',
+        'on',
+        'getBrushOptions',
+      ]);
     });
 
     describe('enabled', () => {

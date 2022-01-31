@@ -1,12 +1,14 @@
 import conversion from 'qlik-object-conversion';
 import pp from './property-definition';
 import dataDefinition from '../qae/data-definition';
+import softDefinition from './explore-definition';
 
 const isValidLayout = (layout) => !!((layout?.qHyperCube?.qSize?.qcy || 0) > 0);
 
 export default function ext(env) {
   return {
     definition: pp(env),
+    softDefinition,
     support: {
       snapshot: isValidLayout,
       export: true,

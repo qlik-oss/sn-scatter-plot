@@ -2,7 +2,7 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 import createSizeScale from '../../scales/size';
-import createBrush from '../../brush';
+import createBrush from '../../brush/point-brush';
 import movePath from '../../../utils/move-path';
 
 export default function createPoint({ layoutService, colorService, chartModel }) {

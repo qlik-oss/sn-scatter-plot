@@ -9,6 +9,7 @@ describe('chart-model', () => {
   let hyperCube;
   let layoutService;
   let colorService;
+  let trendLinesService;
   let picassoInstance;
   let picassoDataFn;
   let colorModelDataFn;
@@ -70,6 +71,10 @@ describe('chart-model', () => {
       meta: { isContinuous: false, isSnapshot: false, isBigData: false },
       getHyperCube: sandbox.stub().returns(hyperCube),
     };
+    trendLinesService = {
+      getData: () => [{ trendlineData: 'here' }],
+      update: sandbox.stub(),
+    };
     extremumModel = { command: { updateExtrema: sandbox.stub() } };
     colorModelDataFn = sandbox.stub().returns([{ colorData: 'oh yes' }]);
     colorService = {
@@ -85,6 +90,7 @@ describe('chart-model', () => {
         localeInfo,
         layoutService,
         colorService,
+        trendLinesService,
         picasso: picassoInstance,
         viewState,
         extremumModel,
@@ -231,6 +237,11 @@ describe('chart-model', () => {
         expect(argsObject.settings).eql({ key: 'settings' });
       });
 
+      it('should call trendlinesserverce.update', () => {
+        create().command.update();
+        expect(trendLinesService.update).to.have.been.calledOnce;
+      });
+
       describe('getBinnedDataConfig', () => {
         describe('the returned object', () => {
           it('should have correct config.parse.fields function', () => {
@@ -296,6 +307,7 @@ describe('chart-model', () => {
           partialData: true,
           excludeFromUpdate: ['xat', 'yat', 'mcp'],
         });
+        expect(trendLinesService.update).to.have.been.calledOnce;
       });
     });
 
@@ -324,6 +336,7 @@ describe('chart-model', () => {
               },
             },
             { colorData: 'oh yes' },
+            { trendlineData: 'here' },
           ],
           settings: undefined,
         });
@@ -346,6 +359,7 @@ describe('chart-model', () => {
               },
             },
             { colorData: 'oh yes' },
+            { trendlineData: 'here' },
           ],
           settings: undefined,
         });

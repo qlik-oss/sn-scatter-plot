@@ -20,24 +20,18 @@ export default [
   {
     key: 'LimitedData',
     alignment: 'bottom',
-    condition: ({ layoutService, flags }) => {
+    condition: ({ layoutService }) => {
       if (layoutService.getLayout().showDisclaimer === false) {
         return false;
       }
 
       const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-      return qcy > NUMBERS.MAX_NR_SCATTER && (!layoutService.meta.isBigData || !flags.isEnabled('DATA_BINNING'));
+      return qcy > NUMBERS.MAX_NR_SCATTER && !layoutService.meta.isBigData;
     },
   },
   {
     key: 'OverviewData',
     alignment: 'bottom',
-    condition: ({ layoutService, flags }) => {
-      if (layoutService.getLayout().showDisclaimer === false && !flags.isEnabled('DATA_BINNING')) {
-        return false;
-      }
-
-      return layoutService.meta.isBigData;
-    },
+    condition: ({ layoutService }) => layoutService.meta.isBigData,
   },
 ];

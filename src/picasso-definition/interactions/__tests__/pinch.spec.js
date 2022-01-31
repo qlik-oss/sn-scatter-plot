@@ -2,6 +2,8 @@ import extend from 'extend';
 import KEYS from '../../../constants/keys';
 import * as zoom from '../../../view-handler/zoom';
 import pinch from '../pinch';
+import * as clearMinor from '../../../utils/clear-minor';
+import * as isInBinValueSelection from '../../../utils/is-in-bin-value-selection';
 
 describe('pinch', () => {
   let sandbox;
@@ -21,6 +23,8 @@ describe('pinch', () => {
     rtl = false;
     sandbox.stub(KEYS, 'COMPONENT').value({ POINT: 'point-component' });
     sandbox.stub(zoom, 'default');
+    sandbox.stub(clearMinor, 'default');
+    sandbox.stub(isInBinValueSelection, 'default').returns(false);
     pinchObject = pinch({ chart, actions, viewHandler, rtl });
   });
 
@@ -47,14 +51,23 @@ describe('pinch', () => {
         expect(pinchObject.options.enable('', 'e')).to.equal(false);
       });
 
-      it('should return correct pointAreaPinched', () => {
+      it('should return false if is in bin vaule selection', () => {
+        isInBinValueSelection.default.returns(true);
+        expect(pinchObject.options.enable('', 'e')).to.equal(false);
+      });
+
+      it('should return false if has no corresponding component', () => {
+        actions.zoom.enabled.returns(true);
+        chart.componentsFromPoint.withArgs({ x: 200, y: 100 }).returns([]);
+        expect(pinchObject.options.enable('', { center: { x: 200, y: 100 } })).to.equal(false);
+      });
+
+      it('should return true if has corresponding component', () => {
         actions.zoom.enabled.returns(true);
         chart.componentsFromPoint
           .withArgs({ x: 200, y: 100 })
           .returns([{ key: 'point-component' }, { key: 'point-component', id: 'should-not-return-this' }]);
-        expect(pinchObject.options.enable('', { center: { x: 200, y: 100 } })).to.deep.equal({
-          key: 'point-component',
-        });
+        expect(pinchObject.options.enable('', { center: { x: 200, y: 100 } })).to.equal(true);
       });
     });
   });
@@ -67,7 +80,7 @@ describe('pinch', () => {
     describe('zoomstart', () => {
       it('should add correct zoom object to events', () => {
         viewHandler.getDataView.returns({ xAxisMin: 1, xAxisMax: 2, yAxisMin: 3, yAxisMax: 4 });
-        pinchObject.events.pointArea = { rect: { width: 1, height: 2 } };
+        pinchObject.events.componentSize = { width: 1, height: 2 };
         e = { preventDefault: sandbox.stub() };
         pinchObject.events.zoomstart(e);
         expect(pinchObject.events.started).to.equal('zoom');
@@ -78,6 +91,7 @@ describe('pinch', () => {
           yAxisMin: 3,
           yAxisMax: 4,
         });
+        expect(clearMinor.default).to.have.been.calledOnce;
       });
     });
 

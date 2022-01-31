@@ -1,5 +1,7 @@
 import KEYS from '../../constants/keys';
 import zoom from '../../view-handler/zoom';
+import clearMinor from '../../utils/clear-minor';
+import isInBinValueSelection from '../../utils/is-in-bin-value-selection';
 
 export default function native({ chart, actions, viewHandler }) {
   function scrollLegend(e, comp) {
@@ -8,6 +10,7 @@ export default function native({ chart, actions, viewHandler }) {
     const dir = delta >= 0 ? 'next' : 'prev';
     comp.emit(dir);
   }
+  let componentSize;
   return {
     type: 'native',
     events: {
@@ -15,14 +18,21 @@ export default function native({ chart, actions, viewHandler }) {
         const point = { x: e.clientX, y: e.clientY };
         let target;
 
+        if (isInBinValueSelection(chart)) {
+          return;
+        }
+
         if (actions.zoom.enabled()) {
           [target] = chart
             .componentsFromPoint(point)
             .filter((c) => c.key === KEYS.COMPONENT.POINT || c.key === KEYS.COMPONENT.HEAT_MAP);
           if (target) {
-            // TODO
-            // use touch pad to zoom sometime gets console error, probbaly need to specify how much to zoom each time
-            zoom({ e, chart, pointComponent: target, viewHandler });
+            clearMinor({ chart, actions });
+            const rectSize = target.rect?.computedPhysical;
+            if (rectSize?.height && rectSize?.width) {
+              componentSize = { ...rectSize };
+            }
+            zoom({ e, chart, componentSize, viewHandler });
             e.preventDefault();
           }
         }

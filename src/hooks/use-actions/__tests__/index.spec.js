@@ -7,7 +7,6 @@ import useActions from '..';
 describe('use-actions', () => {
   let sandbox;
   let create;
-  let flags;
   let constraints;
   let select;
   let lasso;
@@ -18,13 +17,12 @@ describe('use-actions', () => {
     constraints = { active: false, passive: false };
     select = 'select';
     lasso = 'lasso';
-    flags = { isEnabled: sandbox.stub().returns(true) };
     actions = {};
     sandbox.stub(stardust, 'useConstraints').returns(constraints);
     sandbox.stub(useSelect, 'default').returns(select);
     sandbox.stub(useLasso, 'default').returns(lasso);
     sandbox.stub(stardust, 'useState').returns([actions]);
-    create = () => useActions({ flags });
+    create = () => useActions();
   });
 
   afterEach(() => {

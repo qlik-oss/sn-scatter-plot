@@ -5,7 +5,6 @@ import disclaimers from '../disclaimers';
 describe('disclaimers', () => {
   let sandbox;
   let layoutService;
-  let flags;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -15,7 +14,6 @@ describe('disclaimers', () => {
       meta: { isBigData: undefined },
     };
     sandbox.stub(NUMBERS, 'default').value({ MAX_NR_SCATTER: 100 });
-    flags = { isEnabled: sandbox.stub() };
   });
 
   afterEach(() => {
@@ -75,18 +73,19 @@ describe('disclaimers', () => {
     describe('condition', () => {
       it('should return false if showDisclaimer is false', () => {
         layoutService.getLayout.returns({ showDisclaimer: false });
-        expect(disclaimers[2].condition({ layoutService, flags })).to.equal(false);
+        expect(disclaimers[2].condition({ layoutService })).to.equal(false);
       });
 
-      it('should return true if qcy exceeds the limit for numbers of points, and if it is not big data or data binning flag is not enabled', () => {
+      it('should return false if qcy exceeds the limit for numbers of points and is big data', () => {
+        layoutService.getHyperCubeValue.withArgs('qSize.qcy', 0).returns(101);
+        layoutService.meta.isBigData = true;
+        expect(disclaimers[2].condition({ layoutService })).to.equal(false);
+      });
+
+      it('should return true if qcy exceeds the limit for numbers of points and is not big data', () => {
         layoutService.getHyperCubeValue.withArgs('qSize.qcy', 0).returns(101);
         layoutService.meta.isBigData = false;
-        flags.isEnabled.withArgs('DATA_BINNING').returns(true);
-        expect(disclaimers[2].condition({ layoutService, flags })).to.equal(true);
-
-        layoutService.meta.isBigData = true;
-        flags.isEnabled.withArgs('DATA_BINNING').returns(false);
-        expect(disclaimers[2].condition({ layoutService, flags })).to.equal(true);
+        expect(disclaimers[2].condition({ layoutService })).to.equal(true);
       });
     });
   });
@@ -97,20 +96,10 @@ describe('disclaimers', () => {
     });
 
     describe('condition', () => {
-      it('should return false if showDisclaimer is false and data binning flag is not enabled', () => {
-        layoutService.getLayout.returns({ showDisclaimer: false });
-        flags.isEnabled.withArgs('DATA_BINNING').returns(false);
-        expect(disclaimers[3].condition({ layoutService, flags })).to.equal(false);
-      });
-
-      it('should return the same value as isBigData if showDisclaimer is true or data binning flag is  enabled', () => {
+      it('should return the same value as isBigData if showDisclaimer is true ', () => {
         layoutService.getLayout.returns({ showDisclaimer: true });
         layoutService.meta.isBigData = true;
-        expect(disclaimers[3].condition({ layoutService, flags })).to.equal(true);
-
-        flags.isEnabled.withArgs('DATA_BINNING').returns(true);
-        layoutService.meta.isBigData = false;
-        expect(disclaimers[3].condition({ layoutService, flags })).to.equal(false);
+        expect(disclaimers[3].condition({ layoutService })).to.equal(true);
       });
     });
   });

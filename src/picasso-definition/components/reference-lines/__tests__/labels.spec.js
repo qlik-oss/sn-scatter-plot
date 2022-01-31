@@ -5,6 +5,7 @@ import * as getContrastColors from '../../../../utils/color/get-contrast-colors'
 describe('createRefLineLabels', () => {
   let sandbox;
   let models;
+  let colorService;
   let layoutService;
   let themeService;
   let context;
@@ -15,6 +16,7 @@ describe('createRefLineLabels', () => {
     sandbox = sinon.createSandbox();
     sandbox.stub(KEYS, 'SCALE').returns({ X: 'x', Y: 'y' });
     sandbox.stub(getContrastColors, 'default');
+    colorService = { getPaletteColor: (paletteColor) => paletteColor.color };
     layoutService = { getLayoutValue: sandbox.stub() };
     layoutService.getLayoutValue.withArgs('refLine.refLinesX').returns([
       {
@@ -52,6 +54,7 @@ describe('createRefLineLabels', () => {
     };
     viewHandler = { animationEnabled: false };
     models = {
+      colorService,
       layoutService,
       themeService,
       chartModel: { query: { getViewHandler: sandbox.stub().returns(viewHandler) } },
@@ -114,6 +117,8 @@ describe('createRefLineLabels', () => {
           value: 1234,
           valueLabel: '1234',
           scale: 'x',
+          showLabel: true,
+          showValue: true,
         },
       ],
       scale: 'x',
@@ -178,6 +183,8 @@ describe('createRefLineLabels', () => {
           value: 1234,
           valueLabel: '1234',
           scale: 'x',
+          showLabel: true,
+          showValue: true,
         },
       ],
       scale: 'x',
@@ -238,6 +245,8 @@ describe('createRefLineLabels', () => {
           value: 4321,
           valueLabel: '4321',
           scale: 'y',
+          showLabel: true,
+          showValue: true,
         },
       ],
       scale: 'y',
@@ -306,6 +315,8 @@ describe('createRefLineLabels', () => {
           value: 4321,
           valueLabel: '4321',
           scale: 'y',
+          showLabel: true,
+          showValue: true,
         },
       ],
       scale: 'y',

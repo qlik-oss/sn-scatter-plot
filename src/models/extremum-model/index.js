@@ -1,5 +1,7 @@
 import KEYS from '../../constants/keys';
 import getDelta from './delta';
+import isBinnedData from '../../data-handler/is-binned-data';
+import getBinMinMax from './get-bin-extremum';
 
 export default function createExtremumModel(layoutService, viewStateOptions = {}) {
   function resolveExtrema(scaleName) {
@@ -8,6 +10,12 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
     const measureIndex = scaleName === KEYS.SCALE.X ? 0 : 1;
     let minFromLayout = layoutService.getHyperCubeValue(`${measurePath}.qMin`, 0);
     let maxFromLayout = layoutService.getHyperCubeValue(`${measurePath}.qMax`, 1);
+    const dataPages = layoutService.getLayoutValue('dataPages');
+    if (minFromLayout === maxFromLayout && isBinnedData(layoutService) && dataPages?.length) {
+      const { min, max } = getBinMinMax({ layoutService, scaleName });
+      minFromLayout = Math.min(minFromLayout, min);
+      maxFromLayout = Math.max(maxFromLayout, max);
+    }
     let explicitType = 'none';
 
     const axis = scaleName === KEYS.SCALE.X ? 'xAxis' : 'yAxis';

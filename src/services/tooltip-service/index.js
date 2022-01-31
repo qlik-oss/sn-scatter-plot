@@ -10,6 +10,9 @@ export default function createTooltipService({
   layoutService,
   colorService,
   themeService,
+  trendLinesService,
+  propertiesModel,
+  custom,
 }) {
   const { fontFamily } = themeService.getStyles();
 
@@ -53,11 +56,64 @@ export default function createTooltipService({
             },
             placement: 'collectible',
           },
+          {
+            keys: [KEYS.COMPONENT.TRENDLINES_TOOLTIP_OVERLAY],
+            collect: {
+              from: 'single',
+            },
+            placement: 'collectible',
+          },
         ],
-        section: ({ nodes, dataset, meta, create, util }) =>
-          createSection({ translator, measureProperties, nodes, dataset, meta, create, util }),
+        section: ({ h, nodes, dataset, meta, create, util }) =>
+          createSection({
+            translator,
+            custom,
+            measureProperties,
+            h,
+            nodes,
+            dataset,
+            meta,
+            create,
+            util,
+            trendLinesService,
+          }),
         layout: {
           grouping: true,
+          single: ({ meta }) =>
+            !!(
+              meta.triggerer === KEYS.COMPONENT.POINT &&
+              ((custom.isEnabled() && custom.hasImages()) || custom.chart.isEnabled())
+            ),
+        },
+        events: {
+          tooltip: {
+            beforeShow: ({ collectNodes, meta }) => {
+              if (meta.triggerer !== KEYS.COMPONENT.POINT || !custom.isEnabled() || !custom.hasImages()) {
+                return Promise.resolve();
+              }
+
+              return custom.addImages({ nodes: collectNodes() });
+            },
+            afterShow: ({ nodes, meta }) => {
+              if (
+                meta.triggerer === KEYS.COMPONENT.POINT &&
+                custom.chart.isEnabled() &&
+                !custom.chart.hasLimitation()
+              ) {
+                custom.chart.show({
+                  nodes,
+                  properties: propertiesModel.query.getProperties(),
+                });
+              }
+            },
+          },
+          interaction: {
+            mouseleave: () => {
+              if (custom.chart.isEnabled() && custom.chart.hasAlternateState()) {
+                custom.chart.hide();
+              }
+            },
+          },
         },
       },
       legend: {

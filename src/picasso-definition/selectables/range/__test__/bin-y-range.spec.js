@@ -21,6 +21,9 @@ describe('bin-y-Range', () => {
             SCALE: { BIN_Y: 'bin-y-scale' },
             COMPONENT: { Y_AXIS: 'y-axis-key', HEAT_MAP: 'heat-map-key' },
             FORMATTER: { Y: 'y-formatter' },
+            BRUSH: {
+              BIN_Y_RANGE: 'bin-y-range-brush',
+            },
           }),
         ],
       ],
@@ -139,6 +142,7 @@ describe('bin-y-Range', () => {
       expect(
         config.toLabel({
           datum: 2,
+          data: [3, 10.6],
         })
       ).to.equal('2-formatted');
     });

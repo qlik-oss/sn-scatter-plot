@@ -27,6 +27,7 @@ export default {
   LAYOUT_MODES: {
     FULL: { width: 550, height: 450 },
     MEDIUM: { width: 400, height: 220 },
+    MEDIUM_NAV: { width: 400, height: 400 }, // special treatment for navigation buttons
     SMALL: { width: 300, height: 150 },
     XSMALL: { width: 150, height: 75 },
     SPARK: { width: 0, height: 0 },
@@ -38,6 +39,6 @@ export default {
   MINI_CHART: { RATIO: 0.15, PADDING: 10 },
   MAX_NR_ANIMATION: 1000,
 
-  NAVIGATION_PANEL: { GRID_WIDTH: 45, PADDING: 10 },
+  NAVIGATION_PANEL: { BUTTON_WIDTH: 45 },
   WINDOW_SIZE_BASE: 300,
 };

@@ -1,5 +1,5 @@
-// eslint-disable-next-line no-unused-vars
 import * as KEYS from '../../../constants/keys';
+import * as customTooltipNodes from '../../../custom-tooltip/picasso-definitions/nodes';
 import createCollections from '..';
 
 describe('createCollections', () => {
@@ -13,7 +13,14 @@ describe('createCollections', () => {
     sandbox
       .stub(KEYS, 'default')
       .value({ COLLECTION: { MAIN: 'main-collection' }, FIELDS: { DIM: 'dimension', X: 'x', Y: 'y', SIZE: 'size' } });
-    layoutService = { meta: { hasSizeMeasure: true } };
+    sandbox.stub(customTooltipNodes.default, 'getNode');
+    customTooltipNodes.default.getNode
+      .withArgs({ key: 'layout' }, { dimensionCount: 1 })
+      .returns({ key: 'custom-tooltip-attr-exps' });
+    layoutService = {
+      getLayout: () => ({ key: 'layout' }),
+      meta: { hasSizeMeasure: true },
+    };
     colorService = { getDatumProps: sandbox.stub() };
     colorService.getDatumProps.withArgs(0).returns({ prop0: 'value-0', prop1: 'value-1' });
     create = () => createCollections({ layoutService, colorService });
@@ -40,6 +47,7 @@ describe('createCollections', () => {
               },
               prop0: 'value-0',
               prop1: 'value-1',
+              customTooltipAttrExps: { key: 'custom-tooltip-attr-exps' },
             },
           },
         },

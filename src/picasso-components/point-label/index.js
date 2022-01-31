@@ -41,7 +41,7 @@ export default {
     }
 
     const nodeFilter = (node) => node.key === key && showLabel(node);
-    const nodes = [...this.chart.findShapes('circle'), ...this.chart.findShapes('path')].filter(nodeFilter);
+    const nodes = [...this.chart.findShapes('circle'), ...this.chart.findShapes('path')].filter(nodeFilter).reverse();
 
     if (!nodes.length) {
       return [];

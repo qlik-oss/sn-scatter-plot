@@ -25,6 +25,10 @@ describe('settings', () => {
           type: 'circle',
           size: 10,
         },
+        label: {
+          wordBreak: 'break-word',
+          maxLines: 2,
+        },
       },
     });
   });

@@ -11,6 +11,7 @@ import {
   useRect,
   useSelections,
   usePlugins,
+  useEmbed,
 } from '@nebula.js/stardust';
 import {
   layoutService as createLayoutService,
@@ -20,10 +21,12 @@ import {
 } from 'qlik-chart-modules';
 import themeStyleMatrix from '../services/theme-service/theme-style-matrix';
 import layoutServiceMeta from '../services/layout-service/meta';
+import createTrenslinesService from '../services/trendlines-service';
 import createChartModel from '../models/chart-model';
 import createTickModel from '../models/tick-model';
 import createSelectionService from '../services/selection-service';
 import createColorService from '../services/color-service';
+import createCustomTooltipService from '../custom-tooltip/service';
 import createTooltipService from '../services/tooltip-service';
 import getPluginArgs from '../services/plugin-service/plugin-args';
 import getLogicalSize from '../logical-size';
@@ -45,6 +48,7 @@ const useModels = ({ core, flags }) => {
   const plugins = usePlugins();
   const [selectionService, setSelectionService] = useState();
   const [models, setModels] = useState();
+  const embed = useEmbed();
 
   useEffect(() => {
     if (!core) {
@@ -96,7 +100,7 @@ const useModels = ({ core, flags }) => {
     const pluginService = createPluginService({ picassoInstance, plugins, pluginArgs });
     const extremumModel = createExtremumModel(layoutService, options.viewState);
 
-    const dataHandler = createDataHandler({ layoutService, model, extremumModel, flags });
+    const dataHandler = createDataHandler({ layoutService, model, extremumModel });
 
     const colorService = createColorService({
       actions,
@@ -113,6 +117,31 @@ const useModels = ({ core, flags }) => {
       dataHandler,
     });
 
+    let chartModel;
+    const trendLinesService = createTrenslinesService({
+      chart,
+      colorService,
+      enableAnimations: () => chartModel.query.getViewHandler().animationEnabled,
+      flags,
+      layoutService,
+      translator,
+      viewState,
+    });
+
+    const propertiesModel = createPropertiesModel({ model, layoutService });
+
+    const customTooltipService = createCustomTooltipService({
+      flags,
+      layout,
+      app,
+      model,
+      picasso: picassoInstance,
+      chart,
+      translator,
+      embed,
+      options,
+    });
+
     const tooltipService = createTooltipService({
       chart,
       actions,
@@ -121,9 +150,12 @@ const useModels = ({ core, flags }) => {
       layoutService,
       colorService,
       themeService,
+      trendLinesService,
+      propertiesModel,
+      custom: customTooltipService,
     });
 
-    const chartModel = createChartModel({
+    chartModel = createChartModel({
       chart,
       localeInfo,
       layoutService,
@@ -132,14 +164,12 @@ const useModels = ({ core, flags }) => {
       colorService,
       extremumModel,
       dataHandler,
-      flags,
+      trendLinesService,
     });
 
     const tickModel = createTickModel({ layoutService, dockService, extremumModel, themeService, chartModel, chart });
 
-    const disclaimerModel = createDisclaimerModel({ layoutService, flags });
-
-    const propertiesModel = createPropertiesModel({ model, layoutService });
+    const disclaimerModel = createDisclaimerModel({ layoutService });
 
     selectionService.setLayout(layoutService.getLayout());
     setModels({
@@ -155,6 +185,7 @@ const useModels = ({ core, flags }) => {
       extremumModel,
       tooltipService,
       propertiesModel,
+      trendLinesService,
     });
   }, [model, app, selectionService, layout, theme.name(), translator.language(), options.direction, options.viewState]);
 

@@ -9,7 +9,7 @@ export default function createXRange({ chart, actions, selectionService, dockSer
   return range(
     {
       eventName: 'binXRange',
-      key: 'bin-x-range-brush',
+      key: KEYS.BRUSH.BIN_X_RANGE,
       targets: [KEYS.COMPONENT.X_AXIS, KEYS.COMPONENT.HEAT_MAP],
       fillTargets: [KEYS.COMPONENT.X_AXIS],
       dock: dockService.meta.x.dock,
