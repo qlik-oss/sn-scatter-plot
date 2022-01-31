@@ -29,6 +29,7 @@ export default function createViewHandler({ viewState, extremumModel, layoutServ
         meta.isHomeState = false;
       }
       extremumModel.command.updateExtrema(dataView, meta.isHomeState);
+      meta.scale = (xMax1 - xMin1) / (xMax2 - xMin2);
       viewState.set('dataView', dataView);
     },
 
