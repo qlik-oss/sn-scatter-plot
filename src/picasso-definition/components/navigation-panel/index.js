@@ -6,7 +6,7 @@ import clearMinor from '../../../utils/clear-minor';
 
 export default function createNavigationPanel({ layoutService, chartModel, chart, actions, context }) {
   if (layoutService.meta.isSnapshot) {
-    return false;
+    return [];
   }
   const width = NUMBERS.NAVIGATION_PANEL.BUTTON_WIDTH;
   const viewHandler = chartModel.query.getViewHandler();
