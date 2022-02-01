@@ -109,7 +109,6 @@ describe('createRefLineLabels', () => {
     expect(result).to.deep.equal({
       key: 'reference-line-labels-X',
       type: 'reference-line-labels',
-      renderer: 'svg',
       labels: [
         {
           text: 'X ref label',
@@ -175,7 +174,6 @@ describe('createRefLineLabels', () => {
     expect(result).to.deep.equal({
       key: 'reference-line-labels-X',
       type: 'reference-line-labels',
-      renderer: 'svg',
       labels: [
         {
           text: 'X ref label',
@@ -237,7 +235,6 @@ describe('createRefLineLabels', () => {
     expect(result).to.deep.equal({
       key: 'reference-line-labels-Y',
       type: 'reference-line-labels',
-      renderer: 'svg',
       labels: [
         {
           text: 'Y ref label',
@@ -307,7 +304,6 @@ describe('createRefLineLabels', () => {
     expect(result).to.deep.equal({
       key: 'reference-line-labels-Y',
       type: 'reference-line-labels',
-      renderer: 'svg',
       labels: [
         {
           text: 'Y ref label',
