@@ -20,13 +20,9 @@ describe('trendline-tooltip', () => {
     nodes = [
       {
         data: {
-          value: 5,
-          minor: {
-            value: 15,
-          },
-          layer: {
-            value: 0,
-          },
+          x: 5,
+          y: 15,
+          layer: 0,
         },
       },
     ];
