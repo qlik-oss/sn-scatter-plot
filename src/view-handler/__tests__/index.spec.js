@@ -80,6 +80,7 @@ describe('createViewHandler', () => {
       maxScale: 2 ** 4.1,
       minScale: 2 ** -9.1,
       isHomeState: true,
+      updateWithSettings: undefined,
     });
   });
 
@@ -96,6 +97,7 @@ describe('createViewHandler', () => {
       maxScale: 3,
       minScale: 4,
       isHomeState: true,
+      updateWithSettings: undefined,
     });
   });
 
@@ -123,10 +125,11 @@ describe('createViewHandler', () => {
     expect(viewHandler.animationEnabled).to.equal(false);
 
     viewHandler.setInteractionInProgress(false);
-    flags.isEnabled.withArgs('DATA_BINNING').returns(true);
+    viewHandler.setMeta({ updateWithSettings: true });
     expect(viewHandler.animationEnabled).to.equal(true);
 
-    flags.isEnabled.withArgs('DATA_BINNING').returns(true);
+    layoutService.meta.isBigData = false;
+    viewHandler.setInteractionInProgress(false);
     layoutService.getHyperCubeValue.returns(10);
     expect(viewHandler.animationEnabled).to.equal(true);
   });
