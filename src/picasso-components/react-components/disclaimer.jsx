@@ -66,6 +66,7 @@ export default function disclaimer() {
   return {
     renderer: 'react',
     disableTriggers: true,
+    resize: ({ outer }) => outer,
     preferredSize: function preferredSize() {
       return 22;
     },
