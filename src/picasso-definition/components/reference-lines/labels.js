@@ -64,7 +64,6 @@ export default function createRefLineLabels({ models, context, scale, key, dock,
   const refLineLabelsDef = {
     key,
     type: 'reference-line-labels',
-    renderer: 'svg',
     labels,
     scale,
     localeInfo,
