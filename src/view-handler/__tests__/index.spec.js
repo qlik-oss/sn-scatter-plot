@@ -49,7 +49,7 @@ describe('createViewHandler', () => {
 
   it('should return a view handler with proper setDataView method, case 1: not home state', () => {
     viewHandler.setMeta({
-      homeStateDataView: { xAxisMin: -100, xAxisMax: 200, yAxisMin: 0, yAxisMax: 100 },
+      homeStateDataView: { xAxisMin: -200, xAxisMax: 200, yAxisMin: 0, yAxisMax: 100 },
       scale: 2,
     });
     viewHandler.setDataView(myDataView);
@@ -57,6 +57,7 @@ describe('createViewHandler', () => {
       .been.calledOnce;
     expect(extremumModel.command.updateExtrema).to.have.been.calledOnce;
     expect(viewHandler.getMeta().isHomeState).to.equal(false);
+    expect(viewHandler.getMeta().scale).to.equal(0.25);
   });
 
   it('should return a view handler with proper setDataView method, case 2: home state', () => {
@@ -69,6 +70,7 @@ describe('createViewHandler', () => {
       .been.calledOnce;
     expect(extremumModel.command.updateExtrema).to.have.been.calledOnce;
     expect(viewHandler.getMeta().isHomeState).to.equal(true);
+    expect(viewHandler.getMeta().scale).to.equal(1);
   });
 
   it('should return a view handler with proper getMeta method', () => {

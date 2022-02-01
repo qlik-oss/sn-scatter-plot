@@ -36,5 +36,4 @@ export default function zoom({ e, chart, componentSize, viewHandler, pinchZoomFa
     yAxisMin: yMin,
     yAxisMax: yMax,
   });
-  viewHandler.setMeta({ scale: newScale });
 }
