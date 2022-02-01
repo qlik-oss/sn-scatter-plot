@@ -57,9 +57,10 @@ export default function createTooltipService({
             placement: 'collectible',
           },
           {
-            keys: [KEYS.COMPONENT.TRENDLINES_TOOLTIP_OVERLAY],
+            keys: [KEYS.COMPONENT.TRENDLINES],
+            distance: 3,
             collect: {
-              from: 'single',
+              from: (args) => trendLinesService.collectNodes(args),
             },
             placement: 'collectible',
           },

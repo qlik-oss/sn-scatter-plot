@@ -27,7 +27,7 @@ describe('tooltip-service', () => {
         HEAT_MAP: 'heat-map',
         LEGEND_CAT_TOOLTIP: 'legend-tooltip',
         LEGEND_CATEGORICAL: 'legend',
-        TRENDLINES_TOOLTIP_OVERLAY: 'trendlines-tooltip',
+        TRENDLINES: 'trendlines',
       },
     }));
     sandbox.stub(createSection, 'default');
@@ -194,7 +194,12 @@ describe('tooltip-service', () => {
       });
 
       it('should have correct triggers', () => {
-        expect(getConfig().main.triggers).to.deep.equal([
+        const { triggers } = getConfig().main;
+
+        expect(triggers[2].collect.from).to.be.an('function');
+        triggers[2].collect.from = undefined;
+
+        expect(triggers).to.deep.equal([
           {
             keys: ['point'],
             collect: {
@@ -210,9 +215,10 @@ describe('tooltip-service', () => {
             placement: 'collectible',
           },
           {
-            keys: ['trendlines-tooltip'],
+            keys: ['trendlines'],
+            distance: 3,
             collect: {
-              from: 'single',
+              from: undefined,
             },
             placement: 'collectible',
           },
@@ -381,12 +387,12 @@ describe('tooltip-service', () => {
               expect(custom.chart.show).not.to.have.been.called;
             });
 
-            it('should not show custom chart if triggerer is trendlines overlay, custom chart is enabled and does not have limitation', () => {
+            it('should not show custom chart if triggerer is trendlines, custom chart is enabled and does not have limitation', () => {
               custom.chart.isEnabled.returns(true);
               custom.chart.hasLimitation.returns(false);
               getConfig().main.events.tooltip.afterShow({
                 nodes: undefined,
-                meta: { triggerer: 'trendlines-tooltip' },
+                meta: { triggerer: 'trendlines' },
               });
               expect(custom.chart.show).not.to.have.been.called;
             });
