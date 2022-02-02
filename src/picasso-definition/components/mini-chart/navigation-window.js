@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
+import MODES from '../../../constants/modes';
 
 export default function createMiniChartNavigationWindow(chartModel, rtl) {
   const { RATIO, PADDING } = NUMBERS.MINI_CHART; // Padding from the bottom right corner
@@ -65,6 +66,9 @@ export default function createMiniChartNavigationWindow(chartModel, rtl) {
   return {
     key: KEYS.COMPONENT.MINI_CHART_NAVIGATION,
     type: 'mini-chart-window',
+    layout: {
+      minimumLayoutMode: MODES.MINI_CHART,
+    },
     style: { borderColor: '#DC423F', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '0px' },
     show: () => chartModel.query.miniChartEnabled(),
     settings: {

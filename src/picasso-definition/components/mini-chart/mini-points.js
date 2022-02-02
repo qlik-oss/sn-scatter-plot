@@ -1,5 +1,6 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
+import MODES from '../../../constants/modes';
 
 export default function createMiniChartPoints(chartModel, rtl) {
   const { RATIO, PADDING } = NUMBERS.MINI_CHART; // Padding from the bottom right corner
@@ -25,6 +26,9 @@ export default function createMiniChartPoints(chartModel, rtl) {
   return {
     key: KEYS.COMPONENT.MINI_CHART_POINT,
     type: 'point',
+    layout: {
+      minimumLayoutMode: MODES.MINI_CHART,
+    },
     data: {
       items: homeStateBins,
     },

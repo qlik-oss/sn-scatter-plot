@@ -49,7 +49,7 @@ describe('createMiniChartPoints', () => {
   });
 
   it('should return an object with correct keys', () => {
-    expect(create()).to.have.all.keys(['key', 'type', 'data', 'show', 'settings', 'beforeRender']);
+    expect(create()).to.have.all.keys(['key', 'type', 'layout', 'data', 'show', 'settings', 'beforeRender']);
   });
 
   describe('show', () => {

@@ -11,6 +11,7 @@ describe('modes', () => {
       'REFERENCE_LINE_LABELS',
       'HEAT_MAP_LABELS',
       'HEAT_MAP_LEGEND',
+      'MINI_CHART',
     ]);
   });
 
