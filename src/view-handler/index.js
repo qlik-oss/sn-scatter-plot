@@ -64,7 +64,11 @@ export default function createViewHandler({ viewState, extremumModel, layoutServ
       return layoutService.getHyperCubeValue('qSize.qcy', 0) <= NUMBERS.MAX_NR_ANIMATION && !interactionInProgress;
     },
 
-    transform: () => {
+    transform: (numberOfNodes) => {
+      if (numberOfNodes < NUMBERS.MIN_TRANSFORMATION) {
+        return false;
+      }
+
       if (interactionInProgress) {
         const { deltaX, deltaY } = viewHandler.getDataView();
         return {
@@ -76,6 +80,7 @@ export default function createViewHandler({ viewState, extremumModel, layoutServ
           verticalMoving: deltaY,
         };
       }
+
       return false;
     },
   };
