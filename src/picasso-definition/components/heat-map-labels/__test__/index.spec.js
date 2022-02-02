@@ -9,6 +9,7 @@ describe('heat-map-labels', () => {
   let create;
   let chartModel;
   let viewHandler;
+  let chart;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -30,9 +31,10 @@ describe('heat-map-labels', () => {
         HEAT_MAP_LABELS: 'heat-map-labels',
       },
     });
-    viewHandler = { transform: 'transform-function', animationEnabled: undefined };
+    viewHandler = { transform: sandbox.stub(), animationEnabled: undefined };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
-    create = () => createHeatMapLabels({ themeService, chartModel, picasso, context });
+    chart = { findShapes: sandbox.stub().returns([]) };
+    create = () => createHeatMapLabels({ themeService, chartModel, picasso, context, chart });
   });
 
   afterEach(() => {
@@ -185,7 +187,8 @@ describe('heat-map-labels', () => {
 
           describe('rendererSettings', () => {
             it('should have correct transform function', () => {
-              expect(create().rendererSettings.transform).to.equal('transform-function');
+              create().rendererSettings.transform();
+              expect(viewHandler.transform).to.have.been.calledOnce;
             });
             it('should have correct buffer size', () => {
               const rect = { computedPhysical: { width: 200, height: 150 } };

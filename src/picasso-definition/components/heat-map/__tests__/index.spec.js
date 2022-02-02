@@ -7,6 +7,7 @@ describe('heat-map', () => {
   let dataHandler;
   let create;
   let viewHandler;
+  let chart;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -30,7 +31,7 @@ describe('heat-map', () => {
     }));
     viewHandler = {
       getDataView: sandbox.stub().returns({ xAxisMin: 0, xAxisMax: 4000, yAxisMin: 0, yAxisMax: 10 }),
-      transform: 'transform-function',
+      transform: sandbox.stub(),
       animationEnabled: undefined,
     };
     dataHandler = {
@@ -44,8 +45,8 @@ describe('heat-map', () => {
         getDataHandler: () => dataHandler,
       },
     };
-
-    create = () => createHeatMap(chartModel);
+    chart = { findShapes: sandbox.stub().returns([]) };
+    create = () => createHeatMap({ chartModel, chart });
   });
 
   afterEach(() => {
@@ -163,7 +164,8 @@ describe('heat-map', () => {
 
     describe('rendererSettings', () => {
       it('should have correct transform function', () => {
-        expect(create().rendererSettings.transform).to.equal('transform-function');
+        create().rendererSettings.transform();
+        expect(viewHandler.transform).to.have.been.calledOnce;
       });
       it('should have correct buffer size', () => {
         const rect = { computedPhysical: { width: 200, height: 150 } };

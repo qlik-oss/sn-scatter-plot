@@ -76,7 +76,12 @@ export default function createPointLabels({ models, chart }) {
       },
     },
     rendererSettings: {
-      transform,
+      transform: () =>
+        transform(
+          [...chart.findShapes('circle'), ...chart.findShapes('path')].filter(
+            (node) => node.key === KEYS.COMPONENT.POINT
+          ).length
+        ),
       canvasBufferSize: (rect) => ({
         width: rect.computedPhysical.width + 100,
         height: rect.computedPhysical.height + 100,

@@ -11,6 +11,7 @@ describe('numbers', () => {
       'MAX_NR_SCATTER',
       'MAX_NR_ANIMATION',
       'MINI_CHART',
+      'MIN_TRANSFORMATION',
       'NAVIGATION_PANEL',
       'WINDOW_SIZE_BASE',
     ]);

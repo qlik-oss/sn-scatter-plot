@@ -32,12 +32,14 @@ describe('point-labels', () => {
     viewHandler = {
       redererSettings: 'renderer-settings',
       animationEnabled: false,
-      transform: 'transform-function',
+      transform: sandbox.stub(),
     };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
     models = { layoutService, themeService, chartModel };
-    chart = { component: sandbox.stub().returns({ rect: { width: 500, height: 500 } }) };
-    create = () => createPointLabels({ models, chart });
+    chart = {
+      component: sandbox.stub().returns({ rect: { width: 500, height: 500 } }),
+      findShapes: sandbox.stub().returns([]),
+    };
     labels = { mode: 1 };
     layoutService.getLayoutValue.withArgs('labels').returns(labels);
     themeService.getStyles.returns({ label: { value: { fontFamily: 'Sans serif', fontSize: '1px', color: 'red' } } });
@@ -47,6 +49,7 @@ describe('point-labels', () => {
         POINT_LABELS: 'point-labels',
       },
     });
+    create = () => createPointLabels({ models, chart });
   });
 
   afterEach(() => {
@@ -104,7 +107,8 @@ describe('point-labels', () => {
 
     describe('rendererSettings', () => {
       it('should have correct transform function', () => {
-        expect(create().rendererSettings.transform).to.equal('transform-function');
+        create().rendererSettings.transform();
+        expect(viewHandler.transform).to.have.been.calledOnce;
       });
       it('should have correct buffer size', () => {
         const compRect = { computedPhysical: { width: 200, height: 150 } };

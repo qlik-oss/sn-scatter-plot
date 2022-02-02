@@ -5,7 +5,7 @@ import createSizeScale from '../../scales/size';
 import createBrush from '../../brush/point-brush';
 import movePath from '../../../utils/move-path';
 
-export default function createPoint({ layoutService, colorService, chartModel }) {
+export default function createPoint({ layoutService, colorService, chartModel, chart }) {
   let windowSizeMultiplier;
   const sizeScaleFn = createSizeScale(layoutService);
   const viewHandler = chartModel.query.getViewHandler();
@@ -58,7 +58,12 @@ export default function createPoint({ layoutService, colorService, chartModel })
       },
     },
     rendererSettings: {
-      transform,
+      transform: () =>
+        transform(
+          [...chart.findShapes('circle'), ...chart.findShapes('path')].filter(
+            (node) => node.key === KEYS.COMPONENT.POINT
+          ).length
+        ),
       canvasBufferSize: (rect) => ({
         width: rect.computedPhysical.width + 100,
         height: rect.computedPhysical.height + 100,
