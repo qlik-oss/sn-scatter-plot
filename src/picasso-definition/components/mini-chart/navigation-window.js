@@ -2,7 +2,7 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 
-export default function createMiniChartNavigationWindow(chartModel) {
+export default function createMiniChartNavigationWindow(chartModel, rtl) {
   const { RATIO, PADDING } = NUMBERS.MINI_CHART; // Padding from the bottom right corner
 
   const state = {
@@ -65,11 +65,11 @@ export default function createMiniChartNavigationWindow(chartModel) {
   return {
     key: KEYS.COMPONENT.MINI_CHART_NAVIGATION,
     type: 'mini-chart-window',
-    style: { borderColor: 'red', background: 'rgba(200, 200, 200, 0.3)' },
+    style: { borderColor: '#DC423F', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '0px' },
     show: () => chartModel.query.miniChartEnabled(),
     settings: {
       rect: {
-        x: () => state.pointRect.width * (1 - RATIO) - PADDING + state.navRect.x,
+        x: () => (rtl ? PADDING + state.navRect.x : state.pointRect.width * (1 - RATIO) - PADDING + state.navRect.x),
         y: () => state.pointRect.height * (1 - RATIO) - PADDING + state.navRect.y,
         width: () => state.navRect.width,
         height: () => state.navRect.height,
@@ -86,9 +86,11 @@ export default function createMiniChartNavigationWindow(chartModel) {
         height:
           (state.pointRect.height * RATIO * (state.dataView.yAxisMax - state.dataView.yAxisMin)) /
           (state.homeStateDataView.yAxisMax - state.homeStateDataView.yAxisMin),
-        x:
-          (state.pointRect.width * RATIO * (state.dataView.xAxisMin - state.homeStateDataView.xAxisMin)) /
-          (state.homeStateDataView.xAxisMax - state.homeStateDataView.xAxisMin),
+        x: rtl
+          ? (state.pointRect.width * RATIO * (-state.dataView.xAxisMax + state.homeStateDataView.xAxisMax)) /
+            (state.homeStateDataView.xAxisMax - state.homeStateDataView.xAxisMin)
+          : (state.pointRect.width * RATIO * (state.dataView.xAxisMin - state.homeStateDataView.xAxisMin)) /
+            (state.homeStateDataView.xAxisMax - state.homeStateDataView.xAxisMin),
         y:
           (state.pointRect.height * RATIO * (state.homeStateDataView.yAxisMax - state.dataView.yAxisMax)) /
           (state.homeStateDataView.yAxisMax - state.homeStateDataView.yAxisMin),

@@ -315,8 +315,8 @@ describe('chart-model', () => {
       it('should trigger chart.update properly (full version), when mini chart is off then on, and on then off', async () => {
         sandbox.useFakeTimers();
         const { clock } = sandbox;
-        dataHandler.getHomeStateBins.returns([{ qText: [0, 2, 1, 5] }]);
-        viewHandler.getDataView.returns({ xAxisMin: -1, xAxisMax: 2, yAxisMin: 1, yAxisMax: 4 });
+        viewHandler.getMeta.returns({ homeStateDataView: { xAxisMin: -1, xAxisMax: 2, yAxisMin: 1, yAxisMax: 4 } });
+        viewHandler.getDataView.returns({ xAxisMin: -1, xAxisMax: 1, yAxisMin: 1, yAxisMax: 4 });
         createViewHandler.default.returns(viewHandler);
         create();
         // off --> on
@@ -342,7 +342,7 @@ describe('chart-model', () => {
         });
 
         // on --> off
-        dataHandler.getHomeStateBins.returns([]);
+        viewHandler.getMeta.returns({ homeStateDataView: { xAxisMin: -1, xAxisMax: 1, yAxisMin: 1, yAxisMax: 4 } });
         await viewState.dataView();
         await clock.tick(50);
 
@@ -369,7 +369,9 @@ describe('chart-model', () => {
         sandbox.useFakeTimers();
         const { clock } = sandbox;
         dataHandler.fetch = sandbox.stub().rejects();
-        dataHandler.getHomeStateBins.returns([]);
+        viewHandler.getMeta.returns({ homeStateDataView: { xAxisMin: -1, xAxisMax: 1, yAxisMin: 1, yAxisMax: 4 } });
+        viewHandler.getDataView.returns({ xAxisMin: -1, xAxisMax: 1, yAxisMin: 1, yAxisMax: 4 });
+        createViewHandler.default.returns(viewHandler);
         create();
 
         await viewState.dataView();

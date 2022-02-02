@@ -1,7 +1,7 @@
 import getTapPosition from './tap-position';
 import updateTapDataView from './update-tap-data-view';
 
-const tap = ({ eventName = 'tap-mini-chart', viewHandler }) => ({
+const tap = ({ eventName = 'tap-mini-chart', viewHandler, rtl }) => ({
   key: 'event:tap-mini-chart',
   type: 'Tap',
   options: {
@@ -13,13 +13,13 @@ const tap = ({ eventName = 'tap-mini-chart', viewHandler }) => ({
         return true;
       }
 
-      return getTapPosition({ e, chart: this.chart }) !== null;
+      return getTapPosition({ e, chart: this.chart, rtl }) !== null;
     },
   },
   events: {
     [eventName](e) {
       e.preventDefault();
-      updateTapDataView({ e, viewHandler, chart: this.chart });
+      updateTapDataView({ e, viewHandler, chart: this.chart, rtl });
     },
   },
 });

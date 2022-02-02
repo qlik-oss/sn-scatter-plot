@@ -7,6 +7,7 @@ describe('createMiniChart', () => {
   let sandbox;
   let create;
   let models;
+  let context;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -14,7 +15,8 @@ describe('createMiniChart', () => {
     sandbox.stub(createBackgroundWindow, 'default').returns('background-window');
     sandbox.stub(createNavigationWindow, 'default').returns('nav-window');
     models = { layoutService: { meta: { isBigData: true, isSnapshot: false } } };
-    create = () => createMiniChart({ models });
+    context = { rtl: true };
+    create = () => createMiniChart({ models, context });
   });
 
   afterEach(() => {

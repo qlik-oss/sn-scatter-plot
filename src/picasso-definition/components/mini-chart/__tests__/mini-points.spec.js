@@ -10,6 +10,7 @@ describe('createMiniChartPoints', () => {
   let viewHandler;
   let dataHandler;
   let d;
+  let rtl;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -37,9 +38,10 @@ describe('createMiniChartPoints', () => {
     };
     flags = { isEnabled: sandbox.stub() };
     flags.isEnabled.withArgs('DATA_BINNING').returns(true);
-    d = { datum: { value: { qText: [8, 8, 12, 12], qNum: 3 } }, scale: sandbox.stub() };
+    d = { datum: { value: { qText: [8, 12, 12, 8], qNum: 3 } }, scale: sandbox.stub() };
     d.scale.withArgs(3).returns(0.3);
-    create = () => createMiniChartPoints(chartModel);
+    rtl = false;
+    create = () => createMiniChartPoints(chartModel, rtl);
   });
 
   afterEach(() => {
@@ -68,10 +70,10 @@ describe('createMiniChartPoints', () => {
     it('should return correct point', () => {
       const obj = create();
       obj.beforeRender({ size: { width: 200, height: 160 } });
-      expect(obj.settings.x(d)).to.equal(125 / 200);
-      expect(obj.settings.y(d)).to.equal(120 / 160);
+      expect(obj.settings.x(d)).to.equal(126 / 200);
+      expect(obj.settings.y(d)).to.equal(121 / 160);
       expect(obj.settings.fill.fn(d)).to.equal(0.3);
-      expect(obj.settings.shape()).to.deep.equal({ type: 'rect', width: 5, height: 8 });
+      expect(obj.settings.shape(d)).to.deep.equal({ type: 'rect', width: 5, height: 8 });
     });
   });
 });

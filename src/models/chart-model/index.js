@@ -122,28 +122,18 @@ export default function createChartModel({
   };
 
   const miniChartEnabled = () => {
-    const homeStateBins = dataHandler.getHomeStateBins(viewHandler.getMeta().isHomeState);
-    if (homeStateBins.length) {
-      const binXValues = [];
-      const binYValues = [];
-      homeStateBins.forEach((bin) => {
-        binXValues.push(bin.qText[0], bin.qText[2]);
-        binYValues.push(bin.qText[1], bin.qText[3]);
-      });
-      const binsViewState = {
-        xAxisMin: Math.min(...binXValues),
-        xAxisMax: Math.max(...binXValues),
-        yAxisMin: Math.min(...binYValues),
-        yAxisMax: Math.max(...binYValues),
-      };
-      const isInside = (smallRect, largeRect) =>
-        smallRect.xAxisMin >= largeRect.xAxisMin &&
-        smallRect.xAxisMax <= largeRect.xAxisMax &&
-        smallRect.yAxisMin >= largeRect.yAxisMin &&
-        smallRect.yAxisMax <= largeRect.yAxisMax;
-      return !isInside(binsViewState, viewHandler.getDataView());
-    }
-    return false;
+    const dataView = viewHandler.getDataView();
+    const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getMeta().homeStateDataView;
+    const xUpperLimit = xAxisMax - 0.1 * (xAxisMax - xAxisMin);
+    const xLowerLimit = xAxisMin + 0.1 * (xAxisMax - xAxisMin);
+    const yUpperLimit = yAxisMax - 0.1 * (yAxisMax - yAxisMin);
+    const yLowerLimit = yAxisMin + 0.1 * (yAxisMax - yAxisMin);
+    return (
+      dataView.xAxisMax <= xUpperLimit ||
+      dataView.xAxisMin >= xLowerLimit ||
+      dataView.yAxisMax <= yUpperLimit ||
+      dataView.yAxisMin >= yLowerLimit
+    );
   };
 
   let miniChartOn = false;

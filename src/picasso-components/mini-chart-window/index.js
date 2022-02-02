@@ -1,7 +1,7 @@
 export default {
   require: ['renderer'],
   defaultSettings: {
-    style: { borderColor: 'black', background: 'red' },
+    style: { borderColor: 'black', background: 'red', borderRadius: '0px' },
     settings: {
       rect: {
         x: () => 100,
@@ -14,7 +14,7 @@ export default {
   renderer: 'dom',
   render(h) {
     const { x, y, width, height } = this.settings.settings.rect;
-    const { borderColor, background } = this.settings.style;
+    const { borderColor, background, borderRadius } = this.settings.style;
     return [
       h('div', {
         style: {
@@ -27,6 +27,7 @@ export default {
           'border-style': 'solid',
           'border-color': borderColor,
           'border-width': '1px',
+          'border-radius': borderRadius,
         },
       }),
     ];

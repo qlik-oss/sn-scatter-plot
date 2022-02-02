@@ -18,6 +18,7 @@ describe('custom rect', () => {
         'border-style': 'solid',
         'border-color': 'red',
         'border-width': '1px',
+        'border-radius': '4px',
       },
     }).returns('correct rect');
   });
@@ -44,7 +45,7 @@ describe('custom rect', () => {
     it('should render correct rect', () => {
       miniChartWindow.settings = {
         show: sandbox.stub(),
-        style: { borderColor: 'red', background: 'white' },
+        style: { borderColor: 'red', background: 'white', borderRadius: '4px' },
         settings: {
           rect: { x: sandbox.stub(), y: sandbox.stub(), width: sandbox.stub(), height: sandbox.stub() },
         },
