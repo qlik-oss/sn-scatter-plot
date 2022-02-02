@@ -35,12 +35,13 @@ export default function createService({ chart, actions, selections }) {
       selectionActions: {
         clear: ({ clearMinor, clearLegend, selectionInfo, cleared }) => {
           const isSelectingRanges = ['xRange', 'yRange', 'binXRange', 'binYRange'].includes(selectionInfo.event);
+          const isSelectingBinRanges = ['binXRange', 'binYRange'].includes(selectionInfo.event);
           if (cleared || !isSelectingRanges) {
             clearMinor({ eventName: 'xRange', componentName: KEYS.BRUSH.X_RANGE });
             clearMinor({ eventName: 'yRange', componentName: KEYS.BRUSH.Y_RANGE });
             clearMinor({ eventName: 'binXRange', componentName: KEYS.BRUSH.BIN_X_RANGE });
             clearMinor({ eventName: 'binYRange', componentName: KEYS.BRUSH.BIN_Y_RANGE });
-            if (selectionInfo.components.includes(KEYS.COMPONENT.HEAT_MAP_HIGHLIGHT)) {
+            if (isSelectingBinRanges) {
               actions.select.emit('binsRangeSelectionClear');
             }
           }

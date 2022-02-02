@@ -136,7 +136,7 @@ describe('selection-service', () => {
 
           it('should call clearMinor four times and emit event when is bin data', () => {
             cleared = true;
-            selectionInfo = { event: 'xRange', components: ['heat-map-highlight'] };
+            selectionInfo = { event: 'binXRange', components: ['heat-map-highlight'] };
             getConfig().selectionActions.clear({ clearMinor, clearLegend, selectionInfo, cleared });
             expect(clearMinor.callCount).to.equal(4);
             expect(clearMinor).to.have.been.calledWith({ eventName: 'xRange', componentName: 'x-range-brush' });
@@ -172,7 +172,7 @@ describe('selection-service', () => {
             expect(actions.select.emit).to.not.have.been.called;
           });
 
-          it('should call clearMinor four times and emit event when is bin data', () => {
+          it('should call clearMinor four times and not emit event when is bin data', () => {
             cleared = true;
             selectionInfo = { event: 'range', components: ['heat-map-highlight'] };
             getConfig().selectionActions.clear({ clearMinor, clearLegend, selectionInfo, cleared });
@@ -187,7 +187,7 @@ describe('selection-service', () => {
               eventName: 'binYRange',
               componentName: 'bin-y-range-brush',
             });
-            expect(actions.select.emit).to.have.been.calledWith('binsRangeSelectionClear');
+            expect(actions.select.emit).to.not.have.been.called;
           });
         });
 
