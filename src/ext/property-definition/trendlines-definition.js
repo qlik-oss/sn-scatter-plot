@@ -39,11 +39,11 @@ export default function getDefinition(env) {
     type: 'boolean',
     defaultValue: false,
     ref: 'flipXY',
-    translation: 'Direction',
+    translation: 'properties.regressionline.direction',
     component: 'dropdown',
     options: [
-      { value: false, translation: 'Minimize Y' },
-      { value: true, translation: 'Minimize X' },
+      { value: false, translation: 'properties.regressionline.direction.normal' },
+      { value: true, translation: 'properties.regressionline.direction.alternative' },
     ],
   };
 
