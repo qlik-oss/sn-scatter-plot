@@ -1,6 +1,6 @@
 import KEYS from '../../../constants/keys';
 
-export default function createHeatMapHighLight({ chartModel, layoutService, actions }) {
+export default function createHeatMapHighLight({ chartModel, layoutService, actions, context }) {
   if (!layoutService.meta.isBigData || layoutService.meta.isSnapshot) {
     return false;
   }
@@ -13,6 +13,7 @@ export default function createHeatMapHighLight({ chartModel, layoutService, acti
     settings: {
       actions,
       dataView: () => viewHandler.getDataView(),
+      rtl: context.rtl,
     },
   };
 }

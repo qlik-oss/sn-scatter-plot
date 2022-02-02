@@ -20,7 +20,7 @@ export default {
       w: width,
       h: height,
     };
-    const { actions, dataView } = this.settings.settings;
+    const { actions, dataView, rtl } = this.settings.settings;
     const heatMapCanvasContext = heatMapCanvas.getContext('2d');
     const pixelRatio = getPixelRatio(heatMapCanvasContext);
     let imageData;
@@ -30,7 +30,7 @@ export default {
     const updateImageData = (range, axis) => {
       if (!imageData) return;
       ctx.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
-      const { x, y, w, h } = getImageData(range, axis, dataView, dirtyImageData, width, height);
+      const { x, y, w, h } = getImageData(range, axis, dataView, dirtyImageData, width, height, rtl);
       dirtyImageData.x = x;
       dirtyImageData.y = y;
       dirtyImageData.w = w;
