@@ -7,6 +7,7 @@ describe('image data', () => {
   let dirtyImageData;
   let width;
   let height;
+  let rtl;
 
   beforeEach(() => {
     range = { min: 100, max: 200 };
@@ -25,10 +26,11 @@ describe('image data', () => {
     };
     width = 300;
     height = 200;
+    rtl = false;
   });
 
   it('should return correct image data for x range selection', () => {
-    const { x, y, w, h } = getImageData(range, axis, dataView, dirtyImageData, width, height);
+    const { x, y, w, h } = getImageData(range, axis, dataView, dirtyImageData, width, height, rtl);
 
     expect(x).to.equal(27.27);
     expect(y).to.equal(0);
@@ -36,9 +38,19 @@ describe('image data', () => {
     expect(h).to.equal(200);
   });
 
+  it('should return correct image data for x range selection when is rtl', () => {
+    rtl = true;
+    const { x, y, w, h } = getImageData(range, axis, dataView, dirtyImageData, width, height, rtl);
+
+    expect(x).to.equal(242.42);
+    expect(y).to.equal(0);
+    expect(w).to.equal(30.3);
+    expect(h).to.equal(200);
+  });
+
   it('should return correct image data for y range selection', () => {
     axis = 'y';
-    const { x, y, w, h } = getImageData(range, axis, dataView, dirtyImageData, width, height);
+    const { x, y, w, h } = getImageData(range, axis, dataView, dirtyImageData, width, height, rtl);
 
     expect(x).to.equal(0);
     expect(y).to.equal(67.8);
