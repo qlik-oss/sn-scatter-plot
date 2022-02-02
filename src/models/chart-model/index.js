@@ -84,6 +84,7 @@ export default function createChartModel({
   const dataset = picasso.data('q')(mainConfig);
 
   function updatePartial() {
+    viewHandler.setMeta({ updateWithSettings: false });
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???
       // const startTime = Date.now();
@@ -115,6 +116,7 @@ export default function createChartModel({
 
   const update = ({ settings } = {}) => {
     trendLinesService.update();
+    viewHandler.setMeta({ updateWithSettings: !!settings });
     chart.update({
       data: getData(),
       settings,

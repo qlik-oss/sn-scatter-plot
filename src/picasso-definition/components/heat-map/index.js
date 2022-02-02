@@ -58,6 +58,25 @@ export default function createHeatMap(chartModel) {
         binHeightPx = Math.max(1, (binHeight * size.height) / (dataView.yAxisMax - dataView.yAxisMin));
       }
     },
+
+    animations: {
+      enabled: () => viewHandler.animationEnabled,
+      trackBy: (node, i) => {
+        // If it is a current node (dataHanler.binArray contains current nodes)
+        // Or it is an old node, but oldNodes and currentNodes are identical (corner case: select all)
+        if (
+          dataHandler.binArray[i] !== undefined &&
+          dataHandler.binArray[i].qElemNumber === node.data.value &&
+          dataHandler.binArray[i].qNum === node.data.binDensity.value
+        ) {
+          return node.data.value;
+        }
+
+        // Old node, make sure that its ID is different from that of current nodes
+        return node.data.value + 0.5;
+      },
+    },
+
     rendererSettings: {
       transform,
       canvasBufferSize: (rect) => ({

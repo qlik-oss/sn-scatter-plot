@@ -9,6 +9,7 @@ describe('createViewHandler', () => {
   let myDataView;
   let extremumModel;
   let layoutService;
+  let flags;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -21,8 +22,9 @@ describe('createViewHandler', () => {
       },
     };
     sandbox.stub(NUMBERS, 'default').value({ MAX_NR_ANIMATION: 10 });
-    layoutService = { getHyperCubeValue: sandbox.stub() };
-    create = () => createViewHandler({ viewState, extremumModel, layoutService });
+    layoutService = { getHyperCubeValue: sandbox.stub(), meta: { isBigData: true } };
+    flags = { isEnabled: sandbox.stub() };
+    create = () => createViewHandler({ viewState, extremumModel, layoutService, flags });
     viewHandler = create();
   });
 
@@ -80,6 +82,7 @@ describe('createViewHandler', () => {
       maxScale: 2 ** 4.1,
       minScale: 2 ** -9.1,
       isHomeState: true,
+      updateWithSettings: undefined,
     });
   });
 
@@ -96,6 +99,7 @@ describe('createViewHandler', () => {
       maxScale: 3,
       minScale: 4,
       isHomeState: true,
+      updateWithSettings: undefined,
     });
   });
 
@@ -119,14 +123,16 @@ describe('createViewHandler', () => {
   });
 
   it('should return a view handler with proper get animationEnabled', () => {
-    layoutService.getHyperCubeValue.returns(5);
     viewHandler.setInteractionInProgress(true);
     expect(viewHandler.animationEnabled).to.equal(false);
-    layoutService.getHyperCubeValue.returns(11);
+
     viewHandler.setInteractionInProgress(false);
-    expect(viewHandler.animationEnabled).to.equal(false);
+    viewHandler.setMeta({ updateWithSettings: true });
+    expect(viewHandler.animationEnabled).to.equal(true);
+
+    layoutService.meta.isBigData = false;
+    viewHandler.setInteractionInProgress(false);
     layoutService.getHyperCubeValue.returns(10);
-    viewHandler.setInteractionInProgress(false);
     expect(viewHandler.animationEnabled).to.equal(true);
   });
 });

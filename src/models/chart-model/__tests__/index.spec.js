@@ -31,6 +31,7 @@ describe('chart-model', () => {
     ];
     viewHandler = {
       getMeta: sandbox.stub().returns('isHomeState'),
+      setMeta: sandbox.stub(),
       getInteractionInProgress: sandbox.stub(),
       getDataView: sandbox.stub(),
     };
@@ -213,6 +214,7 @@ describe('chart-model', () => {
         create().command.update({ settings: { key: 'settings' } });
         const argsObject = chart.update.args[0][0];
 
+        expect(viewHandler.setMeta).to.have.been.calledWithExactly({ updateWithSettings: true });
         expect(chart.update).to.have.been.calledOnce;
         expect(argsObject.data).to.be.an('array');
         expect(argsObject.data[0].config.localeInfo).to.equal(localeInfo);
@@ -221,6 +223,7 @@ describe('chart-model', () => {
 
       it('should call update, when settings is implicit', () => {
         create().command.update();
+        expect(viewHandler.setMeta).to.have.been.calledWithExactly({ updateWithSettings: false });
         expect(chart.update).to.have.been.calledOnce;
       });
 
@@ -229,6 +232,7 @@ describe('chart-model', () => {
         create().command.update({ settings: { key: 'settings' } });
         const argsObject = chart.update.args[0][0];
 
+        expect(viewHandler.setMeta).to.have.been.calledWithExactly({ updateWithSettings: true });
         expect(chart.update).to.have.been.calledOnce;
         expect(argsObject.data).to.be.an('array');
         expect(argsObject.data[1].key).to.equal('db');
@@ -303,6 +307,7 @@ describe('chart-model', () => {
         await viewState.dataView();
         await clock.tick(50);
 
+        expect(viewHandler.setMeta).to.have.been.calledWithExactly({ updateWithSettings: false });
         expect(chart.update).to.have.been.calledWithExactly({
           partialData: true,
           excludeFromUpdate: ['xat', 'yat', 'mcp'],
