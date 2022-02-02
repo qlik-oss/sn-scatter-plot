@@ -127,6 +127,7 @@ jobs:
           name: Run API Compliance
           command: >
             VER=$(cat ./version.txt)
+
             docker run --volumes-from specs
             -e SPEC_PATHS="0395aa3a-3d13-439f-a0a6-3d47e0462a8f@/specs/properties.json,86d3d254-a759-433c-b235-c14b479b4521@/specs/plugins.json"
             -e COMMIT_SHA="$CIRCLE_SHA1"
