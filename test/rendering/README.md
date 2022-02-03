@@ -1,3 +1,17 @@
+# Howto
+
+- Step 1: Take a snapshot and grab the large engine call underneath getBookmark starting with qProp
+- Step 2: Create a new .fix.js file under _fixtures_. The file should include the following:
+  getLayout: {},
+  getHyperCubeBinnedData: [],  
+   getEffectiveProperties: {},
+
+- Step 3: Now some copy P copy S is needed since the different parts of the engine call needs to be inserted into the different API calls above.
+
+The Layout qInfo should go into getLayout without the dataPages. The Data (qMatrix) from dataPages should be inserted into getHyperCubeBinnedData. If it is binned data then the call should be getHyperCubeBinnedData otherwise it should be getHyperCubeData. getEffectiveProperties can be left empty.
+
+- Step 4: qType might need to be change to 'sn-scatter-plot' instead of 'scatterplot' in getLayout
+
 # Tests
 
 -scatter_render_1:
@@ -51,3 +65,13 @@ Legend to left
 -scatter_render_8:
 Three measures,
 Color by Expression
+
+-scatter_render_binned_1:
+binned data
+
+-scatter_render_binned_2:
+Navigation on,
+X-Axis on left,
+Y-axis at top,
+Reference lines,
+Compressed resolution
