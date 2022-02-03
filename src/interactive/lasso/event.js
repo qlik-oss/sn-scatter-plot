@@ -24,9 +24,9 @@ const lasso = ({ key, componentTargetKeys, requireFailure, recognizeWith }, opts
     lassostart(e) {
       e.preventDefault();
       if (this.started !== eventName) {
-        opts.actions.select.emit('start', eventName);
-        opts.actions.select.emit('selectionStart');
         opts.actions.select.emit('binsRangeSelectionClear');
+        opts.actions.select.emit('selectionStart');
+        opts.actions.select.emit('start', eventName);
         this.chart.component(key).emit('lassoStart', e);
         this.started = eventName;
       }
