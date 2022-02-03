@@ -75,3 +75,10 @@ X-Axis on left,
 Y-axis at top,
 Reference lines,
 Compressed resolution
+
+-scatter_render_binned_snapshot_1:
+Navigation on,
+X-Axis on left,
+Y-axis at top,
+Reference lines,
+Zoomed in to binned data
