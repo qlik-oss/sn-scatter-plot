@@ -8,6 +8,7 @@ describe('heat-map-labels', () => {
   let context;
   let create;
   let chartModel;
+  let viewHandler;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -29,7 +30,8 @@ describe('heat-map-labels', () => {
         HEAT_MAP_LABELS: 'heat-map-labels',
       },
     });
-    chartModel = { query: { getViewHandler: sandbox.stub().returns({ transform: 'transform-function' }) } };
+    viewHandler = { transform: 'transform-function', animationEnabled: undefined };
+    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
     create = () => createHeatMapLabels({ themeService, chartModel, picasso, context });
   });
 
@@ -148,6 +150,35 @@ describe('heat-map-labels', () => {
                 it('should have correct justify', () => {
                   expect(create().settings.sources[0].strategy.settings.labels[0].placements[0].justify).to.equal(0.5);
                 });
+              });
+            });
+          });
+
+          describe('animations', () => {
+            describe('enabled', () => {
+              it('should be true if animation is enabled in viewHandler', () => {
+                viewHandler.animationEnabled = true;
+                expect(create().animations.enabled()).to.equal(true);
+              });
+
+              it('should be false if animation is not enabled in viewHandler', () => {
+                viewHandler.animationEnabled = false;
+                expect(create().animations.enabled()).to.equal(false);
+              });
+            });
+
+            describe('trackBy', () => {
+              it('should return correct numbers as node IDs', () => {
+                let id1;
+                let id2;
+                const { trackBy } = create().animations;
+                let result = true;
+                for (let i = 0; i < 10000; i++) {
+                  id1 = trackBy();
+                  id2 = trackBy();
+                  if (id1 === id2) result = false;
+                }
+                expect(result).to.equal(true);
               });
             });
           });

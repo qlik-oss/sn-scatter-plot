@@ -1,10 +1,12 @@
-export default function imageData(range, axis, dataView, dirtyImageData, width, height) {
+export default function imageData(range, axis, dataView, dirtyImageData, width, height, rtl) {
   let { x, y, w, h } = dirtyImageData;
   const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = dataView();
   const { min, max } = range;
 
   if (axis === 'x') {
-    x = Number((Math.abs((min - xAxisMin) / (xAxisMax - xAxisMin)) * width).toFixed(2));
+    x = rtl
+      ? Number((Math.abs((xAxisMax - max) / (xAxisMax - xAxisMin)) * width).toFixed(2))
+      : Number((Math.abs((min - xAxisMin) / (xAxisMax - xAxisMin)) * width).toFixed(2));
     w = Number((Math.abs((max - min) / (xAxisMax - xAxisMin)) * width).toFixed(2));
   } else {
     y = Number((Math.abs((yAxisMax - max) / (yAxisMax - yAxisMin)) * height).toFixed(2));

@@ -45,9 +45,9 @@ describe('createNavigationPanel', () => {
     sandbox.restore();
   });
 
-  it('should return false if is snapshot', () => {
+  it('should return empty array if is snapshot', () => {
     layoutService.meta.isSnapshot = true;
-    expect(create()).to.be.false;
+    expect(create()).to.deep.equal([]);
   });
 
   describe('the returned buttons', () => {

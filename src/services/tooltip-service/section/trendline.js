@@ -55,10 +55,10 @@ function createHeaderRow(h, trendLineModel, index) {
 export default function createTrendlineSection({ dataset, translator, nodes, create, h, trendLinesService }) {
   const trendLineModel = trendLinesService.getModel();
   const [node] = nodes;
-  const index = node.data.layer.value;
 
-  const xVal = getMeasureValue({ dataset, value: node.data.value, measureIndex: 0 });
-  const yVal = getMeasureValue({ dataset, value: node.data.minor.value, measureIndex: 1 });
+  const index = node.data.layer;
+  const xVal = getMeasureValue({ dataset, value: node.data.x, measureIndex: 0 });
+  const yVal = getMeasureValue({ dataset, value: node.data.y, measureIndex: 1 });
 
   const headerRow = create.raw({ value: createHeaderRow(h, trendLineModel, index) });
 

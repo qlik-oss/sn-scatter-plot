@@ -41,7 +41,7 @@ describe('trendlines-service', () => {
       keys: {
         majorScale: KEYS.SCALE.X,
         minorScale: KEYS.SCALE.Y,
-        tooltipOverlay: KEYS.COMPONENT.TRENDLINES_TOOLTIP_OVERLAY,
+        trendlines: KEYS.COMPONENT.TRENDLINES,
       },
       isEnabled: sinon.match.func,
       animations: {

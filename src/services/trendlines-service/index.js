@@ -38,7 +38,7 @@ export default function createTrenslinesService({
     keys: {
       majorScale: KEYS.SCALE.X,
       minorScale: KEYS.SCALE.Y,
-      tooltipOverlay: KEYS.COMPONENT.TRENDLINES_TOOLTIP_OVERLAY,
+      trendlines: KEYS.COMPONENT.TRENDLINES,
     },
     isEnabled: () => flags.isEnabled('BEST_FIT_LINE'),
     animations: {

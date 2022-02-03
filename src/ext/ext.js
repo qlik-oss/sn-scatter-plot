@@ -2,6 +2,7 @@ import conversion from 'qlik-object-conversion';
 import pp from './property-definition';
 import dataDefinition from '../qae/data-definition';
 import softDefinition from './explore-definition';
+import { updateTrendlines, clearTrendlines } from './property-definition/trendlines-definition';
 
 const isValidLayout = (layout) => !!((layout?.qHyperCube?.qSize?.qcy || 0) > 0);
 
@@ -16,8 +17,8 @@ export default function ext(env) {
       sharing: false,
       viewData: true,
     },
-    importProperties: (exportFormat, initialProperties, extension) =>
-      conversion.colorChart.importProperties({
+    importProperties: (exportFormat, initialProperties, extension) => {
+      const propertyTree = conversion.colorChart.importProperties({
         exportFormat,
         initialProperties,
         dataDefinition: dataDefinition(env),
@@ -25,7 +26,18 @@ export default function ext(env) {
           defaultDimension: extension.getDefaultDimensionProperties(),
           defaultMeasure: extension.getDefaultMeasureProperties(),
         },
-      }),
-    exportProperties: (propertyTree) => conversion.colorChart.exportProperties({ propertyTree }),
+      });
+
+      const props = propertyTree.qProperty;
+      clearTrendlines(props);
+      updateTrendlines(props);
+
+      return propertyTree;
+    },
+    exportProperties: (propertyTree) => {
+      const props = propertyTree.qProperty;
+      clearTrendlines(props);
+      return conversion.colorChart.exportProperties({ propertyTree });
+    },
   };
 }

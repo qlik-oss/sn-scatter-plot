@@ -13,7 +13,14 @@ function areIntervalsEqual(min1, max1, min2, max2, e) {
 }
 
 export default function createViewHandler({ viewState, extremumModel, layoutService }) {
-  const meta = { homeStateDataView: {}, scale: 1, maxScale: 2 ** 4.1, minScale: 2 ** -9.1, isHomeState: true };
+  const meta = {
+    homeStateDataView: {},
+    scale: 1,
+    maxScale: 2 ** 4.1,
+    minScale: 2 ** -9.1,
+    isHomeState: true,
+    updateWithSettings: undefined,
+  };
   let interactionInProgress = false;
 
   const viewHandler = {
@@ -29,6 +36,7 @@ export default function createViewHandler({ viewState, extremumModel, layoutServ
         meta.isHomeState = false;
       }
       extremumModel.command.updateExtrema(dataView, meta.isHomeState);
+      meta.scale = (xMax1 - xMin1) / (xMax2 - xMin2);
       viewState.set('dataView', dataView);
     },
 
@@ -45,6 +53,14 @@ export default function createViewHandler({ viewState, extremumModel, layoutServ
     getInteractionInProgress: () => interactionInProgress,
 
     get animationEnabled() {
+      if (interactionInProgress || !meta.updateWithSettings) {
+        return false;
+      }
+
+      if (layoutService.meta.isBigData) {
+        return true;
+      }
+
       return layoutService.getHyperCubeValue('qSize.qcy', 0) <= NUMBERS.MAX_NR_ANIMATION && !interactionInProgress;
     },
 

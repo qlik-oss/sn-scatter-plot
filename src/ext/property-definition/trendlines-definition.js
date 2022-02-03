@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { trendlinesService } from 'qlik-chart-modules';
 
-const onGlobalChange = (properties) => {
+export function updateTrendlines(properties) {
   if (properties.qHyperCubeDef?.qMeasures?.length >= 2) {
     properties.qHyperCubeDef.qMeasures[0].qTrendLines = [];
     properties.qHyperCubeDef.qMeasures[1].qTrendLines = [];
@@ -15,7 +15,13 @@ const onGlobalChange = (properties) => {
       }
     });
   }
-};
+}
+
+export function clearTrendlines(properties) {
+  properties.qHyperCubeDef?.qMeasures?.forEach((measureDef) => {
+    measureDef.qTrendLines = [];
+  });
+}
 
 export default function getDefinition(env) {
   const { flags, translator } = env;
@@ -26,18 +32,18 @@ export default function getDefinition(env) {
 
   trendlines.ref = 'trendLines';
   trendlines.schemaIgnore = true;
-  trendlines.globalChange = onGlobalChange;
+  trendlines.globalChange = updateTrendlines;
   trendlines.show = () => flags.isEnabled('BEST_FIT_LINE');
   trendlines.items.type.defaultValue = 'LINEAR';
   trendlines.items.flipXY = {
     type: 'boolean',
     defaultValue: false,
     ref: 'flipXY',
-    translation: 'Direction',
+    translation: 'properties.regressionline.direction',
     component: 'dropdown',
     options: [
-      { value: false, translation: 'Minimize Y' },
-      { value: true, translation: 'Minimize X' },
+      { value: false, translation: 'properties.regressionline.direction.normal' },
+      { value: true, translation: 'properties.regressionline.direction.alternative' },
     ],
   };
 

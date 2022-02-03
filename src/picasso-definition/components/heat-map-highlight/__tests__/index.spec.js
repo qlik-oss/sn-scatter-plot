@@ -8,6 +8,7 @@ describe('heat-map-highlight', () => {
   let dataHandler;
   let viewHandler;
   let layoutService;
+  let context;
   let create;
 
   beforeEach(() => {
@@ -30,6 +31,9 @@ describe('heat-map-highlight', () => {
       },
     };
     actions = { key: 'actions' };
+    context = {
+      rtl: false,
+    };
     layoutService = {
       meta: {
         isBigData: true,
@@ -37,7 +41,7 @@ describe('heat-map-highlight', () => {
       },
     };
 
-    create = () => createHeatMapHighlight({ chartModel, layoutService, actions });
+    create = () => createHeatMapHighlight({ chartModel, layoutService, actions, context });
   });
 
   afterEach(() => {
@@ -73,7 +77,7 @@ describe('heat-map-highlight', () => {
 
     describe('settings', () => {
       it('should have correct properties', () => {
-        expect(create().settings).to.have.all.keys(['actions', 'dataView']);
+        expect(create().settings).to.have.all.keys(['actions', 'dataView', 'rtl']);
       });
 
       it('should have correct actions', () => {
@@ -88,6 +92,10 @@ describe('heat-map-highlight', () => {
         it('should have correct dataView', () => {
           expect(create().settings.dataView()).to.equal('dataView');
         });
+      });
+
+      it('should have correct rtl', () => {
+        expect(create().settings.rtl).to.equal(false);
       });
     });
   });

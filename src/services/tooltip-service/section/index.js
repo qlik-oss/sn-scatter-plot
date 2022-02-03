@@ -14,7 +14,7 @@ export default function createSection({
   util,
   trendLinesService,
 }) {
-  if (meta.triggerer === KEYS.COMPONENT.TRENDLINES_TOOLTIP_OVERLAY) {
+  if (meta.triggerer === KEYS.COMPONENT.TRENDLINES) {
     return createTrendline({ dataset, translator, nodes, create, h, trendLinesService });
   }
 
