@@ -82,3 +82,8 @@ X-Axis on left,
 Y-axis at top,
 Reference lines,
 Zoomed in to binned data
+
+-scatter_render_snapshot_1:
+Color by dimenision,
+Zoomed in,
+OoB balls at edges
