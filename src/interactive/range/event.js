@@ -46,10 +46,10 @@ const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith
         opts.actions.select.brushSelectionIncludeMax = true; // eslint-disable-line no-param-reassign
       }
       e.preventDefault();
-      opts.actions.select.emit('start', eventName);
       if (['binXRange', 'binYRange'].indexOf(eventName) > -1) {
         opts.actions.select.emit('selectionStart');
       }
+      opts.actions.select.emit('start', eventName);
       this.chart.component(key).emit('rangeStart', e);
       this.started = eventName;
     },

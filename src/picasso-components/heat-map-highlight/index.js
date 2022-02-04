@@ -40,6 +40,7 @@ export default {
 
     const onSelectionStart = () => {
       if (!imageData) {
+        heatMapCanvas.style.opacity = 1;
         imageData = heatMapCanvasContext.getImageData(0, 0, heatMapCanvas.width, heatMapCanvas.height);
         const pixels = imageData.data;
         for (let i = 3, n = heatMapCanvas.width * heatMapCanvas.height * 4; i < n; i += 4) {
