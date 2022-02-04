@@ -52,6 +52,12 @@ Legend to left
 Three measures,
 Color by Expression
 
+-scatter_render_9:
+Some sort of coloring
+
+-scatter_render_10:
+Best fit lines
+
 -scatter_render_binned_1:
 binned data
 
@@ -61,6 +67,10 @@ X-Axis on left,
 Y-axis at top,
 Reference lines,
 Compressed resolution
+
+-scatter_render_binned_1:
+binned data,
+Best fit lines
 
 -scatter_render_binned_snapshot_1:
 Navigation on,
