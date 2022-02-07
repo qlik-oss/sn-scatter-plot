@@ -9,15 +9,18 @@ describe('use-render', () => {
   let models;
   let fn;
   let conditionArray;
+  let chart;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     settings = 'stngs';
     models = {
       chartModel: { command: { update: sandbox.stub() } },
+      dockService: { meta: { chart: { size: { width: 100, height: 200 } } } },
     };
     sandbox.stub(stardust, 'useEffect');
-    create = () => useRender({ settings, models });
+    chart = { element: { clientWidth: 100, clientHeight: 200 } };
+    create = () => useRender({ settings, models, chart });
   });
 
   afterEach(() => {
