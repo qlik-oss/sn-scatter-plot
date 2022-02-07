@@ -1,7 +1,7 @@
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 
-export default function createHeatMapLabels({ themeService, chartModel, picasso, context }) {
+export default function createHeatMapLabels({ themeService, chartModel, picasso, context, chart }) {
   const formatter = picasso.formatter('q-number');
   const style = themeService.getStyles();
   const { fontFamily, numFontSize } = style.label?.value || {};
@@ -49,7 +49,8 @@ export default function createHeatMapLabels({ themeService, chartModel, picasso,
       trackBy: () => Math.random(),
     },
     rendererSettings: {
-      transform,
+      transform: () =>
+        transform(chart.findShapes('rect').filter((node) => node.key === KEYS.COMPONENT.HEAT_MAP).length),
       canvasBufferSize: (rect) => ({
         width: rect.computedPhysical.width + 100,
         height: rect.computedPhysical.height + 100,

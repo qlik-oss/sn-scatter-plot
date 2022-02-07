@@ -1,7 +1,7 @@
 import KEYS from '../../../constants/keys';
 import createBrush from '../../brush/heat-map-brush';
 
-export default function createHeatMap(chartModel) {
+export default function createHeatMap({ chartModel, chart }) {
   const viewHandler = chartModel.query.getViewHandler();
   const { transform } = viewHandler;
   const dataHandler = chartModel.query.getDataHandler();
@@ -78,7 +78,8 @@ export default function createHeatMap(chartModel) {
     },
 
     rendererSettings: {
-      transform,
+      transform: () =>
+        transform(chart.findShapes('rect').filter((node) => node.key === KEYS.COMPONENT.HEAT_MAP).length),
       canvasBufferSize: (rect) => ({
         width: rect.computedPhysical.width + 100,
         height: rect.computedPhysical.height + 100,

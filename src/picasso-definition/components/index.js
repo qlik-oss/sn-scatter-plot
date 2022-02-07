@@ -26,8 +26,8 @@ export default function createComponents({ context, models, picasso, chart, acti
     ...createOutOfBoundsSpace({ models }),
     createGridLines(models),
     ...createReferenceLines({ models, context }),
-    createPoint(models),
-    createHeatMap(chartModel),
+    createPoint({ layoutService, colorService, chartModel, chart }),
+    createHeatMap({ chartModel, chart }),
     ...trendLinesService.getComponents(),
     ...createAxes({ models }),
     ...createAxisTitles({ models, context }),
@@ -37,10 +37,10 @@ export default function createComponents({ context, models, picasso, chart, acti
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
     createHeatMapHighLight({ chartModel, layoutService, actions, context }),
+    createHeatMapLabels({ themeService, chartModel, picasso, context, chart }),
     ...createNavigationPanel({ layoutService, chartModel, chart, actions, context }),
-    ...createMiniChart({ models }),
+    ...createMiniChart({ models, context }),
     ...tooltipService.getComponents(),
-    createHeatMapLabels({ themeService, chartModel, picasso, context }),
   ].filter(Boolean);
   // setDisplayOrder(components);
 

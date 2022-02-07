@@ -18,6 +18,7 @@ describe('point', () => {
   const wsm = 1;
   let rect;
   let viewHandler;
+  let chart;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -50,7 +51,7 @@ describe('point', () => {
       getMeta: sandbox.stub().returns({ isBinnedData: false }),
     };
     chartModel.query.getDataHandler.returns(dataHandler);
-    viewHandler = { redererSettings: 'renderer-settings', animationEnabled: false, transform: 'transform-function' };
+    viewHandler = { redererSettings: 'renderer-settings', animationEnabled: false, transform: sandbox.stub() };
     chartModel.query.getViewHandler.returns(viewHandler);
     canvasBufferSizeStub = sandbox.stub();
     rect = {
@@ -65,7 +66,6 @@ describe('point', () => {
     });
 
     colorService = { getColor: sandbox.stub() };
-
     d = {
       datum: {
         size: {
@@ -75,12 +75,13 @@ describe('point', () => {
     };
 
     sandbox.stub(movePath, 'default').returns('new-path');
-
+    chart = { findShapes: sandbox.stub().returns([]) };
     create = () =>
       createPoint({
         layoutService,
         colorService,
         chartModel,
+        chart,
       });
   });
 
@@ -175,7 +176,8 @@ describe('point', () => {
 
   describe('rendererSettings', () => {
     it('should have correct transform function', () => {
-      expect(create().rendererSettings.transform).to.equal('transform-function');
+      create().rendererSettings.transform();
+      expect(viewHandler.transform).to.have.been.calledOnce;
     });
     it('should have correct buffer size', () => {
       const compRect = { computedPhysical: { width: 200, height: 150 } };
