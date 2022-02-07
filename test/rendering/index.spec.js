@@ -22,6 +22,9 @@ describe('sn scatter plot: ui regression tests to test visual bugs', () => {
       open: false,
       build: false,
       themes: [],
+      flags: {
+        BEST_FIT_LINE: true,
+      },
       fixturePath: 'test/rendering/__fixtures__',
     });
 
