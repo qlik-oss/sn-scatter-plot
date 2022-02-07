@@ -23,7 +23,7 @@ export default {
           top: `${y()}px`,
           width: `${width()}px`,
           height: `${height()}px`,
-          background,
+          'background-color': background,
           'border-style': 'solid',
           'border-color': borderColor,
           'border-width': '1px',
