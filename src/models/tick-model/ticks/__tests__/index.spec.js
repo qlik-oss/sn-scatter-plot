@@ -35,7 +35,8 @@ describe('getTicks', () => {
   it('should get niced major ticks when explicitType is none', () => {
     distance = 500;
     explicitType = 'none';
-    tickHelper.getTicksAndMinMax.withArgs(scale, true, 1, 1, 998).returns({ ticks: [0, 1000], min: 0, max: 1000 });
+    tickHelper.getTicksAndMinMax.withArgs(scale, true, 2, 1, 998).returns({ ticks: [0, 1000], min: 0, max: 1000 });
+    tickHelper.valid.returns(true);
     sandbox.stub(getMinorTicks, 'default').returns([500]);
     expect(create()).to.deep.equal({
       ticks: [
@@ -101,7 +102,8 @@ describe('getTicks', () => {
   it('should get correct min max when explicitType is min', () => {
     distance = 500;
     explicitType = 'min';
-    tickHelper.getTicksAndMinMax.withArgs(scale, true, 1, 1, 998).returns({ ticks: [0, 1000], min: 0, max: 1000 });
+    tickHelper.getTicksAndMinMax.withArgs(scale, true, 2, 1, 998).returns({ ticks: [0, 1000], min: 0, max: 1000 });
+    tickHelper.valid.returns(true);
     sandbox.stub(getMinorTicks, 'default').returns([500]);
     expect(create()).to.deep.equal({
       ticks: [
@@ -116,7 +118,8 @@ describe('getTicks', () => {
   it('should get correct min max when explicitType is max', () => {
     distance = 500;
     explicitType = 'max';
-    tickHelper.getTicksAndMinMax.withArgs(scale, true, 1, 1, 998).returns({ ticks: [0, 1000], min: 0, max: 1000 });
+    tickHelper.getTicksAndMinMax.withArgs(scale, true, 2, 1, 998).returns({ ticks: [0, 1000], min: 0, max: 1000 });
+    tickHelper.valid.returns(true);
     sandbox.stub(getMinorTicks, 'default').returns([500]);
     expect(create()).to.deep.equal({
       ticks: [
