@@ -14,7 +14,7 @@ describe('custom rect', () => {
         top: '1px',
         width: '2px',
         height: '3px',
-        background: 'white',
+        'background-color': 'white',
         'border-style': 'solid',
         'border-color': 'red',
         'border-width': '1px',
