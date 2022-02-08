@@ -35,41 +35,35 @@ export default function createMiniChartPoints(chartModel, rtl) {
     show: () => chartModel.query.miniChartEnabled(),
     settings: {
       x: (d) => {
-        const leftEnd = Math.max(d.datum.value.qText[0], homeStateDataView.xAxisMin);
-        const rightEnd = Math.min(d.datum.value.qText[2], homeStateDataView.xAxisMax);
+        const { xAxisMin, xAxisMax } = homeStateDataView;
+        const leftEnd = Math.max(d.datum.value.qText[0], xAxisMin);
+        const rightEnd = Math.min(d.datum.value.qText[2], xAxisMax);
         if (rightEnd < leftEnd) {
           return false;
         }
         const xValue = (leftEnd + rightEnd) / 2;
         return rtl
-          ? (1 - (xValue - homeStateDataView.xAxisMin) / (homeStateDataView.xAxisMax - homeStateDataView.xAxisMin)) *
-              RATIO +
-              padding.x
-          : ((xValue - homeStateDataView.xAxisMin) / (homeStateDataView.xAxisMax - homeStateDataView.xAxisMin)) *
-              RATIO +
-              (1 - RATIO) -
-              padding.x;
+          ? (1 - (xValue - xAxisMin) / (xAxisMax - xAxisMin)) * RATIO + padding.x
+          : ((xValue - xAxisMin) / (xAxisMax - xAxisMin)) * RATIO + (1 - RATIO) - padding.x;
       },
       y: (d) => {
-        const bottomEnd = Math.max(d.datum.value.qText[3], homeStateDataView.yAxisMin);
-        const topEnd = Math.min(d.datum.value.qText[1], homeStateDataView.yAxisMax);
+        const { yAxisMin, yAxisMax } = homeStateDataView;
+        const bottomEnd = Math.max(d.datum.value.qText[3], yAxisMin);
+        const topEnd = Math.min(d.datum.value.qText[1], yAxisMax);
         if (topEnd < bottomEnd) {
           return false;
         }
         const yValue = (bottomEnd + topEnd) / 2;
-        return (
-          ((homeStateDataView.yAxisMax - yValue) / (homeStateDataView.yAxisMax - homeStateDataView.yAxisMin)) * RATIO +
-          (1 - RATIO) -
-          padding.y
-        );
+        return ((yAxisMax - yValue) / (yAxisMax - yAxisMin)) * RATIO + (1 - RATIO) - padding.y;
       },
       fill: {
         scale: KEYS.SCALE.HEAT_MAP_COLOR,
         fn: (d) => d.scale(d.datum.value.qNum),
       },
       shape: (d) => {
-        const leftEnd = Math.max(d.datum.value.qText[0], homeStateDataView.xAxisMin);
-        const rightEnd = Math.min(d.datum.value.qText[2], homeStateDataView.xAxisMax);
+        const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = homeStateDataView;
+        const leftEnd = Math.max(d.datum.value.qText[0], xAxisMin);
+        const rightEnd = Math.min(d.datum.value.qText[2], xAxisMax);
         const valueWidth = rightEnd - leftEnd;
         let pxWidth;
         if (valueWidth < 0) {
@@ -78,8 +72,8 @@ export default function createMiniChartPoints(chartModel, rtl) {
           pxWidth = Math.min(bin.width.px, (valueWidth / bin.width.value) * bin.width.px);
         }
 
-        const bottomEnd = Math.max(d.datum.value.qText[3], homeStateDataView.yAxisMin);
-        const topEnd = Math.min(d.datum.value.qText[1], homeStateDataView.yAxisMax);
+        const bottomEnd = Math.max(d.datum.value.qText[3], yAxisMin);
+        const topEnd = Math.min(d.datum.value.qText[1], yAxisMax);
         const valueHeight = topEnd - bottomEnd;
         let pxHeight;
         if (valueHeight < 0) {
@@ -98,8 +92,9 @@ export default function createMiniChartPoints(chartModel, rtl) {
     beforeRender: ({ size }) => {
       ({ homeStateDataView } = viewHandler.getMeta());
       const { width, height } = size;
-      bin.width.px = ((bin.width.value * width) / (homeStateDataView.xAxisMax - homeStateDataView.xAxisMin)) * RATIO;
-      bin.height.px = ((bin.height.value * height) / (homeStateDataView.yAxisMax - homeStateDataView.yAxisMin)) * RATIO;
+      const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = homeStateDataView;
+      bin.width.px = ((bin.width.value * width) / (xAxisMax - xAxisMin)) * RATIO;
+      bin.height.px = ((bin.height.value * height) / (yAxisMax - yAxisMin)) * RATIO;
       padding.x = rtl ? (PADDING + 1) / width : (PADDING - 1) / width;
       padding.y = (PADDING - 1) / height;
     },
