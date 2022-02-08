@@ -16,7 +16,7 @@ export default function scatterplot(env) {
       const models = useModels({ core, flags });
       const settings = useSettings({ core, models, flags });
 
-      useRender({ settings, models });
+      useRender({ settings, models, chart: core?.chart });
       setupSnapshot({ core, models });
     },
   };
