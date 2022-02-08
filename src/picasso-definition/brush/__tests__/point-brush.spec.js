@@ -43,4 +43,62 @@ describe('createPointBrush', () => {
     myBrush.brushes.returns([{ id: 'measure 1' }, { id: 'meausre 2' }]);
     expect(create().consume[0].data({ brush: myBrush })).to.deep.equal(['x', 'y']);
   });
+
+  it('should return correct nodes with sorted order', () => {
+    const nodes = [
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 10,
+        opacity: 1,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 8,
+        opacity: 0.3,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 4,
+        opacity: 1,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 6,
+        opacity: 0.3,
+      },
+    ];
+    const config = {
+      consume: [{ style: { active: { opacity: 1 } } }],
+    };
+    expect(create().sortNodes({ nodes, config })).to.deep.equal([
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 8,
+        opacity: 0.3,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 6,
+        opacity: 0.3,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 10,
+        opacity: 1,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 4,
+        opacity: 1,
+      },
+    ]);
+  });
 });

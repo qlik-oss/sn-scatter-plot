@@ -20,5 +20,13 @@ export default function createBrush() {
         },
       },
     ],
+    sortNodes: ({ nodes, config }) => {
+      const activeOpactiy = config.consume[0]?.style?.active?.opacity || 1;
+      const activeNodes = nodes.filter((node) => node.opacity === activeOpactiy);
+      const inactiveNodes = nodes.filter((node) => node.opacity !== activeOpactiy);
+      activeNodes.sort((node1, node2) => node2.r - node1.r);
+      inactiveNodes.sort((node1, node2) => node2.r - node1.r);
+      return inactiveNodes.concat(activeNodes);
+    },
   };
 }
