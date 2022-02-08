@@ -31,7 +31,6 @@ export default function getDefinition(env) {
   trendlines.addTranslation = 'properties.regressionline.add';
 
   trendlines.ref = 'trendLines';
-  trendlines.schemaIgnore = true;
   trendlines.globalChange = updateTrendlines;
   trendlines.show = () => flags.isEnabled('BEST_FIT_LINE');
   trendlines.items.type.defaultValue = 'LINEAR';

@@ -6,7 +6,7 @@ export default function getTicks({ scale, explicitType, distance, size, measure,
 
   // 'Nice' if at least one end is implicit (extendable). You can't nice only one end with d3 scale
   const nicing = explicitType !== 'minMax';
-  const count = Math.max(1, Math.round(size / distance));
+  const count = Math.max(2, Math.round(size / distance));
 
   let { ticks: majorTicks, min, max } = tickHelper.getTicksAndMinMax(scale, nicing, count, originalMin, originalMax);
   for (let c = count - 1; c > 0; c--) {
