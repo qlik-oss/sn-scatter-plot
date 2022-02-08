@@ -38,7 +38,7 @@ const tickHelper = {
 
   valid({ ticks, scale, distance, size, formatter, measure }) {
     // It is not valid if the space between two major ticks is smaller than tolerance times distance (i.e. too many ticks)
-    const tolerance = ticks.length <= 4 ? 0.5 : 0.75;
+    const tolerance = ticks.length <= 4 ? 0.5 : 0.8;
     const space = (scale(ticks[1]) - scale(ticks[0])) * size;
     if (space < distance * tolerance) {
       return false;
