@@ -206,6 +206,7 @@ describe('getSize', () => {
   let chartModel;
   let chart;
   let dimension;
+  let layoutService;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -213,11 +214,18 @@ describe('getSize', () => {
     sandbox.stub(KEYS, 'COMPONENT').value({ POINT: 'point-component', HEAT_MAP: 'heat-map' });
     chart = { component: sandbox.stub() };
     chartModel = { query: { isPrelayout: sandbox.stub() } };
-    create = () => tickHelper.getSize(dockService, chartModel, chart, dimension);
+    layoutService = { meta: { isSnapshot: undefined } };
+    create = () => tickHelper.getSize(dockService, chartModel, chart, dimension, layoutService);
   });
 
   afterEach(() => {
     sandbox.restore();
+  });
+
+  it('should return correct size if it is snapshot', () => {
+    layoutService.meta.isSnapshot = true;
+    dimension = 'width';
+    expect(create()).to.equal(100);
   });
 
   it('should return correct size if prelayout is true and dimension is width', () => {

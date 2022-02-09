@@ -29,7 +29,7 @@ export default function createTickModel({
       spacing = layoutService.getLayoutValue('yAxis.spacing', 1);
     }
 
-    const size = tickHelper.getSize(dockService, chartModel, chart, dimension);
+    const size = tickHelper.getSize(dockService, chartModel, chart, dimension, layoutService);
     const distance = tickHelper.getDistance(spacing);
 
     // Get the measureText function from renderer

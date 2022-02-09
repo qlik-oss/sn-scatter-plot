@@ -63,8 +63,8 @@ const tickHelper = {
     }
   },
 
-  getSize(dockService, chartModel, chart, dimension) {
-    if (chartModel.query.isPrelayout()) {
+  getSize(dockService, chartModel, chart, dimension, layoutService) {
+    if (layoutService.meta.isSnapshot || chartModel.query.isPrelayout()) {
       return dockService.meta.chart.size[dimension];
     }
     const pointDimension = chart.component(KEYS.COMPONENT.POINT)?.rect.computedPhysical[dimension];
