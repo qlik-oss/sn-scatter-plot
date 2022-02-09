@@ -247,7 +247,7 @@ describe('out of bounds', () => {
         expect(oob.settings.size()).to.equal('6px');
       });
 
-      it('should return correct oob size calculated size is less than 6 ', () => {
+      it('should return correct oob size when calculated size is less than 6 ', () => {
         const oob = create();
         oob.beforeRender({ size: { width: 20, height: 10 } });
         expect(oob.settings.size()).to.equal('1px');
