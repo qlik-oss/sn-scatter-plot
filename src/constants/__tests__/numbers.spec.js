@@ -13,6 +13,7 @@ describe('numbers', () => {
       'MINI_CHART',
       'NAVIGATION_PANEL',
       'WINDOW_SIZE_BASE',
+      'DIAMETER_OVER_RADIUS',
     ]);
   });
 

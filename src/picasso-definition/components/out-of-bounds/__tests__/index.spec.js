@@ -240,11 +240,17 @@ describe('out of bounds', () => {
       });
     });
 
-    describe('y', () => {
-      describe('fn', () => {
-        it('should return correct value', () => {
-          expect(create().settings.size.fn()).to.equal('6px');
-        });
+    describe('size', () => {
+      it('should return correct oob size', () => {
+        const oob = create();
+        oob.beforeRender({ size: { width: 200, height: 160 } });
+        expect(oob.settings.size()).to.equal('6px');
+      });
+
+      it('should return correct oob size calculated size is less than 6 ', () => {
+        const oob = create();
+        oob.beforeRender({ size: { width: 20, height: 10 } });
+        expect(oob.settings.size()).to.equal('1px');
       });
     });
   });

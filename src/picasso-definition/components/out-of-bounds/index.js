@@ -1,8 +1,10 @@
 import KEYS from '../../../constants/keys';
+import NUMBERS from '../../../constants/numbers';
 import createSizeScale from '../../scales/size';
 import isOob from './is-oob';
 
 const OOB_SPACE = 10;
+const OOB_SIZE = 6;
 
 export function createSpace({ models }) {
   const { dockService } = models;
@@ -28,6 +30,7 @@ export default function createOutOfBounds({ models, context, chart }) {
     yMin: 1.005,
     yMax: -0.005,
   };
+  let windowSizeMultiplier = 0;
 
   const oobDefinition = !layoutService.meta.isBigData
     ? {
@@ -66,9 +69,8 @@ export default function createOutOfBounds({ models, context, chart }) {
               return 1 - (datum.y.value - yAxisMin) / (yAxisMax - yAxisMin);
             },
           },
-          size: {
-            fn: () => '6px',
-          },
+          size: () =>
+            `${Math.min(Math.ceil(OOB_SIZE * windowSizeMultiplier * NUMBERS.DIAMETER_OVER_RADIUS), OOB_SIZE)}px`,
           fill: colorService.getColor(),
         },
         preferredSize: () => ({
@@ -86,6 +88,7 @@ export default function createOutOfBounds({ models, context, chart }) {
           oobPositions.xMax = 1 - oobPositions.xMin;
           oobPositions.yMax = -OOB_SPACE / (1.5 * size.height);
           oobPositions.yMin = 1 - oobPositions.yMax;
+          windowSizeMultiplier = Math.min(size.height, size.width) / NUMBERS.WINDOW_SIZE_BASE;
         },
       }
     : undefined;
