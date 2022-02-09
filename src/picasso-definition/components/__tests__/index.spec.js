@@ -81,6 +81,7 @@ describe('createComponents', () => {
       'legend-component-2',
       'heat-map-legend',
       'disclaimer',
+      'heat-map-labels',
       'home',
       'up',
       'mini-chart-point',
@@ -88,7 +89,6 @@ describe('createComponents', () => {
       'mini-chart-nav',
       'tooltip-1',
       'tooltip-2',
-      'heat-map-labels',
     ]);
   });
 

@@ -37,10 +37,10 @@ export default function createComponents({ context, models, picasso, chart, acti
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
-    ...createNavigationPanel({ layoutService, chartModel, chart, actions, context }),
-    ...createMiniChart({ models }),
-    ...tooltipService.getComponents(),
     createHeatMapLabels({ themeService, chartModel, picasso, context }),
+    ...createNavigationPanel({ layoutService, chartModel, chart, actions, context }),
+    ...createMiniChart({ models, context }),
+    ...tooltipService.getComponents(),
   ].filter(Boolean);
   // setDisplayOrder(components);
 
