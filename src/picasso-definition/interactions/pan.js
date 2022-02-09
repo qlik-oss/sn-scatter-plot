@@ -81,8 +81,8 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
 
       // Check if the pointer is inside the mini chart
       let panInMiniChart = false;
-      if (getTapPosition({ e, chart }) !== null) {
-        updateTapDataView({ e, chart, viewHandler });
+      if (getTapPosition({ e, chart, rtl }) !== null) {
+        updateTapDataView({ e, chart, viewHandler, rtl });
         panInMiniChart = true;
       }
 

@@ -13,8 +13,8 @@ export default function create({ chart, actions, viewHandler, gestures, colorSer
     gestures: [
       // Note: the order of these gestures are important
       ...colorService.custom.legendInteractions(), // need higher priority than the tap in selectables.gestures
-      tapButton({ chart, actions, viewHandler }),
-      tapMiniChart({ chart, actions, viewHandler }),
+      tapButton({}),
+      tapMiniChart({ viewHandler, rtl }),
       ...[...gestures].sort((a, b) => (b.prio || 0) - (a.prio || 0)),
       pan({ chart, actions, viewHandler, rtl }),
       pinch({ chart, actions, viewHandler, rtl }),

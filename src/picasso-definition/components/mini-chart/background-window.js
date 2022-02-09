@@ -1,18 +1,22 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
+import MODES from '../../../constants/modes';
 
-export default function createMiniChartBackgroundWindow(chartModel) {
+export default function createMiniChartBackgroundWindow(chartModel, rtl) {
   const { RATIO, PADDING } = NUMBERS.MINI_CHART; // Padding from the bottom right corner
   let width;
   let height;
   return {
     key: KEYS.COMPONENT.MINI_CHART_BACKGROUND,
     type: 'mini-chart-window',
+    layout: {
+      minimumLayoutMode: MODES.MINI_CHART,
+    },
     show: () => chartModel.query.miniChartEnabled(),
-    style: { borderColor: 'black', background: 'rgba(255, 255, 255, 0.7)' },
+    style: { borderColor: '#B3B3B3', background: 'rgba(255, 255, 255, 0.7)', borderRadius: '4px' },
     settings: {
       rect: {
-        x: () => width * (1 - RATIO) - PADDING,
+        x: () => (rtl ? PADDING : width * (1 - RATIO) - PADDING),
         y: () => height * (1 - RATIO) - PADDING,
         width: () => width * RATIO,
         height: () => height * RATIO,
