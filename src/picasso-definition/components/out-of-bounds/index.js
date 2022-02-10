@@ -1,8 +1,7 @@
 import KEYS from '../../../constants/keys';
+import NUMBERS from '../../../constants/numbers';
 import createSizeScale from '../../scales/size';
 import isOob from './is-oob';
-
-const OOB_SPACE = 10;
 
 export function createSpace({ models }) {
   const { dockService } = models;
@@ -11,7 +10,7 @@ export function createSpace({ models }) {
     key: `${KEYS.COMPONENT.OUT_OF_BOUNDS}-space-${dock}`,
     type: 'container',
     layout: { dock },
-    preferredSize: () => OOB_SPACE,
+    preferredSize: () => NUMBERS.OOB_SPACE,
   });
 
   return [space(dockService.meta.x.opposite), space(dockService.meta.y.opposite)];
@@ -28,6 +27,7 @@ export default function createOutOfBounds({ models, context, chart }) {
     yMin: 1.005,
     yMax: -0.005,
   };
+  let windowSizeMultiplier = 0;
 
   const oobDefinition = !layoutService.meta.isBigData
     ? {
@@ -66,26 +66,29 @@ export default function createOutOfBounds({ models, context, chart }) {
               return 1 - (datum.y.value - yAxisMin) / (yAxisMax - yAxisMin);
             },
           },
-          size: {
-            fn: () => '6px',
-          },
+          size: () =>
+            `${Math.min(
+              Math.ceil(NUMBERS.OOB_SIZE * windowSizeMultiplier * NUMBERS.DIAMETER_OVER_RADIUS),
+              NUMBERS.OOB_SIZE
+            )}px`,
           fill: colorService.getColor(),
         },
         preferredSize: () => ({
           edgeBleed: {
-            top: OOB_SPACE,
-            bottom: OOB_SPACE,
-            left: OOB_SPACE,
-            right: OOB_SPACE,
+            top: NUMBERS.OOB_SPACE,
+            bottom: NUMBERS.OOB_SPACE,
+            left: NUMBERS.OOB_SPACE,
+            right: NUMBERS.OOB_SPACE,
           },
         }),
         beforeRender: ({ size }) => {
           // can be changed back to 2 * size.h (size.w) if we want to render it in the middle of the oob space;
           // 1.5 * size.h (size.w) to render it near the edge of the oob space like for old scatterplot
-          oobPositions.xMin = -OOB_SPACE / (1.5 * size.width);
+          oobPositions.xMin = -NUMBERS.OOB_SPACE / (1.5 * size.width);
           oobPositions.xMax = 1 - oobPositions.xMin;
-          oobPositions.yMax = -OOB_SPACE / (1.5 * size.height);
+          oobPositions.yMax = -NUMBERS.OOB_SPACE / (1.5 * size.height);
           oobPositions.yMin = 1 - oobPositions.yMax;
+          windowSizeMultiplier = Math.min(size.height, size.width) / NUMBERS.WINDOW_SIZE_BASE;
         },
       }
     : undefined;
