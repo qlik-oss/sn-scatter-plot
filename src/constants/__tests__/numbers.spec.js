@@ -14,6 +14,8 @@ describe('numbers', () => {
       'NAVIGATION_PANEL',
       'WINDOW_SIZE_BASE',
       'DIAMETER_OVER_RADIUS',
+      'OOB_SPACE',
+      'OOB_SIZE',
     ]);
   });
 
