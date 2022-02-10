@@ -43,6 +43,13 @@ describe('use-render', () => {
         expect(fn()).to.equal(undefined);
       });
 
+      it('should return nothing (undefined) if chart is undefined', () => {
+        chart = undefined;
+        create();
+        fn = stardust.useEffect.getCall(0).args[0];
+        expect(fn()).to.equal(undefined);
+      });
+
       it('should call chart update if it is snapshot', () => {
         models.layoutService.meta.isSnapshot = true;
         create();
