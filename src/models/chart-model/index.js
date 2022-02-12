@@ -1,12 +1,12 @@
 import KEYS from '../../constants/keys';
 import createViewHandler from '../../view-handler';
+import getFormatPatternFromRange from './format-pattern-from-range';
 
 export default function createChartModel({
   chart,
   localeInfo,
   layoutService,
   colorService,
-  picasso,
   viewState,
   extremumModel,
   dataHandler,
@@ -80,8 +80,6 @@ export default function createChartModel({
       },
     ];
   };
-
-  const dataset = picasso.data('q')(mainConfig);
 
   function updatePartial() {
     viewHandler.setMeta({ updateWithSettings: false });
@@ -175,7 +173,7 @@ export default function createChartModel({
       getViewHandler: () => viewHandler,
       getDataHandler: () => dataHandler,
       getLocaleInfo: () => localeInfo,
-      getFormatter: (fieldName) => dataset.field(fieldName).formatter(),
+      getFormatPattern: (scaleName) => getFormatPatternFromRange(scaleName, viewHandler, layoutService),
       isPrelayout: () => state.isPrelayout,
       miniChartEnabled,
     },

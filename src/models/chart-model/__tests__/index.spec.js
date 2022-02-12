@@ -1,5 +1,6 @@
 import * as KEYS from '../../../constants/keys';
 import createChartModel from '..';
+import * as getFormatPatternFromRange from '../format-pattern-from-range';
 import * as createViewHandler from '../../../view-handler';
 
 describe('chart-model', () => {
@@ -10,8 +11,6 @@ describe('chart-model', () => {
   let layoutService;
   let colorService;
   let trendLinesService;
-  let picassoInstance;
-  let picassoDataFn;
   let colorModelDataFn;
   let create;
   let viewHandler;
@@ -81,10 +80,7 @@ describe('chart-model', () => {
     colorService = {
       getData: colorModelDataFn,
     };
-    picassoDataFn = sandbox.stub().returns('correct dataset');
-    picassoInstance = {
-      data: () => picassoDataFn,
-    };
+    sandbox.stub(getFormatPatternFromRange, 'default');
     create = () =>
       createChartModel({
         chart,
@@ -92,7 +88,6 @@ describe('chart-model', () => {
         layoutService,
         colorService,
         trendLinesService,
-        picasso: picassoInstance,
         viewState,
         extremumModel,
         dataHandler,
@@ -107,17 +102,6 @@ describe('chart-model', () => {
     expect(create()).to.have.all.keys(['query', 'command']);
   });
 
-  it('should prepare dataset properly', () => {
-    create();
-    expect(picassoDataFn).to.have.been.calledWith({
-      key: 'dm',
-      data: hyperCube,
-      config: {
-        localeInfo,
-      },
-    });
-  });
-
   describe('query', () => {
     it('should have correct properties', () => {
       expect(create().query).to.have.all.keys([
@@ -126,7 +110,7 @@ describe('chart-model', () => {
         'getDataHandler',
         'getLocaleInfo',
         'isPrelayout',
-        'getFormatter',
+        'getFormatPattern',
         'miniChartEnabled',
       ]);
     });
@@ -161,15 +145,10 @@ describe('chart-model', () => {
       });
     });
 
-    describe('getFormatter', () => {
-      it('should return correct getFormatter value', () => {
-        picassoDataFn.returns({
-          field: sandbox
-            .stub()
-            .withArgs('x')
-            .returns({ formatter: sandbox.stub().returns('x-formatter') }),
-        });
-        expect(create().query.getFormatter('x')).to.deep.equal('x-formatter');
+    describe('getFormatPattern', () => {
+      it('should call getFormatPatternFromRange', () => {
+        create().query.getFormatPattern('x');
+        expect(getFormatPatternFromRange.default).to.have.been.calledOnce;
       });
     });
   });
