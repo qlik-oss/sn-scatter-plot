@@ -8,12 +8,12 @@ export default function getFormatPatternFromRange(scaleName, viewHandler, layout
   } else {
     ({ yAxisMin: min, yAxisMax: max } = viewHandler.getMeta().homeStateDataView);
   }
-  if (!min || !max) {
+  if (!Number.isFinite(min) || !Number.isFinite(max)) {
     return false;
   }
   let p = '';
-  const minMagnitude = Number(Number(min).toExponential().split('e')[1]);
-  const maxMagnitude = Number(Number(max).toExponential().split('e')[1]);
+  const minMagnitude = Math.floor(Math.log10(Math.abs(min)));
+  const maxMagnitude = Math.floor(Math.log10(Math.abs(max)));
   const minDecimals = Math.min(Math.abs(minMagnitude), Math.abs(maxMagnitude));
   const range = Math.abs(max - min);
   let reduceBy;
