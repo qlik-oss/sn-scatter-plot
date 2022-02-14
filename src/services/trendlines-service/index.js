@@ -48,8 +48,10 @@ export default function createTrenslinesService({
         if (currentRect.x !== previousRect.x) {
           const deltaX = currentRect.x - previousRect.x;
           currentNodes.forEach((node) => {
-            // eslint-disable-next-line no-param-reassign
-            node.d = movePath(node.d, -deltaX);
+            if (node.d) {
+              // eslint-disable-next-line no-param-reassign
+              node.d = movePath(node.d, -deltaX);
+            }
           });
         }
       },
