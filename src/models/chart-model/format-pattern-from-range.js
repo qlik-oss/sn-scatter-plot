@@ -16,12 +16,7 @@ export default function getFormatPatternFromRange(scaleName, viewHandler, layout
   const maxMagnitude = Math.floor(Math.log10(Math.abs(max)));
   const minDecimals = Math.min(Math.abs(minMagnitude), Math.abs(maxMagnitude));
   const range = Math.abs(max - min);
-  let reduceBy;
-  const rangeMagnitude = Number(
-    Number(range / 50)
-      .toExponential()
-      .split('e')[1]
-  );
+  const rangeMagnitude = Math.floor(Math.log10(Math.abs(range / 50)));
 
   let nDecimals = Math.abs(rangeMagnitude);
 
@@ -32,6 +27,7 @@ export default function getFormatPatternFromRange(scaleName, viewHandler, layout
     return '0'.concat(decimalDelimiter, '##');
   }
 
+  let reduceBy;
   if (rangeMagnitude >= 0) {
     nDecimals = Math.max(2, minDecimals - rangeMagnitude);
   } else {
