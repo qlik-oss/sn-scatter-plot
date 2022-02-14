@@ -13,6 +13,12 @@ export default function createTickModel({
   chartModel,
   chart,
 }) {
+  const viewHandler = chartModel.query.getViewHandler();
+  let yTicks;
+  // if (viewHandler.getMeta().updateTicks) {
+  //   chart.update();
+  //   viewHandler.setMeta({ updateTicks: false });
+  // }
   function getChartProperties(axis) {
     let min;
     let max;
@@ -55,6 +61,13 @@ export default function createTickModel({
     const scale = scaleLinear().domain([min, max]);
     const formatter = axis === KEYS.SCALE.X ? formatters.x : formatters.y;
     const tickObject = getTicks({ scale, explicitType, distance, size, measure, formatter });
+    if (prop === 'ticks' && axis === KEYS.SCALE.Y) {
+      if (yTicks) {
+        const updateTicks = tickHelper.shouldUpdateTicksLength(yTicks, tickObject);
+        viewHandler.setMeta({ updateTicks });
+      }
+      yTicks = { ...tickObject };
+    }
     return prop === 'ticks' ? tickObject.ticks : tickObject.minMax;
   }
 
