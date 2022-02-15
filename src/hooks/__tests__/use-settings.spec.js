@@ -53,6 +53,7 @@ describe('use-settings', () => {
     colorService = {
       initialize: sandbox.stub().resolves(),
       custom: { updateBrushAliases: sandbox.stub(), updateLegend: sandbox.stub() },
+      isInitialized: sandbox.stub().returns(true),
     };
     models = { layoutService, chartModel, colorService, pluginService, propertiesModel, dockService };
     core = { viewState: undefined };
@@ -115,6 +116,14 @@ describe('use-settings', () => {
   });
 
   describe('useEffect', () => {
+    it('should resolve to nothing (undefined) when colorService is not initialized ', async () => {
+      colorService.isInitialized.returns(false);
+      create();
+      fn = stardust.usePromise.getCall(0).args[0];
+      const result = await fn();
+      expect(result).to.equal(undefined);
+    });
+
     it('should have the second argument being an array with correct elements', () => {
       create();
       conditionArray = stardust.useEffect.getCall(0).args[1];
