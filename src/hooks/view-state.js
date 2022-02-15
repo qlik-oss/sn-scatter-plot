@@ -1,5 +1,3 @@
-import KEYS from '../constants/keys';
-
 /**
  * Get relative dataView from:
  * - snapshot data
@@ -12,12 +10,6 @@ export function updateViewState({ viewState, viewStateOptions = {}, models }) {
   const source = layoutService.meta.isSnapshot
     ? layoutService.getLayoutValue('snapshotData.content.chartData', {})
     : viewStateOptions;
-
-  const formatters = {
-    x: chartModel.query.getFormatter(KEYS.FIELDS.X),
-    y: chartModel.query.getFormatter(KEYS.FIELDS.Y),
-  };
-  tickModel.command.updateFormatters(formatters);
 
   const viewHandler = chartModel.query.getViewHandler();
   if (viewHandler.getMeta().isHomeState) {

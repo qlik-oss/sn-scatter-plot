@@ -65,7 +65,7 @@ const useSettings = ({ core, models, flags }) => {
   }, [models]);
 
   useEffect(() => {
-    if (!models) {
+    if (!models || !models?.colorService.isInitialized()) {
       return;
     }
 

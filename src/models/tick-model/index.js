@@ -1,5 +1,4 @@
 import { scaleLinear } from 'd3-scale';
-import extend from 'extend';
 import picasso from 'picasso.js';
 import KEYS from '../../constants/keys';
 import getTicks from './ticks';
@@ -51,19 +50,31 @@ export default function createTickModel({
     return { min, max, explicitType, distance, size, measure };
   }
 
-  const formatters = {
-    x: chartModel.query.getFormatter(KEYS.FIELDS.X),
-    y: chartModel.query.getFormatter(KEYS.FIELDS.Y),
+  const formatPatterns = {
+    [KEYS.SCALE.X]: undefined,
+    [KEYS.SCALE.Y]: undefined,
   };
 
   function resolve(axis, prop) {
+    if (!formatPatterns[axis]) {
+      const field = axis === KEYS.SCALE.X ? 'qMeasureInfo.0' : 'qMeasureInfo.1';
+      const isAutoFormat = layoutService.getHyperCubeValue(`${field}.qIsAutoFormat`, false);
+      if (isAutoFormat) {
+        formatPatterns[axis] = chartModel.query.getFormatPattern(axis);
+      }
+    }
+
+    if (formatPatterns[axis]) {
+      chart.formatters()[axis].pattern(formatPatterns[axis]);
+    }
+
     const { min, max, explicitType, distance, size, measure } = getChartProperties(axis);
     const scale = scaleLinear().domain([min, max]);
-    const formatter = axis === KEYS.SCALE.X ? formatters.x : formatters.y;
+    const formatter = chart.formatters()[axis];
     const tickObject = getTicks({ scale, explicitType, distance, size, measure, formatter });
     if (prop === 'ticks' && axis === KEYS.SCALE.Y) {
       if (yTicks) {
-        const updateTicks = tickHelper.shouldUpdateTicksLength(yTicks, tickObject);
+        const updateTicks = tickHelper.shouldUpdateTicksLength(yTicks, tickObject, formatter);
         viewHandler.setMeta({ updateTicks });
       }
       yTicks = { ...tickObject };
@@ -77,12 +88,6 @@ export default function createTickModel({
       getYTicks: () => resolve(KEYS.SCALE.Y, 'ticks'),
       getXMinMax: () => resolve(KEYS.SCALE.X, 'minMax'),
       getYMinMax: () => resolve(KEYS.SCALE.Y, 'minMax'),
-    },
-
-    command: {
-      updateFormatters: (newFormatters) => {
-        extend(true, formatters, newFormatters);
-      },
     },
   };
 }
