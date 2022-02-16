@@ -1,5 +1,6 @@
 import * as KEYS from '../../../constants/keys';
 import createChartModel from '..';
+import * as getFormatPatternFromRange from '../format-pattern-from-range';
 import * as createViewHandler from '../../../view-handler';
 
 describe('chart-model', () => {
@@ -10,8 +11,6 @@ describe('chart-model', () => {
   let layoutService;
   let colorService;
   let trendLinesService;
-  let picassoInstance;
-  let picassoDataFn;
   let colorModelDataFn;
   let create;
   let viewHandler;
@@ -81,10 +80,7 @@ describe('chart-model', () => {
     colorService = {
       getData: colorModelDataFn,
     };
-    picassoDataFn = sandbox.stub().returns('correct dataset');
-    picassoInstance = {
-      data: () => picassoDataFn,
-    };
+    sandbox.stub(getFormatPatternFromRange, 'default');
     create = () =>
       createChartModel({
         chart,
@@ -92,7 +88,6 @@ describe('chart-model', () => {
         layoutService,
         colorService,
         trendLinesService,
-        picasso: picassoInstance,
         viewState,
         extremumModel,
         dataHandler,
@@ -107,17 +102,6 @@ describe('chart-model', () => {
     expect(create()).to.have.all.keys(['query', 'command']);
   });
 
-  it('should prepare dataset properly', () => {
-    create();
-    expect(picassoDataFn).to.have.been.calledWith({
-      key: 'dm',
-      data: hyperCube,
-      config: {
-        localeInfo,
-      },
-    });
-  });
-
   describe('query', () => {
     it('should have correct properties', () => {
       expect(create().query).to.have.all.keys([
@@ -126,7 +110,7 @@ describe('chart-model', () => {
         'getDataHandler',
         'getLocaleInfo',
         'isPrelayout',
-        'getFormatter',
+        'getFormatPattern',
         'miniChartEnabled',
       ]);
     });
@@ -161,15 +145,10 @@ describe('chart-model', () => {
       });
     });
 
-    describe('getFormatter', () => {
-      it('should return correct getFormatter value', () => {
-        picassoDataFn.returns({
-          field: sandbox
-            .stub()
-            .withArgs('x')
-            .returns({ formatter: sandbox.stub().returns('x-formatter') }),
-        });
-        expect(create().query.getFormatter('x')).to.deep.equal('x-formatter');
+    describe('getFormatPattern', () => {
+      it('should call getFormatPatternFromRange', () => {
+        create().query.getFormatPattern('x');
+        expect(getFormatPatternFromRange.default).to.have.been.calledOnce;
       });
     });
   });
@@ -320,8 +299,8 @@ describe('chart-model', () => {
       it('should trigger chart.update properly (full version), when mini chart is off then on, and on then off', async () => {
         sandbox.useFakeTimers();
         const { clock } = sandbox;
-        dataHandler.getHomeStateBins.returns([{ qText: [0, 2, 1, 5] }]);
-        viewHandler.getDataView.returns({ xAxisMin: -1, xAxisMax: 2, yAxisMin: 1, yAxisMax: 4 });
+        viewHandler.getMeta.returns({ homeStateDataView: { xAxisMin: -1, xAxisMax: 2, yAxisMin: 1, yAxisMax: 4 } });
+        viewHandler.getDataView.returns({ xAxisMin: -1, xAxisMax: 1, yAxisMin: 1, yAxisMax: 4 });
         createViewHandler.default.returns(viewHandler);
         create();
         // off --> on
@@ -347,7 +326,7 @@ describe('chart-model', () => {
         });
 
         // on --> off
-        dataHandler.getHomeStateBins.returns([]);
+        viewHandler.getMeta.returns({ homeStateDataView: { xAxisMin: -1, xAxisMax: 1, yAxisMin: 1, yAxisMax: 4 } });
         await viewState.dataView();
         await clock.tick(50);
 
@@ -374,7 +353,9 @@ describe('chart-model', () => {
         sandbox.useFakeTimers();
         const { clock } = sandbox;
         dataHandler.fetch = sandbox.stub().rejects();
-        dataHandler.getHomeStateBins.returns([]);
+        viewHandler.getMeta.returns({ homeStateDataView: { xAxisMin: -1, xAxisMax: 1, yAxisMin: 1, yAxisMax: 4 } });
+        viewHandler.getDataView.returns({ xAxisMin: -1, xAxisMax: 1, yAxisMin: 1, yAxisMax: 4 });
+        createViewHandler.default.returns(viewHandler);
         create();
 
         await viewState.dataView();

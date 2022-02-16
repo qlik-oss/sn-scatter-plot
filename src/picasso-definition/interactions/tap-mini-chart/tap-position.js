@@ -1,7 +1,7 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 
-export default function getTapPosition({ e, chart }) {
+export default function getTapPosition({ e, chart, rtl }) {
   if (!chart.component(KEYS.COMPONENT.MINI_CHART_POINT)) {
     return null;
   }
@@ -15,7 +15,7 @@ export default function getTapPosition({ e, chart }) {
   const { RATIO, PADDING } = NUMBERS.MINI_CHART;
 
   // Top left corner of the mini chart, relative to the point component
-  const Xmin = W * (1 - RATIO) - PADDING;
+  const Xmin = rtl ? PADDING : W * (1 - RATIO) - PADDING;
   const Ymin = H * (1 - RATIO) - PADDING;
 
   // Coordinate of the clicked spot, relative to the mini chart

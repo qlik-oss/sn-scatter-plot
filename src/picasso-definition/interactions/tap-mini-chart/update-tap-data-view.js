@@ -4,22 +4,21 @@ import getTapPosition from './tap-position';
 
 const { RATIO } = NUMBERS.MINI_CHART;
 
-export default function updateTapDataView({ viewHandler, e, chart }) {
+export default function updateTapDataView({ viewHandler, e, chart, rtl }) {
   const { scale, homeStateDataView } = viewHandler.getMeta();
 
-  const tapPoint = getTapPosition({ e, chart });
+  const tapPoint = getTapPosition({ e, chart, rtl });
   const miniChart = {
     width: chart.component(KEYS.COMPONENT.MINI_CHART_POINT).rect.computedPhysical.width * RATIO,
     height: chart.component(KEYS.COMPONENT.MINI_CHART_POINT).rect.computedPhysical.height * RATIO,
   };
-  const xCenter =
-    homeStateDataView.xAxisMin +
-    (tapPoint.x * (homeStateDataView.xAxisMax - homeStateDataView.xAxisMin)) / miniChart.width;
-  const yCenter =
-    homeStateDataView.yAxisMax -
-    (tapPoint.y * (homeStateDataView.yAxisMax - homeStateDataView.yAxisMin)) / miniChart.height;
-  const xWidth = (homeStateDataView.xAxisMax - homeStateDataView.xAxisMin) * scale;
-  const yWidth = (homeStateDataView.yAxisMax - homeStateDataView.yAxisMin) * scale;
+  const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = homeStateDataView;
+  const xCenter = rtl
+    ? xAxisMax - (tapPoint.x * (xAxisMax - xAxisMin)) / miniChart.width
+    : xAxisMin + (tapPoint.x * (xAxisMax - xAxisMin)) / miniChart.width;
+  const yCenter = yAxisMax - (tapPoint.y * (yAxisMax - yAxisMin)) / miniChart.height;
+  const xWidth = (xAxisMax - xAxisMin) * scale;
+  const yWidth = (yAxisMax - yAxisMin) * scale;
 
   const dataView = {
     xAxisMin: xCenter - 0.5 * xWidth,

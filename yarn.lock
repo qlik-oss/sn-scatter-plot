@@ -9309,20 +9309,20 @@ phin@^2.9.1:
   resolved "https://registry.yarnpkg.com/phin/-/phin-2.9.3.tgz#f9b6ac10a035636fb65dfc576aaaa17b8743125c"
   integrity sha512-CzFr90qM24ju5f88quFC/6qohjC144rehe5n6DH900lgXmUe86+xCKc10ev56gRKC4/BkHUoG4uSiQgBiIXwDA==
 
-picasso-plugin-hammer@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/picasso-plugin-hammer/-/picasso-plugin-hammer-1.5.0.tgz#8fdbe83a1221cf4e6673b4b07c2ebf56636dcd93"
-  integrity sha512-MXYcd/Ga/JxASODo89wJEv2n2Vv2xPWI/p8vVV+bM9YeDivV/ftxFIIkHgLb7x2SLbkAY3UetrykRf4oVmVV2w==
+picasso-plugin-hammer@1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/picasso-plugin-hammer/-/picasso-plugin-hammer-1.6.0.tgz#0735d57eb5e9c88881b660d1b7693bb5f37cca51"
+  integrity sha512-WHchq1u7cu8T1zjMwrmxqOUjsImRgh8QfPTpkFSHrAvZXPvBuBojWDS7WNUDlj+/iWWgrx1ECKM7nHzQVhj/dQ==
 
-picasso-plugin-q@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/picasso-plugin-q/-/picasso-plugin-q-1.5.0.tgz#3b31ef53ad3385d2e7be8da8c591513abd2b87ab"
-  integrity sha512-kGoVkugdaFqdeYqqPM5nsqQqmYpE7eiUYXAz1fW5XqLwoLikZRvhaelb3IITDYrfQpWaTx4yGkaN9+X9BxnSxQ==
+picasso-plugin-q@1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/picasso-plugin-q/-/picasso-plugin-q-1.6.0.tgz#89a67719e031ba1c5e8a6e33250d374a5516ec1a"
+  integrity sha512-fx2lQCRb6+b4eAEPIIQ6Ja/Ah7kHtV1AW2ofFa2hYIFKxxpi6yllO7EyuHoQw9KEOXkQE47nOXMZXQHtQpymiw==
 
-picasso.js@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/picasso.js/-/picasso.js-1.5.0.tgz#064fc32873e06ddfbe33f9fcc0f9f1b9a732a102"
-  integrity sha512-FGNrsJ4m11RrrAAuwELZtvPIJwb2CWMF/6E5x/wYjMbQyW8jgz5YSUl2l9x+gC1MB2u9MbzLf9cCh0hoHt1FTQ==
+picasso.js@1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/picasso.js/-/picasso.js-1.6.0.tgz#861dd14111b60e02a4089851d0581007abc37ac9"
+  integrity sha512-+mCH7i7vDVOFlFYNshF79K+soIAR5uCVsKZIuD+nNgKqLiW9OJrK6VtqXfkoP7zOm6jTFMAiQ/XNFwMISdQSBA==
 
 picocolors@^1.0.0:
   version "1.0.0"
@@ -9892,10 +9892,10 @@ q@^1.5.1:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
-qlik-chart-modules@0.29.0:
-  version "0.29.0"
-  resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.29.0.tgz#747cbcd00073fd14ec820f16c2c07b1b2554fcda"
-  integrity sha512-3byxB9rhYmwg0Rctv/biK16Si7DrwDLkimGFG+ck51VjGptJ8H3mzlZoJPj2cfhRUvtg2QwXpgkaoevwus//Fg==
+qlik-chart-modules@0.30.0:
+  version "0.30.0"
+  resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.30.0.tgz#9bac42229d94942e0bfab04dfb3e620d83a06d02"
+  integrity sha512-tfXBmpxDU7XT4gcQS+OCdrP/nHpuD6EvILQY2Or7DwXyMc1oul9vPPRURYGf/MFR/u/J/USbaLiptEVIDcky0g==
 
 qlik-modifiers@0.5.1:
   version "0.5.1"

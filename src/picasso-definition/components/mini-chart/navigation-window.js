@@ -1,20 +1,17 @@
 /* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
+import MODES from '../../../constants/modes';
 
-export default function createMiniChartNavigationWindow(chartModel) {
+export default function createMiniChartNavigationWindow(chartModel, rtl) {
   const { RATIO, PADDING } = NUMBERS.MINI_CHART; // Padding from the bottom right corner
 
-  const state = {
-    // Home state data view (corresponding the rect of the mini chart)
-    homeStateDataView: undefined,
-    // Current data view (corresponding to the rect of the navigation window)
-    dataView: undefined,
-    // The rect of the point component
-    pointRect: undefined,
-    // The rect of the navigation window, relative to the mini chart
-    navRect: undefined,
-  };
+  // Current data view (corresponding to the rect of the navigation window)
+  let dataView;
+  // The rect of the point component
+  let pointRect;
+  // The rect of the navigation window, relative to the mini chart
+  let navRect;
 
   const viewHandler = chartModel.query.getViewHandler();
 
@@ -65,37 +62,34 @@ export default function createMiniChartNavigationWindow(chartModel) {
   return {
     key: KEYS.COMPONENT.MINI_CHART_NAVIGATION,
     type: 'mini-chart-window',
-    style: { borderColor: 'red', background: 'rgba(200, 200, 200, 0.3)' },
+    layout: {
+      minimumLayoutMode: MODES.MINI_CHART,
+    },
+    style: { borderColor: '#DC423F', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '0px' },
     show: () => chartModel.query.miniChartEnabled(),
     settings: {
       rect: {
-        x: () => state.pointRect.width * (1 - RATIO) - PADDING + state.navRect.x,
-        y: () => state.pointRect.height * (1 - RATIO) - PADDING + state.navRect.y,
-        width: () => state.navRect.width,
-        height: () => state.navRect.height,
+        x: () => (rtl ? PADDING + navRect.x : pointRect.width * (1 - RATIO) - PADDING + navRect.x),
+        y: () => pointRect.height * (1 - RATIO) - PADDING + navRect.y,
+        width: () => navRect.width,
+        height: () => navRect.height,
       },
     },
     beforeRender: ({ size }) => {
-      state.pointRect = size;
-      state.homeStateDataView = viewHandler.getMeta().homeStateDataView;
-      state.dataView = viewHandler.getDataView();
-      state.navRect = {
-        width:
-          (state.pointRect.width * RATIO * (state.dataView.xAxisMax - state.dataView.xAxisMin)) /
-          (state.homeStateDataView.xAxisMax - state.homeStateDataView.xAxisMin),
-        height:
-          (state.pointRect.height * RATIO * (state.dataView.yAxisMax - state.dataView.yAxisMin)) /
-          (state.homeStateDataView.yAxisMax - state.homeStateDataView.yAxisMin),
-        x:
-          (state.pointRect.width * RATIO * (state.dataView.xAxisMin - state.homeStateDataView.xAxisMin)) /
-          (state.homeStateDataView.xAxisMax - state.homeStateDataView.xAxisMin),
-        y:
-          (state.pointRect.height * RATIO * (state.homeStateDataView.yAxisMax - state.dataView.yAxisMax)) /
-          (state.homeStateDataView.yAxisMax - state.homeStateDataView.yAxisMin),
+      pointRect = size;
+      const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getMeta().homeStateDataView;
+      dataView = viewHandler.getDataView();
+      navRect = {
+        width: (pointRect.width * RATIO * (dataView.xAxisMax - dataView.xAxisMin)) / (xAxisMax - xAxisMin),
+        height: (pointRect.height * RATIO * (dataView.yAxisMax - dataView.yAxisMin)) / (yAxisMax - yAxisMin),
+        x: rtl
+          ? (pointRect.width * RATIO * (-dataView.xAxisMax + xAxisMax)) / (xAxisMax - xAxisMin)
+          : (pointRect.width * RATIO * (dataView.xAxisMin - xAxisMin)) / (xAxisMax - xAxisMin),
+        y: (pointRect.height * RATIO * (yAxisMax - dataView.yAxisMax)) / (yAxisMax - yAxisMin),
       };
 
       // Handle the cases when the navigation window is partly outside of the minichart: we need to truncate the navigation window
-      truncateNavigationWindow({ nav: state.navRect, point: state.pointRect });
+      truncateNavigationWindow({ nav: navRect, point: pointRect });
     },
   };
 }
