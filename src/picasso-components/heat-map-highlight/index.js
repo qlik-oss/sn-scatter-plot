@@ -50,7 +50,13 @@ export default {
 
     const onSelectionStart = async () => {
       if (!bitmapImage) {
-        bitmapImage = await createImageBitmap(heatMapCanvas);
+        heatMapCanvas.style.opacity = 1;
+        const imageData = heatMapCanvasContext.getImageData(0, 0, heatMapCanvas.width, heatMapCanvas.height);
+        const pixels = imageData.data;
+        for (let i = 3, n = heatMapCanvas.width * heatMapCanvas.height * 4; i < n; i += 4) {
+          pixels[i] = pixels[i] === 0 ? 0 : 255;
+        }
+        bitmapImage = await createImageBitmap(imageData);
       }
     };
 
