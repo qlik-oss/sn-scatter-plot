@@ -23,29 +23,40 @@ export default {
     const { actions, dataView, rtl } = this.settings.settings;
     const heatMapCanvasContext = heatMapCanvas.getContext('2d');
     const pixelRatio = getPixelRatio(heatMapCanvasContext);
-    let imageData;
+    let bitmapImage;
     const ctx = heatMapHighlightCanvas.getContext('2d');
     ctx.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
 
     const updateImageData = (range, axis) => {
-      if (!imageData) return;
+      if (!bitmapImage) return;
       ctx.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
       const { x, y, w, h } = getImageData(range, axis, dataView, dirtyImageData, width, height, rtl);
       dirtyImageData.x = x;
       dirtyImageData.y = y;
       dirtyImageData.w = w;
       dirtyImageData.h = h;
-      ctx.putImageData(imageData, 0, 0, x * pixelRatio, y * pixelRatio, w * pixelRatio, h * pixelRatio);
+      ctx.drawImage(
+        bitmapImage,
+        x * pixelRatio,
+        y * pixelRatio,
+        w * pixelRatio,
+        h * pixelRatio,
+        x * pixelRatio,
+        y * pixelRatio,
+        w * pixelRatio,
+        h * pixelRatio
+      );
     };
 
-    const onSelectionStart = () => {
-      if (!imageData) {
+    const onSelectionStart = async () => {
+      if (!bitmapImage) {
         heatMapCanvas.style.opacity = 1;
-        imageData = heatMapCanvasContext.getImageData(0, 0, heatMapCanvas.width, heatMapCanvas.height);
+        const imageData = heatMapCanvasContext.getImageData(0, 0, heatMapCanvas.width, heatMapCanvas.height);
         const pixels = imageData.data;
         for (let i = 3, n = heatMapCanvas.width * heatMapCanvas.height * 4; i < n; i += 4) {
           pixels[i] = pixels[i] === 0 ? 0 : 255;
         }
+        bitmapImage = await createImageBitmap(imageData);
       }
     };
 
@@ -58,7 +69,7 @@ export default {
     };
 
     const onBinRangeHighlightClear = () => {
-      imageData = undefined;
+      bitmapImage = undefined;
       ctx.clearRect(0, 0, width * pixelRatio, height * pixelRatio);
     };
 
