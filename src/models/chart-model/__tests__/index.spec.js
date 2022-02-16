@@ -30,8 +30,8 @@ describe('chart-model', () => {
     ];
     viewHandler = {
       getMeta: sandbox.stub().returns('isHomeState'),
-      setMeta: sandbox.stub(),
       getInteractionInProgress: sandbox.stub(),
+      setInteractionInProgress: sandbox.stub(),
       getDataView: sandbox.stub(),
     };
     dataHandler = {
@@ -70,6 +70,7 @@ describe('chart-model', () => {
     layoutService = {
       meta: { isContinuous: false, isSnapshot: false, isBigData: false },
       getHyperCube: sandbox.stub().returns(hyperCube),
+      getHyperCubeValue: sandbox.stub(),
     };
     trendLinesService = {
       getData: () => [{ trendlineData: 'here' }],
@@ -109,8 +110,9 @@ describe('chart-model', () => {
         'getViewHandler',
         'getDataHandler',
         'getLocaleInfo',
-        'isPrelayout',
+        'getMeta',
         'getFormatPattern',
+        'animationEnabled',
         'miniChartEnabled',
       ]);
     });
@@ -139,9 +141,14 @@ describe('chart-model', () => {
       });
     });
 
-    describe('isPrelayout', () => {
-      it('should return correct isPrelayout value', () => {
-        expect(create().query.isPrelayout()).to.equal(true);
+    describe('getMeta', () => {
+      it('should return correct meta', () => {
+        expect(create().query.getMeta()).to.deep.equal({
+          isPrelayout: true,
+          previousConstraints: undefined,
+          updateWithSettings: undefined,
+          constraintsHaveChanged: undefined,
+        });
       });
     });
 
@@ -151,11 +158,30 @@ describe('chart-model', () => {
         expect(getFormatPatternFromRange.default).to.have.been.calledOnce;
       });
     });
+
+    describe('animationEnabled', () => {
+      it('should return correctly', () => {
+        const chartModel = create();
+
+        viewHandler.setInteractionInProgress(true);
+        expect(chartModel.query.animationEnabled()).to.equal(false);
+
+        viewHandler.setInteractionInProgress(false);
+        layoutService.meta.isBigData = true;
+        chartModel.command.setMeta({ updateWithSettings: true, constraintsHaveChanged: false });
+        expect(chartModel.query.animationEnabled()).to.equal(true);
+
+        layoutService.meta.isBigData = false;
+        viewHandler.setInteractionInProgress(false);
+        layoutService.getHyperCubeValue.returns(10);
+        expect(chartModel.query.animationEnabled()).to.equal(true);
+      });
+    });
   });
 
   describe('command', () => {
     it('should expose correct methods', () => {
-      expect(create().command).to.have.all.keys(['layoutComponents', 'update']);
+      expect(create().command).to.have.all.keys(['layoutComponents', 'setMeta', 'update']);
     });
 
     describe('layoutComponents', () => {
@@ -190,10 +216,10 @@ describe('chart-model', () => {
 
     describe('update', () => {
       it('should call update correctly', () => {
-        create().command.update({ settings: { key: 'settings' } });
+        const chartModel = create();
+        chartModel.command.update({ settings: { key: 'settings' } });
         const argsObject = chart.update.args[0][0];
-
-        expect(viewHandler.setMeta).to.have.been.calledWithExactly({ updateWithSettings: true });
+        expect(chartModel.query.getMeta().updateWithSettings).to.equal(true);
         expect(chart.update).to.have.been.calledOnce;
         expect(argsObject.data).to.be.an('array');
         expect(argsObject.data[0].config.localeInfo).to.equal(localeInfo);
@@ -201,17 +227,18 @@ describe('chart-model', () => {
       });
 
       it('should call update, when settings is implicit', () => {
-        create().command.update();
-        expect(viewHandler.setMeta).to.have.been.calledWithExactly({ updateWithSettings: false });
+        const chartModel = create();
+        chartModel.command.update();
+        expect(chartModel.query.getMeta().updateWithSettings).to.equal(false);
         expect(chart.update).to.have.been.calledOnce;
       });
 
       it('should update correct binned data when calling update', () => {
         dataHandler.getMeta.returns({ isBinnedData: true });
-        create().command.update({ settings: { key: 'settings' } });
+        const chartModel = create();
+        chartModel.command.update({ settings: { key: 'settings' } });
         const argsObject = chart.update.args[0][0];
-
-        expect(viewHandler.setMeta).to.have.been.calledWithExactly({ updateWithSettings: true });
+        expect(chartModel.query.getMeta().updateWithSettings).to.equal(true);
         expect(chart.update).to.have.been.calledOnce;
         expect(argsObject.data).to.be.an('array');
         expect(argsObject.data[1].key).to.equal('db');
@@ -282,11 +309,11 @@ describe('chart-model', () => {
         sandbox.useFakeTimers();
         const { clock } = sandbox;
         chart.component.withArgs('mcp').returns(false);
-        create();
+        const chartModel = create();
         await viewState.dataView();
         await clock.tick(50);
 
-        expect(viewHandler.setMeta).to.have.been.calledWithExactly({ updateWithSettings: false });
+        expect(chartModel.query.getMeta().updateWithSettings).to.equal(false);
         expect(chart.update).to.have.been.calledWithExactly({
           partialData: true,
           excludeFromUpdate: ['xat', 'yat', 'mcp'],

@@ -14,6 +14,7 @@ import customTooltipMigrators from '../custom-tooltip/migrators';
 import createPicassoDefinition from '../picasso-definition';
 import getLogicalSize from '../logical-size';
 import { initializeViewState, updateViewState } from './view-state';
+import objectHelper from '../utils/object-helper';
 
 const useSettings = ({ core, models, flags }) => {
   const rect = useRect();
@@ -64,11 +65,7 @@ const useSettings = ({ core, models, flags }) => {
     });
   }, [models]);
 
-  useEffect(() => {
-    if (!models || !models?.colorService.isInitialized()) {
-      return;
-    }
-
+  const update = () => {
     const { layoutService, chartModel, dockService, colorService } = models;
     const { viewState } = core;
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
@@ -79,7 +76,32 @@ const useSettings = ({ core, models, flags }) => {
     chartModel.command.layoutComponents({ settings: newSettings });
     updateViewState({ viewState, viewStateOptions: options.viewState, models });
     setSettings(newSettings);
-  }, [rect.width, rect.height, constraints]);
+  };
+
+  useEffect(() => {
+    if (!models || !models?.colorService.isInitialized()) {
+      return;
+    }
+
+    const { chartModel } = models;
+    if (objectHelper.isEqual(constraints, chartModel.query.getMeta().previousConstraints)) {
+      chartModel.command.setMeta({ constraintsHaveChanged: false });
+    } else {
+      chartModel.command.setMeta({ constraintsHaveChanged: true });
+    }
+
+    chartModel.command.setMeta({ previousConstraints: { ...constraints } });
+
+    update();
+  }, [rect.width, rect.height]);
+
+  useEffect(() => {
+    if (!models || !models?.colorService.isInitialized()) {
+      return;
+    }
+
+    update();
+  }, [constraints]);
 
   return settings;
 };

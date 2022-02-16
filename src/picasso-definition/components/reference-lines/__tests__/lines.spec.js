@@ -5,7 +5,6 @@ describe('createRefLines', () => {
   let sandbox;
   let colorService;
   let layoutService;
-  let viewHandler;
   let chartModel;
 
   beforeEach(() => {
@@ -44,8 +43,7 @@ describe('createRefLines', () => {
         },
       },
     ]);
-    viewHandler = { animationEnabled: false };
-    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
+    chartModel = { query: { animationEnabled: sandbox.stub() } };
   });
 
   afterEach(() => {
@@ -173,14 +171,14 @@ describe('createRefLines', () => {
     const minimumLayoutMode = 'min-layout-mode';
 
     describe('enabled', () => {
-      it('should be true if animation is enabled in viewHandler', () => {
-        viewHandler.animationEnabled = true;
+      it('should be true if animation is enabled in chartModel', () => {
+        chartModel.query.animationEnabled.returns(true);
         const refLines = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
         expect(refLines.animations.enabled()).to.equal(true);
       });
 
-      it('should be false if animation is not enabled in viewHandler', () => {
-        viewHandler.animationEnabled = false;
+      it('should be false if animation is not enabled in chartModel', () => {
+        chartModel.query.animationEnabled.returns(false);
         const refLines = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
         expect(refLines.animations.enabled()).to.equal(false);
       });

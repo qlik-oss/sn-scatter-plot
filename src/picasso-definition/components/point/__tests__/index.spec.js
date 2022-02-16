@@ -45,12 +45,14 @@ describe('point', () => {
       },
     };
     sizeScaleFn = createSizeScale(layoutService);
-    chartModel = { query: { getViewHandler: sandbox.stub(), getDataHandler: sandbox.stub() } };
+    chartModel = {
+      query: { getViewHandler: sandbox.stub(), getDataHandler: sandbox.stub(), animationEnabled: sandbox.stub() },
+    };
     dataHandler = {
       getMeta: sandbox.stub().returns({ isBinnedData: false }),
     };
     chartModel.query.getDataHandler.returns(dataHandler);
-    viewHandler = { redererSettings: 'renderer-settings', animationEnabled: false, transform: 'transform-function' };
+    viewHandler = { redererSettings: 'renderer-settings', transform: 'transform-function' };
     chartModel.query.getViewHandler.returns(viewHandler);
     canvasBufferSizeStub = sandbox.stub();
     rect = {
@@ -185,13 +187,13 @@ describe('point', () => {
 
   describe('animation', () => {
     describe('enabled', () => {
-      it('should be true if animation is enabled in viewHandler', () => {
-        viewHandler.animationEnabled = true;
+      it('should be true if animation is enabled in chartModel', () => {
+        chartModel.query.animationEnabled.returns(true);
         expect(create().animations.enabled()).to.equal(true);
       });
 
-      it('should be false if animation is not enabled in viewHandler', () => {
-        viewHandler.animationEnabled = false;
+      it('should be false if animation is not enabled in chartModel', () => {
+        chartModel.query.animationEnabled.returns(false);
         expect(create().animations.enabled()).to.equal(false);
       });
     });

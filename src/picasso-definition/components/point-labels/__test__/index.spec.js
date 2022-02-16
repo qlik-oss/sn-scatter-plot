@@ -31,10 +31,9 @@ describe('point-labels', () => {
     themeService = { getStyles: sandbox.stub() };
     viewHandler = {
       redererSettings: 'renderer-settings',
-      animationEnabled: false,
       transform: 'transform-function',
     };
-    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
+    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler), animationEnabled: sandbox.stub() } };
     models = { layoutService, themeService, chartModel };
     chart = { component: sandbox.stub().returns({ rect: { width: 500, height: 500 } }) };
     create = () => createPointLabels({ models, chart });
@@ -114,13 +113,13 @@ describe('point-labels', () => {
 
     describe('animation', () => {
       describe('enabled', () => {
-        it('should be true if animation is enabled in viewHandler', () => {
-          viewHandler.animationEnabled = true;
+        it('should be true if animation is enabled in chartModel', () => {
+          chartModel.query.animationEnabled.returns(true);
           expect(create().animations.enabled()).to.equal(true);
         });
 
-        it('should be false if animation is not enabled in viewHandler', () => {
-          viewHandler.animationEnabled = false;
+        it('should be false if animation is not enabled in chartModel', () => {
+          chartModel.query.animationEnabled.returns(false);
           expect(create().animations.enabled()).to.equal(false);
         });
       });

@@ -43,7 +43,7 @@ export default function createPointLabels({ models, chart }) {
       backgroundColor: style.backgroundColor,
     },
     animations: {
-      enabled: () => viewHandler.animationEnabled,
+      enabled: () => chartModel.query.animationEnabled(),
       trackBy: (node) => {
         let id;
         if (node.type === 'text') {

@@ -6,7 +6,6 @@ describe('grid-line', () => {
   let layoutService;
   let themeService;
   let gridLine;
-  let viewHandler;
   let chartModel;
   let create;
 
@@ -48,8 +47,7 @@ describe('grid-line', () => {
       },
     });
 
-    viewHandler = { animationEnabled: false };
-    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
+    chartModel = { query: { animationEnabled: sandbox.stub() } };
   });
 
   after(() => {
@@ -267,13 +265,13 @@ describe('grid-line', () => {
 
     describe('animation', () => {
       describe('enabled', () => {
-        it('should be true if animation is enabled in viewHandler', () => {
-          viewHandler.animationEnabled = true;
+        it('should be true if animation is enabled in chartModel', () => {
+          chartModel.query.animationEnabled.returns(true);
           expect(create().animations.enabled()).to.equal(true);
         });
 
-        it('should be false if animation is not enabled in viewHandler', () => {
-          viewHandler.animationEnabled = false;
+        it('should be false if animation is not enabled in chartModel', () => {
+          chartModel.query.animationEnabled.returns(false);
           expect(create().animations.enabled()).to.equal(false);
         });
       });

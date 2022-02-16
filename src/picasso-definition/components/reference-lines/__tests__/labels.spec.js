@@ -10,7 +10,6 @@ describe('createRefLineLabels', () => {
   let themeService;
   let context;
   let theme;
-  let viewHandler;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -52,12 +51,11 @@ describe('createRefLineLabels', () => {
       getStyles: sandbox.stub().returns('theme'),
       getTheme: sandbox.stub().returns(theme),
     };
-    viewHandler = { animationEnabled: false };
     models = {
       colorService,
       layoutService,
       themeService,
-      chartModel: { query: { getViewHandler: sandbox.stub().returns(viewHandler) } },
+      chartModel: { query: { animationEnabled: sandbox.stub() } },
     };
     context = { rtl: false, localeInfo: 'valid localeInfo' };
   });
@@ -360,14 +358,14 @@ describe('createRefLineLabels', () => {
     let key;
 
     describe('enabled', () => {
-      it('should be true if animation is enabled in viewHandler', () => {
-        viewHandler.animationEnabled = true;
+      it('should be true if animation is enabled in chartModel', () => {
+        models.chartModel.query.animationEnabled.returns(true);
         const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
         expect(refLineLabels.animations.enabled()).to.equal(true);
       });
 
-      it('should be false if animation is not enabled in viewHandler', () => {
-        viewHandler.animationEnabled = false;
+      it('should be false if animation is not enabled in chartModel', () => {
+        models.chartModel.query.animationEnabled.returns(false);
         const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
         expect(refLineLabels.animations.enabled()).to.equal(false);
       });

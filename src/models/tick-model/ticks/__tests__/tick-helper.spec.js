@@ -213,7 +213,7 @@ describe('getSize', () => {
     dockService = { meta: { chart: { size: { width: 100, height: 50 } } } };
     sandbox.stub(KEYS, 'COMPONENT').value({ POINT: 'point-component', HEAT_MAP: 'heat-map' });
     chart = { component: sandbox.stub() };
-    chartModel = { query: { isPrelayout: sandbox.stub() } };
+    chartModel = { query: { getMeta: sandbox.stub() } };
     layoutService = { meta: { isSnapshot: undefined } };
     create = () => tickHelper.getSize(dockService, chartModel, chart, dimension, layoutService);
   });
@@ -229,26 +229,26 @@ describe('getSize', () => {
   });
 
   it('should return correct size if prelayout is true and dimension is width', () => {
-    chartModel.query.isPrelayout.returns(true);
+    chartModel.query.getMeta.returns({ isPrelayout: true });
     dimension = 'width';
     expect(create()).to.equal(100);
   });
 
   it('should return correct size if prelayout is true and dimension is height', () => {
-    chartModel.query.isPrelayout.returns(true);
+    chartModel.query.getMeta.returns({ isPrelayout: true });
     dimension = 'height';
     expect(create()).to.equal(50);
   });
 
   it('should return correct size if prelayout is false and dimension is width for nomal data', () => {
-    chartModel.query.isPrelayout.returns(false);
+    chartModel.query.getMeta.returns({ isPrelayout: false });
     dimension = 'width';
     chart.component.withArgs('point-component').returns({ rect: { computedPhysical: { width: 80, height: 40 } } });
     expect(create()).to.equal(80);
   });
 
   it('should return correct size if prelayout is false and dimension is height for nomal data', () => {
-    chartModel.query.isPrelayout.returns(false);
+    chartModel.query.getMeta.returns({ isPrelayout: false });
     dimension = 'height';
     chart.component.withArgs('point-component').returns({ rect: { computedPhysical: { width: 80, height: 40 } } });
     chart.component.withArgs('heat-map').returns({ rect: { computedPhysical: { width: 0, height: 0 } } });
@@ -256,14 +256,14 @@ describe('getSize', () => {
   });
 
   it('should return correct size if prelayout is false and dimension is width for bin data', () => {
-    chartModel.query.isPrelayout.returns(false);
+    chartModel.query.getMeta.returns({ isPrelayout: false });
     dimension = 'width';
     chart.component.withArgs('heat-map').returns({ rect: { computedPhysical: { width: 100, height: 50 } } });
     expect(create()).to.equal(100);
   });
 
   it('should return correct size if prelayout is false and dimension is height for bin data', () => {
-    chartModel.query.isPrelayout.returns(false);
+    chartModel.query.getMeta.returns({ isPrelayout: false });
     dimension = 'height';
     chart.component.withArgs('point-component').returns({ rect: { computedPhysical: { width: 0, height: 0 } } });
     chart.component.withArgs('heat-map').returns({ rect: { computedPhysical: { width: 100, height: 50 } } });
