@@ -366,7 +366,7 @@ describe('chart-model', () => {
         expect(chart.update).to.have.been.called;
       });
 
-      it('should trigger chart.update even ticks length is updated', async () => {
+      it('should trigger chart.update when ticks length is updated', async () => {
         sandbox.useFakeTimers();
         const { clock } = sandbox;
         viewHandler.getMeta.returns({
