@@ -1,6 +1,6 @@
 export default {
   AXIS: {
-    X: 'SMALL',
+    X: 'XSMALL',
     Y: 'XSMALL',
   },
   AXIS_TITLE: {
