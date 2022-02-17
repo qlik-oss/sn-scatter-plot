@@ -49,7 +49,7 @@ export default function createAxes({ models }) {
             paddingEnd: NUMBERS.AXIS.X.PADDING.END,
           },
           animations: {
-            enabled: () => viewHandler.animationEnabled,
+            enabled: () => chartModel.query.animationEnabled(),
             trackBy,
             compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
               if (currentRect.width !== previousRect.width) {
@@ -95,7 +95,7 @@ export default function createAxes({ models }) {
               yAxis.show === 'title' || viewHandler.getMeta().isHomeState === false ? 0 : NUMBERS.AXIS.Y.PADDING.END,
           },
           animations: {
-            enabled: () => viewHandler.animationEnabled,
+            enabled: () => chartModel.query.animationEnabled(),
             trackBy,
             compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
               if (dockService.meta.y.dock === 'right') {

@@ -1,4 +1,6 @@
+import extend from 'extend';
 import KEYS from '../../constants/keys';
+import NUMBERS from '../../constants/numbers';
 import createViewHandler from '../../view-handler';
 import getFormatPatternFromRange from './format-pattern-from-range';
 import shouldUpdateTicks from './should-update-ticks';
@@ -84,8 +86,15 @@ export default function createChartModel({
     ];
   };
 
+  const meta = {
+    isPrelayout: true,
+    previousConstraints: undefined,
+    updateWithSettings: undefined,
+    constraintsHaveChanged: undefined,
+  };
+
   function updatePartial() {
-    viewHandler.setMeta({ updateWithSettings: false });
+    meta.updateWithSettings = false;
     requestAnimationFrame(() => {
       // TODO: cancel requests as well to optimize???
       // const startTime = Date.now();
@@ -116,13 +125,15 @@ export default function createChartModel({
   ];
 
   const update = ({ settings } = {}) => {
+    meta.updateWithSettings = !!settings;
     trendLinesService.update();
-    viewHandler.setMeta({ updateWithSettings: !!settings });
     chart.update({
       data: getData(),
       settings,
     });
   };
+
+  let miniChartOn = false;
 
   const miniChartEnabled = () => {
     const dataView = viewHandler.getDataView();
@@ -139,7 +150,19 @@ export default function createChartModel({
     );
   };
 
-  let miniChartOn = false;
+  const animationEnabled = () => {
+    const interactionInProgress = viewHandler.getInteractionInProgress();
+    if (interactionInProgress || !meta.updateWithSettings || meta.constraintsHaveChanged) {
+      return false;
+    }
+
+    if (layoutService.meta.isBigData) {
+      return true;
+    }
+
+    return layoutService.getHyperCubeValue('qSize.qcy', 0) <= NUMBERS.MAX_NR_ANIMATION && !interactionInProgress;
+  };
+
   let updateTicks = false;
   const updateTicksState = [];
 
@@ -175,8 +198,6 @@ export default function createChartModel({
 
   viewState.onChanged('dataView', handleDataViewUpdate);
 
-  const state = { isPrelayout: true };
-
   const chartModel = {
     query: {
       getViewState: () => viewState,
@@ -184,16 +205,20 @@ export default function createChartModel({
       getDataHandler: () => dataHandler,
       getLocaleInfo: () => localeInfo,
       getFormatPattern: (scaleName) => getFormatPatternFromRange(scaleName, viewHandler, layoutService),
-      isPrelayout: () => state.isPrelayout,
+      getMeta: () => meta,
+      animationEnabled,
       miniChartEnabled,
     },
     command: {
+      setMeta(newMeta) {
+        extend(meta, newMeta);
+      },
       layoutComponents: ({ settings } = {}) => {
         chart.layoutComponents({
           data: getData(),
           settings,
         });
-        state.isPrelayout = false;
+        meta.isPrelayout = false;
       },
       update,
     },

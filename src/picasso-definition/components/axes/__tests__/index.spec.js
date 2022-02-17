@@ -72,10 +72,11 @@ describe('axes', () => {
     };
     themeService = { getStyles: () => style };
     isHomeState = false;
-    viewHandler = { getMeta: sandbox.stub().returns(isHomeState), animationEnabled: false };
+    viewHandler = { getMeta: sandbox.stub().returns(isHomeState) };
     chartModel = {
       query: {
         getViewHandler: () => viewHandler,
+        animationEnabled: sandbox.stub(),
       },
     };
     models = { layoutService, dockService, themeService, chartModel };
@@ -147,13 +148,13 @@ describe('axes', () => {
 
   describe('animations for x axis', () => {
     describe('enabled', () => {
-      it('should be true if animation is enabled in viewHandler', () => {
-        viewHandler.animationEnabled = true;
+      it('should be true if animation is enabled in chartModel', () => {
+        chartModel.query.animationEnabled.returns(true);
         expect(axes[0].animations.enabled()).to.equal(true);
       });
 
-      it('should be false if animation is not enabled in viewHandler', () => {
-        viewHandler.animationEnabled = false;
+      it('should be false if animation is not enabled in chartModel', () => {
+        chartModel.query.animationEnabled.returns(false);
         expect(axes[0].animations.enabled()).to.equal(false);
       });
     });
@@ -191,13 +192,13 @@ describe('axes', () => {
 
   describe('animations for y axis', () => {
     describe('enabled', () => {
-      it('should be true if animation is enabled in viewHandler', () => {
-        viewHandler.animationEnabled = true;
+      it('should be true if animation is enabled in chartModel', () => {
+        chartModel.query.animationEnabled.returns(true);
         expect(axes[1].animations.enabled()).to.equal(true);
       });
 
-      it('should be false if animation is not enabled in viewHandler', () => {
-        viewHandler.animationEnabled = false;
+      it('should be true if animation is enabled in chartModel', () => {
+        chartModel.query.animationEnabled.returns(false);
         expect(axes[1].animations.enabled()).to.equal(false);
       });
     });
