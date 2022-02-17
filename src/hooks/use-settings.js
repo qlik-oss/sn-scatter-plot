@@ -14,7 +14,6 @@ import customTooltipMigrators from '../custom-tooltip/migrators';
 import createPicassoDefinition from '../picasso-definition';
 import getLogicalSize from '../logical-size';
 import { initializeViewState, updateViewState } from './view-state';
-import objectHelper from '../utils/object-helper';
 
 const useSettings = ({ core, models, flags }) => {
   const rect = useRect();
@@ -84,7 +83,7 @@ const useSettings = ({ core, models, flags }) => {
     }
 
     const { chartModel } = models;
-    if (objectHelper.isEqual(constraints, chartModel.query.getMeta().previousConstraints)) {
+    if (JSON.stringify(constraints) === JSON.stringify(chartModel.query.getMeta().previousConstraints)) {
       chartModel.command.setMeta({ constraintsHaveChanged: false });
     } else {
       chartModel.command.setMeta({ constraintsHaveChanged: true });

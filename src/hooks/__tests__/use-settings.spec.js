@@ -3,7 +3,6 @@ import * as stardust from '@nebula.js/stardust';
 import * as createPicassoDefinition from '../../picasso-definition';
 import * as getLogicalSize from '../../logical-size';
 import * as viewStateActions from '../view-state';
-import objectHelper from '../../utils/object-helper';
 import customTooltipMigrators from '../../custom-tooltip/migrators';
 import useSettings from '../use-settings';
 
@@ -77,7 +76,6 @@ describe('use-settings', () => {
     sandbox.stub(viewStateActions, 'initializeViewState');
     sandbox.stub(viewStateActions, 'updateViewState');
     sandbox.stub(customTooltipMigrators.attrExpr, 'updateProperties');
-    sandbox.stub(objectHelper, 'isEqual');
     create = () => useSettings({ core, models, flags });
   });
 
@@ -144,14 +142,26 @@ describe('use-settings', () => {
         expect(result).to.equal(undefined);
       });
 
-      it('should call chartModel setMeta correctly', () => {
-        objectHelper.isEqual.returns(true);
+      it('should call chartModel setMeta correctly, case 1: normal resize', () => {
+        stardust.useConstraints.returns({});
+        chartModel.query.getMeta.returns({ previousConstraints: {} });
+        create();
+        fn = stardust.useEffect.getCall(2).args[0];
         fn();
-        expect(chartModel.command.setMeta).to.have.been.calledWithExactly({ constraintsHaveChanged: false });
+        expect(chartModel.command.setMeta.firstCall).to.have.been.calledWithExactly({ constraintsHaveChanged: false });
+        expect(chartModel.command.setMeta.secondCall).to.have.been.calledWithExactly({ previousConstraints: {} });
+      });
 
-        objectHelper.isEqual.returns(false);
+      it('should call chartModel setMeta correctly, case 2: resize accompanied by constraints changed', () => {
+        stardust.useConstraints.returns({});
+        chartModel.query.getMeta.returns({ previousConstraints: { active: false } });
+        create();
+        fn = stardust.useEffect.getCall(2).args[0];
         fn();
-        expect(chartModel.command.setMeta).to.have.been.calledWithExactly({ constraintsHaveChanged: true });
+        expect(chartModel.command.setMeta.firstCall).to.have.been.calledWithExactly({ constraintsHaveChanged: true });
+        expect(chartModel.command.setMeta.secondCall).to.have.been.calledWithExactly({
+          previousConstraints: {},
+        });
       });
 
       it('should call setSettings with the new settings ', () => {
