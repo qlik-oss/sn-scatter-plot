@@ -65,8 +65,7 @@ export default function createTickModel({
 
     const { min, max, explicitType, distance, size, measure } = getChartProperties(axis);
     const scale = scaleLinear().domain([min, max]);
-    const formatter = chart.formatters()[axis];
-    const tickObject = getTicks({ scale, explicitType, distance, size, measure, formatter });
+    const tickObject = getTicks({ scale, explicitType, distance, size, measure, formatter: chart.formatters()[axis] });
     if (prop === 'ticks' && axis === KEYS.SCALE.Y) {
       yTicks = tickObject.ticks;
     }
