@@ -31,7 +31,6 @@ describe('heat-map', () => {
     viewHandler = {
       getDataView: sandbox.stub().returns({ xAxisMin: 0, xAxisMax: 4000, yAxisMin: 0, yAxisMax: 10 }),
       transform: 'transform-function',
-      animationEnabled: undefined,
     };
     dataHandler = {
       binArray: [{ qText: [2100, 5, 2200, 4], qNum: 10, qElemNumber: 7964 }],
@@ -42,6 +41,7 @@ describe('heat-map', () => {
       query: {
         getViewHandler: () => viewHandler,
         getDataHandler: () => dataHandler,
+        animationEnabled: sandbox.stub(),
       },
     };
 
@@ -142,13 +142,13 @@ describe('heat-map', () => {
 
     describe('animations', () => {
       describe('enabled', () => {
-        it('should be true if animation is enabled in viewHandler', () => {
-          viewHandler.animationEnabled = true;
+        it('should be true if animation is enabled in chartModel', () => {
+          chartModel.query.animationEnabled.returns(true);
           expect(create().animations.enabled()).to.equal(true);
         });
 
-        it('should be false if animation is not enabled in viewHandler', () => {
-          viewHandler.animationEnabled = false;
+        it('should be false if animation is not enabled in chartModel', () => {
+          chartModel.query.animationEnabled.returns(false);
           expect(create().animations.enabled()).to.equal(false);
         });
       });

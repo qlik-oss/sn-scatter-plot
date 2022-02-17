@@ -35,7 +35,6 @@ export default function createRefLineLabels({ models, context, scale, key, dock,
   const { rtl, localeInfo } = context;
   const themeStyle = themeService.getStyles();
   const theme = themeService.getTheme();
-  const viewHandler = chartModel.query.getViewHandler();
 
   const path = scale === KEYS.SCALE.X ? 'refLine.refLinesX' : 'refLine.refLinesY';
   const refLineLabels = layoutService
@@ -96,7 +95,7 @@ export default function createRefLineLabels({ models, context, scale, key, dock,
       },
     },
     animations: {
-      enabled: () => viewHandler.animationEnabled,
+      enabled: () => chartModel.query.animationEnabled(),
       trackBy: (node) => `${node.labelID}: ${node.text}`,
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         const deltaX = currentRect.x - previousRect.x;

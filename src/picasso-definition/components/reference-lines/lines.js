@@ -2,7 +2,6 @@
 import KEYS from '../../../constants/keys';
 
 export default function createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode }) {
-  const viewHandler = chartModel.query.getViewHandler();
   const path = scale === KEYS.SCALE.X ? 'refLine.refLinesX' : 'refLine.refLinesY';
   const refLines = layoutService
     .getLayoutValue(path)
@@ -30,7 +29,7 @@ export default function createRefLines({ colorService, layoutService, chartModel
       },
     },
     animations: {
-      enabled: () => viewHandler.animationEnabled,
+      enabled: () => chartModel.query.animationEnabled(),
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         switch (scale) {
           case KEYS.SCALE.X:

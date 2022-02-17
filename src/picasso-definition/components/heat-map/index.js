@@ -60,7 +60,7 @@ export default function createHeatMap(chartModel) {
     },
 
     animations: {
-      enabled: () => viewHandler.animationEnabled,
+      enabled: () => chartModel.query.animationEnabled(),
       trackBy: (node, i) => {
         // If it is a current node (dataHanler.binArray contains current nodes)
         // Or it is an old node, but oldNodes and currentNodes are identical (corner case: select all)

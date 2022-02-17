@@ -45,8 +45,11 @@ describe('use-settings', () => {
     dataHandler = { fetch: sandbox.stub().resolves() };
     layoutService = { getLayout: sandbox.stub() };
     chartModel = {
-      query: { getDataHandler: sandbox.stub().returns(dataHandler) },
-      command: { layoutComponents: sandbox.stub() },
+      query: {
+        getDataHandler: sandbox.stub().returns(dataHandler),
+        getMeta: sandbox.stub().returns({ previousConstraints: undefined }),
+      },
+      command: { layoutComponents: sandbox.stub(), setMeta: sandbox.stub() },
     };
     pluginService = { initialize: sandbox.stub().resolves() };
     propertiesModel = { command: { initialize: sandbox.stub().resolves() } };
@@ -73,7 +76,6 @@ describe('use-settings', () => {
     sandbox.stub(viewStateActions, 'initializeViewState');
     sandbox.stub(viewStateActions, 'updateViewState');
     sandbox.stub(customTooltipMigrators.attrExpr, 'updateProperties');
-
     create = () => useSettings({ core, models, flags });
   });
 
@@ -115,33 +117,86 @@ describe('use-settings', () => {
     });
   });
 
-  describe('useEffect', () => {
-    it('should resolve to nothing (undefined) when colorService is not initialized ', async () => {
-      colorService.isInitialized.returns(false);
-      create();
-      fn = stardust.usePromise.getCall(0).args[0];
-      const result = await fn();
-      expect(result).to.equal(undefined);
-    });
-
+  describe('useEffect 1', () => {
     it('should have the second argument being an array with correct elements', () => {
       create();
       conditionArray = stardust.useEffect.getCall(0).args[1];
-      expect(conditionArray).to.deep.equal([100, 200, 300]);
+      expect(conditionArray).to.deep.equal([100, 200]);
     });
 
     describe('the function in the arugment list', () => {
-      it('should resolve to nothing (undefined) when models are not defined', () => {
-        models = undefined;
+      beforeEach(() => {
         create();
         fn = stardust.useEffect.getCall(0).args[0];
+      });
+
+      it('should resolve to nothing (undefined) when models are not defined', () => {
+        models = undefined;
+        const result = fn();
+        expect(result).to.equal(undefined);
+      });
+
+      it('should resolve to nothing (undefined) when colorService are not initialized', () => {
+        colorService.isInitialized.returns(false);
+        const result = fn();
+        expect(result).to.equal(undefined);
+      });
+
+      it('should call chartModel setMeta correctly, case 1: normal resize', () => {
+        stardust.useConstraints.returns({});
+        chartModel.query.getMeta.returns({ previousConstraints: {} });
+        create();
+        fn = stardust.useEffect.getCall(2).args[0];
+        fn();
+        expect(chartModel.command.setMeta.firstCall).to.have.been.calledWithExactly({ constraintsHaveChanged: false });
+        expect(chartModel.command.setMeta.secondCall).to.have.been.calledWithExactly({ previousConstraints: {} });
+      });
+
+      it('should call chartModel setMeta correctly, case 2: resize accompanied by constraints changed', () => {
+        stardust.useConstraints.returns({});
+        chartModel.query.getMeta.returns({ previousConstraints: { active: false } });
+        create();
+        fn = stardust.useEffect.getCall(2).args[0];
+        fn();
+        expect(chartModel.command.setMeta.firstCall).to.have.been.calledWithExactly({ constraintsHaveChanged: true });
+        expect(chartModel.command.setMeta.secondCall).to.have.been.calledWithExactly({
+          previousConstraints: {},
+        });
+      });
+
+      it('should call setSettings with the new settings ', () => {
+        fn();
+        expect(setSettings).to.have.been.calledWithExactly('new-settings');
+      });
+    });
+  });
+
+  describe('useEffect 2', () => {
+    it('should have the second argument being an array with correct elements', () => {
+      create();
+      conditionArray = stardust.useEffect.getCall(1).args[1];
+      expect(conditionArray).to.deep.equal([300]);
+    });
+
+    describe('the function in the arugment list', () => {
+      beforeEach(() => {
+        create();
+        fn = stardust.useEffect.getCall(1).args[0];
+      });
+
+      it('should resolve to nothing (undefined) when models are not defined', () => {
+        models = undefined;
+        const result = fn();
+        expect(result).to.equal(undefined);
+      });
+
+      it('should resolve to nothing (undefined) when colorService are not initialized', () => {
+        colorService.isInitialized.returns(false);
         const result = fn();
         expect(result).to.equal(undefined);
       });
 
       it('should call setSettings with the new settings ', () => {
-        create();
-        fn = stardust.useEffect.getCall(0).args[0];
         fn();
         expect(setSettings).to.have.been.calledWithExactly('new-settings');
       });

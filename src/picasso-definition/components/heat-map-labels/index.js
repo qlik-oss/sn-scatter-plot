@@ -45,7 +45,7 @@ export default function createHeatMapLabels({ themeService, chartModel, picasso,
       ],
     },
     animations: {
-      enabled: () => viewHandler.animationEnabled,
+      enabled: () => chartModel.query.animationEnabled(),
       trackBy: () => Math.random(),
     },
     rendererSettings: {
