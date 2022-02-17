@@ -71,12 +71,6 @@ const tickHelper = {
     const heatMapDimension = chart.component(KEYS.COMPONENT.HEAT_MAP)?.rect.computedPhysical[dimension];
     return Math.max(...[pointDimension, heatMapDimension].filter(Number.isFinite));
   },
-
-  shouldUpdateTicksLength(yTicks, tickObject) {
-    const oldLength = Math.max(...yTicks.ticks.map((t) => t.value.toString().length));
-    const newLength = Math.max(...tickObject.ticks.map((t) => t.value.toString().length));
-    return newLength > oldLength;
-  },
 };
 
 export default tickHelper;

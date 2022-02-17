@@ -12,12 +12,7 @@ export default function createTickModel({
   chartModel,
   chart,
 }) {
-  const viewHandler = chartModel.query.getViewHandler();
   let yTicks;
-  // if (viewHandler.getMeta().updateTicks) {
-  //   chart.update();
-  //   viewHandler.setMeta({ updateTicks: false });
-  // }
   function getChartProperties(axis) {
     let min;
     let max;
@@ -73,11 +68,7 @@ export default function createTickModel({
     const formatter = chart.formatters()[axis];
     const tickObject = getTicks({ scale, explicitType, distance, size, measure, formatter });
     if (prop === 'ticks' && axis === KEYS.SCALE.Y) {
-      if (yTicks) {
-        const updateTicks = tickHelper.shouldUpdateTicksLength(yTicks, tickObject, formatter);
-        viewHandler.setMeta({ updateTicks });
-      }
-      yTicks = { ...tickObject };
+      yTicks = tickObject.ticks;
     }
     return prop === 'ticks' ? tickObject.ticks : tickObject.minMax;
   }
@@ -88,6 +79,7 @@ export default function createTickModel({
       getYTicks: () => resolve(KEYS.SCALE.Y, 'ticks'),
       getXMinMax: () => resolve(KEYS.SCALE.X, 'minMax'),
       getYMinMax: () => resolve(KEYS.SCALE.Y, 'minMax'),
+      getCurrentYTicks: () => yTicks,
     },
   };
 }

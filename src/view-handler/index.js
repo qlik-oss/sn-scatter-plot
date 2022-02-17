@@ -20,7 +20,6 @@ export default function createViewHandler({ viewState, extremumModel, layoutServ
     minScale: 2 ** -9.1,
     isHomeState: true,
     updateWithSettings: undefined,
-    updateTicks: false,
   };
   let interactionInProgress = false;
 

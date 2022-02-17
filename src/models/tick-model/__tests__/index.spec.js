@@ -56,7 +56,13 @@ describe('createTickModel', () => {
 
   describe('query', () => {
     it('should expose correct methods', () => {
-      expect(create().query).to.have.all.keys(['getXTicks', 'getYTicks', 'getXMinMax', 'getYMinMax']);
+      expect(create().query).to.have.all.keys([
+        'getXTicks',
+        'getYTicks',
+        'getXMinMax',
+        'getYMinMax',
+        'getCurrentYTicks',
+      ]);
     });
 
     describe('getXTicks', () => {
@@ -185,6 +191,33 @@ describe('createTickModel', () => {
         const model = create();
         const minMax = model.query.getYMinMax();
         expect(minMax).to.deep.equal('correct minMax');
+      });
+    });
+
+    describe('getCurrentYTicks', () => {
+      it('should return correct Y ticks', () => {
+        layoutService.getHyperCubeValue.withArgs('qMeasureInfo.1.qIsAutoFormat', false).returns(false);
+        extremumModel.query.getYExtrema.returns({
+          yAxisMin: 0,
+          yAxisMax: 300,
+          yAxisExplicitType: 'minMax',
+        });
+        tickHelper.getSize.returns(400);
+        tickHelper.getDistance.returns(100);
+        getTicks.default
+          .withArgs({
+            scale: 'correct scale',
+            explicitType: 'minMax',
+            distance: 100,
+            size: 400,
+            measure: sinon.match.func,
+            formatter: sinon.match.object,
+          })
+          .returns({ ticks: 'correct ticks', minMax: 'correct minMax' });
+        const model = create();
+        model.query.getYTicks();
+        ticks = model.query.getCurrentYTicks();
+        expect(ticks).to.deep.equal('correct ticks');
       });
     });
   });
