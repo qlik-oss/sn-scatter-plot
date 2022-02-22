@@ -12,7 +12,14 @@ export default function createExtremumModel(layoutService, viewStateOptions = {}
     let maxFromLayout = layoutService.getHyperCubeValue(`${measurePath}.qMax`, 1);
     const dataPages = layoutService.getLayoutValue('dataPages');
     if (minFromLayout === maxFromLayout && isBinnedData(layoutService) && dataPages?.length) {
-      const { min, max } = getBinMinMax({ layoutService, scaleName });
+      let { min, max } = getBinMinMax({ layoutService, scaleName });
+      const delta = 15 * (max - min);
+      if (max !== minFromLayout) {
+        max += delta;
+      }
+      if (min !== minFromLayout) {
+        min -= delta;
+      }
       minFromLayout = Math.min(minFromLayout, min);
       maxFromLayout = Math.max(maxFromLayout, max);
     }
