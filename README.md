@@ -120,12 +120,23 @@ nuked.render({
   type: 'scatterplot',
   fields: ['TransID', '=Sum(Expression1)', '=Sum(Expression2)'],
   properties: {
-    compressionResolution: 2, // Resolution of bins, smaller number <-> more points per bin
+    compressionResolution: 2, // queryLevel of bins, smaller number <-> more points per bin
   },
 });
 ```
 
-### Linear regression best fit line can be turned on
+### Best fit line can be turned on
+
+Supported types:
+
+- Linear
+- Average
+- Second degree polynomial
+- Third degree polynomial
+- Forth degree polynomial
+- Exponential
+- Logarithmic
+- Power
 
 ![scatter plot best fit line](assets/sn-scatter-plot-best-fit-line.png)
 
