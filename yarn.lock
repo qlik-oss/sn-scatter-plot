@@ -9892,10 +9892,10 @@ q@^1.5.1:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
-qlik-chart-modules@0.30.0:
-  version "0.30.0"
-  resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.30.0.tgz#9bac42229d94942e0bfab04dfb3e620d83a06d02"
-  integrity sha512-tfXBmpxDU7XT4gcQS+OCdrP/nHpuD6EvILQY2Or7DwXyMc1oul9vPPRURYGf/MFR/u/J/USbaLiptEVIDcky0g==
+qlik-chart-modules@0.31.0:
+  version "0.31.0"
+  resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.31.0.tgz#e69f2a9abb435fbe7447fb78327c488496a6d1f0"
+  integrity sha512-fd4ViSU/U6YhtmOImACaeRhBe0Rex2Y/M80ka82/9gfsazoxXDW4qkjPcOul3cOML6Rl3+YXMJvTYSLCYaU6lQ==
 
 qlik-modifiers@0.5.1:
   version "0.5.1"
