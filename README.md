@@ -69,13 +69,13 @@ nuked.render({
   properties: {
     qHyperCubeDef: {
       qMeasures: [
-        // Register measure 1 in properties to insert color expression
         {
           qDef: {
             qDef: 'Sum(Expression1)',
           },
           qAttributeExpressions: [
             {
+              // Insert color expression
               qExpression: "if(sum(Expression2) > 0.0096*sum(Expression1), 'red', 'green')",
               id: 'colorByExpression',
             },
