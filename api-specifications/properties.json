@@ -201,6 +201,11 @@
               "defaultValue": 5,
               "type": "number"
             },
+            "queryLevel": {
+              "description": "Resolution settings for compressed data.",
+              "defaultValue": 6,
+              "type": "number"
+            },
             "rangeBubbleSizes": {
               "description": "Bubble sizes. Represented as an array of two integers where the first index is the from-size and the second the to-size. From-size needs to be smaller. Only applicable when there is a third neasure.",
               "defaultValue": "5",
@@ -493,6 +498,13 @@
               ],
               "type": "any"
             }
+          }
+        },
+        "trendLines": {
+          "description": "Array of trend lines",
+          "kind": "array",
+          "items": {
+            "type": "any"
           }
         },
         "version": {

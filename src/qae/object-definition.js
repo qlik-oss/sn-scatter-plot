@@ -176,6 +176,12 @@ const objectDefinition = () => {
        * @default 5
        */
       rangeBubbleSizes: [2, 8],
+      /**
+       * Resolution settings for compressed data.
+       * @type {number}
+       * @default 6
+       */
+      queryLevel: 6,
     },
     /**
      * Set to enable or disable navigation menu.
@@ -281,6 +287,11 @@ const objectDefinition = () => {
        */
       refLinesY: [],
     },
+    /**
+     * Array of trend lines
+     * @type {array}
+     */
+    trendLines: [],
     /**
      * Show visualization details toggle
      * @type {boolean=}
