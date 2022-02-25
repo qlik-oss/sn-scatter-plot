@@ -12,7 +12,7 @@ The scatter plot uses bubbles or dots to represent values of two or three measur
 
 ## Requirements
 
-Requires `@nebula.js/stardust` version `1.2.0` or later.
+Requires `@nebula.js/stardust` version `2.3.0` or later.
 
 ## Installing
 
@@ -54,6 +54,143 @@ nuked.render({
 
 - direction - ltr/rtl
 - freeResize - in conjunction with snapshotData on layout, lets the chart ignore size set on snapshotData
+
+## More examples
+
+### Color bubbles by an expression
+
+![scatter plot color by expression](assets/sn-scatter-plot-color-by-expression.png)
+
+```js
+nuked.render({
+  element: document.getElementById('object'),
+  type: 'scatterplot',
+  fields: ['Alpha', '=Sum(Expression2)'],
+  properties: {
+    qHyperCubeDef: {
+      qMeasures: [
+        {
+          qDef: {
+            qDef: 'Sum(Expression1)',
+          },
+          qAttributeExpressions: [
+            {
+              // Insert color expression
+              qExpression: "if(sum(Expression2) > 0.0096*sum(Expression1), 'red', 'green')",
+              id: 'colorByExpression',
+            },
+          ],
+        },
+      ],
+    },
+    color: {
+      auto: false,
+      mode: 'byExpression',
+      expressionIsColor: true,
+    },
+  },
+});
+```
+
+### Navigation panel can be turned on to make browsing chart easier
+
+![scatter plot navigation](assets/sn-scatter-plot-navigation.png)
+
+```js
+nuked.render({
+  element: document.getElementById('object'),
+  type: 'scatterplot',
+  fields: ['Alpha', '=Sum(Expression1)', '=Sum(Expression2)'],
+  properties: {
+    navigation: true,
+  },
+});
+```
+
+### Binned data is turned on automatically if there are more than 1000 data points
+
+When zoomed in or panned outside of the home view, the chart shows an interactive
+mini map and home button to help with navigating and resetting the view.
+
+![scatter plot binned data](assets/sn-scatter-plot-binned-data.png)
+
+```js
+nuked.render({
+  element: document.getElementById('object'),
+  type: 'scatterplot',
+  fields: ['TransID', '=Sum(Expression1)', '=Sum(Expression2)'],
+  properties: {
+    compressionResolution: 2, // queryLevel of bins, smaller number <-> more points per bin
+  },
+});
+```
+
+### Best fit line can be turned on
+
+Supported types:
+
+- Linear
+- Average
+- Second degree polynomial
+- Third degree polynomial
+- Forth degree polynomial
+- Exponential
+- Logarithmic
+- Power
+
+![scatter plot best fit line](assets/sn-scatter-plot-best-fit-line.png)
+
+```js
+const nuked = window.stardust.embed(app, {
+  context: { theme: 'light' },
+  types: [
+    {
+      name: 'scatterplot',
+      load: () => Promise.resolve(window['sn-scatter-plot']),
+    },
+  ],
+  flags: { BEST_FIT_LINE: true }, // Still experimental
+});
+
+nuked.render({
+  element: document.getElementById('object'),
+  type: 'scatterplot',
+  properties: {
+    qHyperCubeDef: {
+      qDimensions: [
+        {
+          qDef: {
+            qFieldDefs: ['Alpha'],
+          },
+        },
+      ],
+      qMeasures: [
+        {
+          qDef: {
+            qDef: 'Sum(Expression1)',
+          },
+        },
+        {
+          qDef: {
+            qDef: 'Sum(Expression2)',
+          },
+          qTrendLines: [
+            {
+              qType: 'LINEAR',
+              qXColIx: 1, // The column in the hypercube to be used as x axis.
+              style: {
+                autoColor: true,
+                dashed: true,
+                lineDash: '8, 4',
+              },
+            },
+          ],
+        },
+      ],
+    },
+  },
+});
+```
 
 ## Scatter plot plugins
 
