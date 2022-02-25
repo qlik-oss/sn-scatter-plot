@@ -3,7 +3,7 @@ import NUMBERS from '../constants/numbers';
 import populateBins from '../utils/bins-util';
 
 export default function createBinnedDataFetcher({ layoutService, extremumModel, model }) {
-  const DEFAULT_RESOLUTION_LEVEL = 6;
+  const DEFAULT_RESOLUTION_LEVEL = 5;
   const MAX_RESOLUTION_LEVEL = 8;
   const bins = [];
   let maxBinDensity = 0;

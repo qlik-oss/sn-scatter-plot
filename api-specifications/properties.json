@@ -203,7 +203,7 @@
             },
             "compressionResolution": {
               "description": "Resolution settings for compressed data.",
-              "defaultValue": 6,
+              "defaultValue": 5,
               "type": "number"
             },
             "rangeBubbleSizes": {
@@ -504,7 +504,7 @@
           "description": "Array of trend lines",
           "kind": "array",
           "items": {
-            "type": "any"
+            "type": "#/definitions/trendLine"
           }
         },
         "version": {
@@ -978,6 +978,53 @@
                 }
               ],
               "type": "any"
+            }
+          }
+        }
+      }
+    },
+    "trendLine": {
+      "kind": "object",
+      "entries": {
+        "label": {
+          "description": "Trend line label",
+          "type": "string"
+        },
+        "qType": {
+          "description": "Trend line type, for example LINEAR or EXPONENTIAL",
+          "type": "string"
+        },
+        "flipXY": {
+          "description": "Set to true if the first measure should be the dependent variable",
+          "defaultValue": false,
+          "type": "boolean"
+        },
+        "qMultiDimMode": {
+          "description": "Determines if you get one trendline of each value in the other dimension or trendline based on the sum of the value in the other dimension",
+          "defaultValue": "\"Sum\"",
+          "type": "string"
+        },
+        "qXColIx": {
+          "description": "The column in the hypercube to be used as x axis. Related to flipXY.",
+          "type": "number"
+        },
+        "style": {
+          "kind": "object",
+          "entries": {
+            "autoColor": {
+              "defaultValue": true,
+              "type": "boolean"
+            },
+            "paletteColor": {
+              "type": "#/definitions/paletteColor"
+            },
+            "dashed": {
+              "defaultValue": true,
+              "type": "boolean"
+            },
+            "lineDash": {
+              "description": "Represent the lengths of the lines and the breaks",
+              "type": "string"
             }
           }
         }

@@ -179,9 +179,9 @@ const objectDefinition = () => {
       /**
        * Resolution settings for compressed data.
        * @type {number}
-       * @default 6
+       * @default 5
        */
-      compressionResolution: 6,
+      compressionResolution: 5,
     },
     /**
      * Set to enable or disable navigation menu.
@@ -289,7 +289,7 @@ const objectDefinition = () => {
     },
     /**
      * Array of trend lines
-     * @type {array}
+     * @type {trendLine[]}
      */
     trendLines: [],
     /**
@@ -490,6 +490,24 @@ export default objectDefinition;
  * @memberof refLine
  * @property {number|ValueExpression} value
  * @property {string|StringExpression} [label]
+ */
+
+/**
+ * @typedef {object} trendLine
+ * @property {string} label Trend line label
+ * @property {string} qType Trend line type, for example LINEAR or EXPONENTIAL
+ * @property {boolean} flipXY=false Set to true if the first measure should be the dependent variable
+ * @property {string} qMultiDimMode="Sum" Determines if you get one trendline of each value in the other dimension or trendline based on the sum of the value in the other dimension
+ * @property {number} qXColIx The column in the hypercube to be used as x axis. Related to flipXY.
+ */
+
+/**
+ * @typedef {object} style
+ * @memberof trendLine
+ * @property {boolean} autoColor=true
+ * @property {paletteColor} paletteColor
+ * @property {boolean} dashed=true
+ * @property {string} lineDash Represent the lengths of the lines and the breaks
  */
 
 /**
