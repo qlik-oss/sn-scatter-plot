@@ -507,7 +507,7 @@ export default objectDefinition;
  * @property {boolean} autoColor=true
  * @property {paletteColor} paletteColor
  * @property {boolean} dashed=true
- * @property {string} lineDash Represent the lengths of the lines and the breaks
+ * @property {string} lineDash Represents the lengths of the dashes and the breaks
  */
 
 /**
