@@ -202,6 +202,7 @@ describe('tooltip-service', () => {
         expect(triggers).to.deep.equal([
           {
             keys: ['point'],
+            distance: 3,
             collect: {
               from: 'position',
             },
@@ -209,6 +210,7 @@ describe('tooltip-service', () => {
           },
           {
             keys: ['heat-map'],
+            distance: 1,
             collect: {
               from: 'single',
             },

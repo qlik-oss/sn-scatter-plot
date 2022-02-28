@@ -44,6 +44,7 @@ export default function createTooltipService({
         triggers: [
           {
             keys: [KEYS.COMPONENT.POINT],
+            distance: 3,
             collect: {
               from: 'position',
             },
@@ -51,6 +52,7 @@ export default function createTooltipService({
           },
           {
             keys: [KEYS.COMPONENT.HEAT_MAP],
+            distance: 1,
             collect: {
               from: 'single',
             },
