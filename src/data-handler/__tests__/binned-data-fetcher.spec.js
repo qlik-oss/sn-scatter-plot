@@ -162,7 +162,7 @@ describe('createBinnedDataFetcher', () => {
             },
           ],
           1000,
-          6,
+          5,
           0
         )
       ).to.have.been.calledOnce;
