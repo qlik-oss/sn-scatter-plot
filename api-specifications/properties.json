@@ -1000,7 +1000,7 @@
           "type": "boolean"
         },
         "qMultiDimMode": {
-          "description": "Determines if you get one trendline of each value in the other dimension or trendline based on the sum of the value in the other dimension",
+          "description": "Not applicable for scatter plot since it has only one dimension",
           "defaultValue": "\"Sum\"",
           "type": "string"
         },
@@ -1023,7 +1023,7 @@
               "type": "boolean"
             },
             "lineDash": {
-              "description": "Represent the lengths of the lines and the breaks",
+              "description": "Represents the lengths of the dashes and the breaks",
               "type": "string"
             }
           }
