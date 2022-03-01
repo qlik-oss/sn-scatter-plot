@@ -176,6 +176,12 @@ const objectDefinition = () => {
        * @default 5
        */
       rangeBubbleSizes: [2, 8],
+      /**
+       * Resolution settings for compressed data.
+       * @type {number}
+       * @default 5
+       */
+      compressionResolution: 5,
     },
     /**
      * Set to enable or disable navigation menu.
@@ -281,6 +287,11 @@ const objectDefinition = () => {
        */
       refLinesY: [],
     },
+    /**
+     * Array of trend lines
+     * @type {trendLine[]}
+     */
+    trendLines: [],
     /**
      * Show visualization details toggle
      * @type {boolean=}
@@ -479,6 +490,24 @@ export default objectDefinition;
  * @memberof refLine
  * @property {number|ValueExpression} value
  * @property {string|StringExpression} [label]
+ */
+
+/**
+ * @typedef {object} trendLine
+ * @property {string} label Trend line label
+ * @property {string} qType Trend line type, for example LINEAR or EXPONENTIAL
+ * @property {boolean} flipXY=false Set to true if the first measure should be the dependent variable
+ * @property {string} qMultiDimMode="Sum" Not applicable for scatter plot since it has only one dimension
+ * @property {number} qXColIx The column in the hypercube to be used as x axis. Related to flipXY.
+ */
+
+/**
+ * @typedef {object} style
+ * @memberof trendLine
+ * @property {boolean} autoColor=true
+ * @property {paletteColor} paletteColor
+ * @property {boolean} dashed=true
+ * @property {string} lineDash Represents the lengths of the dashes and the breaks
  */
 
 /**

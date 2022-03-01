@@ -201,6 +201,11 @@
               "defaultValue": 5,
               "type": "number"
             },
+            "compressionResolution": {
+              "description": "Resolution settings for compressed data.",
+              "defaultValue": 5,
+              "type": "number"
+            },
             "rangeBubbleSizes": {
               "description": "Bubble sizes. Represented as an array of two integers where the first index is the from-size and the second the to-size. From-size needs to be smaller. Only applicable when there is a third neasure.",
               "defaultValue": "5",
@@ -493,6 +498,13 @@
               ],
               "type": "any"
             }
+          }
+        },
+        "trendLines": {
+          "description": "Array of trend lines",
+          "kind": "array",
+          "items": {
+            "type": "#/definitions/trendLine"
           }
         },
         "version": {
@@ -966,6 +978,53 @@
                 }
               ],
               "type": "any"
+            }
+          }
+        }
+      }
+    },
+    "trendLine": {
+      "kind": "object",
+      "entries": {
+        "label": {
+          "description": "Trend line label",
+          "type": "string"
+        },
+        "qType": {
+          "description": "Trend line type, for example LINEAR or EXPONENTIAL",
+          "type": "string"
+        },
+        "flipXY": {
+          "description": "Set to true if the first measure should be the dependent variable",
+          "defaultValue": false,
+          "type": "boolean"
+        },
+        "qMultiDimMode": {
+          "description": "Not applicable for scatter plot since it has only one dimension",
+          "defaultValue": "\"Sum\"",
+          "type": "string"
+        },
+        "qXColIx": {
+          "description": "The column in the hypercube to be used as x axis. Related to flipXY.",
+          "type": "number"
+        },
+        "style": {
+          "kind": "object",
+          "entries": {
+            "autoColor": {
+              "defaultValue": true,
+              "type": "boolean"
+            },
+            "paletteColor": {
+              "type": "#/definitions/paletteColor"
+            },
+            "dashed": {
+              "defaultValue": true,
+              "type": "boolean"
+            },
+            "lineDash": {
+              "description": "Represents the lengths of the dashes and the breaks",
+              "type": "string"
             }
           }
         }
