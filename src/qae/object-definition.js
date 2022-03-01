@@ -497,7 +497,7 @@ export default objectDefinition;
  * @property {string} label Trend line label
  * @property {string} qType Trend line type, for example LINEAR or EXPONENTIAL
  * @property {boolean} flipXY=false Set to true if the first measure should be the dependent variable
- * @property {string} qMultiDimMode="Sum" Determines if you get one trendline of each value in the other dimension or trendline based on the sum of the value in the other dimension
+ * @property {string} qMultiDimMode="Sum" Not applicable for scatter plot since it has only one dimension
  * @property {number} qXColIx The column in the hypercube to be used as x axis. Related to flipXY.
  */
 
