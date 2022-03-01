@@ -30,6 +30,7 @@ describe('object-definition', () => {
       'subtitle',
       'title',
       'tooltip',
+      'trendLines',
       'xAxis',
       'yAxis',
     ]);
