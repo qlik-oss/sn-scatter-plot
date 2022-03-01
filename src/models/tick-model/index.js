@@ -12,6 +12,7 @@ export default function createTickModel({
   chartModel,
   chart,
 }) {
+  let yTicks;
   function getChartProperties(axis) {
     let min;
     let max;
@@ -65,6 +66,9 @@ export default function createTickModel({
     const { min, max, explicitType, distance, size, measure } = getChartProperties(axis);
     const scale = scaleLinear().domain([min, max]);
     const tickObject = getTicks({ scale, explicitType, distance, size, measure, formatter: chart.formatters()[axis] });
+    if (prop === 'ticks' && axis === KEYS.SCALE.Y) {
+      yTicks = tickObject.ticks;
+    }
     return prop === 'ticks' ? tickObject.ticks : tickObject.minMax;
   }
 
@@ -74,6 +78,7 @@ export default function createTickModel({
       getYTicks: () => resolve(KEYS.SCALE.Y, 'ticks'),
       getXMinMax: () => resolve(KEYS.SCALE.X, 'minMax'),
       getYMinMax: () => resolve(KEYS.SCALE.Y, 'minMax'),
+      getCurrentYTicks: () => yTicks,
     },
   };
 }

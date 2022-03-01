@@ -118,6 +118,7 @@ const useModels = ({ core, flags }) => {
     });
 
     let chartModel;
+    let tickModel;
     const trendLinesService = createTrenslinesService({
       chart,
       colorService,
@@ -165,9 +166,18 @@ const useModels = ({ core, flags }) => {
       extremumModel,
       dataHandler,
       trendLinesService,
+      getCurrentYTicks: () => tickModel.query.getCurrentYTicks(),
+      getYTicks: () => tickModel.query.getYTicks(),
     });
 
-    const tickModel = createTickModel({ layoutService, dockService, extremumModel, themeService, chartModel, chart });
+    tickModel = createTickModel({
+      layoutService,
+      dockService,
+      extremumModel,
+      themeService,
+      chartModel,
+      chart,
+    });
 
     const disclaimerModel = createDisclaimerModel({ layoutService });
 

@@ -1,6 +1,7 @@
 import * as KEYS from '../../../constants/keys';
 import createChartModel from '..';
 import * as getFormatPatternFromRange from '../format-pattern-from-range';
+import * as shouldUpdateTicks from '../should-update-ticks';
 import * as createViewHandler from '../../../view-handler';
 
 describe('chart-model', () => {
@@ -82,6 +83,7 @@ describe('chart-model', () => {
       getData: colorModelDataFn,
     };
     sandbox.stub(getFormatPatternFromRange, 'default');
+    sandbox.stub(shouldUpdateTicks, 'default').returns(false);
     create = () =>
       createChartModel({
         chart,
@@ -383,6 +385,23 @@ describe('chart-model', () => {
         viewHandler.getMeta.returns({ homeStateDataView: { xAxisMin: -1, xAxisMax: 1, yAxisMin: 1, yAxisMax: 4 } });
         viewHandler.getDataView.returns({ xAxisMin: -1, xAxisMax: 1, yAxisMin: 1, yAxisMax: 4 });
         createViewHandler.default.returns(viewHandler);
+        create();
+
+        await viewState.dataView();
+        await clock.tick(50);
+
+        expect(chart.update).to.have.been.called;
+      });
+
+      it('should trigger chart.update when ticks length is updated', async () => {
+        sandbox.useFakeTimers();
+        const { clock } = sandbox;
+        viewHandler.getMeta.returns({
+          homeStateDataView: { xAxisMin: -1, xAxisMax: 1, yAxisMin: 1, yAxisMax: 4 },
+        });
+        viewHandler.getDataView.returns({ xAxisMin: -1, xAxisMax: 1, yAxisMin: 1, yAxisMax: 4 });
+        createViewHandler.default.returns(viewHandler);
+        shouldUpdateTicks.default.returns(true);
         create();
 
         await viewState.dataView();

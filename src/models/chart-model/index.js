@@ -3,6 +3,7 @@ import KEYS from '../../constants/keys';
 import NUMBERS from '../../constants/numbers';
 import createViewHandler from '../../view-handler';
 import getFormatPatternFromRange from './format-pattern-from-range';
+import shouldUpdateTicks from './should-update-ticks';
 
 export default function createChartModel({
   chart,
@@ -13,6 +14,8 @@ export default function createChartModel({
   extremumModel,
   dataHandler,
   trendLinesService,
+  getCurrentYTicks,
+  getYTicks,
 }) {
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
@@ -160,11 +163,17 @@ export default function createChartModel({
     return layoutService.getHyperCubeValue('qSize.qcy', 0) <= NUMBERS.MAX_NR_ANIMATION && !interactionInProgress;
   };
 
+  let updateTicks = false;
+  const updateTicksState = [];
+
   const handleDataViewUpdate = () => {
+    updateTicks = shouldUpdateTicks(chart, getCurrentYTicks, getYTicks);
     if (viewHandler.getInteractionInProgress()) {
+      updateTicksState.push(updateTicks);
       updatePartial();
       return;
     }
+    const ticksNeedUpdate = updateTicks || updateTicksState.filter((s) => s).length > 0;
     const binnedBeforeFetch = dataHandler.getMeta().isBinnedData;
     dataHandler
       .fetch()
@@ -177,12 +186,14 @@ export default function createChartModel({
           (miniChartOn && !miniChartWillBeOn); // On -> Off
         miniChartOn = miniChartWillBeOn;
         // Requires complete chart update when switching between binned and not binned data, or when show/hide mini chart
-        if (binnedBeforeFetch !== dataHandler.getMeta().isBinnedData || miniChartIsToggled) {
+        if (binnedBeforeFetch !== dataHandler.getMeta().isBinnedData || miniChartIsToggled || ticksNeedUpdate) {
           update();
         } else {
           updatePartial();
         }
       });
+
+    updateTicksState.length = 0;
   };
 
   viewState.onChanged('dataView', handleDataViewUpdate);
