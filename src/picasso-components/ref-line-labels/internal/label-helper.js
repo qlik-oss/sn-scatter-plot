@@ -84,7 +84,7 @@ const labelHelper = {
     );
 
     // Remove any special character
-    const s = valueLabel.replace(new RegExp(`[0-9e${specialChars}]`, 'g'), '');
+    const s = String(valueLabel).replace(new RegExp(`[0-9e${specialChars}]`, 'g'), '');
     return s.length > 0;
   },
 
