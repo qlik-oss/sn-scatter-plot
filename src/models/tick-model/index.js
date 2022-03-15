@@ -60,7 +60,10 @@ export default function createTickModel({
     }
 
     if (formatPatterns[axis]) {
-      chart.formatters()[axis].pattern(formatPatterns[axis]);
+      const formatters = chart.formatters();
+      if (typeof formatters[axis].pattern === 'function') {
+        formatters[axis].pattern(formatPatterns[axis]);
+      }
     }
 
     const { min, max, explicitType, distance, size, measure } = getChartProperties(axis);
