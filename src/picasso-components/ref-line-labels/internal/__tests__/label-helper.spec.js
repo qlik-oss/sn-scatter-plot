@@ -217,6 +217,14 @@ describe('hasEngineFormat', () => {
     expect(result).to.deep.equal(true);
   });
 
+  it('should handle when valueLabel is not a string', () => {
+    value = 1234;
+    valueLabel = 1234;
+    localeInfo = { qDecimalSep: '.', qThousandSep: ',' };
+    const result = hasEngineFormat(value, valueLabel, localeInfo);
+    expect(result).to.deep.equal(false);
+  });
+
   it('should return false, if value and valueLabel are defined and are not the same, localeInfo is defined, but valueLabel contains only digits, e, +, -, decimal separator, or thoudsand separtor.', () => {
     value = 1234;
     valueLabel = '1*234$567e6';
