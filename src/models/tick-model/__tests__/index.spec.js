@@ -66,32 +66,7 @@ describe('createTickModel', () => {
     });
 
     describe('getXTicks', () => {
-      it('should return correct X ticks, when it is not autoFormat', () => {
-        layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qIsAutoFormat', false).returns(false);
-        extremumModel.query.getXExtrema.returns({
-          xAxisMin: 0,
-          xAxisMax: 600,
-          xAxisExplicitType: 'minMax',
-        });
-        tickHelper.getSize.returns(200);
-        tickHelper.getDistance.returns(100);
-        getTicks.default
-          .withArgs({
-            scale: 'correct scale',
-            explicitType: 'minMax',
-            distance: 100,
-            size: 200,
-            measure: sinon.match.func,
-            formatter: sinon.match.object,
-          })
-          .returns({ ticks: 'correct ticks', minMax: 'correct minMax' });
-        const model = create();
-        ticks = model.query.getXTicks();
-        expect(ticks).to.deep.equal('correct ticks');
-      });
-
-      it('should return correct X ticks, when it is autoFormat', () => {
-        layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qIsAutoFormat', false).returns(true);
+      beforeEach(() => {
         extremumModel.query.getXExtrema.returns({
           xAxisMin: 0,
           xAxisMax: 600,
@@ -110,6 +85,25 @@ describe('createTickModel', () => {
           })
           .returns({ ticks: 'correct ticks', minMax: 'correct minMax' });
         chartModel.query.getFormatPattern.withArgs('x').returns('#.###');
+      });
+
+      it('should return correct X ticks, when it is not autoFormat', () => {
+        layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qIsAutoFormat', false).returns(false);
+        const model = create();
+        ticks = model.query.getXTicks();
+        expect(ticks).to.deep.equal('correct ticks');
+      });
+
+      it('should return correct X ticks, when it is autoFormat', () => {
+        layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qIsAutoFormat', false).returns(true);
+        const model = create();
+        ticks = model.query.getXTicks();
+        expect(ticks).to.deep.equal('correct ticks');
+      });
+
+      it('should return correct X ticks, when it is autoFormat, and chart x-formatter does not have pattern method', () => {
+        layoutService.getHyperCubeValue.withArgs('qMeasureInfo.0.qIsAutoFormat', false).returns(true);
+        formatters.x.pattern = undefined;
         const model = create();
         ticks = model.query.getXTicks();
         expect(ticks).to.deep.equal('correct ticks');
