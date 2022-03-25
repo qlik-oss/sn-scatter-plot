@@ -51,4 +51,12 @@ describe('trendlines definition', () => {
       { qTrendLines: [{ qType: 'LINEAR', qXColIx: 1, flipXY: false }] },
     ]);
   });
+
+  it('should not return a definition when feature is unsupported', () => {
+    const isUnsupportedFeature = sandbox.stub().returns(true);
+    def = trendlinesDef({ anything: { sense: { isUnsupportedFeature } } });
+
+    expect(isUnsupportedFeature).to.have.been.calledWith('trendlines');
+    expect(def).to.eql(undefined);
+  });
 });

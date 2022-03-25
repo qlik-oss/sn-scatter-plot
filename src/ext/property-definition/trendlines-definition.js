@@ -24,7 +24,10 @@ export function clearTrendlines(properties) {
 }
 
 export default function getDefinition(env) {
-  const { flags, translator } = env;
+  const { flags, translator, anything } = env;
+
+  if (anything?.sense?.isUnsupportedFeature?.('trendlines')) return undefined;
+
   const trendlines = trendlinesService.propertyPanelProperties({ translator });
   trendlines.translation = 'properties.regressionline';
   trendlines.titleTranslation = undefined;
