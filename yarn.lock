@@ -9902,10 +9902,10 @@ qlik-modifiers@0.5.1:
   resolved "https://registry.yarnpkg.com/qlik-modifiers/-/qlik-modifiers-0.5.1.tgz#df81fe57e24fc88f7271e91bc23ab960144667a4"
   integrity sha512-jQXt3oH7UwO5mhwUf0fHiUMRNutb1Fsq2jjN4NQ5Q0ZvBzhjrJPGcIpMMIcU4tmrYabkXS/GaVMA3Oa38jzpsw==
 
-qlik-object-conversion@0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/qlik-object-conversion/-/qlik-object-conversion-0.9.0.tgz#d1c2fd177187e829dfd5c1bd6e65be24ceeaef90"
-  integrity sha512-J9L8/uW2iL2anIuIR04yGYMYuKIluHCzF9JMsQ7jDdSkUuC55mVviET4Xdw46tvoiZWgOL1TLIjF4/EZ7zRSWw==
+qlik-object-conversion@0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/qlik-object-conversion/-/qlik-object-conversion-0.10.0.tgz#b4b92f51ee7c4e4adecf85082e34a91d511b4bb3"
+  integrity sha512-UDjELzyw23kFG1jKTMzCAizRbyTzab/7Hxlmh1zayT1hJ+l1qVOQ+zmv2TSrFKyu7XGVf7+PlLgzh0/MGi96Bg==
   dependencies:
     qlik-modifiers "0.5.1"
 
