@@ -34,7 +34,6 @@ describe('meta', () => {
       hasSizeMeasure: true,
       isBigData: true,
       isContinuous: true,
-      isBinningSupported: true,
     });
   });
 
@@ -48,14 +47,12 @@ describe('meta', () => {
       hasSizeMeasure: true,
       isBigData: true,
       isContinuous: true,
-      isBinningSupported: true,
     });
   });
 
   it('should return correct meta object, when binning is not supported', () => {
     qIsDirectQueryMode = true;
     qUnsupportedFeature = ['binningData'];
-    // create = createMeta(flags, qIsDirectQueryMode, qUnsupportedFeature);
     chartModule.getValue.withArgs('hpc', 'qMeasureInfo.2').returns('some-info');
     chartModule.getValue.withArgs('hpc', 'qSize.qcy').returns(101);
     expect(create()({ layout })).to.deep.equal({
@@ -63,7 +60,6 @@ describe('meta', () => {
       hasSizeMeasure: true,
       isBigData: false,
       isContinuous: true,
-      isBinningSupported: false,
     });
   });
 });

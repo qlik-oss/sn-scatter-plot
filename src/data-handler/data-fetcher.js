@@ -1,5 +1,4 @@
 import KEYS from '../constants/keys';
-import NUMBERS from '../constants/numbers';
 
 export default function createDataFetcher({ layoutService, model }) {
   let lastDataWindow;
@@ -14,7 +13,7 @@ export default function createDataFetcher({ layoutService, model }) {
         qTop: 0,
         qLeft: 0,
         qWidth: 4,
-        qHeight: layoutService.meta.isBinningSupported ? 2000 : NUMBERS.MAX_NR_SCATTER,
+        qHeight: 2000,
       };
 
       // Do not fetch same data window twice in a row (important for performance)

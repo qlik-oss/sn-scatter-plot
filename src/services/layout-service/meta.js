@@ -17,7 +17,6 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
       hasSizeMeasure,
       isBigData,
       isContinuous: true,
-      isBinningSupported,
     };
   };
 }

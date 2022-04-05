@@ -13,7 +13,6 @@ describe('createDataFetcher', () => {
     layoutService = {
       meta: {
         isSnapshot: false,
-        isBinningSupported: true,
       },
       getDataPages: sinon.stub().returns([{ snapshotData: true }]),
       setLayoutValue: sandbox.stub(),
@@ -47,25 +46,6 @@ describe('createDataFetcher', () => {
         qLeft: 0,
         qWidth: 4,
         qHeight: 2000,
-      },
-    ]);
-    expect(dataPages).to.eql(pages);
-    expect(layoutService.setLayoutValue.withArgs('dataPages', undefined)).to.have.been.calledOnce;
-    expect(layoutService.setDataPages.withArgs(pages)).to.have.been.calledOnce;
-  });
-
-  it('should send correct params to getHyperCubeData when binning is not supported', async () => {
-    layoutService.meta.isBinningSupported = false;
-    create = () => createDataFetcher({ layoutService, model });
-    dataFetcher = create();
-    const dataPages = await dataFetcher.fetch();
-
-    expect(model.getHyperCubeData).to.have.been.calledWith('/qHyperCubeDef', [
-      {
-        qTop: 0,
-        qLeft: 0,
-        qWidth: 4,
-        qHeight: 1000,
       },
     ]);
     expect(dataPages).to.eql(pages);
