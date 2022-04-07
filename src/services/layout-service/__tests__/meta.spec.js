@@ -8,14 +8,18 @@ describe('meta', () => {
   let create;
   let flags;
   let layout;
+  let qIsDirectQueryMode;
+  let qUnsupportedFeature;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    qIsDirectQueryMode = false;
+    qUnsupportedFeature = [];
     layout = { snapshotData: 'some-data', qHyperCube: 'hpc' };
     sandbox.stub(chartModule, 'getValue');
     sandbox.stub(NUMBERS, 'default').value({ MAX_NR_SCATTER: 100 });
     flags = { isEnabled: sandbox.stub() };
-    create = () => createMeta(flags);
+    create = () => createMeta(flags, qIsDirectQueryMode, qUnsupportedFeature);
   });
 
   afterEach(() => {
@@ -42,6 +46,19 @@ describe('meta', () => {
       isSnapshot: true,
       hasSizeMeasure: true,
       isBigData: true,
+      isContinuous: true,
+    });
+  });
+
+  it('should return correct meta object, when binning is not supported', () => {
+    qIsDirectQueryMode = true;
+    qUnsupportedFeature = ['binningData'];
+    chartModule.getValue.withArgs('hpc', 'qMeasureInfo.2').returns('some-info');
+    chartModule.getValue.withArgs('hpc', 'qSize.qcy').returns(101);
+    expect(create()({ layout })).to.deep.equal({
+      isSnapshot: true,
+      hasSizeMeasure: true,
+      isBigData: false,
       isContinuous: true,
     });
   });

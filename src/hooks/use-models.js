@@ -44,7 +44,7 @@ const useModels = ({ core, flags }) => {
   const rect = useRect();
   const selections = useSelections();
   const app = useApp();
-  const { qLocaleInfo: localeInfo } = useAppLayout();
+  const { qLocaleInfo: localeInfo, qIsDirectQueryMode, qUnsupportedFeature } = useAppLayout();
   const plugins = usePlugins();
   const [selectionService, setSelectionService] = useState();
   const [models, setModels] = useState();
@@ -81,7 +81,7 @@ const useModels = ({ core, flags }) => {
 
     const layoutService = createLayoutService({
       source: layout,
-      metaAdditionsFn: layoutServiceMeta(flags),
+      metaAdditionsFn: layoutServiceMeta(flags, qIsDirectQueryMode, qUnsupportedFeature),
     });
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
     const dockService = createDockService({
@@ -197,7 +197,18 @@ const useModels = ({ core, flags }) => {
       propertiesModel,
       trendLinesService,
     });
-  }, [model, app, selectionService, layout, theme.name(), translator.language(), options.direction, options.viewState]);
+  }, [
+    model,
+    app,
+    selectionService,
+    layout,
+    theme.name(),
+    translator.language(),
+    options.direction,
+    options.viewState,
+    qIsDirectQueryMode,
+    qUnsupportedFeature,
+  ]);
 
   return models;
 };
