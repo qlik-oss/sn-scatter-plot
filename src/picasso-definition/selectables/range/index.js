@@ -9,6 +9,7 @@ const EMPTY = { components: [], interactions: [] };
 export default function createRange({ models, actions, scales, chart }) {
   const { selectionService, dockService, colorService, layoutService, chartModel } = models;
   const isSingleSelection = layoutService.getHyperCubeValue('qDimensionInfo.0.qIsOneAndOnlyOne', false);
+  const { isRangeSelectionsSupported } = layoutService.meta;
   if (isSingleSelection) {
     return { components: [], interactions: [] };
   }
@@ -23,6 +24,7 @@ export default function createRange({ models, actions, scales, chart }) {
       selectionService,
       dockService,
       enableInteraction: () => !dataHandler.getMeta().isBinnedData,
+      isRangeSelectionsSupported,
     }) || EMPTY;
 
   const binXRange =
@@ -32,6 +34,7 @@ export default function createRange({ models, actions, scales, chart }) {
       dockService,
       chart,
       enableInteraction: () => dataHandler.getMeta().isBinnedData,
+      isRangeSelectionsSupported,
     }) || EMPTY;
 
   const yRange =
@@ -40,6 +43,7 @@ export default function createRange({ models, actions, scales, chart }) {
       selectionService,
       dockService,
       enableInteraction: () => !dataHandler.getMeta().isBinnedData,
+      isRangeSelectionsSupported,
     }) || EMPTY;
 
   const binYRange =
@@ -49,6 +53,7 @@ export default function createRange({ models, actions, scales, chart }) {
       dockService,
       chart,
       enableInteraction: () => dataHandler.getMeta().isBinnedData,
+      isRangeSelectionsSupported,
     }) || EMPTY;
 
   const legendRange =

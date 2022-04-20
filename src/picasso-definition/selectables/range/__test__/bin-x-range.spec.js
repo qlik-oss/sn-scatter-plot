@@ -8,6 +8,7 @@ describe('bin-x-Range', () => {
   let createBinXRange;
   let chart;
   let create;
+  let isRangeSelectionsSupported;
 
   before(() => {
     sandbox = sinon.createSandbox();
@@ -55,11 +56,13 @@ describe('bin-x-Range', () => {
         selectionService,
         dockService,
         enableInteraction,
+        isRangeSelectionsSupported,
       });
   });
 
   beforeEach(() => {
     sandbox.reset();
+    isRangeSelectionsSupported = true;
     range.returns({ key: 'range' });
     selectionService.getIsDimensionLocked.returns(false);
     chart.formatter.withArgs('x-formatter').returns((datum) => `${datum}-formatted`);
@@ -71,6 +74,11 @@ describe('bin-x-Range', () => {
 
   it('should return false if is dimension is locked', () => {
     selectionService.getIsDimensionLocked.returns(true);
+    expect(create()).to.be.false;
+  });
+
+  it('should return false if range selections is not supported', () => {
+    isRangeSelectionsSupported = false;
     expect(create()).to.be.false;
   });
 

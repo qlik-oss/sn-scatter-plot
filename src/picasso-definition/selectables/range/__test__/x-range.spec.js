@@ -7,6 +7,7 @@ describe('xRange', () => {
   let enableInteraction;
   let createXRange;
   let create;
+  let isRangeSelectionsSupported;
 
   before(() => {
     sandbox = sinon.createSandbox();
@@ -49,11 +50,13 @@ describe('xRange', () => {
         selectionService,
         dockService,
         enableInteraction,
+        isRangeSelectionsSupported,
       });
   });
 
   beforeEach(() => {
     sandbox.reset();
+    isRangeSelectionsSupported = true;
     range.returns({ key: 'range' });
     selectionService.getIsDimensionLocked.returns(false);
   });
@@ -64,6 +67,11 @@ describe('xRange', () => {
 
   it('should return false if is dimension is locked', () => {
     selectionService.getIsDimensionLocked.returns(true);
+    expect(create()).to.be.false;
+  });
+
+  it('should return false if range selections is not supported', () => {
+    isRangeSelectionsSupported = false;
     expect(create()).to.be.false;
   });
 

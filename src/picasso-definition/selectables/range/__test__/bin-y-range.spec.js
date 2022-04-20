@@ -8,6 +8,7 @@ describe('bin-y-Range', () => {
   let createBinYRange;
   let chart;
   let create;
+  let isRangeSelectionsSupported;
 
   before(() => {
     sandbox = sinon.createSandbox();
@@ -45,6 +46,7 @@ describe('bin-y-Range', () => {
       },
     };
     enableInteraction = 'enableInteraction';
+
     chart = {
       formatter: sandbox.stub(),
     };
@@ -55,11 +57,13 @@ describe('bin-y-Range', () => {
         selectionService,
         dockService,
         enableInteraction,
+        isRangeSelectionsSupported,
       });
   });
 
   beforeEach(() => {
     sandbox.reset();
+    isRangeSelectionsSupported = true;
     range.returns({ key: 'range' });
     selectionService.getIsDimensionLocked.returns(false);
     chart.formatter.withArgs('y-formatter').returns((datum) => `${datum}-formatted`);
@@ -71,6 +75,11 @@ describe('bin-y-Range', () => {
 
   it('should return false if is dimension is locked', () => {
     selectionService.getIsDimensionLocked.returns(true);
+    expect(create()).to.be.false;
+  });
+
+  it('should return false if range selections is not supported', () => {
+    isRangeSelectionsSupported = false;
     expect(create()).to.be.false;
   });
 

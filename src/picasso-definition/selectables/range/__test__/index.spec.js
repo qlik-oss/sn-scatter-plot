@@ -46,7 +46,11 @@ describe('range', () => {
     actions = { key: 'actions' };
     scales = { key: 'scales' };
     selectionService = { key: 'selection-service' };
-    layoutService = { key: 'layout-service', getHyperCubeValue: sandbox.stub() };
+    layoutService = {
+      key: 'layout-service',
+      getHyperCubeValue: sandbox.stub(),
+      meta: { isRangeSelectionsSupported: true },
+    };
     dockService = { key: 'dock-service' };
     colorService = {
       custom: {
