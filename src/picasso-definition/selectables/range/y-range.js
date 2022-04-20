@@ -1,8 +1,14 @@
 import { range } from '../../../interactive';
 import KEYS from '../../../constants/keys';
 
-export default function createYRange({ actions, selectionService, dockService, enableInteraction }) {
-  if (selectionService.getIsDimensionLocked()) {
+export default function createYRange({
+  actions,
+  selectionService,
+  dockService,
+  enableInteraction,
+  isRangeSelectionsSupported,
+}) {
+  if (selectionService.getIsDimensionLocked() || !isRangeSelectionsSupported) {
     return false;
   }
 

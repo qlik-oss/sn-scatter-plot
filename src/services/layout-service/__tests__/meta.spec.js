@@ -34,6 +34,7 @@ describe('meta', () => {
       hasSizeMeasure: true,
       isBigData: true,
       isContinuous: true,
+      isRangeSelectionsSupported: true,
     });
   });
 
@@ -47,6 +48,7 @@ describe('meta', () => {
       hasSizeMeasure: true,
       isBigData: true,
       isContinuous: true,
+      isRangeSelectionsSupported: true,
     });
   });
 
@@ -60,6 +62,21 @@ describe('meta', () => {
       hasSizeMeasure: true,
       isBigData: false,
       isContinuous: true,
+      isRangeSelectionsSupported: false,
+    });
+  });
+
+  it('should return correct meta object, when range selections is not supported', () => {
+    qIsDirectQueryMode = true;
+    qUnsupportedFeature = ['rangeSelections'];
+    chartModule.getValue.withArgs('hpc', 'qMeasureInfo.2').returns('some-info');
+    chartModule.getValue.withArgs('hpc', 'qSize.qcy').returns(101);
+    expect(create()({ layout })).to.deep.equal({
+      isSnapshot: true,
+      hasSizeMeasure: true,
+      isBigData: false,
+      isContinuous: true,
+      isRangeSelectionsSupported: false,
     });
   });
 });

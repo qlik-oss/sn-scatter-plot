@@ -11,12 +11,15 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
       isBinningSupported &&
       qcy > NUMBERS.MAX_NR_SCATTER &&
       !(layout?.qIsBDILiveMode && flags.isEnabled('BDI_CLIENT_ADAPT'));
+    const isRangeSelectionsSupported =
+      !qIsDirectQueryMode && !qUnsupportedFeature?.some((f) => f === 'rangeSelections');
 
     return {
       isSnapshot,
       hasSizeMeasure,
       isBigData,
       isContinuous: true,
+      isRangeSelectionsSupported,
     };
   };
 }
