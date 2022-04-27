@@ -63,7 +63,7 @@ export default function createDataTitileComp() {
   function HyperDataItem({ title, selected, onClick }) {
     const localDir = rtlUtils.detectTextDirection(title);
     return (
-      <ListItem button onClick={onClick} style={{ textAlign: 'start' }}>
+      <ListItem role="list" button onClick={onClick} style={{ textAlign: 'start' }}>
         <ListItemIcon style={{ minWidth: 32 }}>
           <SVGIcon d={selected ? ICONS.TICK.d : ''} />
         </ListItemIcon>
@@ -92,7 +92,7 @@ export default function createDataTitileComp() {
           style: { minWidth: '250px', maxHeight: '300px' },
         }}
       >
-        <List dense dir={dir} component="nav">
+        <List dense dir={dir} aria-label="use the tab keys to navigate between the options" component="nav">
           <HyperDataItem title={current} selected onClick={onClose} />
           {items}
         </List>
@@ -245,8 +245,10 @@ export default function createDataTitileComp() {
         style.minWidth = minWidth;
       }
       const dir = rtlUtils.detectTextDirection(titleData.text);
+      const instruction = `Currently ${titleData.text} is selcted. Click to expand or press enter key to open the list`;
       const label = (
         <FadeButton
+          aria-label={instruction}
           style={style}
           onClick={disabledLabel ? undefined : onClick}
           title={titleData.text}
