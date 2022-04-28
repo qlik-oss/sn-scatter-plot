@@ -58,12 +58,12 @@ const FadeButton = (
     {children}
   </Button>
 );
-
+// added role="list" to avoid the reading as button for screen readers
 export default function createDataTitileComp() {
   function HyperDataItem({ title, selected, onClick }) {
     const localDir = rtlUtils.detectTextDirection(title);
     return (
-      <ListItem role="list" button onClick={onClick} style={{ textAlign: 'start' }}>
+      <ListItem role="list" button onClick={onClick} style={{ textAlign: 'start' }}> 
         <ListItemIcon style={{ minWidth: 32 }}>
           <SVGIcon d={selected ? ICONS.TICK.d : ''} />
         </ListItemIcon>
