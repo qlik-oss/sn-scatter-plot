@@ -1,4 +1,4 @@
-import { useAction, useConstraints, useEffect, useLayout, useState } from '@nebula.js/stardust';
+import { useAction, useConstraints, useEffect, useLayout, useState, useTranslator } from '@nebula.js/stardust';
 import lassoIcon from './lasso-icon';
 
 export default function useLasso() {
@@ -6,6 +6,7 @@ export default function useLasso() {
   const [enabled, setEnabled] = useState(false);
   const [active, setActive] = useState(false);
   const layout = useLayout();
+  const translator = useTranslator();
   const isInSelections = !!layout.qSelectionInfo.qInSelections;
   const isSingleSelection = !!layout.qHyperCube?.qDimensionInfo?.[0]?.qIsOneAndOnlyOne;
 
@@ -25,7 +26,7 @@ export default function useLasso() {
   useAction(
     () => ({
       key: 'lasso',
-      label: 'Lasso',
+      label: translator.get(active ? 'Tooltip.ToggleOffLassoSelection' : 'Tooltip.ToggleOnLassoSelection'),
       icon: lassoIcon,
       hidden: !enabled || !isInSelections || isSingleSelection,
       active,

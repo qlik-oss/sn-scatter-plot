@@ -33,6 +33,10 @@ describe('use-lasso', () => {
     sandbox.stub(stardust, 'useLayout').returns(layout);
     sandbox.stub(stardust, 'useEffect');
     sandbox.stub(stardust, 'useAction');
+    sandbox.stub(stardust, 'useTranslator');
+    stardust.useTranslator.returns({
+      get: (text) => `${text}-translated`,
+    });
     sandbox.stub(lassoIcon, 'default').value('some-icons');
     create = () => useLasso();
   });
@@ -87,7 +91,7 @@ describe('use-lasso', () => {
         delete result.action;
         expect(result).to.deep.equal({
           key: 'lasso',
-          label: 'Lasso',
+          label: 'Tooltip.ToggleOnLassoSelection-translated',
           icon: 'some-icons',
           hidden: false,
           active: false,
