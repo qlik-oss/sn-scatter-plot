@@ -678,5 +678,45 @@
       "zh-TW": "縮小",
       "ru-RU": "Уменьшение"
     }
+  },
+  "Tooltip_ToggleOnLassoSelection": {
+    "id": "Tooltip.ToggleOnLassoSelection",
+    "locale": {
+      "en-US": "Turn on lasso selection",
+      "de-DE": "Lasso-Auswahl aktivieren",
+      "fr-FR": "Activer la sélection au lasso",
+      "it-IT": "Attiva selezione lazo",
+      "ja-JP": "囲み選択をオンにする",
+      "ko-KR": "올가미 선택 켜기",
+      "es-ES": "Activar la selección de contorno",
+      "nl-NL": "Lassoselectie inschakelen",
+      "pl-PL": "Włącz zaznaczenie lasso",
+      "pt-BR": "Ativar seleção de laço",
+      "sv-SE": "Slå på lassourval",
+      "tr-TR": "Serbest seçimi aç",
+      "zh-CN": "开启套索选择方法",
+      "zh-TW": "開啟套索選取",
+      "ru-RU": "Включить выбор лассо"
+    }
+  },
+  "Tooltip_ToggleOffLassoSelection": {
+    "id": "Tooltip.ToggleOffLassoSelection",
+    "locale": {
+      "en-US": "Turn off lasso selection",
+      "de-DE": "Lasso-Auswahl deaktivieren",
+      "fr-FR": "Désactiver la sélection au lasso",
+      "it-IT": "Disattiva selezione lazo",
+      "ja-JP": "囲み選択をオフにする",
+      "ko-KR": "올가미 선택 끄기",
+      "es-ES": "Desactivar la selección de contorno",
+      "nl-NL": "Lassoselectie uitschakelen",
+      "pl-PL": "Wyłącz zaznaczenie lasso",
+      "pt-BR": "Desativar seleção de laço",
+      "sv-SE": "Stäng av lassourval",
+      "tr-TR": "Serbest seçimi kapat",
+      "zh-CN": "关闭套索选择方法",
+      "zh-TW": "關閉套索選取",
+      "ru-RU": "Выключить выбор лассо"
+    }
   }
 }
