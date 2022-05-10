@@ -1,4 +1,4 @@
-import { getValue } from 'qlik-chart-modules';
+import { setValue, getValue } from 'qlik-chart-modules';
 import trendlineDefinition from './trendlines-definition';
 import showCompressionResolution from '../show-compression-resolution';
 import colorModeOptions from './color-mode-options';
@@ -9,6 +9,12 @@ const persistentColorsShow = (data) => !getValue(data, 'color.auto') && getValue
 
 export default function propertyDefinition(env) {
   const trendlines = trendlineDefinition(env);
+
+  const change = (data) => {
+    if (!data.color?.auto) {
+      setValue(data, 'color.mode', 'primary');
+    }
+  };
 
   const settings = {
     uses: 'settings',
@@ -202,6 +208,26 @@ export default function propertyDefinition(env) {
                   }
                   return persistentColorsShow(data);
                 },
+              },
+            },
+          },
+          simpleColors: {
+            items: {
+              autoColor: {
+                label: (data) => (data.color?.auto ? 'Auto (Single color)' : env.translator.get('Common.Custom')),
+                change,
+              },
+              colorMode: {
+                options: [
+                  {
+                    value: 'primary',
+                    translation: 'properties.colorMode.primary',
+                  },
+                  {
+                    value: 'byDimension',
+                    translation: 'properties.colorMode.byDimension',
+                  },
+                ],
               },
             },
           },
