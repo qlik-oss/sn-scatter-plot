@@ -16,6 +16,37 @@ export default function propertyDefinition(env) {
     }
   };
 
+  const simpleColorModeOptions = (data) => {
+    const options = [
+      {
+        value: 'primary',
+        translation: 'properties.colorMode.primary',
+      },
+      {
+        value: 'byDimension',
+        translation: 'properties.colorMode.byDimension',
+      },
+    ];
+    switch (data.color?.mode) {
+      case 'byMeasure':
+        options.push({
+          value: 'byMeasure',
+          translation: 'properties.colorMode.byMeasure',
+        });
+        break;
+      case 'byExpression':
+        options.push({
+          value: 'byExpression',
+          translation: 'properties.colorMode.byExpression',
+        });
+        break;
+      default: {
+        break;
+      }
+    }
+    return options;
+  };
+
   const settings = {
     uses: 'settings',
     items: {
@@ -214,20 +245,15 @@ export default function propertyDefinition(env) {
           simpleColors: {
             items: {
               autoColor: {
-                label: (data) => (data.color?.auto ? 'Auto (Single color)' : env.translator.get('Common.Custom')),
+                label: (data) => {
+                  if (data.color?.auto)
+                    return env.translator.get('Simple.Color.Auto', env.translator.get('properties.colorMode.primary'));
+                  return env.translator.get('Common.Custom');
+                },
                 change,
               },
               colorMode: {
-                options: [
-                  {
-                    value: 'primary',
-                    translation: 'properties.colorMode.primary',
-                  },
-                  {
-                    value: 'byDimension',
-                    translation: 'properties.colorMode.byDimension',
-                  },
-                ],
+                options: simpleColorModeOptions,
               },
             },
           },
