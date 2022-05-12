@@ -199,474 +199,136 @@ describe('property panel definition', () => {
       ).to.be.false;
     });
 
-    describe('xAxis', () => {
-      it('should show correct translated xAxis', () => {
-        const labelFn = def.items.settings.items.xAxis.label;
-        const properties = 'some properties';
-        const sandbox = sinon.createSandbox();
-        let handler = {
-          getMeasureLayouts: sandbox.stub().returns([{ qError: false, qFallbackTitle: 'fb title' }]),
-        };
-        expect(labelFn(properties, handler), 'with info when there is no error').to.deep.equal(
-          'translated-properties.xAxisWithInfo'
-        );
-        handler = { getMeasureLayouts: sandbox.stub().returns([{ qError: true, qFallbackTitle: 'fb title' }]) };
-        expect(labelFn(properties, handler), 'with no info when there is an error').to.deep.equal(
-          'translated-properties.xAxis'
-        );
-        sandbox.restore();
-      });
-
-      it('should only show xAxis when appropriate', () => {
-        const showFn = def.items.settings.items.xAxis.items.axis.items.dock.show;
-        expect(showFn({ xAxis: { show: 'none' } }), 'not when show property is set to none').to.be.false;
-      });
-
-      it('should only show xAxis grid when appropriate', () => {
-        const showFn = def.items.settings.items.xAxis.items.axis.items.spacing.show;
-        expect(showFn({ xAxis: { show: 'none' } }), 'not when show property is set to none').to.be.false;
-      });
-
-      it('should only show xAxis min max when appropriate', () => {
-        const showFn = def.items.settings.items.xAxis.items.minMax.items.minMax.show;
-        expect(showFn({ xAxis: { autoMinMax: true } }), 'not when autoMinMax is true').to.be.false;
-      });
-
-      it('should only show xAxis min when appropriate', () => {
-        const showFn = def.items.settings.items.xAxis.items.minMax.items.min.show;
-        expect(
-          showFn({ xAxis: { autoMinMax: false, minMax: 'min' } }),
-          'when autoMinMax is false and minMax is set to min'
-        ).to.be.true;
-      });
-
-      it('should detect invalidity of xAxis min value correctly', () => {
-        const validFn = def.items.settings.items.xAxis.items.minMax.items.min.invalid;
-        expect(validFn({ xAxis: { min: 1, max: -1, minMax: 'minMax' } }), 'when min is larger than max').to.be.true;
-        expect(validFn({ xAxis: { min: 1, max: -1, minMax: 'min' } }), 'when the minMax property is set to min').to.be
-          .false;
-      });
-
-      it('should only show xAxis max when appropriate', () => {
-        const showFn = def.items.settings.items.xAxis.items.minMax.items.max.show;
-        expect(
-          showFn({ xAxis: { autoMinMax: false, minMax: 'max' } }),
-          'when autoMinMax is false and minMax is set to max'
-        ).to.be.true;
-      });
-
-      it('should detect invalidity of xAxis max value correctly', () => {
-        const validFn = def.items.settings.items.xAxis.items.minMax.items.max.invalid;
-        expect(validFn({ xAxis: { min: 1, max: -1, minMax: 'minMax' } }), 'when min is larger than max').to.be.true;
-        expect(validFn({ xAxis: { min: 1, max: -1, minMax: 'max' } }), 'when the minMax property is set to max').to.be
-          .false;
-      });
-
-      describe('measureAxisTitle', () => {
-        it('should have correct properties', () => {
-          expect(def.items.settings.items.xAxis.items.axis.items.measureAxisTitle).to.have.all.keys([
-            'component',
-            'type',
-            'label',
-            'classification',
-          ]);
-        });
-
-        it('should have correct component', () => {
-          expect(def.items.settings.items.xAxis.items.axis.items.measureAxisTitle.component).to.equal('header');
-        });
-
-        it('should have correct type', () => {
-          expect(def.items.settings.items.xAxis.items.axis.items.measureAxisTitle.type).to.equal('string');
-        });
-
-        it('should show correct translated xAxis label', () => {
-          const labelFn = def.items.settings.items.xAxis.items.axis.items.measureAxisTitle.label;
-          const properties = 'some properties';
-          const sandbox = sinon.createSandbox();
-          let handler = {
-            getMeasureLayouts: sandbox.stub().returns([{ qError: false, qFallbackTitle: 'fb title' }]),
-          };
-          expect(labelFn(properties, handler), 'with info when there is no error').to.deep.equal(
-            'translated-properties.xAxisWithInfo'
-          );
-          handler = { getMeasureLayouts: sandbox.stub().returns([{ qError: true, qFallbackTitle: 'fb title' }]) };
-          expect(labelFn(properties, handler), 'with no info when there is an error').to.deep.equal(
-            'translated-properties.xAxis'
-          );
-          sandbox.restore();
-        });
-
-        it('should have correct classification', () => {
-          expect(def.items.settings.items.xAxis.items.axis.items.measureAxisTitle.classification).to.deep.equal({
-            section: 'axis',
-            tags: ['simple'],
-            exclusive: true,
-          });
-        });
-      });
-
-      describe('startAt', () => {
-        it('should have correct properties', () => {
-          expect(def.items.settings.items.xAxis.items.startAt).to.have.all.keys([
-            'type',
-            'component',
-            'translation',
-            'readOnly',
-            'options',
-            'defaultValue',
-            'convertFunctions',
-            'classification',
-          ]);
-        });
-
-        it('should have correct type', () => {
-          expect(def.items.settings.items.xAxis.items.startAt.type).to.equal('string');
-        });
-
-        it('should have correct component', () => {
-          expect(def.items.settings.items.xAxis.items.startAt.component).to.equal('dropdown');
-        });
-
-        it('should have correct translation', () => {
-          expect(def.items.settings.items.xAxis.items.startAt.translation).to.equal('properties.axis.startAt');
-        });
-
-        describe('readOnly', () => {
-          let readOnly;
-
-          beforeEach(() => {
-            ({ readOnly } = def.items.settings.items.xAxis.items.startAt);
-          });
-
-          it('should have return true when has autoMinMax is false and not min type', () => {
-            expect(readOnly({ xAxis: { autoMinMax: false, minMax: 'max' } })).to.be.true;
-          });
-
-          it('should have return true when has autoMinMax is false and is min type, but min is not 0', () => {
-            expect(readOnly({ xAxis: { autoMinMax: false, minMax: 'min', min: 10 } })).to.be.true;
-          });
-
-          it('should have return false when has autoMinMax is false and is min type, but min is 0', () => {
-            expect(readOnly({ xAxis: { autoMinMax: false, minMax: 'min', min: 0 } })).to.be.false;
-          });
-
-          it('should have return false when has autoMinMax is true', () => {
-            expect(readOnly({ xAxis: { autoMinMax: true } })).to.be.false;
-          });
-
-          it('should have correct defaultValue', () => {
-            expect(def.items.settings.items.xAxis.items.startAt.defaultValue).to.equal('zero');
-          });
-
-          describe('convertFunctions', () => {
-            let get;
-            let set;
-            let args;
-            let setter;
-            const sandbox = sinon.createSandbox();
-            const definition = { type: 'string' };
-            const getter = (type) => type;
-
-            beforeEach(() => {
-              args = { properties: { xAxis: { startAt: 'zero', autoMinMax: true, min: '10' } } };
-              ({ get, set } = def.items.settings.items.xAxis.items.startAt.convertFunctions);
-              setter = sandbox.stub();
-            });
-
-            afterEach(() => {
-              sandbox.restore();
-            });
-
-            describe('get', () => {
-              it('should convert value to lowest when is autoMinMax', () => {
-                expect(get(getter, definition, args)).to.equal('lowest');
-              });
-
-              it('should convert value to zero when is not autoMinMax, type is min and min is 0', () => {
-                args = {
-                  properties: {
-                    xAxis: { startAt: 'lowest', autoMinMax: false, minMax: 'min', min: 0 },
-                  },
-                };
-                expect(get(getter, definition, args)).to.equal('zero');
-              });
-
-              it('should return value from getter when is not autoMinMax and type is max', () => {
-                args = {
-                  properties: {
-                    xAxis: { startAt: 'lowest', autoMinMax: false, minMax: 'max', min: 0 },
-                  },
-                };
-                expect(get(getter, definition, args)).to.equal('string');
-              });
-            });
-
-            describe('set', () => {
-              it('should call setter three times with correct values when select start at as zero', () => {
-                set('zero', setter, definition, args, '');
-                expect(setter).to.have.been.calledWith('', 'xAxis.autoMinMax', false);
-                expect(setter).to.have.been.calledWith('', 'xAxis.minMax', 'min');
-                expect(setter).to.have.been.calledWith('', 'xAxis.min', 0);
-              });
-
-              it('should call setter one time with correct values when select start at as lowest', () => {
-                set('lowest', setter, definition, args, '');
-                expect(setter).to.have.been.calledWith('', 'xAxis.autoMinMax', true);
-              });
-            });
-          });
-
-          it('should have correct classification', () => {
-            expect(def.items.settings.items.xAxis.items.startAt.classification).to.deep.equal({
-              section: 'axis',
-              tags: ['simple'],
-              exclusive: true,
-            });
-          });
-        });
-      });
+    it('should show correct translated xAxis', () => {
+      const labelFn = def.items.settings.items.xAxis.label;
+      const properties = 'some properties';
+      const sandbox = sinon.createSandbox();
+      let handler = { getMeasureLayouts: sandbox.stub().returns([{ qError: false, qFallbackTitle: 'fb title' }]) };
+      expect(labelFn(properties, handler), 'with info when there is no error').to.deep.equal(
+        'translated-properties.xAxisWithInfo'
+      );
+      handler = { getMeasureLayouts: sandbox.stub().returns([{ qError: true, qFallbackTitle: 'fb title' }]) };
+      expect(labelFn(properties, handler), 'with no info when there is an error').to.deep.equal(
+        'translated-properties.xAxis'
+      );
+      sandbox.restore();
     });
 
-    describe('yAxis', () => {
-      it('should show correct translated yAxis', () => {
-        const labelFn = def.items.settings.items.yAxis.label;
-        const properties = 'some properties';
-        const sandbox = sinon.createSandbox();
-        let handler = {
-          getMeasureLayouts: sandbox.stub().returns([{}, { qError: false, qFallbackTitle: 'fb title' }]),
-        };
-        expect(labelFn(properties, handler), 'with info when there is no error').to.deep.equal(
-          'translated-properties.yAxisWithInfo'
-        );
-        handler = { getMeasureLayouts: sandbox.stub().returns([{ qError: true, qFallbackTitle: 'fb title' }]) };
-        expect(labelFn(properties, handler), 'with no info when there is an error').to.deep.equal(
-          'translated-properties.yAxis'
-        );
-        sandbox.restore();
-      });
+    it('should only show xAxis when appropriate', () => {
+      const showFn = def.items.settings.items.xAxis.items.axis.items.dock.show;
+      expect(showFn({ xAxis: { show: 'none' } }), 'not when show property is set to none').to.be.false;
+    });
 
-      it('should only show yAxis when appropriate', () => {
-        const showFn = def.items.settings.items.yAxis.items.axis.items.dock.show;
-        expect(showFn({ yAxis: { show: 'none' } }), 'not when show property is set to none').to.be.false;
-      });
+    it('should only show xAxis grid when appropriate', () => {
+      const showFn = def.items.settings.items.xAxis.items.axis.items.spacing.show;
+      expect(showFn({ xAxis: { show: 'none' } }), 'not when show property is set to none').to.be.false;
+    });
 
-      it('should return correct yMirrorMode options', () => {
-        const optionFn = def.items.settings.items.yAxis.items.axis.items.dock.options;
-        expect(optionFn('data', 'handler', { yMirrorMode: true }), 'when yMirrorMode is set to true').to.deep.equal([
-          { value: 'near', translation: 'properties.dock.right' },
-          { value: 'far', translation: 'properties.dock.left' },
-        ]);
-        expect(optionFn('data', 'handler', { yMirrorMode: false }), 'when yMirrorMode is set to false').to.deep.equal([
-          { value: 'near', translation: 'properties.dock.left' },
-          { value: 'far', translation: 'properties.dock.right' },
-        ]);
-      });
+    it('should only show xAxis min max when appropriate', () => {
+      const showFn = def.items.settings.items.xAxis.items.minMax.items.minMax.show;
+      expect(showFn({ xAxis: { autoMinMax: true } }), 'not when autoMinMax is true').to.be.false;
+    });
 
-      it('should only show yAxis grid when appropriate', () => {
-        const showFn = def.items.settings.items.yAxis.items.axis.items.spacing.show;
-        expect(showFn({ yAxis: { show: 'none' } }), 'not when show property is set to none').to.be.false;
-      });
+    it('should only show xAxis min when appropriate', () => {
+      const showFn = def.items.settings.items.xAxis.items.minMax.items.min.show;
+      expect(
+        showFn({ xAxis: { autoMinMax: false, minMax: 'min' } }),
+        'when autoMinMax is false and minMax is set to min'
+      ).to.be.true;
+    });
 
-      it('should only show yAxis min max when appropriate', () => {
-        const showFn = def.items.settings.items.yAxis.items.minMax.items.minMax.show;
-        expect(showFn({ yAxis: { autoMinMax: true } }), 'not when autoMinMax is true').to.be.false;
-      });
+    it('should detect invalidity of xAxis min value correctly', () => {
+      const validFn = def.items.settings.items.xAxis.items.minMax.items.min.invalid;
+      expect(validFn({ xAxis: { min: 1, max: -1, minMax: 'minMax' } }), 'when min is larger than max').to.be.true;
+      expect(validFn({ xAxis: { min: 1, max: -1, minMax: 'min' } }), 'when the minMax property is set to min').to.be
+        .false;
+    });
 
-      it('should only show yAxis min when appropriate', () => {
-        const showFn = def.items.settings.items.yAxis.items.minMax.items.min.show;
-        expect(
-          showFn({ yAxis: { autoMinMax: false, minMax: 'min' } }),
-          'when autoMinMax is false and minMax is set to min'
-        ).to.be.true;
-      });
+    it('should only show xAxis max when appropriate', () => {
+      const showFn = def.items.settings.items.xAxis.items.minMax.items.max.show;
+      expect(
+        showFn({ xAxis: { autoMinMax: false, minMax: 'max' } }),
+        'when autoMinMax is false and minMax is set to max'
+      ).to.be.true;
+    });
 
-      it('should detect invalidity of yAxis min value correctly', () => {
-        const validFn = def.items.settings.items.yAxis.items.minMax.items.min.invalid;
-        expect(validFn({ yAxis: { min: 1, max: -1, minMax: 'minMax' } }), 'when min is larger than max').to.be.true;
-        expect(validFn({ yAxis: { min: 1, max: -1, minMax: 'min' } }), 'when the minMax property is set to min').to.be
-          .false;
-      });
+    it('should detect invalidity of xAxis max value correctly', () => {
+      const validFn = def.items.settings.items.xAxis.items.minMax.items.max.invalid;
+      expect(validFn({ xAxis: { min: 1, max: -1, minMax: 'minMax' } }), 'when min is larger than max').to.be.true;
+      expect(validFn({ xAxis: { min: 1, max: -1, minMax: 'max' } }), 'when the minMax property is set to max').to.be
+        .false;
+    });
 
-      it('should only show yAxis max when appropriate', () => {
-        const showFn = def.items.settings.items.yAxis.items.minMax.items.max.show;
-        expect(
-          showFn({ yAxis: { autoMinMax: false, minMax: 'max' } }),
-          'when autoMinMax is false and minMax is set to max'
-        ).to.be.true;
-      });
+    it('should show correct translated yAxis', () => {
+      const labelFn = def.items.settings.items.yAxis.label;
+      const properties = 'some properties';
+      const sandbox = sinon.createSandbox();
+      let handler = { getMeasureLayouts: sandbox.stub().returns([{}, { qError: false, qFallbackTitle: 'fb title' }]) };
+      expect(labelFn(properties, handler), 'with info when there is no error').to.deep.equal(
+        'translated-properties.yAxisWithInfo'
+      );
+      handler = { getMeasureLayouts: sandbox.stub().returns([{ qError: true, qFallbackTitle: 'fb title' }]) };
+      expect(labelFn(properties, handler), 'with no info when there is an error').to.deep.equal(
+        'translated-properties.yAxis'
+      );
+      sandbox.restore();
+    });
 
-      it('should detect invalidity of yAxis max value correctly', () => {
-        const validFn = def.items.settings.items.yAxis.items.minMax.items.max.invalid;
-        expect(validFn({ yAxis: { min: 1, max: -1, minMax: 'minMax' } }), 'when min is larger than max').to.be.true;
-        expect(validFn({ yAxis: { min: 1, max: -1, minMax: 'max' } }), 'when the minMax property is set to max').to.be
-          .false;
-      });
+    it('should only show yAxis when appropriate', () => {
+      const showFn = def.items.settings.items.yAxis.items.axis.items.dock.show;
+      expect(showFn({ yAxis: { show: 'none' } }), 'not when show property is set to none').to.be.false;
+    });
 
-      describe('measureAxisTitle', () => {
-        it('should have correct properties', () => {
-          expect(def.items.settings.items.yAxis.items.axis.items.measureAxisTitle).to.have.all.keys([
-            'component',
-            'type',
-            'label',
-            'classification',
-          ]);
-        });
+    it('should return correct yMirrorMode options', () => {
+      const optionFn = def.items.settings.items.yAxis.items.axis.items.dock.options;
+      expect(optionFn('data', 'handler', { yMirrorMode: true }), 'when yMirrorMode is set to true').to.deep.equal([
+        { value: 'near', translation: 'properties.dock.right' },
+        { value: 'far', translation: 'properties.dock.left' },
+      ]);
+      expect(optionFn('data', 'handler', { yMirrorMode: false }), 'when yMirrorMode is set to false').to.deep.equal([
+        { value: 'near', translation: 'properties.dock.left' },
+        { value: 'far', translation: 'properties.dock.right' },
+      ]);
+    });
 
-        it('should have correct component', () => {
-          expect(def.items.settings.items.yAxis.items.axis.items.measureAxisTitle.component).to.equal('header');
-        });
+    it('should only show yAxis grid when appropriate', () => {
+      const showFn = def.items.settings.items.yAxis.items.axis.items.spacing.show;
+      expect(showFn({ yAxis: { show: 'none' } }), 'not when show property is set to none').to.be.false;
+    });
 
-        it('should have correct type', () => {
-          expect(def.items.settings.items.yAxis.items.axis.items.measureAxisTitle.type).to.equal('string');
-        });
+    it('should only show yAxis min max when appropriate', () => {
+      const showFn = def.items.settings.items.yAxis.items.minMax.items.minMax.show;
+      expect(showFn({ yAxis: { autoMinMax: true } }), 'not when autoMinMax is true').to.be.false;
+    });
 
-        it('should show correct translated yAxis label', () => {
-          const labelFn = def.items.settings.items.yAxis.items.axis.items.measureAxisTitle.label;
-          const properties = 'some properties';
-          const sandbox = sinon.createSandbox();
-          let handler = {
-            getMeasureLayouts: sandbox.stub().returns([{}, { qError: false, qFallbackTitle: 'fb title' }]),
-          };
-          expect(labelFn(properties, handler), 'with info when there is no error').to.deep.equal(
-            'translated-properties.yAxisWithInfo'
-          );
-          handler = { getMeasureLayouts: sandbox.stub().returns([{ qError: true, qFallbackTitle: 'fb title' }]) };
-          expect(labelFn(properties, handler), 'with no info when there is an error').to.deep.equal(
-            'translated-properties.yAxis'
-          );
-          sandbox.restore();
-        });
+    it('should only show yAxis min when appropriate', () => {
+      const showFn = def.items.settings.items.yAxis.items.minMax.items.min.show;
+      expect(
+        showFn({ yAxis: { autoMinMax: false, minMax: 'min' } }),
+        'when autoMinMax is false and minMax is set to min'
+      ).to.be.true;
+    });
 
-        it('should have correct classification', () => {
-          expect(def.items.settings.items.yAxis.items.axis.items.measureAxisTitle.classification).to.deep.equal({
-            section: 'axis',
-            tags: ['simple'],
-            exclusive: true,
-          });
-        });
-      });
+    it('should detect invalidity of yAxis min value correctly', () => {
+      const validFn = def.items.settings.items.yAxis.items.minMax.items.min.invalid;
+      expect(validFn({ yAxis: { min: 1, max: -1, minMax: 'minMax' } }), 'when min is larger than max').to.be.true;
+      expect(validFn({ yAxis: { min: 1, max: -1, minMax: 'min' } }), 'when the minMax property is set to min').to.be
+        .false;
+    });
 
-      describe('startAt', () => {
-        it('should have correct properties', () => {
-          expect(def.items.settings.items.yAxis.items.startAt).to.have.all.keys([
-            'type',
-            'component',
-            'translation',
-            'readOnly',
-            'options',
-            'defaultValue',
-            'convertFunctions',
-            'classification',
-          ]);
-        });
+    it('should only show yAxis max when appropriate', () => {
+      const showFn = def.items.settings.items.yAxis.items.minMax.items.max.show;
+      expect(
+        showFn({ yAxis: { autoMinMax: false, minMax: 'max' } }),
+        'when autoMinMax is false and minMax is set to max'
+      ).to.be.true;
+    });
 
-        it('should have correct type', () => {
-          expect(def.items.settings.items.yAxis.items.startAt.type).to.equal('string');
-        });
-
-        it('should have correct component', () => {
-          expect(def.items.settings.items.yAxis.items.startAt.component).to.equal('dropdown');
-        });
-
-        it('should have correct translation', () => {
-          expect(def.items.settings.items.yAxis.items.startAt.translation).to.equal('properties.axis.startAt');
-        });
-
-        describe('readOnly', () => {
-          let readOnly;
-
-          beforeEach(() => {
-            ({ readOnly } = def.items.settings.items.yAxis.items.startAt);
-          });
-
-          it('should have return true when has autoMinMax is false and not min type', () => {
-            expect(readOnly({ yAxis: { autoMinMax: false, minMax: 'max' } })).to.be.true;
-          });
-
-          it('should have return true when has autoMinMax is false and is min type, but min is not 0', () => {
-            expect(readOnly({ yAxis: { autoMinMax: false, minMax: 'min', min: 10 } })).to.be.true;
-          });
-
-          it('should have return false when has autoMinMax is false and is min type, but min is 0', () => {
-            expect(readOnly({ yAxis: { autoMinMax: false, minMax: 'min', min: 0 } })).to.be.false;
-          });
-
-          it('should have return false when has autoMinMax is true', () => {
-            expect(readOnly({ yAxis: { autoMinMax: true } })).to.be.false;
-          });
-
-          it('should have correct defaultValue', () => {
-            expect(def.items.settings.items.yAxis.items.startAt.defaultValue).to.equal('zero');
-          });
-
-          describe('convertFunctions', () => {
-            let get;
-            let set;
-            let args;
-            let setter;
-            const sandbox = sinon.createSandbox();
-            const definition = { type: 'string' };
-            const getter = (type) => type;
-
-            beforeEach(() => {
-              args = { properties: { yAxis: { startAt: 'zero', autoMinMax: true, min: '10' } } };
-              ({ get, set } = def.items.settings.items.yAxis.items.startAt.convertFunctions);
-              setter = sandbox.stub();
-            });
-
-            afterEach(() => {
-              sandbox.restore();
-            });
-
-            describe('get', () => {
-              it('should convert value to lowest when is autoMinMax', () => {
-                expect(get(getter, definition, args)).to.equal('lowest');
-              });
-
-              it('should convert value to zero when is not autoMinMax, type is min and min is 0', () => {
-                args = {
-                  properties: {
-                    yAxis: { startAt: 'lowest', autoMinMax: false, minMax: 'min', min: 0 },
-                  },
-                };
-                expect(get(getter, definition, args)).to.equal('zero');
-              });
-
-              it('should return value from getter when is not autoMinMax and type is max', () => {
-                args = {
-                  properties: {
-                    yAxis: { startAt: 'lowest', autoMinMax: false, minMax: 'max', min: 0 },
-                  },
-                };
-                expect(get(getter, definition, args)).to.equal('string');
-              });
-            });
-
-            describe('set', () => {
-              it('should call setter three times with correct values when select start at as zero', () => {
-                set('zero', setter, definition, args, '');
-                expect(setter).to.have.been.calledWith('', 'yAxis.autoMinMax', false);
-                expect(setter).to.have.been.calledWith('', 'yAxis.minMax', 'min');
-                expect(setter).to.have.been.calledWith('', 'yAxis.min', 0);
-              });
-
-              it('should call setter one time with correct values when select start at as lowest', () => {
-                set('lowest', setter, definition, args, '');
-                expect(setter).to.have.been.calledWith('', 'yAxis.autoMinMax', true);
-              });
-            });
-          });
-
-          it('should have correct classification', () => {
-            expect(def.items.settings.items.xAxis.items.startAt.classification).to.deep.equal({
-              section: 'axis',
-              tags: ['simple'],
-              exclusive: true,
-            });
-          });
-        });
-      });
+    it('should detect invalidity of yAxis max value correctly', () => {
+      const validFn = def.items.settings.items.yAxis.items.minMax.items.max.invalid;
+      expect(validFn({ yAxis: { min: 1, max: -1, minMax: 'minMax' } }), 'when min is larger than max').to.be.true;
+      expect(validFn({ yAxis: { min: 1, max: -1, minMax: 'max' } }), 'when the minMax property is set to max').to.be
+        .false;
     });
   });
 });
