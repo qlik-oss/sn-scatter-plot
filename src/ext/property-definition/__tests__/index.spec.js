@@ -369,7 +369,7 @@ describe('property panel definition', () => {
             const getter = (type) => type;
 
             beforeEach(() => {
-              args = { properties: { xAxis: { startAt: 'zero', autoMinMax: true, min: '10' } } };
+              args = { properties: { xAxis: { autoMinMax: true, min: '10' } } };
               ({ get, set } = def.items.settings.items.xAxis.items.startAt.convertFunctions);
               setter = sandbox.stub();
             });
@@ -386,7 +386,7 @@ describe('property panel definition', () => {
               it('should convert value to zero when is not autoMinMax, type is min and min is 0', () => {
                 args = {
                   properties: {
-                    xAxis: { startAt: 'lowest', autoMinMax: false, minMax: 'min', min: 0 },
+                    xAxis: { autoMinMax: false, minMax: 'min', min: 0 },
                   },
                 };
                 expect(get(getter, definition, args)).to.equal('zero');
@@ -395,7 +395,7 @@ describe('property panel definition', () => {
               it('should return value from getter when is not autoMinMax and type is max', () => {
                 args = {
                   properties: {
-                    xAxis: { startAt: 'lowest', autoMinMax: false, minMax: 'max', min: 0 },
+                    xAxis: { autoMinMax: false, minMax: 'max', min: 0 },
                   },
                 };
                 expect(get(getter, definition, args)).to.equal('string');
@@ -610,7 +610,7 @@ describe('property panel definition', () => {
             const getter = (type) => type;
 
             beforeEach(() => {
-              args = { properties: { yAxis: { startAt: 'zero', autoMinMax: true, min: '10' } } };
+              args = { properties: { yAxis: { autoMinMax: true, min: '10' } } };
               ({ get, set } = def.items.settings.items.yAxis.items.startAt.convertFunctions);
               setter = sandbox.stub();
             });
@@ -627,7 +627,7 @@ describe('property panel definition', () => {
               it('should convert value to zero when is not autoMinMax, type is min and min is 0', () => {
                 args = {
                   properties: {
-                    yAxis: { startAt: 'lowest', autoMinMax: false, minMax: 'min', min: 0 },
+                    yAxis: { autoMinMax: false, minMax: 'min', min: 0 },
                   },
                 };
                 expect(get(getter, definition, args)).to.equal('zero');
@@ -636,7 +636,7 @@ describe('property panel definition', () => {
               it('should return value from getter when is not autoMinMax and type is max', () => {
                 args = {
                   properties: {
-                    yAxis: { startAt: 'lowest', autoMinMax: false, minMax: 'max', min: 0 },
+                    yAxis: { autoMinMax: false, minMax: 'max', min: 0 },
                   },
                 };
                 expect(get(getter, definition, args)).to.equal('string');
