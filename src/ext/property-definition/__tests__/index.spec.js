@@ -363,15 +363,14 @@ describe('property panel definition', () => {
             let get;
             let set;
             let args;
-            let setter;
             const sandbox = sinon.createSandbox();
             const definition = { type: 'string' };
             const getter = (type) => type;
 
             beforeEach(() => {
+              sandbox.stub(chartModules, 'setValue');
               args = { properties: { xAxis: { autoMinMax: true, min: '10' } } };
               ({ get, set } = def.items.settings.items.xAxis.items.startAt.convertFunctions);
-              setter = sandbox.stub();
             });
 
             afterEach(() => {
@@ -403,16 +402,16 @@ describe('property panel definition', () => {
             });
 
             describe('set', () => {
-              it('should call setter three times with correct values when select start at as zero', () => {
-                set('zero', setter, definition, args, '');
-                expect(setter).to.have.been.calledWith('', 'xAxis.autoMinMax', false);
-                expect(setter).to.have.been.calledWith('', 'xAxis.minMax', 'min');
-                expect(setter).to.have.been.calledWith('', 'xAxis.min', 0);
+              it('should call setValue three times with correct values when select start at as zero', () => {
+                set('zero', undefined, definition, args, '');
+                expect(chartModules.setValue).to.have.been.calledWith('', 'xAxis.autoMinMax', false);
+                expect(chartModules.setValue).to.have.been.calledWith('', 'xAxis.minMax', 'min');
+                expect(chartModules.setValue).to.have.been.calledWith('', 'xAxis.min', 0);
               });
 
-              it('should call setter one time with correct values when select start at as lowest', () => {
-                set('lowest', setter, definition, args, '');
-                expect(setter).to.have.been.calledWith('', 'xAxis.autoMinMax', true);
+              it('should call setValue one time with correct values when select start at as lowest', () => {
+                set('lowest', undefined, definition, args, '');
+                expect(chartModules.setValue).to.have.been.calledWith('', 'xAxis.autoMinMax', true);
               });
             });
           });
@@ -604,15 +603,15 @@ describe('property panel definition', () => {
             let get;
             let set;
             let args;
-            let setter;
+
             const sandbox = sinon.createSandbox();
             const definition = { type: 'string' };
             const getter = (type) => type;
 
             beforeEach(() => {
+              sandbox.stub(chartModules, 'setValue');
               args = { properties: { yAxis: { autoMinMax: true, min: '10' } } };
               ({ get, set } = def.items.settings.items.yAxis.items.startAt.convertFunctions);
-              setter = sandbox.stub();
             });
 
             afterEach(() => {
@@ -644,16 +643,16 @@ describe('property panel definition', () => {
             });
 
             describe('set', () => {
-              it('should call setter three times with correct values when select start at as zero', () => {
-                set('zero', setter, definition, args, '');
-                expect(setter).to.have.been.calledWith('', 'yAxis.autoMinMax', false);
-                expect(setter).to.have.been.calledWith('', 'yAxis.minMax', 'min');
-                expect(setter).to.have.been.calledWith('', 'yAxis.min', 0);
+              it('should call setValue three times with correct values when select start at as zero', () => {
+                set('zero', undefined, definition, args, '');
+                expect(chartModules.setValue).to.have.been.calledWith('', 'yAxis.autoMinMax', false);
+                expect(chartModules.setValue).to.have.been.calledWith('', 'yAxis.minMax', 'min');
+                expect(chartModules.setValue).to.have.been.calledWith('', 'yAxis.min', 0);
               });
 
-              it('should call setter one time with correct values when select start at as lowest', () => {
-                set('lowest', setter, definition, args, '');
-                expect(setter).to.have.been.calledWith('', 'yAxis.autoMinMax', true);
+              it('should call setValue one time with correct values when select start at as lowest', () => {
+                set('lowest', undefined, definition, args, '');
+                expect(chartModules.setValue).to.have.been.calledWith('', 'yAxis.autoMinMax', true);
               });
             });
           });

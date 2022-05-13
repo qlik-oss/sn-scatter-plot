@@ -397,11 +397,11 @@ export default function propertyDefinition(env) {
               },
               set(value, setter, definition, args, data) {
                 if (value === 'zero') {
-                  setter(data, 'xAxis.autoMinMax', false);
-                  setter(data, 'xAxis.minMax', 'min');
-                  setter(data, 'xAxis.min', 0);
+                  setValue(data, 'xAxis.autoMinMax', false);
+                  setValue(data, 'xAxis.minMax', 'min');
+                  setValue(data, 'xAxis.min', 0);
                 } else {
-                  setter(data, 'xAxis.autoMinMax', true);
+                  setValue(data, 'xAxis.autoMinMax', true);
                 }
               },
             },
@@ -530,11 +530,11 @@ export default function propertyDefinition(env) {
               },
               set(value, setter, definition, args, data) {
                 if (value === 'zero') {
-                  setter(data, 'yAxis.autoMinMax', false);
-                  setter(data, 'yAxis.minMax', 'min');
-                  setter(data, 'yAxis.min', 0);
+                  setValue(data, 'yAxis.autoMinMax', false);
+                  setValue(data, 'yAxis.minMax', 'min');
+                  setValue(data, 'yAxis.min', 0);
                 } else {
-                  setter(data, 'yAxis.autoMinMax', true);
+                  setValue(data, 'yAxis.autoMinMax', true);
                 }
               },
             },
