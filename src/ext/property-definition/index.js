@@ -47,6 +47,19 @@ export default function propertyDefinition(env) {
     return options;
   };
 
+  const getAxisTitle = (handler, axis) => {
+    let label;
+    const measure = axis === 'x' ? handler.getMeasureLayouts()[0] : handler.getMeasureLayouts()[1];
+
+    if (measure && !measure.qError) {
+      label = env.translator.get(`properties.${axis}AxisWithInfo`, [measure.qFallbackTitle]);
+    } else {
+      label = env.translator.get(`properties.${axis}Axis`);
+    }
+
+    return label;
+  };
+
   const settings = {
     uses: 'settings',
     items: {
@@ -269,20 +282,23 @@ export default function propertyDefinition(env) {
         type: 'items',
         uses: 'axis.measureAxis',
         label(properties, handler) {
-          let label;
-          const measure = handler.getMeasureLayouts()[0];
-
-          if (measure && !measure.qError) {
-            label = env.translator.get('properties.xAxisWithInfo', [measure.qFallbackTitle]);
-          } else {
-            label = env.translator.get('properties.xAxis');
-          }
-
-          return label;
+          return getAxisTitle(handler, 'x');
         },
         items: {
           axis: {
             items: {
+              measureAxisTitle: {
+                component: 'header',
+                type: 'string',
+                label(properties, handler) {
+                  return getAxisTitle(handler, 'x');
+                },
+                classification: {
+                  section: 'axis',
+                  tags: ['simple'],
+                  exclusive: true,
+                },
+              },
               show: {
                 ref: 'xAxis.show',
                 snapshot: {
@@ -352,26 +368,72 @@ export default function propertyDefinition(env) {
               },
             },
           },
+          startAt: {
+            type: 'string',
+            component: 'dropdown',
+            translation: 'properties.axis.startAt',
+            readOnly: (data) => !data.xAxis.autoMinMax && !(data.xAxis.minMax === 'min' && data.xAxis.min === 0),
+            options: [
+              {
+                value: 'zero',
+                translation: 'properties.axis.startAt.zero',
+              },
+              {
+                value: 'lowest',
+                translation: 'properties.axis.startAt.lowest',
+              },
+            ],
+            defaultValue: 'zero',
+            convertFunctions: {
+              get(getter, definition, args) {
+                const { autoMinMax, minMax, min } = args.properties?.xAxis || {};
+                if (autoMinMax === true) {
+                  return 'lowest';
+                }
+                if (!autoMinMax && minMax === 'min' && min === 0) {
+                  return 'zero';
+                }
+                return getter(definition.type);
+              },
+              set(value, setter, definition, args, data) {
+                if (value === 'zero') {
+                  setValue(data, 'xAxis.autoMinMax', false);
+                  setValue(data, 'xAxis.minMax', 'min');
+                  setValue(data, 'xAxis.min', 0);
+                } else {
+                  setValue(data, 'xAxis.autoMinMax', true);
+                }
+              },
+            },
+            classification: {
+              section: 'axis',
+              tags: ['simple'],
+              exclusive: true,
+            },
+          },
         },
       },
       yAxis: {
         type: 'items',
         uses: 'axis.measureAxis',
         label(properties, handler) {
-          let label;
-          const measure = handler.getMeasureLayouts()[1];
-
-          if (measure && !measure.qError) {
-            label = env.translator.get('properties.yAxisWithInfo', [measure.qFallbackTitle]);
-          } else {
-            label = env.translator.get('properties.yAxis');
-          }
-
-          return label;
+          return getAxisTitle(handler, 'y');
         },
         items: {
           axis: {
             items: {
+              measureAxisTitle: {
+                component: 'header',
+                type: 'string',
+                label(properties, handler) {
+                  return getAxisTitle(handler, 'y');
+                },
+                classification: {
+                  section: 'axis',
+                  tags: ['simple'],
+                  exclusive: true,
+                },
+              },
               show: {
                 ref: 'yAxis.show',
                 snapshot: {
@@ -437,6 +499,49 @@ export default function propertyDefinition(env) {
                   return false;
                 },
               },
+            },
+          },
+          startAt: {
+            type: 'string',
+            component: 'dropdown',
+            translation: 'properties.axis.startAt',
+            readOnly: (data) => !data.yAxis.autoMinMax && !(data.yAxis.minMax === 'min' && data.yAxis.min === 0),
+            options: [
+              {
+                value: 'zero',
+                translation: 'properties.axis.startAt.zero',
+              },
+              {
+                value: 'lowest',
+                translation: 'properties.axis.startAt.lowest',
+              },
+            ],
+            defaultValue: 'zero',
+            convertFunctions: {
+              get(getter, definition, args) {
+                const { autoMinMax, minMax, min } = args.properties?.yAxis || {};
+                if (autoMinMax === true) {
+                  return 'lowest';
+                }
+                if (!autoMinMax && minMax === 'min' && min === 0) {
+                  return 'zero';
+                }
+                return getter(definition.type);
+              },
+              set(value, setter, definition, args, data) {
+                if (value === 'zero') {
+                  setValue(data, 'yAxis.autoMinMax', false);
+                  setValue(data, 'yAxis.minMax', 'min');
+                  setValue(data, 'yAxis.min', 0);
+                } else {
+                  setValue(data, 'yAxis.autoMinMax', true);
+                }
+              },
+            },
+            classification: {
+              section: 'axis',
+              tags: ['simple'],
+              exclusive: true,
             },
           },
         },

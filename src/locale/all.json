@@ -718,5 +718,23 @@
       "zh-TW": "關閉套索選取",
       "ru-RU": "Выключить выбор лассо"
     }
+  },
+  "properties.axis.startAt": {
+    "id": "properties.axis.startAt",
+    "locale": {
+      "en-US": "Start at"
+    }
+  },
+  "properties.axis.startAt.zero": {
+    "id": "properties.axis.startAt.zero",
+    "locale": {
+      "en-US": "Zero"
+    }
+  },
+  "properties.axis.startAt.lowest": {
+    "id": "properties.axis.startAt.lowest",
+    "locale": {
+      "en-US": "Lowest value"
+    }
   }
 }
