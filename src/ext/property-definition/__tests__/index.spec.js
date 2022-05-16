@@ -356,7 +356,7 @@ describe('property panel definition', () => {
           });
 
           it('should have correct defaultValue', () => {
-            expect(def.items.settings.items.xAxis.items.startAt.defaultValue).to.equal('zero');
+            expect(def.items.settings.items.xAxis.items.startAt.defaultValue).to.equal('lowest');
           });
 
           describe('convertFunctions', () => {

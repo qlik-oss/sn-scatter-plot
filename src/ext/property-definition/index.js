@@ -383,7 +383,7 @@ export default function propertyDefinition(env) {
                 translation: 'properties.axis.startAt.lowest',
               },
             ],
-            defaultValue: 'zero',
+            defaultValue: 'lowest',
             convertFunctions: {
               get(getter, definition, args) {
                 const { autoMinMax, minMax, min } = args.properties?.xAxis || {};
