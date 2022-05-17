@@ -63,7 +63,7 @@ export default function createDataTitileComp() {
   function HyperDataItem({ title, selected, onClick }) {
     const localDir = rtlUtils.detectTextDirection(title);
     return (
-      <ListItem button onClick={onClick} style={{ textAlign: 'start' }}>
+      <ListItem role="menuitem" onClick={onClick} style={{ textAlign: 'start' }}>
         <ListItemIcon style={{ minWidth: 32 }}>
           <SVGIcon d={selected ? ICONS.TICK.d : ''} />
         </ListItemIcon>
@@ -92,7 +92,7 @@ export default function createDataTitileComp() {
           style: { minWidth: '250px', maxHeight: '300px' },
         }}
       >
-        <List dense dir={dir} component="nav">
+        <List dense dir={dir} aria-label="use the tab keys to navigate between the options" component="nav">
           <HyperDataItem title={current} selected onClick={onClose} />
           {items}
         </List>
@@ -223,7 +223,7 @@ export default function createDataTitileComp() {
       const handleFocus = (event) => {
         // Fixing show focus style when closing popover
         if (this.state.closeTime && Date.now() - this.state.closeTime < 20) {
-          return;
+          return event.currentTarget.style.boxShadow = '0px 0px 0px 2px #177FE6 inset';;
         }
         // eslint-disable-next-line no-param-reassign
         event.currentTarget.style.boxShadow = '0px 0px 0px 2px #177FE6 inset';
@@ -245,8 +245,15 @@ export default function createDataTitileComp() {
         style.minWidth = minWidth;
       }
       const dir = rtlUtils.detectTextDirection(titleData.text);
+      let instruction = "";
+      if (popover.dock === "right"){
+        instruction = `the y-axis is showing ${titleData.text}, Click to expand or press enter key to open the list, selecting an option from this list will change the data in the y-axis shown in the chart`;
+      } else if (popover.dock === "top"){
+        instruction = `the x-axis is showing ${titleData.text}, Click to expand or press enter key to open the list, selecting an option from this list will change the data in the y-axis shown in the chart`;
+      }
       const label = (
         <FadeButton
+          aria-label={instruction}
           style={style}
           onClick={disabledLabel ? undefined : onClick}
           title={titleData.text}
