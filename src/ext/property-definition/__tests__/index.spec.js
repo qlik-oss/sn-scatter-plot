@@ -29,6 +29,7 @@ describe('property panel definition', () => {
       describe('items', () => {
         it('should have all keys', () => {
           expect(def.items.settings.items).to.have.all.keys([
+            'simpleLabels',
             'general',
             'presentation',
             'colorsAndLegend',
