@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { setValue, getValue } from 'qlik-chart-modules';
 import trendlineDefinition from './trendlines-definition';
 import showCompressionResolution from '../show-compression-resolution';
@@ -63,6 +64,76 @@ export default function propertyDefinition(env) {
   const settings = {
     uses: 'settings',
     items: {
+      simpleLabels: {
+        items: {
+          labels: {
+            items: {
+              labels: {
+                component: 'checkbox',
+                ref: 'labels.mode',
+                type: 'number',
+                translation: 'Simple.Label.Show',
+                show(props, handler, args) {
+                  return (
+                    args.properties.qHyperCubeDef.qDimensions.length &&
+                    args.properties.qHyperCubeDef.qMeasures.length >= 2
+                  );
+                },
+                convertFunctions: {
+                  get(getter, def, args) {
+                    return args.properties.labels.mode;
+                  },
+                  set(value, setter, def, args) {
+                    args.properties.labels.mode = value ? 1 : 0;
+                  },
+                },
+              },
+              xAxisTitle: {
+                component: 'checkbox',
+                ref: 'xAxis.show',
+                type: 'string',
+                translation: 'Simple.Label.XAxis.Hide',
+                defaultValue: 'all',
+                show(props, handler, args) {
+                  return (
+                    args.properties.qHyperCubeDef.qDimensions.length &&
+                    args.properties.qHyperCubeDef.qMeasures.length >= 2
+                  );
+                },
+                convertFunctions: {
+                  get(getter, def, args) {
+                    return args.properties.xAxis.show === 'labels' || args.properties.xAxis.show === 'none';
+                  },
+                  set(value, setter, def, args) {
+                    args.properties.xAxis.show = value ? 'labels' : 'all';
+                  },
+                },
+              },
+              yAxisTitle: {
+                component: 'checkbox',
+                ref: 'yAxis.show',
+                type: 'string',
+                translation: 'Simple.Label.YAxis.Hide',
+                defaultValue: 'all',
+                show(props, handler, args) {
+                  return (
+                    args.properties.qHyperCubeDef.qDimensions.length &&
+                    args.properties.qHyperCubeDef.qMeasures.length >= 2
+                  );
+                },
+                convertFunctions: {
+                  get(getter, def, args) {
+                    return args.properties.yAxis.show === 'labels' || args.properties.yAxis.show === 'none';
+                  },
+                  set(value, setter, def, args) {
+                    args.properties.yAxis.show = value ? 'labels' : 'all';
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
       general: {
         items: {
           showDisclaimer: {
