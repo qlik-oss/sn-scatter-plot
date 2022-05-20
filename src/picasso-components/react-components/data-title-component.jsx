@@ -223,7 +223,7 @@ export default function createDataTitileComp() {
       const handleFocus = (event) => {
         // Fixing show focus style when closing popover
         if (this.state.closeTime && Date.now() - this.state.closeTime < 20) {
-          return event.currentTarget.style.boxShadow = '0px 0px 0px 2px #177FE6 inset';;
+          return event.currentTarget.style.boxShadow = '0px 0px 0px 2px #177FE6 inset';
         }
         // eslint-disable-next-line no-param-reassign
         event.currentTarget.style.boxShadow = '0px 0px 0px 2px #177FE6 inset';
@@ -246,9 +246,9 @@ export default function createDataTitileComp() {
       }
       const dir = rtlUtils.detectTextDirection(titleData.text);
       let instruction = "";
-      if (popover.dock === "right"){
+      if (popover.dock === "right") {
         instruction = `the y-axis is showing ${titleData.text}, Click to expand or press enter key to open the list, selecting an option from this list will change the data in the y-axis shown in the chart`;
-      } else if (popover.dock === "top"){
+      } else if (popover.dock === "top") {
         instruction = `the x-axis is showing ${titleData.text}, Click to expand or press enter key to open the list, selecting an option from this list will change the data in the y-axis shown in the chart`;
       }
       const label = (
