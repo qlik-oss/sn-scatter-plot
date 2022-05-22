@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-scatter-plot:plugins",
     "description": "Scatter plot plugins API definitions",
-    "version": "3.14.0",
+    "version": "3.15.0",
     "license": "MIT",
     "stability": "experimental",
     "x-qlik-visibility": "public"
