@@ -237,6 +237,7 @@ export default function createDataTitileComp() {
         // eslint-disable-next-line no-param-reassign
         event.currentTarget.style.borderRadius = '0px';
       };
+
       if (padding) {
         style.padding = padding;
       }
