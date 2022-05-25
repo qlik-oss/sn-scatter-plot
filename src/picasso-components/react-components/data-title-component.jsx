@@ -223,7 +223,7 @@ export default function createDataTitileComp() {
       const handleFocus = (event) => {
         // Fixing show focus style when closing popover
         if (this.state.closeTime && Date.now() - this.state.closeTime < 20) {
-          return (event.currentTarget.style.boxShadow = '0px 0px 0px 2px #177FE6 inset');
+          event.currentTarget.style.boxShadow = '0px 0px 0px 2px #177FE6 inset';
         }
         // eslint-disable-next-line no-param-reassign
         event.currentTarget.style.boxShadow = '0px 0px 0px 2px #177FE6 inset';
