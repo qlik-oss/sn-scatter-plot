@@ -61,6 +61,26 @@ export default function propertyDefinition(env) {
     return label;
   };
 
+  const simpleColors = {
+    items: {
+      simpleItems: {
+        items: {
+          autoColor: {
+            label: (data) => {
+              if (data.color?.auto)
+                return env.translator.get('Simple.Color.Auto', env.translator.get('properties.colorMode.primary'));
+              return env.translator.get('Common.Custom');
+            },
+            change,
+          },
+          colorMode: {
+            options: simpleColorModeOptions,
+          },
+        },
+      },
+    },
+  };
+
   const simpleLabels = {
     items: {
       labels: {
@@ -332,21 +352,7 @@ export default function propertyDefinition(env) {
               },
             },
           },
-          simpleColors: {
-            items: {
-              autoColor: {
-                label: (data) => {
-                  if (data.color?.auto)
-                    return env.translator.get('Simple.Color.Auto', env.translator.get('properties.colorMode.primary'));
-                  return env.translator.get('Common.Custom');
-                },
-                change,
-              },
-              colorMode: {
-                options: simpleColorModeOptions,
-              },
-            },
-          },
+          simpleColors,
           legend: {
             show(data) {
               const { auto, mode, expressionIsColor } = data.color;
