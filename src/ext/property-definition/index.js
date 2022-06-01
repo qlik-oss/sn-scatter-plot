@@ -14,6 +14,7 @@ export default function propertyDefinition(env) {
   const change = (data) => {
     if (!data.color?.auto) {
       setValue(data, 'color.mode', 'primary');
+      setValue(data, 'color.useBaseColors', 'off');
     }
   };
 
