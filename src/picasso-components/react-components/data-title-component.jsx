@@ -243,7 +243,6 @@ export default function createDataTitileComp() {
       }
 
       const dir = rtlUtils.detectTextDirection(titleData.text);
-
       let instruction = '';
 
       if (popover.dock === 'right') {
