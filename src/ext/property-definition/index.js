@@ -87,10 +87,8 @@ export default function propertyDefinition(env) {
       labels: {
         items: {
           header: {
-            show(props, handler, args) {
-              return (
-                args.properties.qHyperCubeDef.qDimensions.length && args.properties.qHyperCubeDef.qMeasures.length >= 2
-              );
+            show(props) {
+              return props.qHyperCubeDef.qDimensions.length && props.qHyperCubeDef.qMeasures.length >= 2;
             },
           },
           labels: {
@@ -98,17 +96,15 @@ export default function propertyDefinition(env) {
             ref: 'labels.mode',
             type: 'number',
             translation: 'Simple.Label.Show',
-            show(props, handler, args) {
-              return (
-                args.properties.qHyperCubeDef.qDimensions.length && args.properties.qHyperCubeDef.qMeasures.length >= 2
-              );
+            show(props) {
+              return props.qHyperCubeDef.qDimensions.length && props.qHyperCubeDef.qMeasures.length >= 2;
             },
             convertFunctions: {
-              get(getter, def, args) {
-                return args.properties.labels.mode;
+              get(getter, def, args, data) {
+                return data.labels.mode;
               },
-              set(value, setter, def, args) {
-                args.properties.labels.mode = value ? 1 : 0;
+              set(value, setter, def, args, data) {
+                data.labels.mode = value ? 1 : 0;
               },
             },
           },
@@ -118,17 +114,15 @@ export default function propertyDefinition(env) {
             type: 'string',
             translation: 'Simple.Label.XAxis.Hide',
             defaultValue: 'all',
-            show(props, handler, args) {
-              return (
-                args.properties.qHyperCubeDef.qDimensions.length && args.properties.qHyperCubeDef.qMeasures.length >= 2
-              );
+            show(props) {
+              return props.qHyperCubeDef.qDimensions.length && props.qHyperCubeDef.qMeasures.length >= 2;
             },
             convertFunctions: {
-              get(getter, def, args) {
-                return args.properties.xAxis.show === 'labels' || args.properties.xAxis.show === 'none';
+              get(getter, def, args, data) {
+                return data.xAxis.show === 'labels' || data.xAxis.show === 'none';
               },
-              set(value, setter, def, args) {
-                args.properties.xAxis.show = value ? 'labels' : 'all';
+              set(value, setter, def, args, data) {
+                data.xAxis.show = value ? 'labels' : 'all';
               },
             },
           },
@@ -138,17 +132,15 @@ export default function propertyDefinition(env) {
             type: 'string',
             translation: 'Simple.Label.YAxis.Hide',
             defaultValue: 'all',
-            show(props, handler, args) {
-              return (
-                args.properties.qHyperCubeDef.qDimensions.length && args.properties.qHyperCubeDef.qMeasures.length >= 2
-              );
+            show(props) {
+              return props.qHyperCubeDef.qDimensions.length && props.qHyperCubeDef.qMeasures.length >= 2;
             },
             convertFunctions: {
-              get(getter, def, args) {
-                return args.properties.yAxis.show === 'labels' || args.properties.yAxis.show === 'none';
+              get(getter, def, args, data) {
+                return data.yAxis.show === 'labels' || data.yAxis.show === 'none';
               },
-              set(value, setter, def, args) {
-                args.properties.yAxis.show = value ? 'labels' : 'all';
+              set(value, setter, def, args, data) {
+                data.yAxis.show = value ? 'labels' : 'all';
               },
             },
           },
@@ -469,8 +461,8 @@ export default function propertyDefinition(env) {
             ],
             defaultValue: 'lowest',
             convertFunctions: {
-              get(getter, definition, args) {
-                const { autoMinMax, minMax, min } = args.properties?.xAxis || {};
+              get(getter, definition, args, data) {
+                const { autoMinMax, minMax, min } = data?.xAxis || {};
                 if (autoMinMax === true) {
                   return 'lowest';
                 }
@@ -602,8 +594,8 @@ export default function propertyDefinition(env) {
             ],
             defaultValue: 'lowest',
             convertFunctions: {
-              get(getter, definition, args) {
-                const { autoMinMax, minMax, min } = args.properties?.yAxis || {};
+              get(getter, definition, args, data) {
+                const { autoMinMax, minMax, min } = data?.yAxis || {};
                 if (autoMinMax === true) {
                   return 'lowest';
                 }
