@@ -96,6 +96,7 @@ export default function propertyDefinition(env) {
             ref: 'labels.mode',
             type: 'number',
             translation: 'Simple.Label.Show',
+            defaultValue: 1,
             show(props) {
               return props.qHyperCubeDef.qDimensions.length && props.qHyperCubeDef.qMeasures.length >= 2;
             },
