@@ -248,7 +248,7 @@ export default function createDataTitileComp() {
       if (popover.dock === 'right') {
         instruction = `the y-axis is showing ${titleData.text}, Click to expand or press enter key to open the list, selecting an option from this list will change the data in the y-axis shown in the chart`;
       } else if (popover.dock === 'top') {
-        instruction = `the x-axis is showing ${titleData.text}, Click to expand or press enter key to open the list, selecting an option from this list will change the data in the y-axis shown in the chart`;
+        instruction = `the x-axis is showing ${titleData.text}, Click to expand or press enter key to open the list, selecting an option from this list will change the data in the x-axis shown in the chart`;
       }
 
       const label = (
