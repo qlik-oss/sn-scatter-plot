@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-scatter-plot:properties",
     "description": "Scatter plot generic object definition",
-    "version": "3.19.0",
+    "version": "3.19.1",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
