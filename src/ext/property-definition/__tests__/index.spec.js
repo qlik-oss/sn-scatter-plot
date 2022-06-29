@@ -363,14 +363,15 @@ describe('property panel definition', () => {
           describe('convertFunctions', () => {
             let get;
             let set;
-            let args;
+            let data;
             const sandbox = sinon.createSandbox();
             const definition = { type: 'string' };
             const getter = (type) => type;
+            const args = {};
 
             beforeEach(() => {
               sandbox.stub(chartModules, 'setValue');
-              args = { properties: { xAxis: { autoMinMax: true, min: '10' } } };
+              data = { xAxis: { autoMinMax: true, min: '10' } };
               ({ get, set } = def.items.settings.items.xAxis.items.startAt.convertFunctions);
             });
 
@@ -380,25 +381,17 @@ describe('property panel definition', () => {
 
             describe('get', () => {
               it('should convert value to lowest when is autoMinMax', () => {
-                expect(get(getter, definition, args)).to.equal('lowest');
+                expect(get(getter, definition, args, data)).to.equal('lowest');
               });
 
               it('should convert value to zero when is not autoMinMax, type is min and min is 0', () => {
-                args = {
-                  properties: {
-                    xAxis: { autoMinMax: false, minMax: 'min', min: 0 },
-                  },
-                };
-                expect(get(getter, definition, args)).to.equal('zero');
+                data = { xAxis: { autoMinMax: false, minMax: 'min', min: 0 } };
+                expect(get(getter, definition, args, data)).to.equal('zero');
               });
 
               it('should return value from getter when is not autoMinMax and type is max', () => {
-                args = {
-                  properties: {
-                    xAxis: { autoMinMax: false, minMax: 'max', min: 0 },
-                  },
-                };
-                expect(get(getter, definition, args)).to.equal('string');
+                data = { xAxis: { autoMinMax: false, minMax: 'max', min: 0 } };
+                expect(get(getter, definition, args, data)).to.equal('string');
               });
             });
 
@@ -603,15 +596,16 @@ describe('property panel definition', () => {
           describe('convertFunctions', () => {
             let get;
             let set;
-            let args;
+            let data;
 
             const sandbox = sinon.createSandbox();
             const definition = { type: 'string' };
             const getter = (type) => type;
+            const args = {};
 
             beforeEach(() => {
               sandbox.stub(chartModules, 'setValue');
-              args = { properties: { yAxis: { autoMinMax: true, min: '10' } } };
+              data = { yAxis: { autoMinMax: true, min: '10' } };
               ({ get, set } = def.items.settings.items.yAxis.items.startAt.convertFunctions);
             });
 
@@ -621,25 +615,17 @@ describe('property panel definition', () => {
 
             describe('get', () => {
               it('should convert value to lowest when is autoMinMax', () => {
-                expect(get(getter, definition, args)).to.equal('lowest');
+                expect(get(getter, definition, args, data)).to.equal('lowest');
               });
 
               it('should convert value to zero when is not autoMinMax, type is min and min is 0', () => {
-                args = {
-                  properties: {
-                    yAxis: { autoMinMax: false, minMax: 'min', min: 0 },
-                  },
-                };
-                expect(get(getter, definition, args)).to.equal('zero');
+                data = { yAxis: { autoMinMax: false, minMax: 'min', min: 0 } };
+                expect(get(getter, definition, args, data)).to.equal('zero');
               });
 
               it('should return value from getter when is not autoMinMax and type is max', () => {
-                args = {
-                  properties: {
-                    yAxis: { autoMinMax: false, minMax: 'max', min: 0 },
-                  },
-                };
-                expect(get(getter, definition, args)).to.equal('string');
+                data = { yAxis: { autoMinMax: false, minMax: 'max', min: 0 } };
+                expect(get(getter, definition, args, data)).to.equal('string');
               });
             });
 
