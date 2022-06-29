@@ -244,7 +244,6 @@ export default function createDataTitileComp() {
 
       const dir = rtlUtils.detectTextDirection(titleData.text);
       let instruction = '';
-
       if (popover != null) {
         if (popover.dock === 'right') {
           instruction = `the y-axis is showing ${titleData.text}, Click to expand or press enter key to open the list, selecting an option from this list will change the data in the y-axis shown in the chart`;
