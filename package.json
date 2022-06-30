@@ -79,7 +79,7 @@
     "extend": "3.0.2",
     "fs-extra": "10.0.0",
     "hammerjs": "2.0.8",
-    "husky": "7.0.4",
+    "husky": "8.0.1",
     "lint-staged": "12.2.1",
     "mocha-junit-reporter": "2.0.2",
     "picasso-plugin-hammer": "1.6.0",
