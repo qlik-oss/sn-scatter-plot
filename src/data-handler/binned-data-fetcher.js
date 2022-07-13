@@ -37,7 +37,7 @@ export default function createBinnedDataFetcher({ layoutService, extremumModel, 
           qHeight: height,
         },
       ],
-      NUMBERS.MAX_NR_SCATTER,
+      NUMBERS.getMaxNrScatter(layout),
       resolutionLevel,
       0
     );

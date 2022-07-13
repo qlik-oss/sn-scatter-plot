@@ -9,6 +9,8 @@ import compressionNoteProperties from './compression-note-properties';
 const persistentColorsShow = (data) => !getValue(data, 'color.auto') && getValue(data, 'color.mode') === 'byDimension';
 
 export default function propertyDefinition(env) {
+  const { flags } = env;
+
   const trendlines = trendlineDefinition(env);
 
   const change = (data) => {
@@ -272,6 +274,15 @@ export default function propertyDefinition(env) {
               return showCompressionResolution(handler.layout);
             },
           },
+          maxNumberOfBubbles: !flags.isEnabled('NUM_BUBBLES')
+            ? undefined
+            : {
+                type: 'integer',
+                expression: 'optional',
+                ref: 'maxNumberOfBubbles',
+                translation: 'Number of bubbles',
+                defaultValue: 1000,
+              },
           gridLines: {
             type: 'items',
             snapshot: {

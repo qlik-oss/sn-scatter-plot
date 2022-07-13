@@ -9,7 +9,7 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
     const isBinningSupported = !qIsDirectQueryMode && !qUnsupportedFeature?.some((f) => f === 'binningData');
     const isBigData =
       isBinningSupported &&
-      qcy > NUMBERS.MAX_NR_SCATTER &&
+      qcy > NUMBERS.getMaxNrScatter(layout) &&
       !(layout?.qIsBDILiveMode && flags.isEnabled('BDI_CLIENT_ADAPT'));
     const isRangeSelectionsSupported =
       !qIsDirectQueryMode && !qUnsupportedFeature?.some((f) => f === 'rangeSelections');
