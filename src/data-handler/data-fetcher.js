@@ -1,5 +1,5 @@
 import KEYS from '../constants/keys';
-import NUMBERS from '../constants/numbers';
+import getMaxNumBubbles from '../utils/get-max-num-bubbles';
 
 export default function createDataFetcher({ layoutService, model }) {
   let lastDataWindow;
@@ -11,7 +11,7 @@ export default function createDataFetcher({ layoutService, model }) {
       }
 
       const NR_POINTS_PER_FETCH = 2500;
-      const MAX_NR = Math.min(NUMBERS.getMaxNrScatter(layoutService.getLayout()), layoutService.meta.size.y || 0);
+      const MAX_NR = Math.min(getMaxNumBubbles(layoutService.getLayout()), layoutService.meta.size.y || 0);
       const numFetches = Math.ceil(MAX_NR / NR_POINTS_PER_FETCH);
       const dataRects = [];
       for (let i = 0; i < numFetches; i++) {

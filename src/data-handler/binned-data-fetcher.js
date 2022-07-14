@@ -1,5 +1,5 @@
 import KEYS from '../constants/keys';
-import NUMBERS from '../constants/numbers';
+import getMaxNumBubbles from '../utils/get-max-num-bubbles';
 import populateBins from '../utils/bins-util';
 
 export default function createBinnedDataFetcher({ layoutService, extremumModel, model }) {
@@ -37,7 +37,7 @@ export default function createBinnedDataFetcher({ layoutService, extremumModel, 
           qHeight: height,
         },
       ],
-      NUMBERS.getMaxNrScatter(layout),
+      getMaxNumBubbles(layout),
       resolutionLevel,
       0
     );

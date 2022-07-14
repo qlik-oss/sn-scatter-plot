@@ -1,5 +1,5 @@
 import { getValue } from 'qlik-chart-modules';
-import NUMBERS from '../../constants/numbers';
+import getMaxNumBubbles from '../../utils/get-max-num-bubbles';
 
 export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUnsupportedFeature) {
   return function layoutServiceMeta({ layout }) {
@@ -9,7 +9,7 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
     const isBinningSupported = !qIsDirectQueryMode && !qUnsupportedFeature?.some((f) => f === 'binningData');
     const isBigData =
       isBinningSupported &&
-      qcy > NUMBERS.getMaxNrScatter(layout) &&
+      qcy > getMaxNumBubbles(layout) &&
       !(layout?.qIsBDILiveMode && flags.isEnabled('BDI_CLIENT_ADAPT'));
     const isRangeSelectionsSupported =
       !qIsDirectQueryMode && !qUnsupportedFeature?.some((f) => f === 'rangeSelections');

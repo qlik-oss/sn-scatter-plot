@@ -1,4 +1,4 @@
-import NUMBERS from '../../../constants/numbers';
+import getMaxNumBubbles from '../../../utils/get-max-num-bubbles';
 
 export default [
   {
@@ -26,7 +26,7 @@ export default [
       }
 
       const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-      return qcy > NUMBERS.getMaxNrScatter(layoutService.getLayout()) && !layoutService.meta.isBigData;
+      return qcy > getMaxNumBubbles(layoutService.getLayout()) && !layoutService.meta.isBigData;
     },
   },
   {

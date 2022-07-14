@@ -33,7 +33,7 @@ export default {
     SPARK: { width: 0, height: 0 },
   },
 
-  getMaxNrScatter: (layout) => layout.maxNumberOfBubbles || 1000,
+  MAX_NR_SCATTER: 1000,
 
   // Ratio = minichart_size/chart_size, Padding: away from the bottom right corner
   MINI_CHART: { RATIO: 0.15, PADDING: 10 },
