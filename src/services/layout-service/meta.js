@@ -7,8 +7,9 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
     const hasSizeMeasure = !!getValue(layout.qHyperCube, 'qMeasureInfo.2');
     const qcy = getValue(layout.qHyperCube, 'qSize.qcy');
     const isBinningSupported = !qIsDirectQueryMode && !qUnsupportedFeature?.some((f) => f === 'binningData');
+    const isMaxNumOfBubblesEnabled = flags.isEnabled('NUM_BUBBLES');
     const maxNumOfBubbles =
-      !flags.isEnabled('NUM_BUBBLES') || layout.maxNumOfBubbles === undefined || layout.maxNumOfBubbles <= 0
+      !isMaxNumOfBubblesEnabled || layout.maxNumOfBubbles === undefined || layout.maxNumOfBubbles <= 0
         ? NUMBERS.MAX_NR_SCATTER
         : Math.ceil(layout.maxNumOfBubbles);
     const isBigData =
@@ -19,6 +20,7 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
     return {
       isSnapshot,
       hasSizeMeasure,
+      isMaxNumOfBubblesEnabled,
       maxNumOfBubbles,
       isBigData,
       isContinuous: true,
