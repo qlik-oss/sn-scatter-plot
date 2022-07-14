@@ -1,5 +1,4 @@
 import KEYS from '../constants/keys';
-import getMaxNumBubbles from '../utils/get-max-num-bubbles';
 
 export default function createDataFetcher({ layoutService, model }) {
   let lastDataWindow;
@@ -10,16 +9,16 @@ export default function createDataFetcher({ layoutService, model }) {
         return Promise.resolve(layoutService.getDataPages());
       }
 
-      const NR_POINTS_PER_FETCH = 2500;
-      const MAX_NR = Math.min(getMaxNumBubbles(layoutService.getLayout()), layoutService.meta.size.y || 0);
-      const numFetches = Math.ceil(MAX_NR / NR_POINTS_PER_FETCH);
+      const NUM_BUBBLES_PER_FETCH = 2500;
+      const NUM_BUBBLES = Math.min(layoutService.meta.maxNumOfBubbles, layoutService.meta.size.y || 0);
+      const numFetches = Math.ceil(NUM_BUBBLES / NUM_BUBBLES_PER_FETCH);
       const dataRects = [];
       for (let i = 0; i < numFetches; i++) {
         dataRects[i] = {
-          qTop: i * NR_POINTS_PER_FETCH,
+          qTop: i * NUM_BUBBLES_PER_FETCH,
           qLeft: 0,
           qWidth: 4,
-          qHeight: NR_POINTS_PER_FETCH,
+          qHeight: NUM_BUBBLES_PER_FETCH,
         };
       }
 
@@ -39,7 +38,7 @@ export default function createDataFetcher({ layoutService, model }) {
               qLeft: 0,
               qTop: 0,
               qWidth: pagesArray[pagesArray.length - 1][0].qArea.qWidth,
-              qHeight: MAX_NR,
+              qHeight: NUM_BUBBLES,
             },
             qMatrix: [],
             qTails: pagesArray[0][0].qTails,

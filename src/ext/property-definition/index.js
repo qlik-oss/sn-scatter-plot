@@ -274,12 +274,12 @@ export default function propertyDefinition(env) {
               return showCompressionResolution(handler.layout);
             },
           },
-          maxNumberOfBubbles: !flags.isEnabled('NUM_BUBBLES')
+          maxNumOfBubbles: !flags.isEnabled('NUM_BUBBLES')
             ? undefined
             : {
                 type: 'integer',
                 expression: 'optional',
-                ref: 'maxNumberOfBubbles',
+                ref: 'maxNumOfBubbles',
                 translation: 'Number of bubbles',
                 defaultValue: 1000,
               },

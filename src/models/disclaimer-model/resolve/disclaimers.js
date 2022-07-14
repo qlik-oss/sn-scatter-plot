@@ -1,5 +1,3 @@
-import getMaxNumBubbles from '../../../utils/get-max-num-bubbles';
-
 export default [
   {
     key: 'NoDataExist',
@@ -26,7 +24,7 @@ export default [
       }
 
       const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-      return qcy > getMaxNumBubbles(layoutService.getLayout()) && !layoutService.meta.isBigData;
+      return qcy > layoutService.meta.maxNumOfBubbles && !layoutService.meta.isBigData;
     },
   },
   {
