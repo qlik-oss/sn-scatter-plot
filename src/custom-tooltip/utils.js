@@ -155,7 +155,7 @@ const customTooltipUtils = {
       }
     } else {
       // destroy mini chart's sessionAlternateState, necessary for the onHide functionality
-      if (opts.flags?.isEnabled('CUSTOM_TOOLTIP_CHART') && customTooltipModel?.miniChartToken?.alternateState) {
+      if (customTooltipModel?.miniChartToken?.alternateState) {
         tooltipChart.hide({ app: opts.app, customTooltipModel });
       }
       tooltip.emit('hide');

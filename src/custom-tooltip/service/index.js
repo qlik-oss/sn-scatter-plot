@@ -38,7 +38,6 @@ export default function createCustomTooltipService({
   const hideBasic = isEnabled && getValue(layout, 'tooltip.hideBasic', false);
   const isChartEnabled = !!(
     isEnabled &&
-    flags.isEnabled('CUSTOM_TOOLTIP_CHART') &&
     layout.tooltip?.chart?.object?.refId &&
     embed &&
     typeof model?.getEffectiveProperties === 'function'

@@ -69,7 +69,6 @@ describe('custom-tooltip-service', () => {
     flags = {
       isEnabled: sandbox.stub(),
     };
-    flags.isEnabled.withArgs('CUSTOM_TOOLTIP_CHART').returns(true);
     layout = {
       tooltip: {
         auto: false,
@@ -285,11 +284,6 @@ describe('custom-tooltip-service', () => {
     describe('isEnabled', () => {
       it('should return false if tooltip is auto', () => {
         layout.tooltip.auto = true;
-        expect(create().chart.isEnabled()).to.be.false;
-      });
-
-      it('should return false if flag is not enabled', () => {
-        flags.isEnabled.withArgs('CUSTOM_TOOLTIP_CHART').returns(false);
         expect(create().chart.isEnabled()).to.be.false;
       });
 
