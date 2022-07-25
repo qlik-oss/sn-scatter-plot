@@ -221,7 +221,6 @@ export default function createDataTitileComp() {
       }
 
       const handleFocus = (event) => {
-        // Fixing show focus style when closing popover
         // eslint-disable-next-line no-param-reassign
         event.currentTarget.style.boxShadow = '0px 0px 0px 2px #177FE6 inset';
         // eslint-disable-next-line no-param-reassign
@@ -243,18 +242,10 @@ export default function createDataTitileComp() {
       }
 
       const dir = rtlUtils.detectTextDirection(titleData.text);
-      let instruction = '';
-      if (popover != null) {
-        if (popover.dock === 'right') {
-          instruction = `the y-axis is showing ${titleData.text}, Click to expand or press enter key to open the list, selecting an option from this list will change the data in the y-axis shown in the chart`;
-        } else if (popover.dock === 'top') {
-          instruction = `the x-axis is showing ${titleData.text}, Click to expand or press enter key to open the list, selecting an option from this list will change the data in the x-axis shown in the chart`;
-        }
-      }
 
       const label = (
         <FadeButton
-          aria-label={instruction}
+          aria-label={translator.get('Accessibility.Alternative.Instructions', [titleData.text])}
           style={style}
           onClick={disabledLabel ? undefined : onClick}
           title={titleData.text}
