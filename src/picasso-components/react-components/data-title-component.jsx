@@ -80,7 +80,7 @@ export default function createDataTitileComp() {
     selected: false,
   };
 
-  function AlternativesPopover({ alignTo, changeTo, current, dir, dock, list, onClose, show }) {
+  function AlternativesPopover({ alignTo, changeTo, current, dir, dock, list, onClose, show, instruction }) {
     const items = list.map((l, i) => <HyperDataItem key={l.id} title={l.title} onClick={() => changeTo(i)} />);
     return (
       <Popover
@@ -92,7 +92,7 @@ export default function createDataTitileComp() {
           style: { minWidth: '250px', maxHeight: '300px' },
         }}
       >
-        <List dense dir={dir} aria-label="use the tab keys to navigate between the options" component="nav">
+        <List dense dir={dir} aria-label={instruction} component="nav">
           <HyperDataItem title={current} selected onClick={onClose} />
           {items}
         </List>
@@ -108,6 +108,7 @@ export default function createDataTitileComp() {
     list: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     onClose: PropTypes.func.isRequired,
     show: PropTypes.bool.isRequired,
+    instruction: PropTypes.string,
   };
   AlternativesPopover.defaultProps = {
     list: [],
@@ -296,6 +297,7 @@ export default function createDataTitileComp() {
               list={this.state.alternatives}
               onClose={this.closePopover}
               changeTo={this.changeTo}
+              instruction={translator.get('Accessibility.Popover.Instructions')}
             />
           )}
         </>
