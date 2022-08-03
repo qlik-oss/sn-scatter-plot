@@ -241,7 +241,6 @@ export default function createDataTitileComp() {
       if (minWidth) {
         style.minWidth = minWidth;
       }
-
       const dir = rtlUtils.detectTextDirection(titleData.text);
 
       const label = (
