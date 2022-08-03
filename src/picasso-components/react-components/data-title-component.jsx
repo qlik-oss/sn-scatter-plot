@@ -242,7 +242,6 @@ export default function createDataTitileComp() {
         style.minWidth = minWidth;
       }
       const dir = rtlUtils.detectTextDirection(titleData.text);
-
       const label = (
         <FadeButton
           aria-label={translator.get('Accessibility.Alternative.Instructions', [titleData.text])}
