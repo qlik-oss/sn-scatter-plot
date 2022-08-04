@@ -63,7 +63,7 @@ export default function createDataTitileComp() {
   function HyperDataItem({ title, selected, onClick }) {
     const localDir = rtlUtils.detectTextDirection(title);
     return (
-      <ListItem button onClick={onClick} style={{ textAlign: 'start' }}>
+      <ListItem role="menuitem" onClick={onClick} style={{ textAlign: 'start' }}>
         <ListItemIcon style={{ minWidth: 32 }}>
           <SVGIcon d={selected ? ICONS.TICK.d : ''} />
         </ListItemIcon>
@@ -80,7 +80,7 @@ export default function createDataTitileComp() {
     selected: false,
   };
 
-  function AlternativesPopover({ alignTo, changeTo, current, dir, dock, list, onClose, show }) {
+  function AlternativesPopover({ alignTo, changeTo, current, dir, dock, list, onClose, show, instruction }) {
     const items = list.map((l, i) => <HyperDataItem key={l.id} title={l.title} onClick={() => changeTo(i)} />);
     return (
       <Popover
@@ -92,7 +92,7 @@ export default function createDataTitileComp() {
           style: { minWidth: '250px', maxHeight: '300px' },
         }}
       >
-        <List dense dir={dir} component="nav">
+        <List dense dir={dir} aria-label={instruction} component="nav">
           <HyperDataItem title={current} selected onClick={onClose} />
           {items}
         </List>
@@ -108,6 +108,7 @@ export default function createDataTitileComp() {
     list: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     onClose: PropTypes.func.isRequired,
     show: PropTypes.bool.isRequired,
+    instruction: PropTypes.string,
   };
   AlternativesPopover.defaultProps = {
     list: [],
@@ -221,10 +222,6 @@ export default function createDataTitileComp() {
       }
 
       const handleFocus = (event) => {
-        // Fixing show focus style when closing popover
-        if (this.state.closeTime && Date.now() - this.state.closeTime < 20) {
-          return;
-        }
         // eslint-disable-next-line no-param-reassign
         event.currentTarget.style.boxShadow = '0px 0px 0px 2px #177FE6 inset';
         // eslint-disable-next-line no-param-reassign
@@ -247,6 +244,7 @@ export default function createDataTitileComp() {
       const dir = rtlUtils.detectTextDirection(titleData.text);
       const label = (
         <FadeButton
+          aria-label={translator.get('Accessibility.Alternative.Instructions', [titleData.text])}
           style={style}
           onClick={disabledLabel ? undefined : onClick}
           title={titleData.text}
@@ -297,6 +295,7 @@ export default function createDataTitileComp() {
               list={this.state.alternatives}
               onClose={this.closePopover}
               changeTo={this.changeTo}
+              instruction={translator.get('Accessibility.Popover.Instructions')}
             />
           )}
         </>
