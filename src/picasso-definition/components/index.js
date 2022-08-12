@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import createGridLines from './grid-lines';
 import createAxes from './axes';
 import createAxisTitles from './axis-titles';
@@ -23,7 +24,7 @@ export default function createComponents({ context, models, picasso, chart, acti
   }
 
   const components = [
-    ...createOutOfBoundsSpace({ models }),
+    // ...createOutOfBoundsSpace({ models }),
     createGridLines(models),
     ...createReferenceLines({ models, context }),
     createPoint(models),
@@ -32,15 +33,15 @@ export default function createComponents({ context, models, picasso, chart, acti
     ...trendLinesService.getComponents(),
     ...createAxes({ models }),
     ...createAxisTitles({ models, context }),
-    createPointLabels({ models, chart }),
-    createOutOfBounds({ models, context, chart }),
+    // createPointLabels({ models, chart }),
+    // createOutOfBounds({ models, context, chart }),
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
     createHeatMapLabels({ themeService, chartModel, picasso, context }),
     ...createNavigationPanel({ layoutService, chartModel, chart, actions, context }),
     ...createMiniChart({ models, context }),
-    ...tooltipService.getComponents(),
+    // ...tooltipService.getComponents(),
   ].filter(Boolean);
   // setDisplayOrder(components);
 

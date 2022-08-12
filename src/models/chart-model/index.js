@@ -91,26 +91,35 @@ export default function createChartModel({
     previousConstraints: undefined,
     updateWithSettings: undefined,
     constraintsHaveChanged: undefined,
+    progressive: false,
   };
 
-  function updatePartial() {
+  let tempPages = [];
+
+  function extractDataPages() {
+    tempPages = layoutService.getDataPages();
+
+    layoutService.setDataPages([]);
+  }
+
+  function insertDataPages() {
+    layoutService.setDataPages(tempPages);
+  }
+
+  function updatePartial(excludeDataPages = false) {
     meta.updateWithSettings = false;
     requestAnimationFrame(() => {
-      // TODO: cancel requests as well to optimize???
-      // const startTime = Date.now();
+      if (excludeDataPages) {
+        extractDataPages();
+      }
       trendLinesService.update();
       chart.update({
         partialData: true,
         excludeFromUpdate: EXCLUDE,
-        // transforms: [
-        //   {
-        //     key: KEYS.COMPONENT.POINT,
-        //     transform: { a: 1, b: 0, c: 0, d: 1, e: x, f: y },
-        //   },
-        // ],
       });
-      // TODO: debounce -> interactionInProgess = false
-      // console.log('chart rendered in ', Date.now() - startTime, ' ms');
+      if (excludeDataPages) {
+        insertDataPages();
+      }
     });
   }
 
@@ -131,6 +140,40 @@ export default function createChartModel({
       data: getData(),
       settings,
     });
+
+    // TODO: Check the number of points etc... to decide wether or not progressive rendering should be used.
+    const nbrOfChunks = 10; // Based on nbr of points?
+    const chunkSize = tempPages[0].qMatrix.length / nbrOfChunks;
+    let renderCount = 0;
+
+    const progressiveUpdate = () => {
+      requestAnimationFrame(() => {
+        const start = renderCount * chunkSize;
+        const end = (renderCount + 1) * chunkSize;
+        meta.progressive = { start, end };
+        const chunk = [
+          {
+            ...tempPages[0],
+            qMatrix: tempPages[0].qMatrix.slice(start, end),
+          },
+        ];
+        layoutService.setDataPages(chunk);
+
+        chart.update({
+          partialData: true,
+          excludeFromUpdate: EXCLUDE,
+        });
+        renderCount++;
+        if (renderCount < nbrOfChunks) {
+          progressiveUpdate();
+        } else {
+          meta.progressive = false;
+        }
+      });
+    };
+
+    progressiveUpdate();
+    // TODO: return a promise the whole way, which resolves when the last rendering is done! Important for printing etc!!!
   };
 
   let miniChartOn = false;
@@ -170,7 +213,7 @@ export default function createChartModel({
     updateTicks = shouldUpdateTicks(chart, getCurrentYTicks, getYTicks);
     if (viewHandler.getInteractionInProgress()) {
       updateTicksState.push(updateTicks);
-      updatePartial();
+      updatePartial(true);
       return;
     }
     const ticksNeedUpdate = updateTicks || updateTicksState.filter((s) => s).length > 0;
@@ -189,7 +232,7 @@ export default function createChartModel({
         if (binnedBeforeFetch !== dataHandler.getMeta().isBinnedData || miniChartIsToggled || ticksNeedUpdate) {
           update();
         } else {
-          updatePartial();
+          updatePartial(false);
         }
       });
 
@@ -214,6 +257,7 @@ export default function createChartModel({
         extend(meta, newMeta);
       },
       layoutComponents: ({ settings } = {}) => {
+        extractDataPages();
         chart.layoutComponents({
           data: getData(),
           settings,

@@ -63,6 +63,7 @@ export default function createPoint({ layoutService, colorService, chartModel })
         width: rect.computedPhysical.width + 100,
         height: rect.computedPhysical.height + 100,
       }),
+      progressive: () => chartModel.query.getMeta().progressive,
     },
   };
 }
