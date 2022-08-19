@@ -52,6 +52,11 @@ describe('createNavigationPanel', () => {
 
   describe('the returned buttons', () => {
     describe('UP', () => {
+      it('should have show as false if navigation is undefined', () => {
+        layoutService.getLayoutValue.returns(undefined);
+        expect(create()[0].show).to.be.false;
+      });
+
       it('should have correct callback', () => {
         chartModel.query.getViewHandler.returns('vh');
         create()[0].settings.callback();
@@ -60,6 +65,11 @@ describe('createNavigationPanel', () => {
     });
 
     describe('LEFT', () => {
+      it('should have show as false if navigation is undefined', () => {
+        layoutService.getLayoutValue.returns(undefined);
+        expect(create()[1].show).to.be.false;
+      });
+
       it('should have correct callback', () => {
         chartModel.query.getViewHandler.returns('vh');
         create()[1].settings.callback();
@@ -106,6 +116,11 @@ describe('createNavigationPanel', () => {
     });
 
     describe('RIGHT', () => {
+      it('should have show as false if navigation is undefined', () => {
+        layoutService.getLayoutValue.returns(undefined);
+        expect(create()[3].show).to.be.false;
+      });
+
       it('should have correct disabled function', () => {
         expect(create()[3].settings.disabled()).to.equal(false);
       });
@@ -129,6 +144,11 @@ describe('createNavigationPanel', () => {
     });
 
     describe('DOWN', () => {
+      it('should have show as false if navigation is undefined', () => {
+        layoutService.getLayoutValue.returns(undefined);
+        expect(create()[4].show).to.be.false;
+      });
+
       it('should have correct callback', () => {
         chartModel.query.getViewHandler.returns('vh');
         create()[4].settings.callback();

@@ -12,7 +12,7 @@ export default function createNavigationPanel({ layoutService, chartModel, chart
   const viewHandler = chartModel.query.getViewHandler();
   const { rtl, translator, model, constraints } = context;
   const { element } = chart;
-  const navigation = layoutService.getLayoutValue('navigation');
+  const navigation = !!layoutService.getLayoutValue('navigation');
   const showPanZoomButtons =
     navigation &&
     element.clientWidth >= NUMBERS.LAYOUT_MODES.MEDIUM_NAV.width &&
