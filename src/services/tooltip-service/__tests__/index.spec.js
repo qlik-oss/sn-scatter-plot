@@ -14,6 +14,8 @@ describe('tooltip-service', () => {
   let themeService;
   let trendLinesService;
   let propertiesModel;
+  let viewHandler;
+  let chartModel;
   let custom;
   let create;
 
@@ -65,6 +67,14 @@ describe('tooltip-service', () => {
         getProperties: sandbox.stub().returns({ key: 'properties' }),
       },
     };
+    viewHandler = {
+      getInteractionInProgress: sandbox.stub().returns(false),
+    };
+    chartModel = {
+      query: {
+        getViewHandler: sandbox.stub().returns(viewHandler),
+      },
+    };
     custom = {
       isEnabled: sandbox.stub(),
       hideBasic: sandbox.stub(),
@@ -94,6 +104,7 @@ describe('tooltip-service', () => {
         themeService,
         trendLinesService,
         propertiesModel,
+        chartModel,
         custom,
       });
   });
@@ -141,8 +152,13 @@ describe('tooltip-service', () => {
       expect(getConfig().rtl).to.be.true;
     });
 
-    it('should have correct enable', () => {
-      expect(getConfig().enable()).to.equal('tooltip-enabled');
+    it('should have correct enable when interaction is not in progress ', () => {
+      expect(getConfig().enable()).to.equal(true);
+    });
+
+    it('should have correct enable when interaction is in progress ', () => {
+      viewHandler.getInteractionInProgress = sandbox.stub().returns(true);
+      expect(getConfig().enable()).to.equal(false);
     });
 
     it('should have correct getColorSettings', () => {
