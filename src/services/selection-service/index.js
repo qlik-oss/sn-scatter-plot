@@ -45,6 +45,7 @@ export default function createService({ chart, actions, selections }) {
               actions.select.emit('binsRangeSelectionClear');
             }
           }
+          chart.brush('lazySelection').clear();
           clearLegend();
         },
       },
