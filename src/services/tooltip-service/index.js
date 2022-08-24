@@ -12,18 +12,21 @@ export default function createTooltipService({
   themeService,
   trendLinesService,
   propertiesModel,
+  chartModel,
   custom,
 }) {
   const { fontFamily } = themeService.getStyles();
 
   const measureProperties = ['x', 'y', layoutService.meta.hasSizeMeasure ? 'size' : false].filter(Boolean);
 
+  const viewHandler = chartModel.query.getViewHandler();
+
   return tooltipService({
     chart,
     translator,
     config: {
       rtl,
-      enable: () => actions.tooltip.enabled(),
+      enable: () => actions.tooltip.enabled() && !viewHandler.getInteractionInProgress(),
       getColorSettings: () => colorService.getSettings(),
       style: {
         fontFamily,
