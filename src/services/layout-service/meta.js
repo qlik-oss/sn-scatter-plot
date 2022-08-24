@@ -18,7 +18,6 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
       !qIsDirectQueryMode && !qUnsupportedFeature?.some((f) => f === 'rangeSelections');
     const largeNumBubbles = Math.min(NUMBERS.LARGE_NUM_BUBBLES, maxVisibleBubbles);
     const isLargeNumBubbles = !isBigData && isMaxVisibleBubblesEnabled && qcy > largeNumBubbles;
-    console.log(qcy, isBigData, isLargeNumBubbles);
 
     return {
       isSnapshot,

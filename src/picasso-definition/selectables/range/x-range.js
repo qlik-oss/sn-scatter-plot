@@ -1,4 +1,5 @@
 import { range } from '../../../interactive';
+import { updateLazySelectionOnEnd } from '../../../interactive/update-selection';
 import KEYS from '../../../constants/keys';
 
 export default function createXRange({
@@ -24,6 +25,7 @@ export default function createXRange({
       scale: KEYS.SCALE.X,
       onEdited() {
         actions.select.emit('end', 'xRange');
+        updateLazySelectionOnEnd({ layoutService, chart: chartModel.query.getChart() });
       },
       enableInteraction,
     },

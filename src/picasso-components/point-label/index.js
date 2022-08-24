@@ -42,7 +42,6 @@ export default {
 
     const nodeFilter = (node) => node.key === key && showLabel(node);
     const nodes = [...this.chart.findShapes('circle'), ...this.chart.findShapes('path')].filter(nodeFilter).reverse();
-    // console.log('point label: ', nodes.length);
     if (!nodes.length || nodes.length > maxVisibleBubblesForLabeling) {
       return [];
     }

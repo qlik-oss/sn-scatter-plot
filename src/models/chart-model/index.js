@@ -210,6 +210,7 @@ export default function createChartModel({
       getMeta: () => meta,
       animationEnabled,
       miniChartEnabled,
+      getChart: () => chart,
     },
     command: {
       setMeta(newMeta) {

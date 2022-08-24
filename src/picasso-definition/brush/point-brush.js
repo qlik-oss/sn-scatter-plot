@@ -11,9 +11,7 @@ export default function createBrush(layoutService) {
         mode: 'and',
         style: {
           inactive: {
-            opacity: () =>
-              // console.log(0.3);
-              0.3,
+            opacity: () => 0.3,
           },
           active: {
             stroke: '#000',
