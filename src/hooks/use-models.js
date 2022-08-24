@@ -143,19 +143,6 @@ const useModels = ({ core, flags }) => {
       options,
     });
 
-    const tooltipService = createTooltipService({
-      chart,
-      actions,
-      translator,
-      rtl,
-      layoutService,
-      colorService,
-      themeService,
-      trendLinesService,
-      propertiesModel,
-      custom: customTooltipService,
-    });
-
     chartModel = createChartModel({
       chart,
       localeInfo,
@@ -168,6 +155,20 @@ const useModels = ({ core, flags }) => {
       trendLinesService,
       getCurrentYTicks: () => tickModel.query.getCurrentYTicks(),
       getYTicks: () => tickModel.query.getYTicks(),
+    });
+
+    const tooltipService = createTooltipService({
+      chart,
+      actions,
+      translator,
+      rtl,
+      layoutService,
+      colorService,
+      themeService,
+      trendLinesService,
+      propertiesModel,
+      chartModel,
+      custom: customTooltipService,
     });
 
     tickModel = createTickModel({
