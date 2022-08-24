@@ -1,3 +1,5 @@
+import { updateLazySelectionOnEnd } from '../update-selection';
+
 function eventToLocalPoint(event, chart) {
   const bounds = chart.element.getBoundingClientRect();
 
@@ -80,6 +82,7 @@ const tap = ({ targets, requireFailure, recognizeWith, components, eventName = '
               components: comps,
             });
             opts.actions.select.emit('end', eventName);
+            updateLazySelectionOnEnd({ layoutService: opts.layoutService, chart: this.chart });
           }
         }
       },

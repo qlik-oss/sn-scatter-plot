@@ -32,7 +32,7 @@ export default {
   render() {
     const DY = DISTANCE - 1;
     const { settings } = this.settings;
-    const { target, label, showLabel, mode, debugMode } = settings;
+    const { target, label, showLabel, mode, debugMode, maxVisibleBubblesForLabeling } = settings;
     const key = target.point;
     const component = this.chart.component(key);
 
@@ -42,8 +42,8 @@ export default {
 
     const nodeFilter = (node) => node.key === key && showLabel(node);
     const nodes = [...this.chart.findShapes('circle'), ...this.chart.findShapes('path')].filter(nodeFilter).reverse();
-
-    if (!nodes.length) {
+    // console.log('point label: ', nodes.length);
+    if (!nodes.length || nodes.length > maxVisibleBubblesForLabeling) {
       return [];
     }
 

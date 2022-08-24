@@ -24,7 +24,7 @@ export default [
       }
 
       const qcy = layoutService.getHyperCubeValue('qSize.qcy', 0);
-      return qcy > layoutService.meta.maxNumOfBubbles && !layoutService.meta.isBigData;
+      return qcy > layoutService.meta.maxVisibleBubbles && !layoutService.meta.isBigData;
     },
   },
   {

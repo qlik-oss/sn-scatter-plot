@@ -7,6 +7,8 @@ export default function createYRange({
   dockService,
   enableInteraction,
   isRangeSelectionsSupported,
+  layoutService,
+  chartModel,
 }) {
   if (selectionService.getIsDimensionLocked() || !isRangeSelectionsSupported) {
     return false;
@@ -27,6 +29,8 @@ export default function createYRange({
     },
     {
       actions,
+      layoutService,
+      chartModel,
     }
   );
 }

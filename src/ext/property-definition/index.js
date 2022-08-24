@@ -274,14 +274,14 @@ export default function propertyDefinition(env) {
               return showCompressionResolution(handler.layout);
             },
           },
-          maxNumOfBubbles: !flags.isEnabled('NUM_BUBBLES')
+          maxVisibleBubbles: !flags.isEnabled('NUM_BUBBLES')
             ? undefined
             : {
                 type: 'integer',
                 expression: 'optional',
-                ref: 'maxNumOfBubbles',
-                translation: 'Number of bubbles',
-                defaultValue: 1000,
+                ref: 'maxVisibleBubbles',
+                translation: 'Max visible bubbles',
+                defaultValue: 2500,
               },
           gridLines: {
             type: 'items',

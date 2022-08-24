@@ -1,3 +1,5 @@
+import { updateLazySelectionOnEnd, updateLazySelectionOnMove } from '../update-selection';
+
 function onBubble(e, key) {
   const { target } = e.srcEvent;
   if (target && (target.getAttribute('data-key') || '').indexOf(`${key}-`) === 0) {
@@ -56,6 +58,7 @@ const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith
     [`${eventName}move`](e) {
       e.preventDefault();
       this.chart.component(key).emit('rangeMove', e);
+      updateLazySelectionOnMove({ ...opts, chart: this.chart });
     },
     [`${eventName}end`](e) {
       if (this.chart.brushSelectionIncludeMax === undefined) {
@@ -64,8 +67,7 @@ const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith
       }
       e.preventDefault();
       this.chart.component(key).emit('rangeEnd', e);
-      opts.actions.select.emit('end', eventName);
-      this.started = false;
+      updateLazySelectionOnEnd({ layoutService: opts.layoutService, chart: this.chart });
     },
   },
 });

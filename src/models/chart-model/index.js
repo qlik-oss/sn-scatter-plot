@@ -109,6 +109,8 @@ export default function createChartModel({
         //   },
         // ],
       });
+      // const nodes = [...chart.findShapes('circle'), ...chart.findShapes('path')].filter(nodeFilter);
+
       // TODO: debounce -> interactionInProgess = false
       // console.log('chart rendered in ', Date.now() - startTime, ' ms');
     });

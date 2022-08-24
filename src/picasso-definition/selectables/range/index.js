@@ -25,6 +25,8 @@ export default function createRange({ models, actions, scales, chart }) {
       dockService,
       enableInteraction: () => !dataHandler.getMeta().isBinnedData,
       isRangeSelectionsSupported,
+      layoutService,
+      chartModel,
     }) || EMPTY;
 
   const binXRange =
@@ -35,6 +37,8 @@ export default function createRange({ models, actions, scales, chart }) {
       chart,
       enableInteraction: () => dataHandler.getMeta().isBinnedData,
       isRangeSelectionsSupported,
+      layoutService,
+      chartModel,
     }) || EMPTY;
 
   const yRange =
@@ -44,6 +48,8 @@ export default function createRange({ models, actions, scales, chart }) {
       dockService,
       enableInteraction: () => !dataHandler.getMeta().isBinnedData,
       isRangeSelectionsSupported,
+      layoutService,
+      chartModel,
     }) || EMPTY;
 
   const binYRange =
@@ -54,6 +60,8 @@ export default function createRange({ models, actions, scales, chart }) {
       chart,
       enableInteraction: () => dataHandler.getMeta().isBinnedData,
       isRangeSelectionsSupported,
+      layoutService,
+      chartModel,
     }) || EMPTY;
 
   const legendRange =
@@ -63,6 +71,8 @@ export default function createRange({ models, actions, scales, chart }) {
       scales,
       legend,
       enableInteraction: () => true,
+      layoutService,
+      chartModel,
     }) || EMPTY;
 
   return {

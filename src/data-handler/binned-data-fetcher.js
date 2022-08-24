@@ -36,7 +36,7 @@ export default function createBinnedDataFetcher({ layoutService, extremumModel, 
           qHeight: height,
         },
       ],
-      layoutService.meta.maxNumOfBubbles,
+      layoutService.meta.maxVisibleBubbles,
       resolutionLevel,
       0
     );

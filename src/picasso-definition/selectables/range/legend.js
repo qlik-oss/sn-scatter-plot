@@ -1,6 +1,14 @@
 import { range } from '../../../interactive';
 
-export default function createLegendRange({ actions, selectionService, scales, legend, enableInteraction }) {
+export default function createLegendRange({
+  actions,
+  selectionService,
+  scales,
+  legend,
+  enableInteraction,
+  layoutService,
+  chartModel,
+}) {
   const [legendComponent] = legend || [];
 
   if (!legendComponent) {
@@ -37,6 +45,8 @@ export default function createLegendRange({ actions, selectionService, scales, l
     },
     {
       actions,
+      layoutService,
+      chartModel,
     }
   );
 }

@@ -8,6 +8,8 @@ export default function createYRange({
   chart,
   enableInteraction,
   isRangeSelectionsSupported,
+  layoutService,
+  chartModel,
 }) {
   if (selectionService.getIsDimensionLocked() || !isRangeSelectionsSupported) {
     return false;
@@ -32,6 +34,8 @@ export default function createYRange({
     },
     {
       actions,
+      layoutService,
+      chartModel,
     }
   );
 }

@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
+import NUMBERS from '../../../constants/numbers';
 import MODES from '../../../constants/modes';
 import isOob from '../out-of-bounds/is-oob';
 import createSizeScale from '../../scales/size';
@@ -34,6 +35,9 @@ export default function createPointLabels({ models, chart }) {
       label: (node) => node.data.label,
       mode: labels.mode,
       showLabel: (node) => !isOob({ nodeData: node.data, chart, sizeScaleFn, viewHandler }),
+      maxVisibleBubblesForLabeling: layoutService.meta.isMaxVisibleBubblesEnabled
+        ? NUMBERS.LARGE_NUM_BUBBLES
+        : undefined,
       // debugMode: true,
     },
     style: {

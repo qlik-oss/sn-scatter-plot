@@ -18,7 +18,7 @@ export default function createPoint({ layoutService, colorService, chartModel })
       collection: KEYS.COLLECTION.MAIN,
     },
     show: () => !dataHandler.getMeta().isBinnedData,
-    brush: createBrush(),
+    brush: createBrush(layoutService),
     settings: {
       x: {
         scale: KEYS.SCALE.X,

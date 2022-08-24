@@ -9,9 +9,9 @@ export default function createDataFetcher({ layoutService, model }) {
         return Promise.resolve(layoutService.getDataPages());
       }
 
-      if (layoutService.meta.isMaxNumOfBubblesEnabled) {
+      if (layoutService.meta.isMaxVisibleBubblesEnabled) {
         const NUM_BUBBLES_PER_FETCH = 2500;
-        const NUM_BUBBLES = Math.min(layoutService.meta.maxNumOfBubbles, layoutService.meta.size.y || 0);
+        const NUM_BUBBLES = Math.min(layoutService.meta.maxVisibleBubbles, layoutService.meta.size.y || 0);
         const numFetches = Math.ceil(NUM_BUBBLES / NUM_BUBBLES_PER_FETCH);
         const dataRects = [];
         for (let i = 0; i < numFetches; i++) {
