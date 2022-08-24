@@ -67,6 +67,8 @@ const range = ({ eventName, key, fillTargets = [], requireFailure, recognizeWith
       }
       e.preventDefault();
       this.chart.component(key).emit('rangeEnd', e);
+      opts.actions.select.emit('end', eventName);
+      this.started = false;
       updateLazySelectionOnEnd({ layoutService: opts.layoutService, chart: this.chart });
     },
   },
