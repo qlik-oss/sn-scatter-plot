@@ -16,8 +16,8 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
       isBinningSupported && qcy > maxVisibleBubbles && !(layout?.qIsBDILiveMode && flags.isEnabled('BDI_CLIENT_ADAPT'));
     const isRangeSelectionsSupported =
       !qIsDirectQueryMode && !qUnsupportedFeature?.some((f) => f === 'rangeSelections');
-    const largeNumBubbles = Math.min(NUMBERS.LARGE_NUM_BUBBLES, maxVisibleBubbles);
-    const isLargeNumBubbles = !isBigData && isMaxVisibleBubblesEnabled && qcy > largeNumBubbles;
+    const largeNumDataPoints = Math.min(NUMBERS.LARGE_NUM_DATA_POINTS, maxVisibleBubbles);
+    const isLargeNumDataPoints = !isBigData && isMaxVisibleBubblesEnabled && qcy > largeNumDataPoints;
 
     return {
       isSnapshot,
@@ -26,9 +26,9 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
       isContinuous: true,
       isRangeSelectionsSupported,
       isMaxVisibleBubblesEnabled,
-      isLargeNumBubbles,
+      isLargeNumDataPoints,
       maxVisibleBubbles,
-      largeNumBubbles,
+      largeNumDataPoints,
       numDataPoints: qcy,
     };
   };

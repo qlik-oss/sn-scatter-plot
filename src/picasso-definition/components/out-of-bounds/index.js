@@ -5,7 +5,7 @@ import isOob from './is-oob';
 
 export function createSpace({ models }) {
   const { dockService, layoutService } = models;
-  if (layoutService.meta.isBigData || layoutService.meta.isLargeNumBubbles) {
+  if (layoutService.meta.isBigData || layoutService.meta.isLargeNumDataPoints) {
     return [];
   }
   const space = (dock) => ({
@@ -32,15 +32,15 @@ export default function createOutOfBounds({ models, context, chart }) {
   let windowSizeMultiplier = 0;
 
   const oobDefinition =
-    !layoutService.meta.isBigData && !layoutService.meta.isLargeNumBubbles
+    !layoutService.meta.isBigData && !layoutService.meta.isLargeNumDataPoints
       ? {
           key: KEYS.COMPONENT.OUT_OF_BOUNDS,
           type: 'point',
           data: {
             collection: KEYS.COLLECTION.MAIN,
-            filter: (nodeData) => isOob({ nodeData, chart, sizeScaleFn, viewHandler }),
           },
           settings: {
+            show: (d) => isOob({ nodeData: d.datum, chart, sizeScaleFn, viewHandler }),
             x: {
               scale: KEYS.SCALE.X,
               fn: ({ datum }) => {

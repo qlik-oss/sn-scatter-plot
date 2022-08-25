@@ -109,6 +109,12 @@ export default function createChartModel({
         //   },
         // ],
       });
+      const key = KEYS.COMPONENT.POINT;
+      const nodeFilter = (node) => node.key === key;
+      const nodes = [...chart.findShapes('circle'), ...chart.findShapes('path')].filter(nodeFilter);
+      meta.numVisibleBubbles = nodes.length;
+      meta.isLargeNumVisibleBubbles = nodes.length > layoutService.meta.largeNumDataPoints;
+
       // TODO: debounce -> interactionInProgess = false
       // console.log('chart rendered in ', Date.now() - startTime, ' ms');
     });
@@ -131,6 +137,12 @@ export default function createChartModel({
       data: getData(),
       settings,
     });
+
+    const key = KEYS.COMPONENT.POINT;
+    const nodeFilter = (node) => node.key === key;
+    const nodes = [...chart.findShapes('circle'), ...chart.findShapes('path')].filter(nodeFilter);
+    meta.numVisibleBubbles = nodes.length;
+    meta.isLargeNumVisibleBubbles = nodes.length > layoutService.meta.largeNumDataPoints;
   };
 
   let miniChartOn = false;

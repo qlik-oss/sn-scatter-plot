@@ -1,22 +1,41 @@
-import { computeWidth, computeColor } from '../../utils/width-color';
-
-export default function createBrush({ layoutService, strokeWidthOnFlyFn, strokeColorOnFlyFn }) {
+export default function createBrush({
+  layoutService,
+  strokeWidthInBigData,
+  strokeColorInBigData,
+  strokeWidthInLargeData,
+  strokeColorInLargeData,
+}) {
   const data = ({ brush }) => {
     const res = brush.brushes();
     return res.length > 1 ? ['x', 'y'] : undefined;
   };
 
-  const getStrokeWidth = () =>
-    layoutService.meta.isBigData ? strokeWidthOnFlyFn : computeWidth(layoutService.meta.numDataPoints);
+  const getStrokeWidth = () => {
+    if (layoutService.meta.isBigData) {
+      return strokeWidthInBigData;
+    }
+    if (layoutService.meta.isLargeNumDataPoints) {
+      return strokeWidthInLargeData;
+    }
+    return 2;
+  };
 
-  const getStrokeColor = () =>
-    layoutService.meta.isBigData ? strokeColorOnFlyFn : computeColor(layoutService.meta.numDataPoints);
+  const getStrokeColor = () => {
+    if (layoutService.meta.isBigData) {
+      return strokeColorInBigData;
+    }
+    if (layoutService.meta.isLargeNumDataPoints) {
+      return strokeColorInLargeData;
+    }
+    return '#000';
+  };
 
   return {
     consume: [
       {
         data,
-        context: layoutService.meta.isBigData || layoutService.meta.isLargeNumBubbles ? 'lazySelection' : 'selection',
+        context:
+          layoutService.meta.isBigData || layoutService.meta.isLargeNumDataPoints ? 'lazySelection' : 'selection',
         mode: 'and',
         style: {
           inactive: {

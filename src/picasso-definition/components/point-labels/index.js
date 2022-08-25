@@ -2,8 +2,6 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 import MODES from '../../../constants/modes';
-import isOob from '../out-of-bounds/is-oob';
-import createSizeScale from '../../scales/size';
 
 const LABEL_MODE = {
   NONE: 0,
@@ -12,14 +10,13 @@ const LABEL_MODE = {
   FALLBACK: 1,
 };
 
-export default function createPointLabels({ models, chart }) {
+export default function createPointLabels({ models }) {
   const { layoutService, themeService, chartModel } = models;
   const labels = layoutService.getLayoutValue('labels', {});
   if (labels.mode === LABEL_MODE.NONE) {
     return false;
   }
 
-  const sizeScaleFn = createSizeScale(layoutService);
   const style = themeService.getStyles();
   const { fontFamily, fontSize, color } = style.label?.value || {};
   const viewHandler = chartModel.query.getViewHandler();
@@ -34,9 +31,8 @@ export default function createPointLabels({ models, chart }) {
     settings: {
       label: (node) => node.data.label,
       mode: labels.mode,
-      showLabel: (node) => !isOob({ nodeData: node.data, chart, sizeScaleFn, viewHandler }),
       maxVisibleBubblesForLabeling: layoutService.meta.isMaxVisibleBubblesEnabled
-        ? NUMBERS.LARGE_NUM_BUBBLES
+        ? NUMBERS.LARGE_NUM_DATA_POINTS
         : undefined,
       // debugMode: true,
     },
