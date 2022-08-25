@@ -29,6 +29,7 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
       isLargeNumBubbles,
       maxVisibleBubbles,
       largeNumBubbles,
+      numDataPoints: qcy,
     };
   };
 }

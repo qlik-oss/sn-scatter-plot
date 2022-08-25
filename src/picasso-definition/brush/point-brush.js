@@ -1,8 +1,17 @@
-export default function createBrush(layoutService) {
+import { computeWidth, computeColor } from '../../utils/width-color';
+
+export default function createBrush({ layoutService, strokeWidthOnFlyFn, strokeColorOnFlyFn }) {
   const data = ({ brush }) => {
     const res = brush.brushes();
     return res.length > 1 ? ['x', 'y'] : undefined;
   };
+
+  const getStrokeWidth = () =>
+    layoutService.meta.isBigData ? strokeWidthOnFlyFn : computeWidth(layoutService.meta.numDataPoints);
+
+  const getStrokeColor = () =>
+    layoutService.meta.isBigData ? strokeColorOnFlyFn : computeColor(layoutService.meta.numDataPoints);
+
   return {
     consume: [
       {
@@ -14,8 +23,8 @@ export default function createBrush(layoutService) {
             opacity: () => 0.3,
           },
           active: {
-            stroke: '#000',
-            strokeWidth: 2,
+            stroke: getStrokeColor(),
+            strokeWidth: getStrokeWidth(),
           },
         },
       },
