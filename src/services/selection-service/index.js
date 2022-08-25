@@ -36,6 +36,15 @@ export default function createService({ chart, actions, selections }) {
         clear: ({ clearMinor, clearLegend, selectionInfo, cleared }) => {
           const isSelectingRanges = ['xRange', 'yRange', 'binXRange', 'binYRange'].includes(selectionInfo.event);
           const isSelectingBinRanges = ['binXRange', 'binYRange'].includes(selectionInfo.event);
+
+          // To check if the previous selection is range selection
+          const rangeHandlersVisible = [
+            KEYS.BRUSH.X_RANGE,
+            KEYS.BRUSH.Y_RANGE,
+            KEYS.BRUSH.BIN_X_RANGE,
+            KEYS.BRUSH.BIN_Y_RANGE,
+          ].some((componentName) => document.querySelector(`[data-key='${componentName}-edge-0']`));
+
           if (cleared || !isSelectingRanges) {
             clearMinor({ eventName: 'xRange', componentName: KEYS.BRUSH.X_RANGE });
             clearMinor({ eventName: 'yRange', componentName: KEYS.BRUSH.Y_RANGE });
@@ -45,7 +54,11 @@ export default function createService({ chart, actions, selections }) {
               actions.select.emit('binsRangeSelectionClear');
             }
           }
-          chart.brush('lazySelection').clear();
+
+          if (rangeHandlersVisible || isSelectingRanges || isSelectingBinRanges) {
+            chart.brush('lazySelection').clear();
+          }
+
           clearLegend();
         },
       },
