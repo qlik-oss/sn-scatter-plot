@@ -29,6 +29,7 @@ export default function createOutOfBounds({ models, context, chart }) {
     yMin: 1.005,
     yMax: -0.005,
   };
+  let compSize;
   let windowSizeMultiplier = 0;
 
   const oobDefinition =
@@ -38,9 +39,9 @@ export default function createOutOfBounds({ models, context, chart }) {
           type: 'point',
           data: {
             collection: KEYS.COLLECTION.MAIN,
+            filter: (nodeData) => isOob({ nodeData, compSize, chart, sizeScaleFn, viewHandler }),
           },
           settings: {
-            show: (d) => isOob({ nodeData: d.datum, chart, sizeScaleFn, viewHandler }),
             x: {
               scale: KEYS.SCALE.X,
               fn: ({ datum }) => {
@@ -92,6 +93,7 @@ export default function createOutOfBounds({ models, context, chart }) {
             oobPositions.yMax = -NUMBERS.OOB_SPACE / (1.5 * size.height);
             oobPositions.yMin = 1 - oobPositions.yMax;
             windowSizeMultiplier = Math.min(size.height, size.width) / NUMBERS.WINDOW_SIZE_BASE;
+            compSize = chart.component(KEYS.COMPONENT.POINT).rect;
           },
         }
       : undefined;

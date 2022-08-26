@@ -9,6 +9,7 @@ import isOob from '../out-of-bounds/is-oob';
 
 export default function createPoint({ models, chart }) {
   const { layoutService, colorService, chartModel } = models;
+  let compSize;
   let windowSizeMultiplier;
   const sizeScaleFn = createSizeScale(layoutService);
   const viewHandler = chartModel.query.getViewHandler();
@@ -59,7 +60,7 @@ export default function createPoint({ models, chart }) {
       strokeColorInLargeData,
     }),
     settings: {
-      show: (d) => !isOob({ nodeData: d.datum, chart, sizeScaleFn, viewHandler }),
+      show: (d) => !isOob({ nodeData: d.datum, compSize, chart, sizeScaleFn, viewHandler }),
       x: {
         scale: KEYS.SCALE.X,
       },
@@ -74,6 +75,7 @@ export default function createPoint({ models, chart }) {
       shape: (d) => (sizeScaleFn(d, windowSizeMultiplier) ? 'circle' : 'saltire'),
     },
     beforeRender: ({ size }) => {
+      compSize = size;
       windowSizeMultiplier = Math.min(size.height, size.width) / NUMBERS.WINDOW_SIZE_BASE;
       numBubblesInBigData = getNumBubblesInBigData();
     },

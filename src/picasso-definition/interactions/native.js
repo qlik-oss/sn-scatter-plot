@@ -11,6 +11,15 @@ export default function native({ chart, actions, viewHandler }) {
     comp.emit(dir);
   }
   let componentSize;
+  let timer;
+
+  function clearTimer() {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+  }
+
   return {
     type: 'native',
     events: {
@@ -32,8 +41,26 @@ export default function native({ chart, actions, viewHandler }) {
             if (rectSize?.height && rectSize?.width) {
               componentSize = { ...rectSize };
             }
+            viewHandler.setInteractionInProgress(true);
             zoom({ e, chart, componentSize, viewHandler });
             e.preventDefault();
+            if (timer) {
+              clearTimer();
+            }
+            timer = setTimeout(() => {
+              viewHandler.setInteractionInProgress(false);
+              const dataView = viewHandler.getDataView();
+              viewHandler.setDataView({
+                xAxisMin: dataView.xAxisMin,
+                xAxisMax: dataView.xAxisMax,
+                yAxisMin: dataView.yAxisMin,
+                yAxisMax: dataView.yAxisMax,
+                deltaX: 0,
+                deltaY: 0,
+                scale: 1,
+              });
+              clearTimer();
+            }, 100);
           }
         }
         if (actions.interact.enabled()) {

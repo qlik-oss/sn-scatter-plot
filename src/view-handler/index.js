@@ -52,12 +52,12 @@ export default function createViewHandler({ viewState, extremumModel }) {
 
     transform: () => {
       if (interactionInProgress) {
-        const { deltaX, deltaY } = viewHandler.getDataView();
+        const { deltaX, deltaY, scale } = viewHandler.getDataView();
         return {
-          horizontalScaling: 1,
+          horizontalScaling: scale || 1,
+          verticalScaling: scale || 1,
           horizontalSkewing: 0,
           verticalSkewing: 0,
-          verticalScaling: 1,
           horizontalMoving: deltaX,
           verticalMoving: deltaY,
         };
