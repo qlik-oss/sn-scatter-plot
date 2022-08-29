@@ -18,7 +18,7 @@ module.exports = {
     flags: {
       panZoom: true,
       DATA_BINNING: true,
-      NUM_BUBBLES: true,
+      'SCATTERPLOT.NUM_BUBBLES': true,
     },
   },
 };

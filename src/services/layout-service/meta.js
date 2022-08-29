@@ -7,7 +7,7 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
     const hasSizeMeasure = !!getValue(layout.qHyperCube, 'qMeasureInfo.2');
     const qcy = getValue(layout.qHyperCube, 'qSize.qcy');
     const isBinningSupported = !qIsDirectQueryMode && !qUnsupportedFeature?.some((f) => f === 'binningData');
-    const isMaxVisibleBubblesEnabled = flags.isEnabled('NUM_BUBBLES');
+    const isMaxVisibleBubblesEnabled = flags.isEnabled('SCATTERPLOT.NUM_BUBBLES');
     const maxVisibleBubbles =
       !isMaxVisibleBubblesEnabled || layout.maxVisibleBubbles === undefined || layout.maxVisibleBubbles <= 0
         ? NUMBERS.MAX_NR_SCATTER
