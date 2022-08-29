@@ -32,7 +32,6 @@ describe('interactions', () => {
     )[0].default;
     chart = { key: 'chart' };
     viewHandler = {};
-    models = { chartModel: {} };
     rtl = false;
     gestures = [
       { key: 'gesture-1', prio: 2 },
@@ -50,14 +49,13 @@ describe('interactions', () => {
         native: { key: 'tooltip-native' },
       }),
     };
+    models = { chartModel: {}, colorService, tooltipService };
     actions = { key: 'actions' };
     args = {
       chart,
       actions,
       viewHandler,
       gestures,
-      colorService,
-      tooltipService,
       models,
       rtl,
     };
@@ -79,6 +77,7 @@ describe('interactions', () => {
       chart,
       actions,
       viewHandler,
+      models,
     }).calledOnce;
   });
 

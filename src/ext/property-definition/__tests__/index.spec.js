@@ -6,6 +6,9 @@ describe('property panel definition', () => {
     translator: {
       get: (text) => `translated-${text}`,
     },
+    flags: {
+      isEnabled: () => false,
+    },
   };
   let def;
   beforeEach(() => {

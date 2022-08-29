@@ -14,6 +14,7 @@ describe('lasso', () => {
     models = {
       selectionService: { getIsDimensionLocked: sandbox.stub().returns(true) },
       layoutService: { getHyperCubeValue: sandbox.stub().returns(true) },
+      chartModel: 'chart-model',
     };
     sandbox.stub(KEYS, 'default').value({ COMPONENT: { POINT: 'p', HEAT_MAP: 'hm' } });
     create = () => createLasso({ models, actions: 'correct-actions' });
@@ -48,7 +49,7 @@ describe('lasso', () => {
           },
         ],
       },
-      { actions: 'correct-actions' }
+      { actions: 'correct-actions', layoutService: models.layoutService, chartModel: 'chart-model' }
     );
   });
 });

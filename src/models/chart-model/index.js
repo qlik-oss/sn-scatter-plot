@@ -4,6 +4,7 @@ import NUMBERS from '../../constants/numbers';
 import createViewHandler from '../../view-handler';
 import getFormatPatternFromRange from './format-pattern-from-range';
 import shouldUpdateTicks from './should-update-ticks';
+import { getPointNodesWithKey } from '../../utils/get-point-nodes';
 
 export default function createChartModel({
   chart,
@@ -109,9 +110,7 @@ export default function createChartModel({
         //   },
         // ],
       });
-      const key = KEYS.COMPONENT.POINT;
-      const nodeFilter = (node) => node.key === key;
-      const nodes = [...chart.findShapes('circle'), ...chart.findShapes('path')].filter(nodeFilter);
+      const nodes = getPointNodesWithKey(chart, KEYS.COMPONENT.POINT);
       meta.numVisibleBubbles = nodes.length;
       meta.isLargeNumVisibleBubbles = nodes.length > layoutService.meta.largeNumDataPoints;
 
@@ -138,9 +137,7 @@ export default function createChartModel({
       settings,
     });
 
-    const key = KEYS.COMPONENT.POINT;
-    const nodeFilter = (node) => node.key === key;
-    const nodes = [...chart.findShapes('circle'), ...chart.findShapes('path')].filter(nodeFilter);
+    const nodes = getPointNodesWithKey(chart, KEYS.COMPONENT.POINT);
     meta.numVisibleBubbles = nodes.length;
     meta.isLargeNumVisibleBubbles = nodes.length > layoutService.meta.largeNumDataPoints;
   };

@@ -40,6 +40,9 @@ describe('zoom', () => {
       xAxisMax: 1000 * Math.sqrt(2),
       yAxisMin: 1000 - 1000 * Math.sqrt(2),
       yAxisMax: 1000 + 1000 * Math.sqrt(2),
+      deltaX: 14.644660940672626,
+      deltaY: 14.644660940672626,
+      scale: 0.7071067811865475,
     });
   });
 
@@ -57,6 +60,9 @@ describe('zoom', () => {
       xAxisMax: 1000 / Math.sqrt(2),
       yAxisMin: -1000 * Math.sqrt(1 / 2) + 1000,
       yAxisMax: 1000 + 1000 / Math.sqrt(2),
+      deltaX: -20.71067811865476,
+      deltaY: -20.71067811865476,
+      scale: 1.4142135623730951,
     });
   });
 
@@ -110,6 +116,9 @@ describe('zoom', () => {
       xAxisMax: 600,
       yAxisMin: 400,
       yAxisMax: 1600,
+      deltaX: -33.333333333333336,
+      deltaY: -33.333333333333336,
+      scale: 1.6666666666666667,
     });
   });
 
@@ -126,6 +135,9 @@ describe('zoom', () => {
       xAxisMax: 1000 / Math.sqrt(2),
       yAxisMin: -1000 * Math.sqrt(1 / 2) + 1000,
       yAxisMax: 1000 + 1000 / Math.sqrt(2),
+      deltaX: 0,
+      deltaY: 0,
+      scale: Math.sqrt(2),
     });
   });
 
@@ -142,6 +154,9 @@ describe('zoom', () => {
       xAxisMax: 1000 * Math.sqrt(2),
       yAxisMin: 1000 - 1000 * Math.sqrt(2),
       yAxisMax: 1000 + 1000 * Math.sqrt(2),
+      deltaX: 0,
+      deltaY: 0,
+      scale: 0.7071067811865475,
     });
   });
 });

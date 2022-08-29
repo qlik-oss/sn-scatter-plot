@@ -80,9 +80,11 @@ describe('point', () => {
 
     create = () =>
       createPoint({
-        layoutService,
-        colorService,
-        chartModel,
+        models: {
+          layoutService,
+          colorService,
+          chartModel,
+        },
       });
   });
 
@@ -137,7 +139,7 @@ describe('point', () => {
 
   describe('settings', () => {
     it('should have correct properties', () => {
-      expect(create().settings).to.have.all.keys(['x', 'y', 'size', 'strokeWidth', 'stroke', 'fill', 'shape']);
+      expect(create().settings).to.have.all.keys(['x', 'y', 'size', 'strokeWidth', 'stroke', 'fill', 'shape', 'show']);
     });
 
     describe('size', () => {

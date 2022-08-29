@@ -1,4 +1,5 @@
 import { getLabels, DISTANCE } from './get-labels';
+import { getPointNodes } from '../../utils/get-point-nodes';
 
 export default {
   require: ['chart', 'renderer'],
@@ -41,7 +42,7 @@ export default {
     }
 
     const nodeFilter = (node) => node.key === key && showLabel(node);
-    const nodes = [...this.chart.findShapes('circle'), ...this.chart.findShapes('path')].filter(nodeFilter).reverse();
+    const nodes = getPointNodes(this.chart).filter(nodeFilter).reverse();
     if (!nodes.length || nodes.length > maxVisibleBubblesForLabeling) {
       return [];
     }

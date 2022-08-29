@@ -2,8 +2,9 @@ import KEYS from '../../constants/keys';
 import zoom from '../../view-handler/zoom';
 import clearMinor from '../../utils/clear-minor';
 import isInBinValueSelection from '../../utils/is-in-bin-value-selection';
+import isZoomByImage from './is-zoom-by-image';
 
-export default function native({ chart, actions, viewHandler }) {
+export default function native({ chart, actions, viewHandler, models }) {
   function scrollLegend(e, comp) {
     // To make it the same as the old one, always scroll by item instead of pixel
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
@@ -41,26 +42,29 @@ export default function native({ chart, actions, viewHandler }) {
             if (rectSize?.height && rectSize?.width) {
               componentSize = { ...rectSize };
             }
-            viewHandler.setInteractionInProgress(true);
+            const enabledZoomByImage = isZoomByImage(models);
+            viewHandler.setInteractionInProgress(enabledZoomByImage);
             zoom({ e, chart, componentSize, viewHandler });
             e.preventDefault();
             if (timer) {
               clearTimer();
             }
-            timer = setTimeout(() => {
-              viewHandler.setInteractionInProgress(false);
-              const dataView = viewHandler.getDataView();
-              viewHandler.setDataView({
-                xAxisMin: dataView.xAxisMin,
-                xAxisMax: dataView.xAxisMax,
-                yAxisMin: dataView.yAxisMin,
-                yAxisMax: dataView.yAxisMax,
-                deltaX: 0,
-                deltaY: 0,
-                scale: 1,
-              });
-              clearTimer();
-            }, 100);
+            if (enabledZoomByImage) {
+              timer = setTimeout(() => {
+                viewHandler.setInteractionInProgress(false);
+                const dataView = viewHandler.getDataView();
+                viewHandler.setDataView({
+                  xAxisMin: dataView.xAxisMin,
+                  xAxisMax: dataView.xAxisMax,
+                  yAxisMin: dataView.yAxisMin,
+                  yAxisMax: dataView.yAxisMax,
+                  deltaX: 0,
+                  deltaY: 0,
+                  scale: 1,
+                });
+                clearTimer();
+              }, 100);
+            }
           }
         }
         if (actions.interact.enabled()) {

@@ -3,6 +3,7 @@ import createChartModel from '..';
 import * as getFormatPatternFromRange from '../format-pattern-from-range';
 import * as shouldUpdateTicks from '../should-update-ticks';
 import * as createViewHandler from '../../../view-handler';
+import * as nodeUtil from '../../../utils/get-point-nodes';
 
 describe('chart-model', () => {
   let sandbox;
@@ -84,6 +85,7 @@ describe('chart-model', () => {
     };
     sandbox.stub(getFormatPatternFromRange, 'default');
     sandbox.stub(shouldUpdateTicks, 'default').returns(false);
+    sandbox.stub(nodeUtil, 'getPointNodesWithKey').returns([]);
     create = () =>
       createChartModel({
         chart,
@@ -116,6 +118,7 @@ describe('chart-model', () => {
         'getFormatPattern',
         'animationEnabled',
         'miniChartEnabled',
+        'getChart',
       ]);
     });
 

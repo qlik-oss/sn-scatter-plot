@@ -274,7 +274,7 @@ export default function propertyDefinition(env) {
               return showCompressionResolution(handler.layout);
             },
           },
-          maxVisibleBubbles: !flags.isEnabled('SCATTERPLOT.NUM_BUBBLES')
+          maxVisibleBubbles: !flags.isEnabled('NUM_BUBBLES')
             ? undefined
             : {
                 type: 'integer',

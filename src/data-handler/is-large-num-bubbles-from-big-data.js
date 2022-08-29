@@ -1,4 +1,4 @@
-export default function isLargeNumVisibleBubblesFromBigData(layoutService) {
+export default function isLargeNumBubblesFromBigData(layoutService) {
   const dataPages = layoutService.getDataPages();
   if (dataPages.length) {
     const { qMatrix, qArea } = dataPages[0];

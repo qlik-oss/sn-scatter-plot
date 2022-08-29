@@ -4,7 +4,8 @@ import pinch from './pinch';
 import tapButton from './tap-button';
 import tapMiniChart from './tap-mini-chart';
 
-export default function create({ chart, actions, viewHandler, gestures, colorService, tooltipService, rtl }) {
+export default function create({ chart, actions, viewHandler, gestures, models, rtl }) {
+  const { colorService, tooltipService } = models;
   const tooltipInteractions = tooltipService.getInteractions();
 
   const hammer = {
@@ -21,6 +22,6 @@ export default function create({ chart, actions, viewHandler, gestures, colorSer
       ...tooltipInteractions.gestures,
     ],
   };
-  const interactions = [native({ chart, actions, viewHandler }), tooltipInteractions.native, hammer];
+  const interactions = [native({ chart, actions, viewHandler, models }), tooltipInteractions.native, hammer];
   return interactions;
 }

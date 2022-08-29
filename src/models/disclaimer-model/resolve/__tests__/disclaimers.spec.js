@@ -11,7 +11,7 @@ describe('disclaimers', () => {
     layoutService = {
       getHyperCubeValue: sandbox.stub(),
       getLayout: sandbox.stub().returns({ showDisclaimer: true }),
-      meta: { isBigData: undefined },
+      meta: { isBigData: undefined, maxVisibleBubbles: 100 },
     };
     sandbox.stub(NUMBERS, 'default').value({ MAX_NR_SCATTER: 100 });
   });

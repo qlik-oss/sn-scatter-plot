@@ -1,3 +1,5 @@
+import getSelectionContext from './get-selection-context';
+
 export default function createBrush({
   layoutService,
   strokeWidthInBigData,
@@ -34,12 +36,11 @@ export default function createBrush({
     consume: [
       {
         data,
-        context:
-          layoutService.meta.isBigData || layoutService.meta.isLargeNumDataPoints ? 'lazySelection' : 'selection',
+        context: getSelectionContext(layoutService),
         mode: 'and',
         style: {
           inactive: {
-            opacity: () => 0.3,
+            opacity: 0.3,
           },
           active: {
             stroke: getStrokeColor(),

@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import * as chartModules from 'qlik-chart-modules';
 import * as qBrush from '../bin-selection/q-brush';
+import * as isRangeHandlersVisible from '../is-range-handlers-visible';
 import * as KEYS from '../../../constants/keys';
 
 describe('selection-service', () => {
@@ -47,10 +48,12 @@ describe('selection-service', () => {
           brush: { ranges: () => [{ min: 10, max: 20 }] },
         },
       ]),
+      clear: sandbox.stub(),
     };
     chart = {
       brush: () => brushFn,
     };
+    sandbox.stub(isRangeHandlersVisible, 'default').returns(false);
     create = () => createSelectionService({ chart, actions, selections });
   });
 

@@ -10,8 +10,8 @@ const updateLazySelectionOnMove = ({ layoutService, chartModel, chart }) => {
   const meta = layoutService?.meta || {};
   if (meta.isBigData) {
     const dataHandler = chartModel?.query.getDataHandler();
-    const { isLargeNumVisibleBubblesFromBigData } = dataHandler?.getMeta() || {};
-    if (!isLargeNumVisibleBubblesFromBigData) {
+    const { isLargeNumBubblesFromBigData } = dataHandler?.getMeta() || {};
+    if (!isLargeNumBubblesFromBigData) {
       // eslint-disable-next-line no-underscore-dangle
       chart.brush('lazySelection')._state(chart.brush('selection')._state());
     }

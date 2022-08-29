@@ -4,7 +4,7 @@ import NUMBERS from '../../../constants/numbers';
 import createSizeScale from '../../scales/size';
 import createBrush from '../../brush/point-brush';
 import movePath from '../../../utils/move-path';
-import { computeWidth, computeColor } from '../../../utils/width-color';
+import { computeWidth, computeColor } from './border-width-color';
 import isOob from '../out-of-bounds/is-oob';
 
 export default function createPoint({ models, chart }) {

@@ -1,3 +1,5 @@
+import * as updateSelection from '../../../../interactive/update-selection';
+
 describe('xRange', () => {
   let sandbox;
   let range;
@@ -6,6 +8,8 @@ describe('xRange', () => {
   let dockService;
   let enableInteraction;
   let createXRange;
+  let layoutService;
+  let chartModel;
   let create;
   let isRangeSelectionsSupported;
 
@@ -44,6 +48,8 @@ describe('xRange', () => {
       },
     };
     enableInteraction = 'enableInteraction';
+    chartModel = { query: { getChart: sandbox.stub().returns({}) } };
+    sandbox.stub(updateSelection, 'updateLazySelectionOnEnd');
     create = () =>
       createXRange({
         actions,
@@ -51,6 +57,8 @@ describe('xRange', () => {
         dockService,
         enableInteraction,
         isRangeSelectionsSupported,
+        layoutService,
+        chartModel,
       });
   });
 
@@ -151,7 +159,7 @@ describe('xRange', () => {
     it('should have correct properties', () => {
       const [, options] = range.getCall(0).args;
 
-      expect(options).to.have.all.keys(['actions']);
+      expect(options).to.have.all.keys(['actions', 'chartModel', 'layoutService']);
     });
 
     it('should have correct actions', () => {

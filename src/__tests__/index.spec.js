@@ -7,7 +7,7 @@ describe('scatter-plot supernova', () => {
   let setupSnapshot;
   before(() => {
     env = {
-      flags: [],
+      flags: { isEnabled: sandbox.stub().returns(false) },
     };
     hooks = {
       default: {

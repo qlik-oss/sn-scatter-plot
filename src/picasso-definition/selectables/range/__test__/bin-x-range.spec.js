@@ -170,7 +170,7 @@ describe('bin-x-Range', () => {
     it('should have correct properties', () => {
       const [, options] = range.getCall(0).args;
 
-      expect(options).to.have.all.keys(['actions']);
+      expect(options).to.have.all.keys(['actions', 'chartModel', 'layoutService']);
     });
 
     it('should have correct actions', () => {
