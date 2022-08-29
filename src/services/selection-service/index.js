@@ -2,6 +2,7 @@ import picassoQ from 'picasso-plugin-q';
 import { selectionService as createSelectionService } from 'qlik-chart-modules';
 import qBrush from './bin-selection/q-brush';
 import KEYS from '../../constants/keys';
+import isRangeHandlersVisible from './is-range-handlers-visible';
 
 export default function createService({ chart, actions, selections }) {
   const allowSimultaneous = [...Array(15)].map((d, i) => `qHyperCube/qMeasureInfo/${i}`);
@@ -36,6 +37,10 @@ export default function createService({ chart, actions, selections }) {
         clear: ({ clearMinor, clearLegend, selectionInfo, cleared }) => {
           const isSelectingRanges = ['xRange', 'yRange', 'binXRange', 'binYRange'].includes(selectionInfo.event);
           const isSelectingBinRanges = ['binXRange', 'binYRange'].includes(selectionInfo.event);
+
+          // To check if the previous selection is range selection
+          const rangeHandlersVisible = isRangeHandlersVisible();
+
           if (cleared || !isSelectingRanges) {
             clearMinor({ eventName: 'xRange', componentName: KEYS.BRUSH.X_RANGE });
             clearMinor({ eventName: 'yRange', componentName: KEYS.BRUSH.Y_RANGE });
@@ -45,6 +50,11 @@ export default function createService({ chart, actions, selections }) {
               actions.select.emit('binsRangeSelectionClear');
             }
           }
+
+          if (rangeHandlersVisible || isSelectingRanges || isSelectingBinRanges) {
+            chart.brush('lazySelection').clear();
+          }
+
           clearLegend();
         },
       },

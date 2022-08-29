@@ -13,7 +13,6 @@ describe('point-labels', () => {
   let chartModel;
   let viewHandler;
   let models;
-  let chart;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -35,8 +34,7 @@ describe('point-labels', () => {
     };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler), animationEnabled: sandbox.stub() } };
     models = { layoutService, themeService, chartModel };
-    chart = { component: sandbox.stub().returns({ rect: { width: 500, height: 500 } }) };
-    create = () => createPointLabels({ models, chart });
+    create = () => createPointLabels({ models });
     labels = { mode: 1 };
     layoutService.getLayoutValue.withArgs('labels').returns(labels);
     themeService.getStyles.returns({ label: { value: { fontFamily: 'Sans serif', fontSize: '1px', color: 'red' } } });
@@ -84,7 +82,7 @@ describe('point-labels', () => {
 
     describe('settings', () => {
       it('should have correct properties', () => {
-        expect(create().settings).to.have.all.keys(['label', 'mode', 'showLabel']);
+        expect(create().settings).to.have.all.keys(['label', 'maxVisibleBubblesForLabeling', 'mode']);
       });
 
       describe('label', () => {

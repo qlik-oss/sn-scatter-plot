@@ -1,3 +1,5 @@
+import { updateLazySelectionOnEnd, updateLazySelectionOnMove } from '../update-selection';
+
 const eventName = 'lasso';
 
 const lasso = ({ key, componentTargetKeys, requireFailure, recognizeWith }, opts) => ({
@@ -34,12 +36,14 @@ const lasso = ({ key, componentTargetKeys, requireFailure, recognizeWith }, opts
     lassomove(e) {
       e.preventDefault();
       this.chart.component(key).emit('lassoMove', e);
+      updateLazySelectionOnMove({ ...opts, chart: this.chart });
     },
     lassoend(e) {
       e.preventDefault();
       this.started = false;
       this.chart.component(key).emit('lassoEnd', e);
       opts.actions.select.emit('end', eventName);
+      updateLazySelectionOnEnd({ layoutService: opts.layoutService, chart: this.chart });
     },
   },
 });

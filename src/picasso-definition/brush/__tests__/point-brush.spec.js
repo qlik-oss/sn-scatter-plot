@@ -1,14 +1,38 @@
 import createBrush from '../point-brush';
+import * as getSelectionContext from '../get-selection-context';
 
 describe('createPointBrush', () => {
   let sandbox;
+  let layoutService;
+  let strokeWidthInBigData;
+  let strokeColorInBigData;
+  let strokeWidthInLargeData;
+  let strokeColorInLargeData;
   let create;
   let myBrush;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     myBrush = { brushes: sandbox.stub() };
-    create = () => createBrush();
+    layoutService = {
+      meta: {
+        isBigData: false,
+        isLargeNumDataPoints: false,
+      },
+    };
+    strokeWidthInBigData = sandbox.spy();
+    strokeColorInBigData = sandbox.spy();
+    strokeWidthInLargeData = sandbox.spy();
+    strokeColorInLargeData = sandbox.spy();
+    sandbox.stub(getSelectionContext, 'default').returns('selection');
+    create = () =>
+      createBrush({
+        layoutService,
+        strokeWidthInBigData,
+        strokeColorInBigData,
+        strokeWidthInLargeData,
+        strokeColorInLargeData,
+      });
   });
 
   afterEach(() => {

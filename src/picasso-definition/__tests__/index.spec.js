@@ -55,8 +55,7 @@ describe('picasso-definition', () => {
         actions: 'registered-actions',
         viewHandler: 'view-handler',
         gestures: ['g-1', 'g-2'],
-        colorService,
-        tooltipService: 'current-tooltip-service',
+        models,
         rtl: false,
       })
       .returns('correct-interactions');

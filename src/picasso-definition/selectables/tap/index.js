@@ -4,7 +4,7 @@ import KEYS from '../../../constants/keys';
 import createIsLocked from './is-locked';
 
 export default function createTap({ models, actions, flags }) {
-  const { selectionService, colorService, customTooltipModel, layoutService } = models;
+  const { selectionService, colorService, customTooltipModel, layoutService, chartModel } = models;
   const targets = [KEYS.COMPONENT.POINT, KEYS.COMPONENT.LEGEND_CATEGORICAL, KEYS.COMPONENT.HEAT_MAP];
   const isSingleSelection = layoutService.getHyperCubeValue('qDimensionInfo.0.qIsOneAndOnlyOne', false);
 
@@ -59,6 +59,8 @@ export default function createTap({ models, actions, flags }) {
     actions,
     isLocked,
     hitRadius: (components) => getHitRadius(components),
+    layoutService,
+    chartModel,
   };
 
   return tap(config, options);

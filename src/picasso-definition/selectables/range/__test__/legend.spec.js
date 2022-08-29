@@ -1,3 +1,5 @@
+import * as updateSelection from '../../../../interactive/update-selection';
+
 describe('legend', () => {
   let sandbox;
   let range;
@@ -7,6 +9,8 @@ describe('legend', () => {
   let legend;
   let enableInteraction;
   let createLegendRange;
+  let layoutService;
+  let chartModel;
   let create;
 
   before(() => {
@@ -22,6 +26,8 @@ describe('legend', () => {
       getIsDimensionLocked: sandbox.stub(),
     };
     enableInteraction = 'enableInteraction';
+    chartModel = { query: { getChart: sandbox.stub().returns({}) } };
+    sandbox.stub(updateSelection, 'updateLazySelectionOnEnd');
     create = () =>
       createLegendRange({
         actions,
@@ -29,6 +35,8 @@ describe('legend', () => {
         scales,
         legend,
         enableInteraction,
+        layoutService,
+        chartModel,
       });
   });
 
@@ -182,7 +190,7 @@ describe('legend', () => {
 
     it('should have correct properties', () => {
       const [, options] = range.getCall(0).args;
-      expect(options).to.have.all.keys(['actions']);
+      expect(options).to.have.all.keys(['actions', 'chartModel', 'layoutService']);
     });
 
     it('should have correct actions', () => {

@@ -3,6 +3,7 @@ import * as zoom from '../../../view-handler/zoom';
 import native from '../native';
 import * as clearMinor from '../../../utils/clear-minor';
 import * as isInBinValueSelection from '../../../utils/is-in-bin-value-selection';
+import * as isZoomByImage from '../is-zoom-by-image';
 
 describe('native', () => {
   let sandbox;
@@ -35,6 +36,7 @@ describe('native', () => {
         y: 2,
       }),
       setPxOffsets: sandbox.spy(),
+      setInteractionInProgress: sandbox.spy(),
     };
     chart.componentsFromPoint.withArgs({ x: 50, y: 100 }).returns([{ key: 'point-component' }]);
     actions = {
@@ -51,6 +53,7 @@ describe('native', () => {
     sandbox.stub(zoom, 'default');
     sandbox.stub(clearMinor, 'default');
     sandbox.stub(isInBinValueSelection, 'default').returns(false);
+    sandbox.stub(isZoomByImage, 'default').returns(false);
     create = () =>
       native({
         chart,

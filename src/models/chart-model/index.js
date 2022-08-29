@@ -4,6 +4,7 @@ import NUMBERS from '../../constants/numbers';
 import createViewHandler from '../../view-handler';
 import getFormatPatternFromRange from './format-pattern-from-range';
 import shouldUpdateTicks from './should-update-ticks';
+import { getPointNodesWithKey } from '../../utils/get-point-nodes';
 
 export default function createChartModel({
   chart,
@@ -109,6 +110,10 @@ export default function createChartModel({
         //   },
         // ],
       });
+      const nodes = getPointNodesWithKey(chart, KEYS.COMPONENT.POINT);
+      meta.numVisibleBubbles = nodes.length;
+      meta.isLargeNumVisibleBubbles = nodes.length > layoutService.meta.largeNumDataPoints;
+
       // TODO: debounce -> interactionInProgess = false
       // console.log('chart rendered in ', Date.now() - startTime, ' ms');
     });
@@ -131,6 +136,10 @@ export default function createChartModel({
       data: getData(),
       settings,
     });
+
+    const nodes = getPointNodesWithKey(chart, KEYS.COMPONENT.POINT);
+    meta.numVisibleBubbles = nodes.length;
+    meta.isLargeNumVisibleBubbles = nodes.length > layoutService.meta.largeNumDataPoints;
   };
 
   let miniChartOn = false;
@@ -208,6 +217,7 @@ export default function createChartModel({
       getMeta: () => meta,
       animationEnabled,
       miniChartEnabled,
+      getChart: () => chart,
     },
     command: {
       setMeta(newMeta) {

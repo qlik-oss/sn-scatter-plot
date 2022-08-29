@@ -9,6 +9,8 @@ describe('numbers', () => {
       'LEGEND_CAT',
       'LAYOUT_MODES',
       'MAX_NR_SCATTER',
+      'MAX_VISIBLE_BUBBLES',
+      'LARGE_NUM_DATA_POINTS',
       'MAX_NR_ANIMATION',
       'MINI_CHART',
       'NAVIGATION_PANEL',

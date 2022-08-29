@@ -33,7 +33,7 @@ describe('createBinnedDataFetcher', () => {
       { qMatrix: [], qTails: [], qArea: [] },
     ];
     layoutService = {
-      meta: { isSnapshot: false, isBigData: false },
+      meta: { isSnapshot: false, isBigData: false, maxVisibleBubbles: 1000 },
       getHyperCubeValue: (path, defaultValue) => defaultValue,
       getLayoutValue: sandbox.stub().withArgs('dataPages').returns(binnedDataPages),
       getLayout: () => layout,

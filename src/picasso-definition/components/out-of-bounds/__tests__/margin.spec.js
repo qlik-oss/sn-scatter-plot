@@ -4,6 +4,7 @@ import * as KEYS from '../../../../constants/keys';
 describe('out of bounds - margin', () => {
   let sandbox;
   let dockService;
+  let layoutService;
   let components;
 
   before(() => {
@@ -19,7 +20,10 @@ describe('out of bounds - margin', () => {
         y: { opposite: 'dock-opposite-y' },
       },
     };
-    const models = { dockService };
+    layoutService = {
+      meta: {},
+    };
+    const models = { dockService, layoutService };
     components = createSpace({ models });
   });
 

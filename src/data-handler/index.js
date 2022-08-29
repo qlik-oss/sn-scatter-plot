@@ -2,6 +2,7 @@ import KEYS from '../constants/keys';
 import createDataFetcher from './data-fetcher';
 import createBinnedDataFetcher from './binned-data-fetcher';
 import isBinnedData from './is-binned-data';
+import isLargeNumBubblesFromBigData from './is-large-num-bubbles-from-big-data';
 
 export default function createDataHandler({ layoutService, model, extremumModel }) {
   const dataFetcher = createDataFetcher({ layoutService, model });
@@ -34,6 +35,7 @@ export default function createDataHandler({ layoutService, model, extremumModel 
       requestInProgress
         .then(() => {
           meta.isBinnedData = isBinnedData(layoutService);
+          meta.isLargeNumBubblesFromBigData = isLargeNumBubblesFromBigData(layoutService); // On zoom in from bin data
         })
         .catch((e) => {
           if (e !== KEYS.REJECTION_TOKEN) {

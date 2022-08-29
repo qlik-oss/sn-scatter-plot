@@ -1,4 +1,6 @@
 import { range } from '../../../interactive';
+import { updateLazySelectionOnEnd } from '../../../interactive/update-selection';
+
 import KEYS from '../../../constants/keys';
 
 export default function createYRange({
@@ -7,6 +9,8 @@ export default function createYRange({
   dockService,
   enableInteraction,
   isRangeSelectionsSupported,
+  layoutService,
+  chartModel,
 }) {
   if (selectionService.getIsDimensionLocked() || !isRangeSelectionsSupported) {
     return false;
@@ -22,11 +26,14 @@ export default function createYRange({
       scale: KEYS.SCALE.Y,
       onEdited() {
         actions.select.emit('end', 'yRange');
+        updateLazySelectionOnEnd({ layoutService, chart: chartModel.query.getChart() });
       },
       enableInteraction,
     },
     {
       actions,
+      layoutService,
+      chartModel,
     }
   );
 }

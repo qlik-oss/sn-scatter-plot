@@ -8,6 +8,8 @@ export default function createXRange({
   dockService,
   enableInteraction,
   isRangeSelectionsSupported,
+  layoutService,
+  chartModel,
 }) {
   if (selectionService.getIsDimensionLocked() || !isRangeSelectionsSupported) {
     return false;
@@ -32,6 +34,8 @@ export default function createXRange({
     },
     {
       actions,
+      layoutService,
+      chartModel,
     }
   );
 }

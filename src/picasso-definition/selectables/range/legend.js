@@ -1,6 +1,15 @@
 import { range } from '../../../interactive';
+import { updateLazySelectionOnEnd } from '../../../interactive/update-selection';
 
-export default function createLegendRange({ actions, selectionService, scales, legend, enableInteraction }) {
+export default function createLegendRange({
+  actions,
+  selectionService,
+  scales,
+  legend,
+  enableInteraction,
+  layoutService,
+  chartModel,
+}) {
   const [legendComponent] = legend || [];
 
   if (!legendComponent) {
@@ -32,11 +41,14 @@ export default function createLegendRange({ actions, selectionService, scales, l
       bubblesPlacement: 'outside',
       onEdited: () => {
         actions.select.emit('end', 'legendRange');
+        updateLazySelectionOnEnd({ layoutService, chart: chartModel.query.getChart() });
       },
       enableInteraction,
     },
     {
       actions,
+      layoutService,
+      chartModel,
     }
   );
 }
