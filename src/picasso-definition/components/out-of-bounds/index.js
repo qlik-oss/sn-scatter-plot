@@ -4,10 +4,7 @@ import createSizeScale from '../../scales/size';
 import isOob from './is-oob';
 
 export function createSpace({ models }) {
-  const { dockService, layoutService } = models;
-  if (layoutService.meta.isBigData || layoutService.meta.isLargeNumDataPoints) {
-    return [];
-  }
+  const { dockService } = models;
   const space = (dock) => ({
     key: `${KEYS.COMPONENT.OUT_OF_BOUNDS}-space-${dock}`,
     type: 'container',
