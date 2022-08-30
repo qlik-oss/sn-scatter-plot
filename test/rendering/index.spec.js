@@ -65,28 +65,24 @@ describe('sn scatter plot: ui regression tests to test visual bugs', () => {
 
   describe('Interaction', () => {
     describe('Tooltip', () => {
-      it('Point in scatter ', async () => {
-        const renderUrl = await route.renderFixture('scatter_render_6.fix.js');
+      it('Point data in scatter ', async () => {
+        const renderUrl = await route.renderFixture('scatter_render_tooltip.fix.js');
         // Open page in Nebula which renders fixture
+        // render svg added to the fix.js
         await puppet.open(renderUrl);
-        const start = await page.waitForSelector('[data-key="out-of-bounds-space-right"]');
-        const elemCoords = await start.boundingBox();
-        await page.mouse.move(elemCoords.x, elemCoords.y);
-        await page.mouse.move(elemCoords.x - 225, elemCoords.y + 245);
-
+        await page.waitForSelector('[data-key="point-component"] g circle[data-label="Karl Anderson"]');
+        await page.hover('[data-key="point-component"] g circle[data-label="Karl Anderson"]');
         expect(await getTooltipContent()).to.equal(
           'Karl Anderson Sales Rep Name: Karl Anderson Expense Amount: $11,735,257.41 # of Customers: 2 Budget: 12.91k'
         );
       });
       it('Binned data in scatter ', async () => {
-        const renderUrl = await route.renderFixture('scatter_render_binned_snapshot_1.fix.js');
+        const renderUrl = await route.renderFixture('scatter_render_binned_snapshot_tooltip.fix.js');
         // Open page in Nebula which renders fixture
+        // render svg added to the fix.js
         await puppet.open(renderUrl);
-        const start = await page.waitForSelector('[data-key="out-of-bounds-space-left"]');
-        const elemCoords = await start.boundingBox();
-        await page.mouse.move(elemCoords.x, elemCoords.y);
-        await page.mouse.move(elemCoords.x + 225, elemCoords.y + 245);
-
+        await page.waitForSelector('[data-key="heat-map"] g rect[data-value="436904"]');
+        await page.hover('[data-key="heat-map"] g rect[data-value="436904"]');
         expect(await getTooltipContent()).to.equal('Density: 3805');
       });
     });
