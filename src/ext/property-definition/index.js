@@ -280,7 +280,7 @@ export default function propertyDefinition(env) {
                 type: 'integer',
                 expression: 'optional',
                 ref: 'maxVisibleBubbles',
-                translation: 'Max visible bubbles',
+                translation: 'properties.dataPoints.maxVisibleBubbles',
                 defaultValue: 2500,
               },
           gridLines: {
