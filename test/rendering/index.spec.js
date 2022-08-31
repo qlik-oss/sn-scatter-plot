@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import serve from '@nebula.js/cli-serve';
-import createPuppet from './utils/puppet';
-import events from './utils/events';
-import createNebulaRoutes from './utils/routes';
+import createPuppet from '../utils/puppet';
+import events from '../utils/events';
+import createNebulaRoutes from '../utils/routes';
 
 const paths = {
   artifacts: path.join(__dirname, '__artifacts__'),
@@ -44,19 +44,21 @@ describe('sn scatter plot: ui regression tests to test visual bugs', () => {
     events.removeListeners(page);
   });
 
-  fs.readdirSync(paths.fixtures).forEach((file) => {
-    const name = file.replace('.fix.js', '');
-    const fixturePath = `./${file}`;
+  describe('rendering', () => {
+    fs.readdirSync(paths.fixtures).forEach((file) => {
+      const name = file.replace('.fix.js', '');
+      const fixturePath = `./${file}`;
 
-    it(name, async () => {
-      const renderUrl = await route.renderFixture(fixturePath);
-      console.log({ renderUrl });
-      // Open page in Nebula which renders fixture
-      await puppet.open(renderUrl);
-      // Capture screenshot
-      const img = await puppet.screenshot();
+      it(name, async () => {
+        const renderUrl = await route.renderFixture(fixturePath);
+        // console.log({ renderUrl });
+        // Open page in Nebula which renders fixture
+        await puppet.open(renderUrl);
+        // Capture screenshot
+        const img = await puppet.screenshot();
 
-      expect(img).to.matchImageOf(name, { artifactsPath: paths.artifacts }, 0.03);
+        expect(img).to.matchImageOf(name, { artifactsPath: paths.artifacts }, 0.03);
+      });
     });
   });
 });
