@@ -66,6 +66,9 @@ jobs:
           command: yarn test:rendering
       - store_artifacts:
           path: ./test/rendering/__artifacts__
+      - run:
+          name: Integration tests
+          command: yarn test:integration
       - persist_to_workspace:
           root: ~/scatter
           paths:
