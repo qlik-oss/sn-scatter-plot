@@ -28,7 +28,7 @@ describe('sn scatter plot: ui integration tests to test visual bugs', () => {
   });
 
   after(async () => {
-    // s.close();
+    s.close();
   });
 
   beforeEach(() => {
