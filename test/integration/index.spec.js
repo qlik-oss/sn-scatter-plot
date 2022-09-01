@@ -28,7 +28,7 @@ describe('sn scatter plot: ui integration tests to test visual bugs', () => {
   });
 
   after(async () => {
-    s.close();
+    // s.close();
   });
 
   beforeEach(() => {
@@ -60,6 +60,52 @@ describe('sn scatter plot: ui integration tests to test visual bugs', () => {
         await page.waitForSelector('[data-key="heat-map"] g rect[data-value="436904"]');
         await page.hover('[data-key="heat-map"] g rect[data-value="436904"]');
         expect(await getTooltipContent()).to.equal('Density: 3805');
+      });
+    });
+    describe('Zoom', () => {
+      it('Zoom data in scatter ', async () => {
+        const renderUrl = await route.renderFixture('scatter_render_zoom.fix.js');
+        // Open page in Nebula which renders fixture
+        // render svg added to the fix.js
+        await puppet.open(renderUrl);
+
+        expect(
+          await page.waitForSelector('[data-key="point-component"] g circle[data-label="Karl Anderson"]', {
+            visible: true,
+          })
+        );
+        expect(
+          await page.waitForSelector('[data-key="out-of-bounds"] g circle[data-label="Karl Anderson"]', {
+            hidden: true,
+          })
+        );
+
+        const zoomIn = await page.waitForSelector('[title="Zoom in"]');
+        for (let index = 0; index < 4; index++) {
+          zoomIn.click();
+        }
+        expect(
+          await page.waitForSelector('[data-key="out-of-bounds"] g circle[data-label="Karl Anderson"]', {
+            visible: true,
+          })
+        );
+        expect(
+          await page.waitForSelector('[data-key="point-component"] g circle[data-label="Karl Anderson"]', {
+            hidden: true,
+          })
+        );
+        const resetZoom = await page.waitForSelector('[title="Reset zoom"]');
+        await resetZoom.click();
+        expect(
+          await page.waitForSelector('[data-key="point-component"] g circle[data-label="Karl Anderson"]', {
+            visible: true,
+          })
+        );
+        expect(
+          await page.waitForSelector('[data-key="out-of-bounds"] g circle[data-label="Karl Anderson"]', {
+            hidden: true,
+          })
+        );
       });
     });
   });
