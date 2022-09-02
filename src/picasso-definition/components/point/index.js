@@ -4,6 +4,7 @@ import NUMBERS from '../../../constants/numbers';
 import createSizeScale from '../../scales/size';
 import createBrush from '../../brush/point-brush';
 import movePath from '../../../utils/move-path';
+import getNumPointsInBigData from '../../../utils/get-num-points-in-big-data';
 import { computeWidth, computeColor } from './border-width-color';
 import isOob from '../out-of-bounds/is-oob';
 
@@ -15,25 +16,11 @@ export default function createPoint({ models, chart }) {
   const viewHandler = chartModel.query.getViewHandler();
   const dataHandler = chartModel.query.getDataHandler();
   const { transform } = viewHandler;
-  let numBubblesInBigData;
-
-  const getNumBubblesInBigData = () => {
-    const dataPages = layoutService.getDataPages();
-    if (dataPages.length) {
-      const { qMatrix, qArea } = dataPages[0];
-      const { qLeft, qTop, qWidth, qHeight } = qArea;
-      const isBinnedData = dataPages.length === 1 && !qMatrix.length && !qLeft && !qTop && !qWidth && !qHeight;
-      if (isBinnedData) {
-        return 0;
-      }
-      return qMatrix.length;
-    }
-    return 0;
-  };
+  let numPointsInBigData;
 
   // For zoom/pan from bin data to point data
-  const strokeWidthInBigData = () => computeWidth(numBubblesInBigData);
-  const strokeColorInBigData = () => computeColor(numBubblesInBigData);
+  const strokeWidthInBigData = () => computeWidth(numPointsInBigData);
+  const strokeColorInBigData = () => computeColor(numPointsInBigData);
 
   // For zoom/pan from large number data points to its subset
   const strokeWidthInLargeData = () => {
@@ -77,7 +64,7 @@ export default function createPoint({ models, chart }) {
     beforeRender: ({ size }) => {
       compSize = size;
       windowSizeMultiplier = Math.min(size.height, size.width) / NUMBERS.WINDOW_SIZE_BASE;
-      numBubblesInBigData = getNumBubblesInBigData();
+      numPointsInBigData = getNumPointsInBigData(layoutService);
     },
     animations: {
       enabled: () => chartModel.query.animationEnabled(),
@@ -106,6 +93,10 @@ export default function createPoint({ models, chart }) {
         width: rect.computedPhysical.width + 100,
         height: rect.computedPhysical.height + 100,
       }),
+      progressive: () => {
+        const meta = chartModel.query.getMeta();
+        return meta.progressive;
+      },
     },
   };
 }

@@ -5,6 +5,7 @@ import createViewHandler from '../../view-handler';
 import getFormatPatternFromRange from './format-pattern-from-range';
 import shouldUpdateTicks from './should-update-ticks';
 import { getPointNodesWithKey } from '../../utils/get-point-nodes';
+import isProgressiveAllowed from '../../utils/is-progressive-allowed';
 
 export default function createChartModel({
   chart,
@@ -92,31 +93,106 @@ export default function createChartModel({
     previousConstraints: undefined,
     updateWithSettings: undefined,
     constraintsHaveChanged: undefined,
+    progressive: false,
   };
 
-  function updatePartial() {
-    meta.updateWithSettings = false;
-    requestAnimationFrame(() => {
-      // TODO: cancel requests as well to optimize???
-      // const startTime = Date.now();
-      trendLinesService.update();
+  let dataPages = [];
+  let enableDataPagesExtract = true;
+  let timer = null;
+
+  function extractDataPages() {
+    if (enableDataPagesExtract) {
+      dataPages = layoutService.getDataPages();
+      layoutService.setDataPages([]);
+      enableDataPagesExtract = false;
+    }
+  }
+
+  function insertDataPages() {
+    layoutService.setDataPages(dataPages);
+    dataPages = [];
+    enableDataPagesExtract = true;
+  }
+
+  function updateMeta() {
+    const nodes = getPointNodesWithKey(chart, KEYS.COMPONENT.POINT);
+    meta.numVisibleBubbles = nodes.length;
+    meta.isLargeNumVisibleBubbles = nodes.length > layoutService.meta.largeNumDataPoints;
+  }
+
+  function renderOnce() {
+    cancelAnimationFrame(timer);
+    timer = requestAnimationFrame(() => {
       chart.update({
         partialData: true,
         excludeFromUpdate: EXCLUDE,
-        // transforms: [
-        //   {
-        //     key: KEYS.COMPONENT.POINT,
-        //     transform: { a: 1, b: 0, c: 0, d: 1, e: x, f: y },
-        //   },
-        // ],
       });
-      const nodes = getPointNodesWithKey(chart, KEYS.COMPONENT.POINT);
-      meta.numVisibleBubbles = nodes.length;
-      meta.isLargeNumVisibleBubbles = nodes.length > layoutService.meta.largeNumDataPoints;
-
-      // TODO: debounce -> interactionInProgess = false
-      // console.log('chart rendered in ', Date.now() - startTime, ' ms');
+      updateMeta();
     });
+  }
+
+  const renderProgressive = () => {
+    const tempPages = layoutService.getDataPages();
+    if (!tempPages.length) return;
+    const dataSize = tempPages[0].qMatrix.length;
+    const nbrOfChunks = Math.ceil(dataSize / NUMBERS.CHUNK_SIZE);
+    if (nbrOfChunks <= 1) {
+      renderOnce();
+      return;
+    }
+
+    extractDataPages();
+    let renderCount = -1; // To clear before rendering
+
+    const renderChunk = () => {
+      cancelAnimationFrame(timer);
+      timer = requestAnimationFrame(() => {
+        const start = renderCount * NUMBERS.CHUNK_SIZE;
+        const end = (renderCount + 1) * NUMBERS.CHUNK_SIZE;
+        meta.progressive = renderCount === -1 ? false : { start, end, size: dataSize };
+        const chunk =
+          renderCount === -1
+            ? [
+                {
+                  ...dataPages[0],
+                  qMatrix: [],
+                },
+              ]
+            : [
+                {
+                  ...dataPages[0],
+                  qMatrix: dataPages[0].qMatrix.slice(start, end),
+                },
+              ];
+        layoutService.setDataPages(chunk);
+        enableDataPagesExtract = false;
+
+        chart.update({
+          partialData: true,
+          excludeFromUpdate: EXCLUDE,
+        });
+        renderCount++;
+        if (renderCount < nbrOfChunks) {
+          renderChunk();
+        } else {
+          meta.progressive = false;
+          updateMeta();
+          insertDataPages();
+        }
+      });
+    };
+
+    renderChunk();
+  };
+
+  function updatePartial(interactionInProgress = false) {
+    meta.updateWithSettings = false;
+    trendLinesService.update();
+    if (interactionInProgress || !isProgressiveAllowed(layoutService)) {
+      renderOnce();
+    } else {
+      renderProgressive(interactionInProgress);
+    }
   }
 
   const getData = () => [
@@ -132,14 +208,22 @@ export default function createChartModel({
   const update = ({ settings } = {}) => {
     meta.updateWithSettings = !!settings;
     trendLinesService.update();
-    chart.update({
-      data: getData(),
-      settings,
-    });
-
-    const nodes = getPointNodesWithKey(chart, KEYS.COMPONENT.POINT);
-    meta.numVisibleBubbles = nodes.length;
-    meta.isLargeNumVisibleBubbles = nodes.length > layoutService.meta.largeNumDataPoints;
+    if (!isProgressiveAllowed(layoutService)) {
+      chart.update({
+        data: getData(),
+        settings,
+      });
+      updateMeta();
+    } else {
+      // Render the first time without data
+      extractDataPages();
+      chart.update({
+        data: getData(),
+        settings,
+      });
+      insertDataPages();
+      renderProgressive();
+    }
   };
 
   let miniChartOn = false;
@@ -179,7 +263,7 @@ export default function createChartModel({
     updateTicks = shouldUpdateTicks(chart, getCurrentYTicks, getYTicks);
     if (viewHandler.getInteractionInProgress()) {
       updateTicksState.push(updateTicks);
-      updatePartial();
+      updatePartial(true);
       return;
     }
     const ticksNeedUpdate = updateTicks || updateTicksState.filter((s) => s).length > 0;
@@ -198,7 +282,7 @@ export default function createChartModel({
         if (binnedBeforeFetch !== dataHandler.getMeta().isBinnedData || miniChartIsToggled || ticksNeedUpdate) {
           update();
         } else {
-          updatePartial();
+          updatePartial(false);
         }
       });
 

@@ -19,6 +19,7 @@ module.exports = {
       panZoom: true,
       DATA_BINNING: true,
       NUM_BUBBLES: true,
+      PROGRESSIVE_RENDERING: true,
     },
   },
 };

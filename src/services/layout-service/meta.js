@@ -8,6 +8,7 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
     const qcy = getValue(layout.qHyperCube, 'qSize.qcy');
     const isBinningSupported = !qIsDirectQueryMode && !qUnsupportedFeature?.some((f) => f === 'binningData');
     const isMaxVisibleBubblesEnabled = flags.isEnabled('NUM_BUBBLES');
+    const isProgressiveEnabled = flags.isEnabled('PROGRESSIVE_RENDERING');
     const maxVisibleBubbles =
       !isMaxVisibleBubblesEnabled || layout.maxVisibleBubbles === undefined || layout.maxVisibleBubbles <= 0
         ? NUMBERS.MAX_NR_SCATTER
@@ -26,6 +27,7 @@ export default function createLayoutServiceMetaFn(flags, qIsDirectQueryMode, qUn
       isContinuous: true,
       isRangeSelectionsSupported,
       isMaxVisibleBubblesEnabled,
+      isProgressiveEnabled,
       isLargeNumDataPoints,
       maxVisibleBubbles,
       largeNumDataPoints,
