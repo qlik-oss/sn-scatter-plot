@@ -26,6 +26,7 @@ describe('chart-model', () => {
     global.requestAnimationFrame = (cb) => {
       cb();
     };
+    global.cancelAnimationFrame = sandbox.spy();
     dataPages = [
       { qElemNumber: 7954, qNum: 1, qState: 'L', qText: [1732, 6, 1765, 5] },
       { qElemNumber: 7946, qNum: 1, qState: 'L', qText: [1599, 5, 1632, 4] },
@@ -153,6 +154,7 @@ describe('chart-model', () => {
           previousConstraints: undefined,
           updateWithSettings: undefined,
           constraintsHaveChanged: undefined,
+          progressive: false,
         });
       });
     });
