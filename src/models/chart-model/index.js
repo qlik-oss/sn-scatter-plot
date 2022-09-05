@@ -160,20 +160,12 @@ export default function createChartModel({
         const start = renderCount * NUMBERS.CHUNK_SIZE;
         const end = (renderCount + 1) * NUMBERS.CHUNK_SIZE;
         meta.progressive = renderCount === -1 ? false : { start, end };
-        const chunk =
-          renderCount === -1
-            ? [
-                {
-                  ...dataPages[0],
-                  qMatrix: [],
-                },
-              ]
-            : [
-                {
-                  ...dataPages[0],
-                  qMatrix: dataPages[0].qMatrix.slice(start, end),
-                },
-              ];
+        const chunk = [
+          {
+            ...dataPages[0],
+            qMatrix: renderCount === -1 ? [] : dataPages[0].qMatrix.slice(start, end),
+          },
+        ];
         layoutService.setDataPages(chunk);
         chart.update({
           partialData: true,
