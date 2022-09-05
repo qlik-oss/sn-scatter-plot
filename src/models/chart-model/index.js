@@ -28,6 +28,16 @@ export default function createChartModel({
     // KEYS.COMPONENT.GRID_LINES,
   ];
 
+  const EXCLUDE_DURING_PROGRESSIVE = [
+    KEYS.COMPONENT.X_AXIS_TITLE,
+    KEYS.COMPONENT.Y_AXIS_TITLE,
+    KEYS.COMPONENT.MINI_CHART_POINT,
+    KEYS.COMPONENT.POINT_LABELS,
+    KEYS.COMPONENT.X_AXIS,
+    KEYS.COMPONENT.Y_AXIS,
+    KEYS.COMPONENT.GRID_LINES,
+  ];
+
   const viewHandler = createViewHandler({
     extremumModel,
     layoutService,
@@ -141,15 +151,15 @@ export default function createChartModel({
       return;
     }
 
-    extractDataPages();
     let renderCount = -1; // To clear before rendering
 
     const renderChunk = () => {
       cancelAnimationFrame(timer);
       timer = requestAnimationFrame(() => {
+        extractDataPages();
         const start = renderCount * NUMBERS.CHUNK_SIZE;
         const end = (renderCount + 1) * NUMBERS.CHUNK_SIZE;
-        meta.progressive = renderCount === -1 ? false : { start, end, size: dataSize };
+        meta.progressive = renderCount === -1 ? false : { start, end };
         const chunk =
           renderCount === -1
             ? [
@@ -165,19 +175,18 @@ export default function createChartModel({
                 },
               ];
         layoutService.setDataPages(chunk);
-        enableDataPagesExtract = false;
-
         chart.update({
           partialData: true,
-          excludeFromUpdate: EXCLUDE,
+          excludeFromUpdate:
+            renderCount === -1 || renderCount === nbrOfChunks - 1 ? EXCLUDE : EXCLUDE_DURING_PROGRESSIVE,
         });
+        insertDataPages();
         renderCount++;
         if (renderCount < nbrOfChunks) {
           renderChunk();
         } else {
           meta.progressive = false;
           updateMeta();
-          insertDataPages();
         }
       });
     };
