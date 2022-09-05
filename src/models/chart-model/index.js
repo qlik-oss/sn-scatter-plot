@@ -112,6 +112,7 @@ export default function createChartModel({
 
   function extractDataPages() {
     if (enableDataPagesExtract) {
+      // To avoid extract a chunk during progressive rendering
       dataPages = layoutService.getDataPages();
       layoutService.setDataPages([]);
       enableDataPagesExtract = false;
