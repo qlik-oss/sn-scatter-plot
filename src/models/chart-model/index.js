@@ -107,22 +107,15 @@ export default function createChartModel({
   };
 
   let dataPages = [];
-  let enableDataPagesExtract = true;
   let timer = null;
 
   function extractDataPages() {
-    if (enableDataPagesExtract) {
-      // To avoid extract a chunk during progressive rendering
-      dataPages = layoutService.getDataPages();
-      layoutService.setDataPages([]);
-      enableDataPagesExtract = false;
-    }
+    dataPages = layoutService.getDataPages();
+    layoutService.setDataPages([]);
   }
 
   function insertDataPages() {
     layoutService.setDataPages(dataPages);
-    dataPages = [];
-    enableDataPagesExtract = true;
   }
 
   function updateMeta() {
@@ -193,7 +186,7 @@ export default function createChartModel({
     if (interactionInProgress || !isProgressiveAllowed(layoutService)) {
       renderOnce();
     } else {
-      renderProgressive(interactionInProgress);
+      renderProgressive();
     }
   }
 
