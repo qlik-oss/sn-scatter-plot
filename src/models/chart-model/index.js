@@ -160,7 +160,7 @@ export default function createChartModel({
         extractDataPages();
         const start = renderCount * NUMBERS.CHUNK_SIZE;
         const end = (renderCount + 1) * NUMBERS.CHUNK_SIZE;
-        meta.progressive = renderCount === -1 ? false : { start, end };
+        meta.progressive = renderCount === -1 ? false : { start, end, isLastStep: renderCount === nbrOfChunks - 1 };
         const chunk = [
           {
             ...dataPages[0],
