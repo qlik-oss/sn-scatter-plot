@@ -38,7 +38,7 @@ jobs:
     <<: *defaults
     docker:
       - image: circleci/node:16.7-browsers
-      - image: browserless/chrome:1.50.0-puppeteer-1.20.0
+      - image: browserless/chrome:1.50.0-playwright-1.25.1
     steps:
       - attach_workspace:
           at: ~/scatter

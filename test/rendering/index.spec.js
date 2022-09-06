@@ -1,8 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import serve from '@nebula.js/cli-serve';
-import createPuppet from '../utils/puppet';
-import events from '../utils/events';
+import { test, expect, chromium } from '@playwright/test';
 import createNebulaRoutes from '../utils/routes';
 
 const paths = {
@@ -10,12 +9,11 @@ const paths = {
   fixtures: path.join(__dirname, '__fixtures__'),
 };
 
-describe('sn scatter plot: ui regression tests to test visual bugs', () => {
+test.describe('Rendering', () => {
   let s;
-  let puppet;
   let route;
 
-  before(async () => {
+  test.beforeAll(async () => {
     s = await serve({
       entry: path.resolve(__dirname, '../../'),
       type: 'sn-scatter-plot',
@@ -28,36 +26,26 @@ describe('sn scatter plot: ui regression tests to test visual bugs', () => {
       fixturePath: 'test/rendering/__fixtures__',
     });
 
-    puppet = createPuppet(page);
     route = createNebulaRoutes(s.url);
   });
 
-  after(async () => {
-    s.close();
+  test.afterAll(async () => {
+    await s.close();
   });
 
-  beforeEach(() => {
-    events.addListeners(page);
-  });
-
-  afterEach(() => {
-    events.removeListeners(page);
-  });
-
-  describe('rendering', () => {
+  test.describe('rendering', () => {
     fs.readdirSync(paths.fixtures).forEach((file) => {
       const name = file.replace('.fix.js', '');
       const fixturePath = `./${file}`;
 
-      it(name, async () => {
+      test(name, async () => {
         const renderUrl = await route.renderFixture(fixturePath);
-        // console.log({ renderUrl });
-        // Open page in Nebula which renders fixture
-        await puppet.open(renderUrl);
-        // Capture screenshot
-        const img = await puppet.screenshot();
-
-        expect(img).to.matchImageOf(name, { artifactsPath: paths.artifacts }, 0.03);
+        const browser = await chromium.launch();
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(renderUrl, { waitUntil: 'networkidle' });
+        await page.waitForSelector('.njs-viz', { visible: true });
+        expect(await page.screenshot()).toMatchSnapshot(`${name}.png`, { threshold: 0.04 });
       });
     });
   });
