@@ -125,6 +125,7 @@ export default function createChartModel({
   }
 
   function renderOnce() {
+    meta.progressive = false;
     cancelAnimationFrame(timer);
     timer = requestAnimationFrame(() => {
       chart.update({
@@ -145,28 +146,29 @@ export default function createChartModel({
       return;
     }
 
-    let renderCount = -1; // To clear before rendering
+    let renderCount = 0;
 
     const renderChunk = () => {
       cancelAnimationFrame(timer);
       timer = requestAnimationFrame(() => {
         extractDataPages();
         const start = renderCount * NUMBERS.CHUNK_SIZE;
-        const end = (renderCount + 1) * NUMBERS.CHUNK_SIZE;
-        meta.progressive = renderCount === -1 ? false : { start, end, isLastStep: renderCount === nbrOfChunks - 1 };
+        const end = Math.min(dataSize, (renderCount + 1) * NUMBERS.CHUNK_SIZE);
+        meta.progressive = { start, end, isFirst: renderCount === 0, isLast: renderCount === nbrOfChunks - 1 };
         const chunk = [
           {
             ...dataPages[0],
-            qMatrix: renderCount === -1 ? [] : dataPages[0].qMatrix.slice(start, end),
+            qMatrix: dataPages[0].qMatrix.slice(start, end),
           },
         ];
         layoutService.setDataPages(chunk);
         chart.update({
           partialData: true,
           excludeFromUpdate:
-            renderCount === -1 || renderCount === nbrOfChunks - 1 ? EXCLUDE : EXCLUDE_DURING_PROGRESSIVE,
+            renderCount === 0 || renderCount === nbrOfChunks - 1 ? EXCLUDE : EXCLUDE_DURING_PROGRESSIVE,
         });
         insertDataPages();
+        updateMeta(); // To count visible bubbles for point brush
         renderCount++;
         if (renderCount < nbrOfChunks) {
           renderChunk();
@@ -201,6 +203,7 @@ export default function createChartModel({
   ];
 
   const update = ({ settings } = {}) => {
+    meta.progressive = false;
     meta.updateWithSettings = !!settings;
     trendLinesService.update();
     if (!isProgressiveAllowed(layoutService)) {
@@ -219,6 +222,34 @@ export default function createChartModel({
       insertDataPages();
       renderProgressive();
     }
+  };
+
+  const brush = ({ render, nodes }) => {
+    const nbrOfChunks = Math.ceil(nodes.length / NUMBERS.CHUNK_SIZE);
+    if (nbrOfChunks <= 1) {
+      render(nodes);
+      return;
+    }
+
+    let renderCount = 0;
+
+    const renderChunk = () => {
+      cancelAnimationFrame(timer);
+      timer = requestAnimationFrame(() => {
+        const start = renderCount * NUMBERS.CHUNK_SIZE;
+        const end = Math.min(nodes.length, (renderCount + 1) * NUMBERS.CHUNK_SIZE);
+        meta.progressive = { start, end, isFirst: renderCount === 0, isLast: renderCount === nbrOfChunks - 1 };
+        render(nodes.slice(start, end));
+        renderCount++;
+        if (renderCount < nbrOfChunks) {
+          renderChunk();
+        } else {
+          meta.progressive = false;
+        }
+      });
+    };
+
+    renderChunk();
   };
 
   let miniChartOn = false;
@@ -310,6 +341,7 @@ export default function createChartModel({
         meta.isPrelayout = false;
       },
       update,
+      brush,
     },
   };
 

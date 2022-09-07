@@ -16,7 +16,7 @@ export default function createPoint({ models, chart }) {
   const viewHandler = chartModel.query.getViewHandler();
   const dataHandler = chartModel.query.getDataHandler();
   const { transform } = viewHandler;
-  let numPointsInBigData;
+  const numPointsInBigData = getNumPointsInBigData(layoutService);
 
   // For zoom/pan from bin data to point data
   const strokeWidthInBigData = () => computeWidth(numPointsInBigData);
@@ -41,6 +41,7 @@ export default function createPoint({ models, chart }) {
     show: () => !dataHandler.getMeta().isBinnedData,
     brush: createBrush({
       layoutService,
+      chartModel,
       strokeWidthInBigData,
       strokeColorInBigData,
       strokeWidthInLargeData,
@@ -64,7 +65,6 @@ export default function createPoint({ models, chart }) {
     beforeRender: ({ size }) => {
       compSize = size;
       windowSizeMultiplier = Math.min(size.height, size.width) / NUMBERS.WINDOW_SIZE_BASE;
-      numPointsInBigData = getNumPointsInBigData(layoutService);
     },
     animations: {
       enabled: () => chartModel.query.animationEnabled(),
