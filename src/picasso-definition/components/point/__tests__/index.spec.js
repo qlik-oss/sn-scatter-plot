@@ -2,6 +2,7 @@ import createPoint from '../index';
 import * as KEYS from '../../../../constants/keys';
 import createSizeScale from '../../../scales/size';
 import * as movePath from '../../../../utils/move-path';
+import * as getNumPointsInBigData from '../../../../utils/get-num-points-in-big-data';
 
 describe('point', () => {
   let sandbox;
@@ -77,6 +78,7 @@ describe('point', () => {
     };
 
     sandbox.stub(movePath, 'default').returns('new-path');
+    sandbox.stub(getNumPointsInBigData, 'default').returns(1000);
 
     create = () =>
       createPoint({

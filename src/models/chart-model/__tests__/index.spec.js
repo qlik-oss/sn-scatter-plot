@@ -188,7 +188,7 @@ describe('chart-model', () => {
 
   describe('command', () => {
     it('should expose correct methods', () => {
-      expect(create().command).to.have.all.keys(['layoutComponents', 'setMeta', 'update']);
+      expect(create().command).to.have.all.keys(['layoutComponents', 'setMeta', 'update', 'brush']);
     });
 
     describe('layoutComponents', () => {
