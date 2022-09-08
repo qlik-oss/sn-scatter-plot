@@ -37,9 +37,8 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7-browsers
-      # - image: browserless/chrome:1.50.0
-      # - image: mcr.microsoft.com/playwright:v1.25.1-focal
+      - image: circleci/node:16.10.0-browsers
+      - image: mcr.microsoft.com/playwright:focal
     steps:
       - attach_workspace:
           at: ~/scatter
