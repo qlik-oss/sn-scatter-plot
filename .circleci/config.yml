@@ -38,8 +38,8 @@ jobs:
     <<: *defaults
     docker:
       - image: circleci/node:16.7-browsers
-      - image: browserless/chrome:1.50.0
-      - image: mcr.microsoft.com/playwright:v1.25.1-focal
+      # - image: browserless/chrome:1.50.0
+      # - image: mcr.microsoft.com/playwright:v1.25.1-focal
     steps:
       - attach_workspace:
           at: ~/scatter
@@ -62,6 +62,11 @@ jobs:
               yarn test:unit -- --mocha.bail false
               ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
             fi
+      - run:
+          name: Install Playwright
+          command: |
+            npx playwright install
+            npx playwright install-deps
       - run:
           name: Rendering tests
           command: yarn test:rendering
