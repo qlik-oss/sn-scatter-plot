@@ -21,7 +21,7 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7-browsers
+      - image: circleci/node:16.10.0
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
@@ -65,7 +65,6 @@ jobs:
           name: Install Playwright
           command: |
             npx playwright install
-            npx playwright install-deps
       - run:
           name: Rendering tests
           command: yarn test:rendering
@@ -82,7 +81,7 @@ jobs:
   publish-dev:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7-browsers
+      - image: circleci/node:16.10.0
     steps:
       - attach_workspace:
           at: ~/scatter
@@ -93,7 +92,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7-browsers
+      - image: circleci/node:16.10.0
     steps:
       - attach_workspace:
           at: ~/scatter
