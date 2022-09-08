@@ -3,11 +3,11 @@ import useLasso from './use-lasso';
 import useSelect from './use-select';
 
 export default function useActions() {
+  const [actions] = useState({});
   const constraints = useConstraints();
-  const select = useSelect();
+  const select = useSelect(actions);
   const lasso = useLasso();
 
-  const [actions] = useState({});
   actions.zoom = {
     enabled: () => constraints && !constraints.active,
   };
@@ -19,6 +19,10 @@ export default function useActions() {
   };
   actions.tooltip = {
     enabled: () => constraints && !constraints.passive,
+  };
+  actions.getProgressive = () => actions.progressive;
+  actions.setProgressive = (b) => {
+    actions.progressive = b;
   };
   actions.lasso = lasso;
   actions.select = select;

@@ -4,8 +4,8 @@ import NUMBERS from '../../constants/numbers';
 import createViewHandler from '../../view-handler';
 import getFormatPatternFromRange from './format-pattern-from-range';
 import shouldUpdateTicks from './should-update-ticks';
-import { getPointNodesWithKey } from '../../utils/get-point-nodes';
 import isProgressiveAllowed from '../../utils/is-progressive-allowed';
+import getNumVisiblePoints from '../../utils/get-num-visible-points';
 
 export default function createChartModel({
   chart,
@@ -16,6 +16,7 @@ export default function createChartModel({
   extremumModel,
   dataHandler,
   trendLinesService,
+  actions,
   getCurrentYTicks,
   getYTicks,
 }) {
@@ -119,12 +120,12 @@ export default function createChartModel({
   }
 
   function updateMeta() {
-    const nodes = getPointNodesWithKey(chart, KEYS.COMPONENT.POINT);
-    meta.numVisibleBubbles = nodes.length;
-    meta.isLargeNumVisibleBubbles = nodes.length > layoutService.meta.largeNumDataPoints;
+    meta.numVisibleBubbles = getNumVisiblePoints({ layoutService, viewHandler });
+    meta.isLargeNumVisibleBubbles = meta.numVisibleBubbles > layoutService.meta.largeNumDataPoints;
   }
 
   function renderOnce() {
+    actions.setProgressive(false);
     meta.progressive = false;
     cancelAnimationFrame(timer);
     timer = requestAnimationFrame(() => {
@@ -137,6 +138,7 @@ export default function createChartModel({
   }
 
   const renderProgressive = () => {
+    actions.setProgressive(false);
     const tempPages = layoutService.getDataPages();
     if (!tempPages.length) return;
     const dataSize = tempPages[0].qMatrix.length;
@@ -146,6 +148,8 @@ export default function createChartModel({
       return;
     }
 
+    actions.setProgressive(true);
+    updateMeta(); // This can be done before progressive rendering
     let renderCount = 0;
 
     const renderChunk = () => {
@@ -168,13 +172,12 @@ export default function createChartModel({
             renderCount === 0 || renderCount === nbrOfChunks - 1 ? EXCLUDE : EXCLUDE_DURING_PROGRESSIVE,
         });
         insertDataPages();
-        updateMeta(); // To count visible bubbles for point brush
         renderCount++;
         if (renderCount < nbrOfChunks) {
           renderChunk();
         } else {
           meta.progressive = false;
-          updateMeta();
+          actions.setProgressive(false);
         }
       });
     };

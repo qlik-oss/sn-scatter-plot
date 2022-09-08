@@ -1,6 +1,6 @@
 import { useConstraints, useState, useEffect } from '@nebula.js/stardust';
 
-export default function useSelect() {
+export default function useSelect(actions) {
   const constraints = useConstraints();
   const [enabled, setEnabled] = useState(false);
   const [listeners, setListeners] = useState({});
@@ -21,7 +21,7 @@ export default function useSelect() {
   }, [constraints]);
 
   return {
-    enabled: () => enabled,
+    enabled: () => enabled && !actions.getProgressive(),
     emit: (event, ...args) => listeners[event]?.forEach((listener) => listener(...args)),
     removeListener: (event, listener) => {
       const idx = listeners[event]?.indexOf(listener);
