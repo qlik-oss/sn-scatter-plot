@@ -69,7 +69,11 @@ jobs:
           name: Rendering tests
           command: yarn test:rendering
       - store_artifacts:
+          path: test/rendering/index.spec.js-snapshots
+      - store_artifacts:
           path: ./test/rendering/__artifacts__
+      - store_artifacts:
+          path: test/rendering/test-report
       - run:
           name: Integration tests
           command: yarn test:integration
