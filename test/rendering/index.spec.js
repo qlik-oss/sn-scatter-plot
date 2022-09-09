@@ -46,7 +46,7 @@ test.describe('Rendering', () => {
         await page.goto(renderUrl, { waitUntil: 'networkidle' });
         // Should switch to below locator when instead of the implicit wait when supported correctly in nebula
         // await page.locator('[data-render-count="1"]', { visible: true });
-        await page.waitForTimeout(2000);
+        await page.waitForTimeout(3000);
         expect(await page.screenshot()).toMatchSnapshot(`${name}.png`);
       });
     });
