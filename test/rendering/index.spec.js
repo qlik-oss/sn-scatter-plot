@@ -30,7 +30,7 @@ test.describe('Rendering', () => {
   });
 
   test.afterAll(async () => {
-    await s.close();
+    // await s.close();
   });
 
   test.describe('rendering', () => {
@@ -44,8 +44,10 @@ test.describe('Rendering', () => {
         const context = await browser.newContext();
         const page = await context.newPage();
         await page.goto(renderUrl, { waitUntil: 'networkidle' });
-        await page.waitForSelector('.njs-viz', { visible: true });
-        expect(await page.screenshot()).toMatchSnapshot(`${name}.png`, { threshold: 0.04 });
+        // Should switch to below locator when instead of the implicit wait when supported correctly in nebula
+        // await page.locator('[data-render-count="1"]', { visible: true });
+        await page.waitForTimeout(2000);
+        expect(await page.screenshot()).toMatchSnapshot(`${name}.png`);
       });
     });
   });
