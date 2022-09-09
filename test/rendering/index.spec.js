@@ -30,7 +30,7 @@ test.describe('Rendering', () => {
   });
 
   test.afterAll(async () => {
-    // await s.close();
+    await s.close();
   });
 
   test.describe('rendering', () => {
