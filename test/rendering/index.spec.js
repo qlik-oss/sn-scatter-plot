@@ -19,7 +19,7 @@ test.describe('Rendering', () => {
       type: 'sn-scatter-plot',
       open: false,
       build: false,
-      themes: [],
+      themes: [{ id: 'test', theme: { fontFamily: "'Arial'" } }],
       flags: {
         BEST_FIT_LINE: true,
       },
