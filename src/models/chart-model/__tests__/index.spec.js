@@ -4,6 +4,7 @@ import * as getFormatPatternFromRange from '../format-pattern-from-range';
 import * as shouldUpdateTicks from '../should-update-ticks';
 import * as createViewHandler from '../../../view-handler';
 import * as nodeUtil from '../../../utils/get-point-nodes';
+import * as getNumVisiblePoints from '../../../utils/get-num-visible-points';
 
 describe('chart-model', () => {
   let sandbox;
@@ -13,6 +14,7 @@ describe('chart-model', () => {
   let layoutService;
   let colorService;
   let trendLinesService;
+  let actions;
   let colorModelDataFn;
   let create;
   let viewHandler;
@@ -79,6 +81,9 @@ describe('chart-model', () => {
       getData: () => [{ trendlineData: 'here' }],
       update: sandbox.stub(),
     };
+    actions = {
+      setProgressive: sandbox.stub(),
+    };
     extremumModel = { command: { updateExtrema: sandbox.stub() } };
     colorModelDataFn = sandbox.stub().returns([{ colorData: 'oh yes' }]);
     colorService = {
@@ -87,6 +92,7 @@ describe('chart-model', () => {
     sandbox.stub(getFormatPatternFromRange, 'default');
     sandbox.stub(shouldUpdateTicks, 'default').returns(false);
     sandbox.stub(nodeUtil, 'getPointNodesWithKey').returns([]);
+    sandbox.stub(getNumVisiblePoints, 'default').returns(100);
     create = () =>
       createChartModel({
         chart,
@@ -94,6 +100,7 @@ describe('chart-model', () => {
         layoutService,
         colorService,
         trendLinesService,
+        actions,
         viewState,
         extremumModel,
         dataHandler,
