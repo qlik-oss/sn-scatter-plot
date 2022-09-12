@@ -40,7 +40,11 @@ export default {
     if (!component || mode === 0) {
       return [];
     }
-
+    const { rendererSettings = {} } = component.settings;
+    const progressive = typeof rendererSettings.progressive === 'function' && rendererSettings.progressive();
+    if (progressive && !progressive.isLast) {
+      return [];
+    }
     const nodeFilter = (node) => node.key === key && showLabel(node);
     const nodes = getPointNodes(this.chart).filter(nodeFilter).reverse();
     if (!nodes.length || nodes.length > maxVisibleBubblesForLabeling) {

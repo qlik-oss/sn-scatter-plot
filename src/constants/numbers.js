@@ -36,6 +36,7 @@ export default {
   MAX_NR_SCATTER: 1000,
   LARGE_NUM_DATA_POINTS: 5000,
   MAX_VISIBLE_BUBBLES: 100000,
+  CHUNK_SIZE: 1000,
 
   // Ratio = minichart_size/chart_size, Padding: away from the bottom right corner
   MINI_CHART: { RATIO: 0.15, PADDING: 10 },

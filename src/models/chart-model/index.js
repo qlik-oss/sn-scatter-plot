@@ -4,7 +4,8 @@ import NUMBERS from '../../constants/numbers';
 import createViewHandler from '../../view-handler';
 import getFormatPatternFromRange from './format-pattern-from-range';
 import shouldUpdateTicks from './should-update-ticks';
-import { getPointNodesWithKey } from '../../utils/get-point-nodes';
+import isProgressiveAllowed from '../../utils/is-progressive-allowed';
+import getNumVisiblePoints from '../../utils/get-num-visible-points';
 
 export default function createChartModel({
   chart,
@@ -15,6 +16,7 @@ export default function createChartModel({
   extremumModel,
   dataHandler,
   trendLinesService,
+  actions,
   getCurrentYTicks,
   getYTicks,
 }) {
@@ -25,6 +27,16 @@ export default function createChartModel({
     // KEYS.COMPONENT.X_AXIS,
     // KEYS.COMPONENT.Y_AXIS,
     // KEYS.COMPONENT.GRID_LINES,
+  ];
+
+  const EXCLUDE_DURING_PROGRESSIVE = [
+    KEYS.COMPONENT.X_AXIS_TITLE,
+    KEYS.COMPONENT.Y_AXIS_TITLE,
+    KEYS.COMPONENT.MINI_CHART_POINT,
+    KEYS.COMPONENT.POINT_LABELS,
+    KEYS.COMPONENT.X_AXIS,
+    KEYS.COMPONENT.Y_AXIS,
+    KEYS.COMPONENT.GRID_LINES,
   ];
 
   const viewHandler = createViewHandler({
@@ -92,31 +104,95 @@ export default function createChartModel({
     previousConstraints: undefined,
     updateWithSettings: undefined,
     constraintsHaveChanged: undefined,
+    progressive: false,
   };
 
-  function updatePartial() {
-    meta.updateWithSettings = false;
-    requestAnimationFrame(() => {
-      // TODO: cancel requests as well to optimize???
-      // const startTime = Date.now();
-      trendLinesService.update();
+  let dataPages = [];
+  let timer = null;
+
+  function extractDataPages() {
+    dataPages = layoutService.getDataPages();
+    layoutService.setDataPages([]);
+  }
+
+  function insertDataPages() {
+    layoutService.setDataPages(dataPages);
+  }
+
+  function updateMeta() {
+    meta.numVisibleBubbles = getNumVisiblePoints({ layoutService, viewHandler });
+    meta.isLargeNumVisibleBubbles = meta.numVisibleBubbles > layoutService.meta.largeNumDataPoints;
+  }
+
+  function renderOnce() {
+    actions.setProgressive(false);
+    meta.progressive = false;
+    cancelAnimationFrame(timer);
+    timer = requestAnimationFrame(() => {
       chart.update({
         partialData: true,
         excludeFromUpdate: EXCLUDE,
-        // transforms: [
-        //   {
-        //     key: KEYS.COMPONENT.POINT,
-        //     transform: { a: 1, b: 0, c: 0, d: 1, e: x, f: y },
-        //   },
-        // ],
       });
-      const nodes = getPointNodesWithKey(chart, KEYS.COMPONENT.POINT);
-      meta.numVisibleBubbles = nodes.length;
-      meta.isLargeNumVisibleBubbles = nodes.length > layoutService.meta.largeNumDataPoints;
-
-      // TODO: debounce -> interactionInProgess = false
-      // console.log('chart rendered in ', Date.now() - startTime, ' ms');
+      updateMeta();
     });
+  }
+
+  const renderProgressive = () => {
+    actions.setProgressive(false);
+    const tempPages = layoutService.getDataPages();
+    if (!tempPages.length) return;
+    const dataSize = tempPages[0].qMatrix.length;
+    const nbrOfChunks = Math.ceil(dataSize / NUMBERS.CHUNK_SIZE);
+    if (nbrOfChunks <= 1) {
+      renderOnce();
+      return;
+    }
+
+    actions.setProgressive(true);
+    updateMeta(); // This can be done before progressive rendering
+    let renderCount = 0;
+
+    const renderChunk = () => {
+      cancelAnimationFrame(timer);
+      timer = requestAnimationFrame(() => {
+        extractDataPages();
+        const start = renderCount * NUMBERS.CHUNK_SIZE;
+        const end = Math.min(dataSize, (renderCount + 1) * NUMBERS.CHUNK_SIZE);
+        meta.progressive = { start, end, isFirst: renderCount === 0, isLast: renderCount === nbrOfChunks - 1 };
+        const chunk = [
+          {
+            ...dataPages[0],
+            qMatrix: dataPages[0].qMatrix.slice(start, end),
+          },
+        ];
+        layoutService.setDataPages(chunk);
+        chart.update({
+          partialData: true,
+          excludeFromUpdate:
+            renderCount === 0 || renderCount === nbrOfChunks - 1 ? EXCLUDE : EXCLUDE_DURING_PROGRESSIVE,
+        });
+        insertDataPages();
+        renderCount++;
+        if (renderCount < nbrOfChunks) {
+          renderChunk();
+        } else {
+          meta.progressive = false;
+          actions.setProgressive(false);
+        }
+      });
+    };
+
+    renderChunk();
+  };
+
+  function updatePartial(interactionInProgress = false) {
+    meta.updateWithSettings = false;
+    trendLinesService.update();
+    if (interactionInProgress || !isProgressiveAllowed(layoutService)) {
+      renderOnce();
+    } else {
+      renderProgressive();
+    }
   }
 
   const getData = () => [
@@ -130,16 +206,53 @@ export default function createChartModel({
   ];
 
   const update = ({ settings } = {}) => {
+    meta.progressive = false;
     meta.updateWithSettings = !!settings;
     trendLinesService.update();
-    chart.update({
-      data: getData(),
-      settings,
-    });
+    if (!isProgressiveAllowed(layoutService)) {
+      chart.update({
+        data: getData(),
+        settings,
+      });
+      updateMeta();
+    } else {
+      // Render the first time without data
+      extractDataPages();
+      chart.update({
+        data: getData(),
+        settings,
+      });
+      insertDataPages();
+      renderProgressive();
+    }
+  };
 
-    const nodes = getPointNodesWithKey(chart, KEYS.COMPONENT.POINT);
-    meta.numVisibleBubbles = nodes.length;
-    meta.isLargeNumVisibleBubbles = nodes.length > layoutService.meta.largeNumDataPoints;
+  const brush = ({ render, nodes }) => {
+    const nbrOfChunks = Math.ceil(nodes.length / NUMBERS.CHUNK_SIZE);
+    if (nbrOfChunks <= 1) {
+      render(nodes);
+      return;
+    }
+
+    let renderCount = 0;
+
+    const renderChunk = () => {
+      cancelAnimationFrame(timer);
+      timer = requestAnimationFrame(() => {
+        const start = renderCount * NUMBERS.CHUNK_SIZE;
+        const end = Math.min(nodes.length, (renderCount + 1) * NUMBERS.CHUNK_SIZE);
+        meta.progressive = { start, end, isFirst: renderCount === 0, isLast: renderCount === nbrOfChunks - 1 };
+        render(nodes.slice(start, end));
+        renderCount++;
+        if (renderCount < nbrOfChunks) {
+          renderChunk();
+        } else {
+          meta.progressive = false;
+        }
+      });
+    };
+
+    renderChunk();
   };
 
   let miniChartOn = false;
@@ -179,7 +292,7 @@ export default function createChartModel({
     updateTicks = shouldUpdateTicks(chart, getCurrentYTicks, getYTicks);
     if (viewHandler.getInteractionInProgress()) {
       updateTicksState.push(updateTicks);
-      updatePartial();
+      updatePartial(true);
       return;
     }
     const ticksNeedUpdate = updateTicks || updateTicksState.filter((s) => s).length > 0;
@@ -198,7 +311,7 @@ export default function createChartModel({
         if (binnedBeforeFetch !== dataHandler.getMeta().isBinnedData || miniChartIsToggled || ticksNeedUpdate) {
           update();
         } else {
-          updatePartial();
+          updatePartial(false);
         }
       });
 
@@ -231,6 +344,7 @@ export default function createChartModel({
         meta.isPrelayout = false;
       },
       update,
+      brush,
     },
   };
 

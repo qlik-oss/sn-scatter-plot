@@ -51,7 +51,7 @@ export default function createService({ chart, actions, selections }) {
             }
           }
 
-          if (rangeHandlersVisible || isSelectingRanges || isSelectingBinRanges) {
+          if (cleared || rangeHandlersVisible || isSelectingRanges || isSelectingBinRanges) {
             chart.brush('lazySelection').clear();
           }
 

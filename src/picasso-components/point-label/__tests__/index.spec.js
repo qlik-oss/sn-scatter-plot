@@ -43,7 +43,7 @@ describe('component', () => {
     beforeEach(() => {
       sandbox = sinon.createSandbox();
       component.chart = { component: sandbox.stub(), findShapes: sandbox.stub() };
-      component.chart.component.withArgs('pc').returns('component');
+      component.chart.component.withArgs('pc').returns({ settings: {} });
       component.settings = {
         settings: {
           target: { point: 'pc' },

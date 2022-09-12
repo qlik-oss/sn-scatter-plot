@@ -63,7 +63,7 @@ export default function native({ chart, actions, viewHandler, models }) {
                   scale: 1,
                 });
                 clearTimer();
-              }, 100);
+              }, 200);
             }
           }
         }

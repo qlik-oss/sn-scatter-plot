@@ -153,6 +153,7 @@ const useModels = ({ core, flags }) => {
       extremumModel,
       dataHandler,
       trendLinesService,
+      actions,
       getCurrentYTicks: () => tickModel.query.getCurrentYTicks(),
       getYTicks: () => tickModel.query.getYTicks(),
     });
