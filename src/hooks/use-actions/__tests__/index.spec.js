@@ -63,5 +63,12 @@ describe('use-actions', () => {
         expect(updatedActions.tooltip.enabled()).to.equal(true);
       });
     });
+
+    describe('progressive', () => {
+      it('setProgressive and getProgressive should work', () => {
+        updatedActions.setProgressive('abc');
+        expect(updatedActions.getProgressive()).to.equal('abc');
+      });
+    });
   });
 });

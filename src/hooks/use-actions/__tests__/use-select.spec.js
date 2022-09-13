@@ -6,6 +6,7 @@ describe('use-select', () => {
   let sandbox;
   let create;
   let constraints;
+  let actions;
   let enabled;
   let setEnabled;
   let listeners;
@@ -19,6 +20,7 @@ describe('use-select', () => {
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     constraints = { select: false, active: false };
+    actions = { getProgressive: sandbox.stub() };
     enabled = false;
     listener1 = sandbox.stub();
     listener2 = sandbox.stub();
@@ -31,7 +33,7 @@ describe('use-select', () => {
     sandbox.stub(stardust, 'useEffect');
     stardust.useState.onFirstCall().returns([enabled, setEnabled]);
     stardust.useState.onSecondCall().returns([listeners, setListeners]);
-    create = () => useSelect();
+    create = () => useSelect(actions);
   });
 
   afterEach(() => {
@@ -76,12 +78,8 @@ describe('use-select', () => {
   });
 
   describe('the returned object', () => {
-    let object;
-    beforeEach(() => {
-      object = create();
-    });
-
     it('should have all keys', () => {
+      const object = create();
       expect(object).to.have.all.keys([
         'enabled',
         'emit',
@@ -93,13 +91,35 @@ describe('use-select', () => {
     });
 
     describe('enabled', () => {
-      it('should return correct value', () => {
+      it('should return correct value if enabled = false', () => {
+        const object = create();
         expect(object.enabled()).to.equal(false);
+      });
+
+      it('should return correct value if enabled = true & actions.getProgressive() = true', () => {
+        actions.getProgressive.returns(true);
+        stardust.useState.onCall(0).callsFake(() => {
+          enabled = true;
+          return [enabled, setEnabled];
+        });
+        const object = create();
+        expect(object.enabled()).to.equal(false);
+      });
+
+      it('should return correct value if enabled = true & actions.getProgressive() = false', () => {
+        actions.getProgressive.returns(false);
+        stardust.useState.onCall(0).callsFake(() => {
+          enabled = true;
+          return [enabled, setEnabled];
+        });
+        const object = create();
+        expect(object.enabled()).to.equal(true);
       });
     });
 
     describe('emit', () => {
       it('should call every listener', () => {
+        const object = create();
         object.emit('event1');
         expect(listener1).to.have.been.calledOnce;
         expect(listener2).to.have.been.calledOnce;
@@ -108,6 +128,7 @@ describe('use-select', () => {
 
     describe('removeListener', () => {
       it('should remove listener correctly', () => {
+        const object = create();
         object.removeListener('event1', listener2);
         expect(listeners).to.deep.equal({ event1: [listener1], event2: undefined });
         object.removeListener('event1', listener3);
@@ -117,6 +138,7 @@ describe('use-select', () => {
 
     describe('on', () => {
       it('should add listeners correctly', () => {
+        const object = create();
         object.on('event2', listener3);
         expect(listeners).to.deep.equal({ event1: [listener1, listener2], event2: [listener3] });
         object.on('event2', listener1);
@@ -126,6 +148,7 @@ describe('use-select', () => {
 
     describe('getBrushOptions', () => {
       it('should get brush options correctly', () => {
+        const object = create();
         expect(object.getBrushOptions('tap')).to.deep.equal({ orMode: true });
         expect(object.getBrushOptions('pan')).to.deep.equal({ orMode: false });
       });

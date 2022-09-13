@@ -3,8 +3,8 @@ import createChartModel from '..';
 import * as getFormatPatternFromRange from '../format-pattern-from-range';
 import * as shouldUpdateTicks from '../should-update-ticks';
 import * as createViewHandler from '../../../view-handler';
-import * as nodeUtil from '../../../utils/get-point-nodes';
 import * as getNumVisiblePoints from '../../../utils/get-num-visible-points';
+import * as isProgressiveAllowed from '../../../utils/is-progressive-allowed';
 
 describe('chart-model', () => {
   let sandbox;
@@ -91,8 +91,8 @@ describe('chart-model', () => {
     };
     sandbox.stub(getFormatPatternFromRange, 'default');
     sandbox.stub(shouldUpdateTicks, 'default').returns(false);
-    sandbox.stub(nodeUtil, 'getPointNodesWithKey').returns([]);
     sandbox.stub(getNumVisiblePoints, 'default').returns(100);
+    sandbox.stub(isProgressiveAllowed, 'default').returns(false);
     create = () =>
       createChartModel({
         chart,

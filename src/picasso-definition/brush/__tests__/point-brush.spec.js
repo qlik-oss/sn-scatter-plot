@@ -1,15 +1,18 @@
 import createBrush from '../point-brush';
 import * as getSelectionContext from '../get-selection-context';
+import * as isProgressiveAllowed from '../../../utils/is-progressive-allowed';
 
 describe('createPointBrush', () => {
   let sandbox;
   let layoutService;
+  let chartModel;
   let strokeWidthInBigData;
   let strokeColorInBigData;
   let strokeWidthInLargeData;
   let strokeColorInLargeData;
   let create;
   let myBrush;
+  let render;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -18,16 +21,21 @@ describe('createPointBrush', () => {
       meta: {
         isBigData: false,
         isLargeNumDataPoints: false,
+        hasSizeMeasure: true,
       },
     };
+    chartModel = { command: { brush: sandbox.spy() } };
     strokeWidthInBigData = sandbox.spy();
     strokeColorInBigData = sandbox.spy();
     strokeWidthInLargeData = sandbox.spy();
     strokeColorInLargeData = sandbox.spy();
     sandbox.stub(getSelectionContext, 'default').returns('selection');
+    sandbox.stub(isProgressiveAllowed, 'default').returns(false);
+    render = sandbox.spy();
     create = () =>
       createBrush({
         layoutService,
+        chartModel,
         strokeWidthInBigData,
         strokeColorInBigData,
         strokeWidthInLargeData,
@@ -68,20 +76,8 @@ describe('createPointBrush', () => {
     expect(create().consume[0].data({ brush: myBrush })).to.deep.equal(['x', 'y']);
   });
 
-  it('should return correct nodes with sorted order', () => {
+  it('should return correct nodes with sorted order if there is size measure', () => {
     const nodes = [
-      {
-        type: 'circle',
-        fill: '#26a0a7',
-        r: 10,
-        opacity: 1,
-      },
-      {
-        type: 'circle',
-        fill: '#26a0a7',
-        r: 8,
-        opacity: 0.3,
-      },
       {
         type: 'circle',
         fill: '#26a0a7',
@@ -92,6 +88,18 @@ describe('createPointBrush', () => {
         type: 'circle',
         fill: '#26a0a7',
         r: 6,
+        opacity: 0.3,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 10,
+        opacity: 1,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 8,
         opacity: 0.3,
       },
     ];
@@ -124,5 +132,79 @@ describe('createPointBrush', () => {
         opacity: 1,
       },
     ]);
+  });
+
+  it('should return correct nodes with sorted order if there is no size measure', () => {
+    layoutService.meta.hasSizeMeasure = false;
+    const nodes = [
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 4,
+        opacity: 1,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 6,
+        opacity: 0.3,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 10,
+        opacity: 1,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 8,
+        opacity: 0.3,
+      },
+    ];
+    const config = {
+      consume: [{ style: { active: { opacity: 1 } } }],
+    };
+    expect(create().sortNodes({ nodes, config })).to.deep.equal([
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 6,
+        opacity: 0.3,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 8,
+        opacity: 0.3,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 4,
+        opacity: 1,
+      },
+      {
+        type: 'circle',
+        fill: '#26a0a7',
+        r: 10,
+        opacity: 1,
+      },
+    ]);
+  });
+
+  it('should run correct functions on customRender if isProgressiveAllowed = false', () => {
+    const nodes = [1, 2];
+    create().customRender({ render, nodes });
+    expect(render).to.have.been.calledWithExactly(nodes);
+    expect(chartModel.command.brush).to.not.have.been.called;
+  });
+
+  it('should run correct functions on customRender if isProgressiveAllowed = true', () => {
+    isProgressiveAllowed.default.returns(true);
+    const nodes = [1, 2];
+    create().customRender({ render, nodes });
+    expect(render).to.not.have.been.called;
+    expect(chartModel.command.brush).to.have.been.calledWithExactly({ render, nodes });
   });
 });
