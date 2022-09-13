@@ -75,6 +75,17 @@ describe('component', () => {
       expect(create()).to.deep.equal([]);
     });
 
+    it('should return an empty array if !progressive.isLast', () => {
+      component.chart.component.withArgs('pc').returns({
+        settings: {
+          rendererSettings: {
+            progressive: sandbox.stub().returns({ isLast: false }),
+          },
+        },
+      });
+      expect(create()).to.deep.equal([]);
+    });
+
     it('should return correct labels, rects, and lines', () => {
       component.chart.findShapes.withArgs('path').returns([]);
       component.chart.findShapes.withArgs('circle').returns([{ key: 'pc' }]);
