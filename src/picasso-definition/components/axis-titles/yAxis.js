@@ -48,7 +48,7 @@ export default function createYAxisTitle({
       selections: undefined,
     },
     style: {
-      fontFamily: styles.axis.title.fontFamily,
+      fontFamily: 'Arial',
       fontSize: styles.axis.title.fontSize,
       color: styles.axis.title.color,
     },

@@ -18,7 +18,7 @@ export default function createPointLabels({ models }) {
   }
 
   const style = themeService.getStyles();
-  const { fontFamily, fontSize, color } = style.label?.value || {};
+  const { fontSize, color } = style.label?.value || {};
   const viewHandler = chartModel.query.getViewHandler();
   const { transform } = viewHandler;
 
@@ -37,7 +37,7 @@ export default function createPointLabels({ models }) {
       // debugMode: true,
     },
     style: {
-      fontFamily,
+      fontFamily: 'Arial',
       fontSize,
       fill: color,
       backgroundColor: style.backgroundColor,
