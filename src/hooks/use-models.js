@@ -198,6 +198,7 @@ const useModels = ({ core, flags }) => {
       tooltipService,
       propertiesModel,
       trendLinesService,
+      app,
     });
   }, [
     model,

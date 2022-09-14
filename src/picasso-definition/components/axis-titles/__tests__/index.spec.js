@@ -16,13 +16,14 @@ describe('axis-titles', () => {
       translator: { key: 'translator' },
       constraints: { key: 'constraints' },
       rtl: true,
-      model: { app: { key: 'app' } },
+      model: {},
     };
     models = {
       layoutService: { key: 'layout-service' },
       dockService: { key: 'dock-service' },
       themeService: { key: 'theme-service' },
       propertiesModel: { key: 'properties-model' },
+      app: { key: 'app' },
     };
 
     axisTitles = createAxisTitles({ models, context });
@@ -34,7 +35,7 @@ describe('axis-titles', () => {
 
   it('should create x axis title', () => {
     expect(createXAxisTitle.default).to.have.been.calledOnceWith({
-      model: { app: { key: 'app' } },
+      model: {},
       app: { key: 'app' },
       translator: { key: 'translator' },
       constraints: { key: 'constraints' },
@@ -48,7 +49,7 @@ describe('axis-titles', () => {
 
   it('should create y axis title', () => {
     expect(createYAxisTitle.default).to.have.been.calledOnceWith({
-      model: { app: { key: 'app' } },
+      model: {},
       app: { key: 'app' },
       translator: { key: 'translator' },
       constraints: { key: 'constraints' },
