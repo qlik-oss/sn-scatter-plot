@@ -33,7 +33,7 @@ export default function createAxes({ models }) {
           settings: {
             labels: {
               show: xAxis.show !== 'title',
-              fontFamily: 'Arial',
+              fontFamily: style.axis.label.name.fontFamily,
               fontSize: style.axis.label.name.fontSize,
               fill: style.axis.label.name.color,
             },
@@ -77,7 +77,7 @@ export default function createAxes({ models }) {
           settings: {
             labels: {
               show: yAxis.show !== 'title',
-              fontFamily: 'Arial',
+              fontFamily: style.axis.label.name.fontFamily,
               fontSize: style.axis.label.name.fontSize,
               fill: style.axis.label.name.color,
             },

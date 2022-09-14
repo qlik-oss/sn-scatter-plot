@@ -219,7 +219,7 @@ describe('x-axis-title', () => {
       });
 
       it('should have correct fontFamily', () => {
-        expect(create().style.fontFamily).to.equal('Arial');
+        expect(create().style.fontFamily).to.equal('title-font-family');
       });
 
       it('should have correct fontSize', () => {
