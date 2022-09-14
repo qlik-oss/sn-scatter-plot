@@ -1,6 +1,8 @@
 import getSelectionContext from './get-selection-context';
 import isProgressiveAllowed from '../../utils/is-progressive-allowed';
 
+const INACTIVE_OPACITY = 0.3;
+
 export default function createBrush({
   layoutService,
   chartModel,
@@ -42,7 +44,7 @@ export default function createBrush({
         mode: 'and',
         style: {
           inactive: {
-            opacity: 0.3,
+            opacity: INACTIVE_OPACITY,
           },
           active: {
             stroke: getStrokeColor(),
@@ -62,6 +64,8 @@ export default function createBrush({
       return inactiveNodes.concat(activeNodes);
     },
     customRender: ({ render, nodes }) => {
+      const activeNodes = nodes.filter((node) => node.opacity !== INACTIVE_OPACITY);
+      if (!activeNodes.length) return;
       if (isProgressiveAllowed(layoutService)) {
         chartModel.command.brush({ render, nodes });
       } else {

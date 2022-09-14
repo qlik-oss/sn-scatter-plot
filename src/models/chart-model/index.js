@@ -206,6 +206,7 @@ export default function createChartModel({
   ];
 
   const update = ({ settings } = {}) => {
+    cancelAnimationFrame(timer);
     meta.progressive = false;
     meta.updateWithSettings = !!settings;
     trendLinesService.update();
