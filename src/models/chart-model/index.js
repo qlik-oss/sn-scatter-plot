@@ -101,9 +101,8 @@ export default function createChartModel({
 
   const meta = {
     isPrelayout: true,
-    previousConstraints: undefined,
     updateWithSettings: undefined,
-    constraintsHaveChanged: undefined,
+    sizeChanged: false,
     progressive: false,
   };
 
@@ -275,7 +274,7 @@ export default function createChartModel({
 
   const animationEnabled = () => {
     const interactionInProgress = viewHandler.getInteractionInProgress();
-    if (interactionInProgress || !meta.updateWithSettings || meta.constraintsHaveChanged) {
+    if (interactionInProgress || !meta.updateWithSettings || meta.sizeChanged) {
       return false;
     }
 
