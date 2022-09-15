@@ -28,12 +28,17 @@ const useCore = () => {
       settings: {},
     });
 
+    const progressiveTimer = {
+      timer: null,
+    };
+
     setCore({
       picassoInstance,
       chart,
       actions,
       viewState,
       picasso,
+      progressiveTimer,
     });
 
     return () => {

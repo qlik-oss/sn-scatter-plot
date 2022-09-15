@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import extend from 'extend';
 import KEYS from '../../constants/keys';
 import NUMBERS from '../../constants/numbers';
@@ -17,6 +18,7 @@ export default function createChartModel({
   dataHandler,
   trendLinesService,
   actions,
+  progressiveTimer,
   getCurrentYTicks,
   getYTicks,
 }) {
@@ -108,7 +110,6 @@ export default function createChartModel({
   };
 
   let dataPages = [];
-  let timer = null;
 
   function extractDataPages() {
     dataPages = layoutService.getDataPages();
@@ -127,8 +128,8 @@ export default function createChartModel({
   function renderOnce() {
     actions.setProgressive(false);
     meta.progressive = false;
-    cancelAnimationFrame(timer);
-    timer = requestAnimationFrame(() => {
+    cancelAnimationFrame(progressiveTimer.timer);
+    progressiveTimer.timer = requestAnimationFrame(() => {
       chart.update({
         partialData: true,
         excludeFromUpdate: EXCLUDE,
@@ -153,8 +154,8 @@ export default function createChartModel({
     let renderCount = 0;
 
     const renderChunk = () => {
-      cancelAnimationFrame(timer);
-      timer = requestAnimationFrame(() => {
+      cancelAnimationFrame(progressiveTimer.timer);
+      progressiveTimer.timer = requestAnimationFrame(() => {
         extractDataPages();
         const start = renderCount * NUMBERS.CHUNK_SIZE;
         const end = Math.min(dataSize, (renderCount + 1) * NUMBERS.CHUNK_SIZE);
@@ -206,7 +207,7 @@ export default function createChartModel({
   ];
 
   const update = ({ settings } = {}) => {
-    cancelAnimationFrame(timer);
+    cancelAnimationFrame(progressiveTimer.timer);
     meta.progressive = false;
     meta.updateWithSettings = !!settings;
     trendLinesService.update();
@@ -238,8 +239,8 @@ export default function createChartModel({
     let renderCount = 0;
 
     const renderChunk = () => {
-      cancelAnimationFrame(timer);
-      timer = requestAnimationFrame(() => {
+      cancelAnimationFrame(progressiveTimer.timer);
+      progressiveTimer.timer = requestAnimationFrame(() => {
         const start = renderCount * NUMBERS.CHUNK_SIZE;
         const end = Math.min(nodes.length, (renderCount + 1) * NUMBERS.CHUNK_SIZE);
         meta.progressive = { start, end, isFirst: renderCount === 0, isLast: renderCount === nbrOfChunks - 1 };
