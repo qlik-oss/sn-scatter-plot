@@ -16,7 +16,7 @@ import createHeatMapHighLight from './heat-map-highlight';
 export default function createComponents({ context, models, picasso, chart, actions }) {
   const { colorService, disclaimerModel, layoutService, themeService, chartModel, trendLinesService, tooltipService } =
     models;
-  const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, picasso });
+  const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, themeService, picasso });
 
   if (disclaimerModel.query.getHasSuppressingDisclaimer()) {
     return [disclaimer];

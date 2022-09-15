@@ -6,6 +6,7 @@ describe('createDisclaimer', () => {
   let create;
   let disclaimerModel;
   let layoutService;
+  let themeService;
   let context;
   let picasso;
   let formatter;
@@ -17,6 +18,7 @@ describe('createDisclaimer', () => {
       query: { getDisclaimer: sandbox.stub().returns({ key: 'OverviewData', alignment: 'bottom' }) },
     };
     layoutService = { getHyperCubeValue: sandbox.stub() };
+    themeService = { getStyles: sandbox.stub().returns({ fontFamily: 'font-family' }) };
     context = { rtl: 'ltr', translator: { get: sandbox.stub() } };
     context.translator.get
       .withArgs('properties.compression.providingOverviewOf', 'overview-data-disclaimer-text')
@@ -25,7 +27,7 @@ describe('createDisclaimer', () => {
     formatter = sandbox.stub().returns('overview-data-disclaimer-text');
     formatterFactory = sandbox.stub().returns(formatter);
     picasso = { formatter: sandbox.stub().returns(formatterFactory) };
-    create = () => createDisclaimer({ disclaimerModel, context, layoutService, picasso });
+    create = () => createDisclaimer({ disclaimerModel, context, layoutService, themeService, picasso });
   });
 
   afterEach(() => {
@@ -42,6 +44,9 @@ describe('createDisclaimer', () => {
         label: 'translated-overview-data-disclaimer-text',
         rtl: 'ltr',
       },
+      style: {
+        fontFamily: 'font-family',
+      },
     });
   });
 
@@ -55,6 +60,9 @@ describe('createDisclaimer', () => {
       settings: {
         label: 'translated-other-disclaimer-text',
         rtl: 'ltr',
+      },
+      style: {
+        fontFamily: 'font-family',
       },
     });
   });

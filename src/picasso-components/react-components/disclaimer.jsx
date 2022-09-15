@@ -75,9 +75,10 @@ export default function disclaimer() {
       const {
         settings: { label, rtl },
         layout: { dock },
+        style: { fontFamily },
       } = this.settings;
       const dir = (dock === 'top' || dock === 'bottom') && rtl ? 'rtl' : 'ltr';
-      const style = getStyle(dock, this.rect);
+      const style = { ...getStyle(dock, this.rect), fontFamily };
 
       const modifiedLabel = dock === 'center' ? label : `* ${label}`;
 
