@@ -51,8 +51,6 @@ test.describe('Rendering', () => {
 
         const element = await page.waitForSelector('.njs-viz', { visible: true, timeout: 10000 });
 
-        await page.waitForTimeout(5000);
-
         const screenshot = await page.screenshot({ clip: await element.boundingBox() });
 
         expect(screenshot).toMatchSnapshot(`${name}.png`);
