@@ -64,8 +64,6 @@ export default function createBrush({
       return inactiveNodes.concat(activeNodes);
     },
     customRender: ({ render, nodes }) => {
-      const activeNodes = nodes.filter((node) => node.opacity !== INACTIVE_OPACITY);
-      if (!activeNodes.length) return;
       if (isProgressiveAllowed(layoutService)) {
         chartModel.command.brush({ render, nodes });
       } else {
