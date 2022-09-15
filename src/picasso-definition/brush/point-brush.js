@@ -1,7 +1,11 @@
 import getSelectionContext from './get-selection-context';
+import isProgressiveAllowed from '../../utils/is-progressive-allowed';
+
+const INACTIVE_OPACITY = 0.3;
 
 export default function createBrush({
   layoutService,
+  chartModel,
   strokeWidthInBigData,
   strokeColorInBigData,
   strokeWidthInLargeData,
@@ -40,7 +44,7 @@ export default function createBrush({
         mode: 'and',
         style: {
           inactive: {
-            opacity: 0.3,
+            opacity: INACTIVE_OPACITY,
           },
           active: {
             stroke: getStrokeColor(),
@@ -53,9 +57,20 @@ export default function createBrush({
       const activeOpacity = config.consume[0]?.style?.active?.opacity || 1;
       const activeNodes = nodes.filter((node) => node.opacity === activeOpacity);
       const inactiveNodes = nodes.filter((node) => node.opacity !== activeOpacity);
-      activeNodes.sort((node1, node2) => node2.r - node1.r); // TODO: skip sorting if there is no measure for bubble size
-      inactiveNodes.sort((node1, node2) => node2.r - node1.r);
+      if (layoutService.meta.hasSizeMeasure) {
+        activeNodes.sort((node1, node2) => node2.r - node1.r);
+        inactiveNodes.sort((node1, node2) => node2.r - node1.r);
+      }
       return inactiveNodes.concat(activeNodes);
+    },
+    customRender: ({ render, nodes }) => {
+      const activeNodes = nodes.filter((node) => node.opacity !== INACTIVE_OPACITY);
+      if (!activeNodes.length) return;
+      if (isProgressiveAllowed(layoutService)) {
+        chartModel.command.brush({ render, nodes });
+      } else {
+        render(nodes);
+      }
     },
   };
 }

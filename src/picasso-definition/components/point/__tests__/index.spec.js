@@ -2,6 +2,7 @@ import createPoint from '../index';
 import * as KEYS from '../../../../constants/keys';
 import createSizeScale from '../../../scales/size';
 import * as movePath from '../../../../utils/move-path';
+import * as getNumPointsInBigData from '../../../../utils/get-num-points-in-big-data';
 
 describe('point', () => {
   let sandbox;
@@ -46,7 +47,12 @@ describe('point', () => {
     };
     sizeScaleFn = createSizeScale(layoutService);
     chartModel = {
-      query: { getViewHandler: sandbox.stub(), getDataHandler: sandbox.stub(), animationEnabled: sandbox.stub() },
+      query: {
+        getViewHandler: sandbox.stub(),
+        getDataHandler: sandbox.stub(),
+        animationEnabled: sandbox.stub(),
+        getMeta: sandbox.stub(),
+      },
     };
     dataHandler = {
       getMeta: sandbox.stub().returns({ isBinnedData: false }),
@@ -77,6 +83,7 @@ describe('point', () => {
     };
 
     sandbox.stub(movePath, 'default').returns('new-path');
+    sandbox.stub(getNumPointsInBigData, 'default').returns(1000);
 
     create = () =>
       createPoint({
@@ -184,6 +191,18 @@ describe('point', () => {
     it('should have correct buffer size', () => {
       const compRect = { computedPhysical: { width: 200, height: 150 } };
       expect(create().rendererSettings.canvasBufferSize(compRect)).to.deep.equal({ width: 300, height: 250 });
+    });
+
+    it('should not have progressive if layoutService.meta.isProgressiveEnabled = false', () => {
+      layoutService.meta.isProgressiveEnabled = false;
+      expect(create().rendererSettings.progressive).to.equal(undefined);
+    });
+
+    it('should have progressive if layoutService.meta.isProgressiveEnabled = true', () => {
+      layoutService.meta.isProgressiveEnabled = true;
+      chartModel.query.getMeta.returns({ progressive: 123 });
+      const progressive = create().rendererSettings.progressive();
+      expect(progressive).to.equal(123);
     });
   });
 

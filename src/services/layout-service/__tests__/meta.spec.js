@@ -22,6 +22,7 @@ describe('meta', () => {
       .value({ MAX_NR_SCATTER: 100, LARGE_NUM_DATA_POINTS: 500, MAX_VISIBLE_BUBBLES: 10000 });
     flags = { isEnabled: sandbox.stub() };
     flags.isEnabled.withArgs('NUM_BUBBLES').returns(false);
+    flags.isEnabled.withArgs('PROGRESSIVE_RENDERING').returns(false);
     create = () => createMeta(flags, qIsDirectQueryMode, qUnsupportedFeature);
   });
 
@@ -39,6 +40,7 @@ describe('meta', () => {
       isContinuous: true,
       isRangeSelectionsSupported: true,
       isMaxVisibleBubblesEnabled: false,
+      isProgressiveEnabled: false,
       isLargeNumDataPoints: false,
       maxVisibleBubbles: 100,
       largeNumDataPoints: 100,
@@ -58,6 +60,7 @@ describe('meta', () => {
       isContinuous: true,
       isRangeSelectionsSupported: true,
       isMaxVisibleBubblesEnabled: false,
+      isProgressiveEnabled: false,
       isLargeNumDataPoints: false,
       maxVisibleBubbles: 100,
       largeNumDataPoints: 100,
@@ -77,6 +80,7 @@ describe('meta', () => {
       isContinuous: true,
       isRangeSelectionsSupported: false,
       isMaxVisibleBubblesEnabled: false,
+      isProgressiveEnabled: false,
       isLargeNumDataPoints: false,
       maxVisibleBubbles: 100,
       largeNumDataPoints: 100,
@@ -96,6 +100,7 @@ describe('meta', () => {
       isContinuous: true,
       isRangeSelectionsSupported: false,
       isMaxVisibleBubblesEnabled: false,
+      isProgressiveEnabled: false,
       isLargeNumDataPoints: false,
       maxVisibleBubbles: 100,
       largeNumDataPoints: 100,
@@ -117,6 +122,7 @@ describe('meta', () => {
       isContinuous: true,
       isRangeSelectionsSupported: true,
       isMaxVisibleBubblesEnabled: true,
+      isProgressiveEnabled: false,
       isLargeNumDataPoints: false,
       maxVisibleBubbles: 300,
       largeNumDataPoints: 300,
@@ -138,6 +144,7 @@ describe('meta', () => {
       isContinuous: true,
       isRangeSelectionsSupported: true,
       isMaxVisibleBubblesEnabled: true,
+      isProgressiveEnabled: false,
       isLargeNumDataPoints: false,
       maxVisibleBubbles: 300,
       largeNumDataPoints: 300,
@@ -159,6 +166,7 @@ describe('meta', () => {
       isContinuous: true,
       isRangeSelectionsSupported: true,
       isMaxVisibleBubblesEnabled: true,
+      isProgressiveEnabled: false,
       isLargeNumDataPoints: false,
       maxVisibleBubbles: 300,
       largeNumDataPoints: 300,
@@ -180,6 +188,7 @@ describe('meta', () => {
       isContinuous: true,
       isRangeSelectionsSupported: true,
       isMaxVisibleBubblesEnabled: true,
+      isProgressiveEnabled: false,
       isLargeNumDataPoints: false,
       maxVisibleBubbles: 600,
       largeNumDataPoints: 500,
@@ -201,6 +210,7 @@ describe('meta', () => {
       isContinuous: true,
       isRangeSelectionsSupported: true,
       isMaxVisibleBubblesEnabled: true,
+      isProgressiveEnabled: false,
       isLargeNumDataPoints: true,
       maxVisibleBubbles: 600,
       largeNumDataPoints: 500,
@@ -222,6 +232,7 @@ describe('meta', () => {
       isContinuous: true,
       isRangeSelectionsSupported: true,
       isMaxVisibleBubblesEnabled: true,
+      isProgressiveEnabled: false,
       isLargeNumDataPoints: false,
       maxVisibleBubbles: 600,
       largeNumDataPoints: 500,

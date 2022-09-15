@@ -43,7 +43,7 @@ describe('component', () => {
     beforeEach(() => {
       sandbox = sinon.createSandbox();
       component.chart = { component: sandbox.stub(), findShapes: sandbox.stub() };
-      component.chart.component.withArgs('pc').returns('component');
+      component.chart.component.withArgs('pc').returns({ settings: {} });
       component.settings = {
         settings: {
           target: { point: 'pc' },
@@ -72,6 +72,17 @@ describe('component', () => {
     it('should return an empty array if there is no node', () => {
       component.chart.findShapes.withArgs('circle').returns([]);
       component.chart.findShapes.withArgs('path').returns([]);
+      expect(create()).to.deep.equal([]);
+    });
+
+    it('should return an empty array if !progressive.isLast', () => {
+      component.chart.component.withArgs('pc').returns({
+        settings: {
+          rendererSettings: {
+            progressive: sandbox.stub().returns({ isLast: false }),
+          },
+        },
+      });
       expect(create()).to.deep.equal([]);
     });
 
