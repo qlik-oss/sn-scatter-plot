@@ -1,40 +1,26 @@
 import getSelectionContext from './get-selection-context';
 import isProgressiveAllowed from '../../utils/is-progressive-allowed';
+import { computeWidth, computeColor } from './border-width-color';
 
 const INACTIVE_OPACITY = 0.3;
 
-export default function createBrush({
-  layoutService,
-  chartModel,
-  strokeWidthInBigData,
-  strokeColorInBigData,
-  strokeWidthInLargeData,
-  strokeColorInLargeData,
-}) {
+export default function createBrush({ layoutService, chartModel }) {
   const data = ({ brush }) => {
     const res = brush.brushes();
     return res.length > 1 ? ['x', 'y'] : undefined;
   };
 
-  const getStrokeWidth = () => {
-    if (layoutService.meta.isBigData) {
-      return strokeWidthInBigData;
-    }
-    if (layoutService.meta.isLargeNumDataPoints) {
-      return strokeWidthInLargeData;
-    }
-    return 2;
-  };
+  // For zoom/pan:
+  // (1) from bin data to point data, or
+  // (2) from large number data points to its subset
+  const strokeWidthFn = (node, activeNodes) => computeWidth(activeNodes.length);
+  const strokeColorFn = (node, activeNodes) => computeColor(activeNodes.length);
 
-  const getStrokeColor = () => {
-    if (layoutService.meta.isBigData) {
-      return strokeColorInBigData;
-    }
-    if (layoutService.meta.isLargeNumDataPoints) {
-      return strokeColorInLargeData;
-    }
-    return '#000';
-  };
+  const getStrokeWidth = () =>
+    layoutService.meta.isBigData || layoutService.meta.isLargeNumDataPoints ? strokeWidthFn : 2;
+
+  const getStrokeColor = () =>
+    layoutService.meta.isBigData || layoutService.meta.isLargeNumDataPoints ? strokeColorFn : '#000';
 
   return {
     consume: [
@@ -63,12 +49,14 @@ export default function createBrush({
       }
       return inactiveNodes.concat(activeNodes);
     },
-    customRender: ({ render, nodes }) => {
-      if (isProgressiveAllowed(layoutService)) {
-        chartModel.command.brush({ render, nodes });
-      } else {
-        render(nodes);
-      }
-    },
+    customRender: !layoutService.meta.isMaxVisibleBubblesEnabled
+      ? undefined
+      : ({ render, nodes }) => {
+          if (isProgressiveAllowed(layoutService)) {
+            chartModel.command.brush({ render, nodes });
+          } else {
+            render(nodes);
+          }
+        },
   };
 }

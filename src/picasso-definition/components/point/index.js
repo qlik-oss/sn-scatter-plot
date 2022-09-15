@@ -4,8 +4,6 @@ import NUMBERS from '../../../constants/numbers';
 import createSizeScale from '../../scales/size';
 import createBrush from '../../brush/point-brush';
 import movePath from '../../../utils/move-path';
-import getNumPointsInBigData from '../../../utils/get-num-points-in-big-data';
-import { computeWidth, computeColor } from './border-width-color';
 import isOob from '../out-of-bounds/is-oob';
 
 export default function createPoint({ models, chart }) {
@@ -16,21 +14,6 @@ export default function createPoint({ models, chart }) {
   const viewHandler = chartModel.query.getViewHandler();
   const dataHandler = chartModel.query.getDataHandler();
   const { transform } = viewHandler;
-  const numPointsInBigData = getNumPointsInBigData(layoutService);
-
-  // For zoom/pan from bin data to point data
-  const strokeWidthInBigData = () => computeWidth(numPointsInBigData);
-  const strokeColorInBigData = () => computeColor(numPointsInBigData);
-
-  // For zoom/pan from large number data points to its subset
-  const strokeWidthInLargeData = () => {
-    const { numVisibleBubbles } = chartModel.query.getMeta() || {};
-    return computeWidth(numVisibleBubbles);
-  };
-  const strokeColorInLargeData = () => {
-    const { numVisibleBubbles } = chartModel.query.getMeta() || {};
-    return computeColor(numVisibleBubbles);
-  };
 
   return {
     key: KEYS.COMPONENT.POINT,
@@ -42,10 +25,6 @@ export default function createPoint({ models, chart }) {
     brush: createBrush({
       layoutService,
       chartModel,
-      strokeWidthInBigData,
-      strokeColorInBigData,
-      strokeWidthInLargeData,
-      strokeColorInLargeData,
     }),
     settings: {
       show: (d) => !isOob({ nodeData: d.datum, compSize, chart, sizeScaleFn, viewHandler }),
