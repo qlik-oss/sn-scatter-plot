@@ -1,16 +1,14 @@
 import path from 'path';
 import serve from '@nebula.js/cli-serve';
-import createPuppet from '../utils/puppet';
-import events from '../utils/events';
+import { test, expect, chromium } from '@playwright/test';
 import createNebulaRoutes from '../utils/routes';
 import getTooltipContent from '../utils/shared';
 
-describe('sn scatter plot: ui integration tests to test visual bugs', () => {
+test.describe('sn scatter plot: ui integration tests to test visual bugs', () => {
   let s;
-  let puppet;
   let route;
 
-  before(async () => {
+  test.beforeAll(async () => {
     s = await serve({
       entry: path.resolve(__dirname, '../../'),
       type: 'sn-scatter-plot',
@@ -23,86 +21,85 @@ describe('sn scatter plot: ui integration tests to test visual bugs', () => {
       fixturePath: 'test/integration/__fixtures__',
     });
 
-    puppet = createPuppet(page);
     route = createNebulaRoutes(s.url);
   });
 
-  after(async () => {
+  test.afterAll(async () => {
     s.close();
   });
 
-  beforeEach(() => {
-    events.addListeners(page);
-  });
-
-  afterEach(() => {
-    events.removeListeners(page);
-  });
-
-  describe('Interaction', () => {
-    describe('Tooltip', () => {
-      it('Point data in scatter ', async () => {
+  test.describe('Interaction', () => {
+    test.describe('Tooltip', () => {
+      test('Point data in scatter ', async () => {
         const renderUrl = await route.renderFixture('scatter_render_tooltip.fix.js');
         // Open page in Nebula which renders fixture
         // render svg added to the fix.js
-        await puppet.open(renderUrl);
-        await page.waitForSelector('[data-key="point-component"] g circle[data-label="Karl Anderson"]');
+        const browser = await chromium.launch();
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(renderUrl, { waitUntil: 'networkidle' });
+        page.locator('[data-key="point-component"] g circle[data-label="Karl Anderson"]');
         await page.hover('[data-key="point-component"] g circle[data-label="Karl Anderson"]');
-        expect(await getTooltipContent()).to.equal(
+        expect(await getTooltipContent(page)).toEqual(
           'Karl Anderson Sales Rep Name: Karl Anderson Expense Amount: $11,735,257.41 # of Customers: 2 Budget: 12.91k'
         );
       });
-      it('Binned data in scatter ', async () => {
+      test('Binned data in scatter ', async () => {
         const renderUrl = await route.renderFixture('scatter_render_binned_snapshot_tooltip.fix.js');
         // Open page in Nebula which renders fixture
         // render svg added to the fix.js
-        await puppet.open(renderUrl);
-        await page.waitForSelector('[data-key="heat-map"] g rect[data-value="436904"]');
+        const browser = await chromium.launch();
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(renderUrl, { waitUntil: 'networkidle' });
+        page.locator('[data-key="heat-map"] g rect[data-value="436904"]');
         await page.hover('[data-key="heat-map"] g rect[data-value="436904"]');
-        expect(await getTooltipContent()).to.equal('Density: 3805');
+        expect(await getTooltipContent(page)).toEqual('Density: 3805');
       });
     });
-    describe('Zoom', () => {
-      it('Zoom data in scatter ', async () => {
+    test.describe('Zoom', () => {
+      test('Zoom data in scatter ', async () => {
         const renderUrl = await route.renderFixture('scatter_render_zoom.fix.js');
         // Open page in Nebula which renders fixture
         // render svg added to the fix.js
-        await puppet.open(renderUrl);
+        const browser = await chromium.launch();
+        const context = await browser.newContext();
+        const page = await context.newPage();
+        await page.goto(renderUrl, { waitUntil: 'networkidle' });
 
         expect(
-          await page.waitForSelector('[data-key="point-component"] g circle[data-label="Karl Anderson"]', {
+          page.locator('[data-key="point-component"] g circle[data-label="Karl Anderson"]', {
             visible: true,
           })
         );
         expect(
-          await page.waitForSelector('[data-key="out-of-bounds"] g circle[data-label="Karl Anderson"]', {
+          page.locator('[data-key="out-of-bounds"] g circle[data-label="Karl Anderson"]', {
             hidden: true,
           })
         );
 
-        const zoomIn = await page.waitForSelector('[title="Zoom in"]');
-        for (let index = 0; index < 4; index++) {
-          zoomIn.click();
-        }
+        const zoomIn = page.locator('[title="Zoom in"]');
+        zoomIn.click({ clickCount: 5 });
+
         expect(
-          await page.waitForSelector('[data-key="out-of-bounds"] g circle[data-label="Karl Anderson"]', {
+          page.locator('[data-key="out-of-bounds"] g circle[data-label="Karl Anderson"]', {
             visible: true,
           })
         );
         expect(
-          await page.waitForSelector('[data-key="point-component"] g circle[data-label="Karl Anderson"]', {
+          page.locator('[data-key="point-component"] g circle[data-label="Karl Anderson"]', {
             hidden: true,
           })
         );
-        const resetZoom = await page.waitForSelector('[title="Reset zoom"]');
+        const resetZoom = page.locator('[title="Reset zoom"]');
         await resetZoom.click();
         expect(
-          await page.waitForSelector('[data-key="point-component"] g circle[data-label="Karl Anderson"]', {
+          page.locator('[data-key="point-component"] g circle[data-label="Karl Anderson"]', {
             visible: true,
           })
         );
         expect(
-          await page.waitForSelector('[data-key="out-of-bounds"] g circle[data-label="Karl Anderson"]', {
+          page.locator('[data-key="out-of-bounds"] g circle[data-label="Karl Anderson"]', {
             hidden: true,
           })
         );

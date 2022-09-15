@@ -21,7 +21,7 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7-browsers
+      - image: circleci/node:16.10.0
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
@@ -37,8 +37,8 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7-browsers
-      - image: browserless/chrome:1.50.0-puppeteer-1.20.0
+      - image: circleci/node:16.10.0-browsers
+      - image: mcr.microsoft.com/playwright:focal
     steps:
       - attach_workspace:
           at: ~/scatter
@@ -62,10 +62,18 @@ jobs:
               ./cc-test-reporter after-build --coverage-input-type lcov --exit-code $?
             fi
       - run:
+          name: Install Playwright
+          command: |
+            npx playwright install
+      - run:
           name: Rendering tests
           command: yarn test:rendering
       - store_artifacts:
+          path: test/rendering/index.spec.js-snapshots
+      - store_artifacts:
           path: ./test/rendering/__artifacts__
+      - store_artifacts:
+          path: test/rendering/test-report
       - run:
           name: Integration tests
           command: yarn test:integration
@@ -77,7 +85,7 @@ jobs:
   publish-dev:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7-browsers
+      - image: circleci/node:16.10.0
     steps:
       - attach_workspace:
           at: ~/scatter
@@ -88,7 +96,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:16.7-browsers
+      - image: circleci/node:16.10.0
     steps:
       - attach_workspace:
           at: ~/scatter

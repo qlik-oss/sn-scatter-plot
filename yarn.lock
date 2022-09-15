@@ -2917,6 +2917,14 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
+"@playwright/test@1.25.1":
+  version "1.25.1"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.25.1.tgz#9847234b6f2b0cca71962b338da7db366a1e9720"
+  integrity sha512-IJ4X0yOakXtwkhbnNzKkaIgXe6df7u3H3FnuhI9Jqh+CdO0e/lYQlDLYiyI9cnXK8E7UAppAWP+VqAv6VX7HQg==
+  dependencies:
+    "@types/node" "*"
+    playwright-core "1.25.1"
+
 "@rollup/plugin-commonjs@21.0.1":
   version "21.0.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-21.0.1.tgz#1e57c81ae1518e4df0954d681c642e7d94588fee"
@@ -5599,6 +5607,11 @@ eslint-plugin-mocha@10.0.3:
   dependencies:
     eslint-utils "^3.0.0"
     ramda "^0.27.1"
+
+eslint-plugin-playwright@0.11.1:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-playwright/-/eslint-plugin-playwright-0.11.1.tgz#c3602e041ffe94d3014cff6f31b140f6815b854c"
+  integrity sha512-SFoz9Sh+FCUPaFrM2iEJ0gkQhx8pT8rNcVFZUsRJEhTxRigK1HHs7dQi30h1QOIoPHt3hpdFVslBPGfEY/mogQ==
 
 eslint-plugin-prettier@4.0.0:
   version "4.0.0"
@@ -9381,6 +9394,11 @@ pkg-dir@^3.0.0:
   integrity sha512-/E57AYkoeQ25qkxMj5PBOVgF8Kiu/h7cYS30Z5+R7WaiCCBfLq58ZI/dSeaEKb9WVJV5n/03QwrN3IeWIFllvw==
   dependencies:
     find-up "^3.0.0"
+
+playwright-core@1.25.1:
+  version "1.25.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.25.1.tgz#abe56aec8bef645fba988320d9f9328fafab0446"
+  integrity sha512-lSvPCmA2n7LawD2Hw7gSCLScZ+vYRkhU8xH0AapMyzwN+ojoDqhkH/KIEUxwNu2PjPoE/fcE0wLAksdOhJ2O5g==
 
 pngjs@^3.0.0, pngjs@^3.3.3:
   version "3.4.0"
