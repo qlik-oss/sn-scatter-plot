@@ -12,6 +12,7 @@ const paths = {
 test.describe('Rendering', () => {
   let s;
   let route;
+  let page;
 
   test.beforeAll(async () => {
     s = await serve({
@@ -19,7 +20,7 @@ test.describe('Rendering', () => {
       type: 'sn-scatter-plot',
       open: false,
       build: false,
-      themes: [{ id: 'test', theme: { fontFamily: "'Arial'" } }],
+      themes: [{ id: 'light', theme: { fontFamily: 'Arial' } }],
       flags: {
         BEST_FIT_LINE: true,
       },
@@ -27,6 +28,11 @@ test.describe('Rendering', () => {
     });
 
     route = createNebulaRoutes(s.url);
+
+    const browser = await chromium.launch();
+    const context = await browser.newContext();
+
+    page = await context.newPage();
   });
 
   test.afterAll(async () => {
@@ -40,14 +46,16 @@ test.describe('Rendering', () => {
 
       test(name, async () => {
         const renderUrl = await route.renderFixture(fixturePath);
-        const browser = await chromium.launch();
-        const context = await browser.newContext();
-        const page = await context.newPage();
+
         await page.goto(renderUrl, { waitUntil: 'networkidle' });
-        // Should switch to below locator when instead of the implicit wait when supported correctly in nebula
-        // await page.locator('[data-render-count="1"]', { visible: true });
-        await page.waitForTimeout(3000);
-        expect(await page.screenshot()).toMatchSnapshot(`${name}.png`);
+
+        const element = await page.waitForSelector('.njs-viz', { visible: true, timeout: 10000 });
+
+        await page.waitForTimeout(5000);
+
+        const screenshot = await page.screenshot({ clip: await element.boundingBox() });
+
+        expect(screenshot).toMatchSnapshot(`${name}.png`);
       });
     });
   });
