@@ -1,4 +1,4 @@
-export default function createDisclaimer({ disclaimerModel, context, layoutService, picasso }) {
+export default function createDisclaimer({ disclaimerModel, context, layoutService, themeService, picasso }) {
   const disclaimer = disclaimerModel.query.getDisclaimer();
   const formatter = picasso.formatter('q-number');
 
@@ -7,6 +7,8 @@ export default function createDisclaimer({ disclaimerModel, context, layoutServi
   }
 
   const { rtl, translator } = context;
+
+  const { fontFamily } = themeService.getStyles();
 
   return {
     key: 'disclaimer',
@@ -22,6 +24,9 @@ export default function createDisclaimer({ disclaimerModel, context, layoutServi
             )
           : translator.get(`Object.Disclaimer.${disclaimer.key}`),
       rtl,
+    },
+    style: {
+      fontFamily,
     },
   };
 }
