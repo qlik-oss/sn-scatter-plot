@@ -81,7 +81,7 @@ const useSettings = ({ core, models, flags }) => {
     chartModel.command.setMeta({ sizeChanged: undefined });
     updateViewState({ viewState, viewStateOptions: options.viewState, models });
     setSettings(newSettings);
-  }, [rect.width, rect.height, constraints]);
+  }, [rect.width, rect.height]);
 
   return settings;
 };

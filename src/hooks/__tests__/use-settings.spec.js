@@ -47,7 +47,6 @@ describe('use-settings', () => {
     chartModel = {
       query: {
         getDataHandler: sandbox.stub().returns(dataHandler),
-        getMeta: sandbox.stub().returns({ previousConstraints: undefined }),
       },
       command: { layoutComponents: sandbox.stub(), setMeta: sandbox.stub() },
     };
@@ -117,7 +116,7 @@ describe('use-settings', () => {
     });
   });
 
-  describe('useEffect 1', () => {
+  describe('useEffect', () => {
     it('should have the second argument being an array with correct elements', () => {
       create();
       conditionArray = stardust.useEffect.getCall(0).args[1];
@@ -142,58 +141,11 @@ describe('use-settings', () => {
         expect(result).to.equal(undefined);
       });
 
-      it('should call chartModel setMeta correctly, case 1: normal resize', () => {
+      it('should call chartModel setMeta correctly', () => {
         stardust.useConstraints.returns({});
-        chartModel.query.getMeta.returns({ previousConstraints: {} });
-        create();
-        fn = stardust.useEffect.getCall(2).args[0];
         fn();
-        expect(chartModel.command.setMeta.firstCall).to.have.been.calledWithExactly({ constraintsHaveChanged: false });
-        expect(chartModel.command.setMeta.secondCall).to.have.been.calledWithExactly({ previousConstraints: {} });
-      });
-
-      it('should call chartModel setMeta correctly, case 2: resize accompanied by constraints changed', () => {
-        stardust.useConstraints.returns({});
-        chartModel.query.getMeta.returns({ previousConstraints: { active: false } });
-        create();
-        fn = stardust.useEffect.getCall(2).args[0];
-        fn();
-        expect(chartModel.command.setMeta.firstCall).to.have.been.calledWithExactly({ constraintsHaveChanged: true });
-        expect(chartModel.command.setMeta.secondCall).to.have.been.calledWithExactly({
-          previousConstraints: {},
-        });
-      });
-
-      it('should call setSettings with the new settings ', () => {
-        fn();
-        expect(setSettings).to.have.been.calledWithExactly('new-settings');
-      });
-    });
-  });
-
-  describe('useEffect 2', () => {
-    it('should have the second argument being an array with correct elements', () => {
-      create();
-      conditionArray = stardust.useEffect.getCall(1).args[1];
-      expect(conditionArray).to.deep.equal([300]);
-    });
-
-    describe('the function in the arugment list', () => {
-      beforeEach(() => {
-        create();
-        fn = stardust.useEffect.getCall(1).args[0];
-      });
-
-      it('should resolve to nothing (undefined) when models are not defined', () => {
-        models = undefined;
-        const result = fn();
-        expect(result).to.equal(undefined);
-      });
-
-      it('should resolve to nothing (undefined) when colorService are not initialized', () => {
-        colorService.isInitialized.returns(false);
-        const result = fn();
-        expect(result).to.equal(undefined);
+        expect(chartModel.command.setMeta.firstCall).to.have.been.calledWithExactly({ sizeChanged: true });
+        expect(chartModel.command.setMeta.secondCall).to.have.been.calledWithExactly({ sizeChanged: undefined });
       });
 
       it('should call setSettings with the new settings ', () => {
