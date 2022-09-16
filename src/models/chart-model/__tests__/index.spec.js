@@ -158,7 +158,7 @@ describe('chart-model', () => {
       it('should return correct meta', () => {
         expect(create().query.getMeta()).to.deep.equal({
           isPrelayout: true,
-          sizeChanged: false,
+          sizeChanged: undefined,
           updateWithSettings: undefined,
           progressive: false,
         });
@@ -181,7 +181,7 @@ describe('chart-model', () => {
 
         viewHandler.setInteractionInProgress(false);
         layoutService.meta.isBigData = true;
-        chartModel.command.setMeta({ updateWithSettings: true, sizeChanged: false });
+        chartModel.command.setMeta({ updateWithSettings: true, sizeChanged: undefined });
         expect(chartModel.query.animationEnabled()).to.equal(true);
 
         layoutService.meta.isBigData = false;

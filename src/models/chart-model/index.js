@@ -102,7 +102,7 @@ export default function createChartModel({
   const meta = {
     isPrelayout: true,
     updateWithSettings: undefined,
-    sizeChanged: false,
+    sizeChanged: undefined,
     progressive: false,
   };
 
