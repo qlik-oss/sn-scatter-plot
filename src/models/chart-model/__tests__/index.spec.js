@@ -161,9 +161,8 @@ describe('chart-model', () => {
       it('should return correct meta', () => {
         expect(create().query.getMeta()).to.deep.equal({
           isPrelayout: true,
-          previousConstraints: undefined,
+          sizeChanged: undefined,
           updateWithSettings: undefined,
-          constraintsHaveChanged: undefined,
           progressive: false,
         });
       });
@@ -185,7 +184,7 @@ describe('chart-model', () => {
 
         viewHandler.setInteractionInProgress(false);
         layoutService.meta.isBigData = true;
-        chartModel.command.setMeta({ updateWithSettings: true, constraintsHaveChanged: false });
+        chartModel.command.setMeta({ updateWithSettings: true, sizeChanged: undefined });
         expect(chartModel.query.animationEnabled()).to.equal(true);
 
         layoutService.meta.isBigData = false;

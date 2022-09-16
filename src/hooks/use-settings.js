@@ -64,7 +64,11 @@ const useSettings = ({ core, models, flags }) => {
     });
   }, [models]);
 
-  const update = () => {
+  useEffect(() => {
+    if (!models || !models?.colorService.isInitialized()) {
+      return;
+    }
+
     const { layoutService, chartModel, dockService, colorService } = models;
     const { viewState } = core;
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
@@ -72,35 +76,12 @@ const useSettings = ({ core, models, flags }) => {
     colorService.custom.updateLegend();
 
     const newSettings = getPicassoDef(logicalSize || rect);
+    chartModel.command.setMeta({ sizeChanged: true });
     chartModel.command.layoutComponents({ settings: newSettings });
+    chartModel.command.setMeta({ sizeChanged: undefined });
     updateViewState({ viewState, viewStateOptions: options.viewState, models });
     setSettings(newSettings);
-  };
-
-  useEffect(() => {
-    if (!models || !models?.colorService.isInitialized()) {
-      return;
-    }
-
-    const { chartModel } = models;
-    if (JSON.stringify(constraints) === JSON.stringify(chartModel.query.getMeta().previousConstraints)) {
-      chartModel.command.setMeta({ constraintsHaveChanged: false });
-    } else {
-      chartModel.command.setMeta({ constraintsHaveChanged: true });
-    }
-
-    chartModel.command.setMeta({ previousConstraints: { ...constraints } });
-
-    update();
   }, [rect.width, rect.height]);
-
-  useEffect(() => {
-    if (!models || !models?.colorService.isInitialized()) {
-      return;
-    }
-
-    update();
-  }, [constraints]);
 
   return settings;
 };
