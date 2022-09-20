@@ -16,7 +16,7 @@ describe('use-render', () => {
     models = {
       chartModel: { command: { update: sandbox.stub() } },
     };
-    sandbox.stub(stardust, 'useEffect');
+    sandbox.stub(stardust, 'usePromise');
     create = () => useRender({ settings, models });
   });
 
@@ -24,24 +24,24 @@ describe('use-render', () => {
     sandbox.restore();
   });
 
-  describe('useEffect', () => {
+  describe('usePromise', () => {
     it('should have the second argument being an array with only one element: settings', () => {
       create();
-      conditionArray = stardust.useEffect.getCall(0).args[1];
+      conditionArray = stardust.usePromise.getCall(0).args[1];
       expect(conditionArray).to.be.deep.equal(['stngs']);
     });
 
-    describe('the function in the useEffect arguments list', () => {
+    describe('the function in the usePromise arguments list', () => {
       it('should return nothing (undefined) if settings is undefined', () => {
         settings = undefined;
         create();
-        fn = stardust.useEffect.getCall(0).args[0];
+        fn = stardust.usePromise.getCall(0).args[0];
         expect(fn()).to.equal(undefined);
       });
 
       it('should call chart update if settings are defined', () => {
         create();
-        fn = stardust.useEffect.getCall(0).args[0];
+        fn = stardust.usePromise.getCall(0).args[0];
         fn();
         expect(models.chartModel.command.update).to.have.been.calledOnce;
       });
