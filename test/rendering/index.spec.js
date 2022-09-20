@@ -23,6 +23,7 @@ test.describe('Rendering', () => {
       themes: [{ id: 'light', theme: { fontFamily: 'Arial' } }],
       flags: {
         BEST_FIT_LINE: true,
+        NUM_BUBBLES: true,
       },
       fixturePath: 'test/rendering/__fixtures__',
     });
