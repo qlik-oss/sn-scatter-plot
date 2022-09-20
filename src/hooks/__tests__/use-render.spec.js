@@ -14,9 +14,9 @@ describe('use-render', () => {
     sandbox = sinon.createSandbox();
     settings = 'stngs';
     models = {
-      chartModel: { command: { update: sandbox.stub() } },
+      chartModel: { command: { update: sandbox.stub().resolves(undefined) } },
     };
-    sandbox.stub(stardust, 'usePromise');
+    sandbox.stub(stardust, 'usePromise').returns([undefined, undefined]);
     create = () => useRender({ settings, models });
   });
 
@@ -36,14 +36,20 @@ describe('use-render', () => {
         settings = undefined;
         create();
         fn = stardust.usePromise.getCall(0).args[0];
-        expect(fn()).to.equal(undefined);
+        const promise = fn();
+        promise.then((res) => {
+          expect(res).to.equal(undefined);
+        });
+        // expect(fn()).to.equal(undefined);
       });
 
       it('should call chart update if settings are defined', () => {
         create();
         fn = stardust.usePromise.getCall(0).args[0];
-        fn();
-        expect(models.chartModel.command.update).to.have.been.calledOnce;
+        const promise = fn();
+        promise.then(() => {
+          expect(models.chartModel.command.update).to.have.been.calledOnce;
+        });
       });
     });
   });

@@ -15,7 +15,7 @@ describe('chart-model', () => {
   let colorService;
   let trendLinesService;
   let actions;
-  let progressiveTimer;
+  let progressive;
   let colorModelDataFn;
   let create;
   let viewHandler;
@@ -85,7 +85,7 @@ describe('chart-model', () => {
     actions = {
       setProgressive: sandbox.stub(),
     };
-    progressiveTimer = { timer: null };
+    progressive = { timer: null };
     extremumModel = { command: { updateExtrema: sandbox.stub() } };
     colorModelDataFn = sandbox.stub().returns([{ colorData: 'oh yes' }]);
     colorService = {
@@ -103,7 +103,7 @@ describe('chart-model', () => {
         colorService,
         trendLinesService,
         actions,
-        progressiveTimer,
+        progressive,
         viewState,
         extremumModel,
         dataHandler,
