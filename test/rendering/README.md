@@ -59,7 +59,7 @@ Some sort of coloring
 Best fit lines
 
 -scatter_render_11:
-Render more data points: 2000 data points
+Render more data points (2000 data points)
 
 -scatter_render_binned_1:
 binned data
