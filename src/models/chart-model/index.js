@@ -18,7 +18,7 @@ export default function createChartModel({
   dataHandler,
   trendLinesService,
   actions,
-  progressiveTimer,
+  progressive,
   getCurrentYTicks,
   getYTicks,
 }) {
@@ -127,17 +127,24 @@ export default function createChartModel({
   function renderOnce() {
     actions.setProgressive(false);
     meta.progressive = false;
-    cancelAnimationFrame(progressiveTimer.timer);
-    progressiveTimer.timer = requestAnimationFrame(() => {
-      chart.update({
-        partialData: true,
-        excludeFromUpdate: EXCLUDE,
-      });
-      updateMeta();
+    if (progressive.timer !== null) {
+      cancelAnimationFrame(progressive.timer);
+      progressive.renderPromise?.resolve();
+    }
+    chart.update({
+      partialData: true,
+      excludeFromUpdate: EXCLUDE,
     });
+    updateMeta();
   }
 
-  const renderProgressive = () => {
+  const renderProgressive = (resolve) => {
+    if (progressive.timer !== null) {
+      cancelAnimationFrame(progressive.timer);
+      progressive.renderPromise?.resolve();
+    }
+    progressive.renderPromise = { resolve };
+
     actions.setProgressive(false);
     const tempPages = layoutService.getDataPages();
     if (!tempPages.length) return;
@@ -145,6 +152,7 @@ export default function createChartModel({
     const nbrOfChunks = Math.ceil(dataSize / NUMBERS.CHUNK_SIZE);
     if (nbrOfChunks <= 1) {
       renderOnce();
+      resolve();
       return;
     }
 
@@ -153,8 +161,7 @@ export default function createChartModel({
     let renderCount = 0;
 
     const renderChunk = () => {
-      cancelAnimationFrame(progressiveTimer.timer);
-      progressiveTimer.timer = requestAnimationFrame(() => {
+      progressive.timer = requestAnimationFrame(() => {
         extractDataPages();
         const start = renderCount * NUMBERS.CHUNK_SIZE;
         const end = Math.min(dataSize, (renderCount + 1) * NUMBERS.CHUNK_SIZE);
@@ -178,6 +185,8 @@ export default function createChartModel({
         } else {
           meta.progressive = false;
           actions.setProgressive(false);
+          progressive.timer = null;
+          resolve();
         }
       });
     };
@@ -190,9 +199,9 @@ export default function createChartModel({
     trendLinesService.update();
     if (interactionInProgress || !isProgressiveAllowed(layoutService)) {
       renderOnce();
-    } else {
-      renderProgressive();
+      return Promise.resolve();
     }
+    return new Promise((resolve, reject) => renderProgressive(resolve, reject));
   }
 
   const getData = () => [
@@ -206,7 +215,10 @@ export default function createChartModel({
   ];
 
   const update = ({ settings } = {}) => {
-    cancelAnimationFrame(progressiveTimer.timer);
+    if (progressive.timer !== null) {
+      cancelAnimationFrame(progressive.timer);
+      progressive.renderPromise?.resolve();
+    }
     meta.progressive = false;
     meta.updateWithSettings = !!settings;
     trendLinesService.update();
@@ -216,19 +228,23 @@ export default function createChartModel({
         settings,
       });
       updateMeta();
-    } else {
-      // Render the first time without data
-      extractDataPages();
-      chart.update({
-        data: getData(),
-        settings,
-      });
-      insertDataPages();
-      renderProgressive();
+      return Promise.resolve();
     }
+    // Render the first time without data
+    extractDataPages();
+    chart.update({
+      data: getData(),
+      settings,
+    });
+    insertDataPages();
+    return new Promise((resolve, reject) => renderProgressive(resolve, reject));
   };
 
   const brush = ({ render, nodes }) => {
+    if (progressive.timer !== null) {
+      cancelAnimationFrame(progressive.timer);
+    }
+
     const nbrOfChunks = Math.ceil(nodes.length / NUMBERS.CHUNK_SIZE);
     if (nbrOfChunks <= 1) {
       render(nodes);
@@ -238,8 +254,7 @@ export default function createChartModel({
     let renderCount = 0;
 
     const renderChunk = () => {
-      cancelAnimationFrame(progressiveTimer.timer);
-      progressiveTimer.timer = requestAnimationFrame(() => {
+      progressive.timer = requestAnimationFrame(() => {
         const start = renderCount * NUMBERS.CHUNK_SIZE;
         const end = Math.min(nodes.length, (renderCount + 1) * NUMBERS.CHUNK_SIZE);
         meta.progressive = { start, end, isFirst: renderCount === 0, isLast: renderCount === nbrOfChunks - 1 };
@@ -249,6 +264,7 @@ export default function createChartModel({
           renderChunk();
         } else {
           meta.progressive = false;
+          progressive.timer = null;
         }
       });
     };

@@ -75,7 +75,7 @@ const useModels = ({ core, flags }) => {
       return;
     }
 
-    const { picassoInstance, chart, actions, viewState, progressiveTimer } = core;
+    const { picassoInstance, chart, actions, viewState, progressive } = core;
 
     const rtl = options.direction === 'rtl';
 
@@ -154,7 +154,7 @@ const useModels = ({ core, flags }) => {
       dataHandler,
       trendLinesService,
       actions,
-      progressiveTimer,
+      progressive,
       getCurrentYTicks: () => tickModel.query.getCurrentYTicks(),
       getYTicks: () => tickModel.query.getYTicks(),
     });

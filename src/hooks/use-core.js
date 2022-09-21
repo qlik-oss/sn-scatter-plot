@@ -28,8 +28,9 @@ const useCore = () => {
       settings: {},
     });
 
-    const progressiveTimer = {
+    const progressive = {
       timer: null,
+      renderPromise: null,
     };
 
     setCore({
@@ -38,7 +39,7 @@ const useCore = () => {
       actions,
       viewState,
       picasso,
-      progressiveTimer,
+      progressive,
     });
 
     return () => {

@@ -1,14 +1,17 @@
-import { useEffect } from '@nebula.js/stardust';
+import { usePromise } from '@nebula.js/stardust';
 
 const useRender = ({ settings, models }) => {
-  useEffect(() => {
+  const [, renderError] = usePromise(() => {
     if (!settings) {
-      return;
+      return Promise.resolve();
     }
 
     const { chartModel } = models;
-    chartModel.command.update({ settings });
+    return chartModel.command.update({ settings });
   }, [settings]);
+  if (renderError) {
+    throw renderError;
+  }
 };
 
 export default useRender;
