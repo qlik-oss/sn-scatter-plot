@@ -58,6 +58,9 @@ Some sort of coloring
 -scatter_render_10:
 Best fit lines
 
+-scatter_render_11:
+Render more data points: 2000 data points
+
 -scatter_render_binned_1:
 binned data
 
