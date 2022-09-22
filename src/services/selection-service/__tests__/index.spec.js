@@ -3,6 +3,8 @@ import * as chartModules from 'qlik-chart-modules';
 import * as qBrush from '../bin-selection/q-brush';
 import * as isRangeHandlersVisible from '../is-range-handlers-visible';
 import * as KEYS from '../../../constants/keys';
+import * as addListeners from '../../../utils/add-listeners';
+import * as removeListeners from '../../../utils/remove-listeners';
 
 describe('selection-service', () => {
   let sandbox;
@@ -17,7 +19,10 @@ describe('selection-service', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    sandbox.stub(chartModules, 'selectionService');
+    sandbox.stub(chartModules, 'selectionService').returns({});
+    sandbox.stub(addListeners, 'default');
+    sandbox.stub(removeListeners, 'default');
+
     picassoQSelections = sandbox.stub();
     createSelectionService = aw.mock(
       [['**/dist/picasso-q.js', () => ({ selections: picassoQSelections })]],

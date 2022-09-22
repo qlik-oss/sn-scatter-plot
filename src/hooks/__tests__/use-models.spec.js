@@ -63,7 +63,7 @@ describe('use-models', () => {
     setModels = sandbox.stub();
     core = { picassoInstance, chart, actions, viewState };
     global.document = 'document';
-    localSelectionService = { destroy: sandbox.stub() };
+    localSelectionService = { destroy: sandbox.stub(), destroyLazySelection: sandbox.stub() };
     layoutService = { getLayout: sandbox.stub() };
 
     sandbox.stub(stardust, 'useStaleLayout').returns(layout);
