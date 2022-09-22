@@ -44,7 +44,7 @@ export default function native({ chart, actions, viewHandler, models }) {
             }
             const enabledZoomByImage = isZoomByImage(models);
             viewHandler.setInteractionInProgress(enabledZoomByImage);
-            zoom({ e, chart, componentSize, viewHandler });
+            zoom({ e, chart, componentSize, viewHandler, models });
             e.preventDefault();
             if (timer) {
               clearTimer();

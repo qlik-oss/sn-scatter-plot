@@ -17,6 +17,7 @@ export default function createViewHandler({ viewState, extremumModel }) {
     scale: 1,
     maxScale: 2 ** 4.1,
     minScale: 2 ** -20.1,
+    checkScale: 2 ** -9.1,
     isHomeState: true,
   };
   let interactionInProgress = false;

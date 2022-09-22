@@ -6,7 +6,8 @@ import createViewHandler from '../../view-handler';
 import getFormatPatternFromRange from './format-pattern-from-range';
 import shouldUpdateTicks from './should-update-ticks';
 import isProgressiveAllowed from '../../utils/is-progressive-allowed';
-import getNumVisiblePoints from '../../utils/get-num-visible-points';
+import getVisiblePoints from '../../utils/get-visible-points';
+import areSameVisiblePoints from '../../utils/are-same-visible-points';
 
 export default function createChartModel({
   chart,
@@ -120,8 +121,9 @@ export default function createChartModel({
   }
 
   function updateMeta() {
-    meta.numVisibleBubbles = getNumVisiblePoints({ layoutService, viewHandler });
-    meta.isLargeNumVisibleBubbles = meta.numVisibleBubbles > layoutService.meta.largeNumDataPoints;
+    meta.visiblePoints = getVisiblePoints({ layoutService, viewHandler });
+    meta.numVisiblePoints = meta.visiblePoints.length;
+    meta.isLargeNumVisibleBubbles = meta.numVisiblePoints > layoutService.meta.largeNumDataPoints;
   }
 
   function renderOnce() {
@@ -348,6 +350,7 @@ export default function createChartModel({
       animationEnabled,
       miniChartEnabled,
       getChart: () => chart,
+      areSameVisiblePoints: () => areSameVisiblePoints(meta.visiblePoints),
     },
     command: {
       setMeta(newMeta) {

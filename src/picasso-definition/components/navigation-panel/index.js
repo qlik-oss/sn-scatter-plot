@@ -4,7 +4,8 @@ import move from '../../../view-handler/move';
 import zoom from '../../../view-handler/zoom';
 import clearMinor from '../../../utils/clear-minor';
 
-export default function createNavigationPanel({ layoutService, chartModel, chart, actions, context }) {
+export default function createNavigationPanel({ models, chart, actions, context }) {
+  const { layoutService, chartModel } = models;
   if (layoutService.meta.isSnapshot) {
     return [];
   }
@@ -128,7 +129,7 @@ export default function createNavigationPanel({ layoutService, chartModel, chart
         disabled,
         callback: () => {
           clearMinor({ chart, actions });
-          zoom({ viewHandler, buttonZoomDirection: 'in' });
+          zoom({ viewHandler, buttonZoomDirection: 'in', models });
         },
         presentation: {
           icon: 'ZOOM_IN',
@@ -148,7 +149,7 @@ export default function createNavigationPanel({ layoutService, chartModel, chart
         disabled,
         callback: () => {
           clearMinor({ chart, actions });
-          zoom({ viewHandler, buttonZoomDirection: 'out' });
+          zoom({ viewHandler, buttonZoomDirection: 'out', models });
         },
         presentation: {
           icon: 'ZOOM_OUT',

@@ -14,8 +14,8 @@ const isZoomByImage = (models, threshold = 0) => {
     }
   }
   if (meta.numDataPoints <= threshold) return false;
-  const { numVisibleBubbles = 0 } = chartModel.query.getMeta() || {};
-  return numVisibleBubbles > threshold;
+  const { numVisiblePoints = 0 } = chartModel.query.getMeta() || {};
+  return numVisiblePoints > threshold;
 };
 
 export default isZoomByImage;
