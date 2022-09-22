@@ -1,6 +1,6 @@
-import getNumVisiblePoints from '../get-num-visible-points';
+import getVisiblePoints from '../get-visible-points';
 
-describe('getNumVisiblePoints', () => {
+describe('getVisiblePoints', () => {
   let sandbox;
   let layoutService;
   let viewHandler;
@@ -18,7 +18,7 @@ describe('getNumVisiblePoints', () => {
 
   it('should return 0 if qMatrix is falsy', () => {
     layoutService.getDataPages.returns([]);
-    expect(getNumVisiblePoints({ layoutService, viewHandler })).to.equal(0);
+    expect(getVisiblePoints({ layoutService, viewHandler }).length).to.equal(0);
   });
 
   it('should return correct number of points inside the view', () => {
@@ -34,6 +34,9 @@ describe('getNumVisiblePoints', () => {
         ],
       },
     ]);
-    expect(getNumVisiblePoints({ layoutService, viewHandler })).to.equal(2);
+    expect(getVisiblePoints({ layoutService, viewHandler })).to.deep.equal([
+      [0, { qNum: 1 }, { qNum: 2000 }],
+      [0, { qNum: 10 }, { qNum: 3000 }],
+    ]);
   });
 });

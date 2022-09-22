@@ -18,7 +18,7 @@ export default function create({ chart, actions, viewHandler, gestures, models, 
       tapMiniChart({ viewHandler, rtl }),
       ...[...gestures].sort((a, b) => (b.prio || 0) - (a.prio || 0)),
       pan({ chart, actions, viewHandler, rtl }),
-      pinch({ chart, actions, viewHandler, rtl }),
+      pinch({ chart, actions, viewHandler, rtl, models }),
       ...tooltipInteractions.gestures,
     ],
   };

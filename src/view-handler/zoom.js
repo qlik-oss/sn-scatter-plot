@@ -10,8 +10,8 @@ function transform(scale, start, end, factor) {
   return [newStart, newEnd];
 }
 
-export default function zoom({ e, chart, componentSize, viewHandler, pinchZoomFactor, buttonZoomDirection }) {
-  const { scale, maxScale, minScale } = viewHandler.getMeta();
+export default function zoom({ e, chart, componentSize, viewHandler, pinchZoomFactor, buttonZoomDirection, models }) {
+  const { scale, maxScale, minScale, checkScale } = viewHandler.getMeta();
   const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = viewHandler.getDataView();
   let zoomFactor;
   let fixedPoint;
@@ -30,6 +30,13 @@ export default function zoom({ e, chart, componentSize, viewHandler, pinchZoomFa
   if (newScale > maxScale || newScale < minScale) {
     return;
   }
+
+  if (newScale < scale && newScale < checkScale) {
+    const { chartModel } = models;
+    // Do not zoom in further if all bubbles in the same position
+    if (chartModel.query.areSameVisiblePoints()) return;
+  }
+
   const [xMin, xMax] = transform(fixedPoint.normX, xAxisMin, xAxisMax, zoomFactor);
   const [yMax, yMin] = transform(fixedPoint.normY, yAxisMax, yAxisMin, zoomFactor);
   const viewScale = Math.abs(xAxisMax - xAxisMin) / Math.abs(xMax - xMin);

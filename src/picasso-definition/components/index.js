@@ -38,7 +38,7 @@ export default function createComponents({ context, models, picasso, chart, acti
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
     createHeatMapLabels({ themeService, chartModel, picasso, context }),
-    ...createNavigationPanel({ layoutService, chartModel, chart, actions, context }),
+    ...createNavigationPanel({ models, chart, actions, context }),
     ...createMiniChart({ models, context }),
     ...tooltipService.getComponents(),
   ].filter(Boolean);

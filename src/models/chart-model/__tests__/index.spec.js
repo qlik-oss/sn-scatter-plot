@@ -3,7 +3,7 @@ import createChartModel from '..';
 import * as getFormatPatternFromRange from '../format-pattern-from-range';
 import * as shouldUpdateTicks from '../should-update-ticks';
 import * as createViewHandler from '../../../view-handler';
-import * as getNumVisiblePoints from '../../../utils/get-num-visible-points';
+import * as getVisiblePoints from '../../../utils/get-visible-points';
 import * as isProgressiveAllowed from '../../../utils/is-progressive-allowed';
 
 describe('chart-model', () => {
@@ -93,7 +93,7 @@ describe('chart-model', () => {
     };
     sandbox.stub(getFormatPatternFromRange, 'default');
     sandbox.stub(shouldUpdateTicks, 'default').returns(false);
-    sandbox.stub(getNumVisiblePoints, 'default').returns(100);
+    sandbox.stub(getVisiblePoints, 'default').returns(new Array(100));
     sandbox.stub(isProgressiveAllowed, 'default').returns(false);
     create = () =>
       createChartModel({
@@ -130,6 +130,7 @@ describe('chart-model', () => {
         'animationEnabled',
         'miniChartEnabled',
         'getChart',
+        'areSameVisiblePoints',
       ]);
     });
 

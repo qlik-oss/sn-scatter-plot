@@ -9,6 +9,7 @@ describe('createNavigationPanel', () => {
   let sandbox;
   let layoutService;
   let chartModel;
+  let models;
   let viewHandler;
   let create;
   let context;
@@ -28,6 +29,7 @@ describe('createNavigationPanel', () => {
       setDataView: sandbox.stub(),
     };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
+    models = { layoutService, chartModel };
     sandbox.stub(KEYS, 'default').value({ COMPONENT: { NAVIGATION_PANEL: 'nav-pan' } });
     sandbox
       .stub(NUMBERS, 'default')
@@ -37,7 +39,7 @@ describe('createNavigationPanel', () => {
     sandbox.stub(clearMinor, 'default');
     context = { rtl: false, translator: { get: sandbox.stub() }, model: 'model', constraints: { active: false } };
     chart = { element: { clientWidth: 11, clientHeight: 21 } };
-    create = () => createNavigationPanel({ layoutService, chartModel, chart, actions, context });
+    create = () => createNavigationPanel({ models, chart, actions, context });
     create();
   });
 
@@ -160,7 +162,7 @@ describe('createNavigationPanel', () => {
       it('should have correct callback', () => {
         chartModel.query.getViewHandler.returns('vh');
         create()[5].settings.callback();
-        expect(zoom.default).to.have.been.calledWithExactly({ viewHandler: 'vh', buttonZoomDirection: 'in' });
+        expect(zoom.default).to.have.been.calledWithExactly({ viewHandler: 'vh', buttonZoomDirection: 'in', models });
       });
     });
 
@@ -168,7 +170,7 @@ describe('createNavigationPanel', () => {
       it('should have correct callback', () => {
         chartModel.query.getViewHandler.returns('vh');
         create()[6].settings.callback();
-        expect(zoom.default).to.have.been.calledWithExactly({ viewHandler: 'vh', buttonZoomDirection: 'out' });
+        expect(zoom.default).to.have.been.calledWithExactly({ viewHandler: 'vh', buttonZoomDirection: 'out', models });
       });
     });
   });
