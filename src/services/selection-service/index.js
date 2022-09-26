@@ -3,6 +3,8 @@ import { selectionService as createSelectionService } from 'qlik-chart-modules';
 import qBrush from './bin-selection/q-brush';
 import KEYS from '../../constants/keys';
 import isRangeHandlersVisible from './is-range-handlers-visible';
+import addListeners from '../../utils/add-listeners';
+import removeListeners from '../../utils/remove-listeners';
 
 export default function createService({ chart, actions, selections }) {
   const allowSimultaneous = [...Array(15)].map((d, i) => `qHyperCube/qMeasureInfo/${i}`);
@@ -66,6 +68,21 @@ export default function createService({ chart, actions, selections }) {
       },
     },
   });
+
+  const lazyBrush = chart.brush('lazySelection');
+
+  const lazySelectionListeners = {
+    activate: () => {},
+    deactivated: () => lazyBrush.end(),
+    cleared: () => lazyBrush.clear(),
+    canceled: () => lazyBrush.end(),
+  };
+
+  addListeners(selections, lazySelectionListeners);
+
+  service.destroyLazySelection = () => {
+    removeListeners(selections, lazySelectionListeners);
+  };
 
   return service;
 }

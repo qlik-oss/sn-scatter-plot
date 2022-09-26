@@ -67,6 +67,7 @@ const useModels = ({ core, flags }) => {
 
     return () => {
       localSelectionService.destroy();
+      localSelectionService.destroyLazySelection();
     };
   }, [core]);
 
