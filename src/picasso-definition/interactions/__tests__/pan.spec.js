@@ -26,7 +26,11 @@ describe('pan', () => {
       getMeta: sandbox.stub().returns({ scale: 0.1 }),
     };
     rtl = false;
-    actions = { zoom: { enabled: sandbox.stub() } };
+    actions = {
+      zoom: { enabled: sandbox.stub() },
+      lasso: { enabled: sandbox.stub(), active: sandbox.stub() },
+      getProgressive: sandbox.stub(),
+    };
     chart = { componentsFromPoint: sandbox.stub(), component: sandbox.stub() };
     sandbox.stub(KEYS, 'default').value({ COMPONENT: { POINT: 'point-comp' } });
     sandbox.stub(NUMBERS, 'default').value({ MINI_CHART: { RATIO: 0.5 } });
