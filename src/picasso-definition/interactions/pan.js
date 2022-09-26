@@ -46,6 +46,11 @@ const pan = ({ chart, actions, viewHandler, rtl }) => ({
         return true;
       }
 
+      const isInLassoMode = actions.lasso.enabled() && actions.lasso.active();
+      if (actions.getProgressive() && isInLassoMode) {
+        return false;
+      }
+
       if (!actions.zoom.enabled()) {
         return false;
       }
