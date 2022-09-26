@@ -34,7 +34,8 @@ export default function zoom({ e, chart, componentSize, viewHandler, pinchZoomFa
   if (newScale < scale && newScale < checkScale) {
     const { chartModel } = models;
     // Do not zoom in further if all bubbles in the same position
-    if (chartModel.query.areSameVisiblePoints()) return;
+    const dataHandler = chartModel.query.getDataHandler();
+    if (!dataHandler.getMeta().isBinnedData && chartModel.query.areSameVisiblePoints()) return;
   }
 
   const [xMin, xMax] = transform(fixedPoint.normX, xAxisMin, xAxisMax, zoomFactor);
