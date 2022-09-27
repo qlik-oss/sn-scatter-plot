@@ -43,9 +43,6 @@ jobs:
       - attach_workspace:
           at: ~/scatter
       - run:
-          name: Fonts
-          command: fc-list
-      - run:
           name: Build
           command: yarn run build
       - run:
@@ -68,6 +65,16 @@ jobs:
           name: Install Playwright
           command: |
             npx playwright install
+      - run:
+          name: Install Source Sans Pro
+          command: |
+            curl https://github.com/adobe-fonts/source-sans-pro/archive/2.020R-ro/1.075R-it.zip
+            unzip 1.075R-it.zip
+            cp source-sans-pro-2.020R-ro-1.075R-it/OTF/*.otf usr/share/fonts/
+            fc-cache -f -v
+      - run:
+          name: Fonts
+          command: fc-list
       - run:
           name: Rendering tests
           command: yarn test:rendering

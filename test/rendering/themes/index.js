@@ -3,10 +3,6 @@ import themeScoped from './theme-scoped.json';
 
 export default [
   {
-    id: 'light',
-    theme: { fontFamily: 'Helvetica' },
-  },
-  {
     id: 'theme-global',
     theme: themeGlobal,
   },
