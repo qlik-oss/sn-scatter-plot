@@ -42,6 +42,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/scatter
+      -run:
+          name: Fonts
+          command: fc-list
       - run:
           name: Build
           command: yarn run build
