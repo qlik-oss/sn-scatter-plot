@@ -42,7 +42,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/scatter
-      -run:
+      - run:
           name: Fonts
           command: fc-list
       - run:
