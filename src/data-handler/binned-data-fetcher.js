@@ -3,7 +3,7 @@ import populateBins from '../utils/bins-util';
 
 export default function createBinnedDataFetcher({ layoutService, extremumModel, model }) {
   const DEFAULT_RESOLUTION_LEVEL = 5;
-  const MAX_RESOLUTION_LEVEL = 8;
+  const MAX_RESOLUTION_LEVEL = 19; // Increase this value to match new max/min zoom level
   const bins = [];
   let maxBinDensity = 0;
   let nextInLine;
