@@ -68,7 +68,7 @@ jobs:
       - run:
           name: Install Source Sans Pro
           command: |
-            curl https://github.com/adobe-fonts/source-sans-pro/archive/2.020R-ro/1.075R-it.zip
+            wget https://github.com/adobe-fonts/source-sans-pro/archive/2.020R-ro/1.075R-it.zip
             unzip 1.075R-it.zip
             cp source-sans-pro-2.020R-ro-1.075R-it/OTF/*.otf usr/share/fonts/
             fc-cache -f -v
