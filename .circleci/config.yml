@@ -68,12 +68,15 @@ jobs:
       - run:
           name: Install Fonts
           command: |
-            DEBIAN_FRONTEND noninteractive
-            sudo apt-get update
-            sudo apt-get -y install ttf-mscorefonts-installer
+            sudo apt install cabextract
+            sudo wget https://www.freedesktop.org/software/fontconfig/webfonts/webfonts.tar.gz
+            sudo tar -xzf webfonts.tar.gz
+            sudo cd msfonts/
+            sudo cabextract *.exe
+            sudo cp *.ttf *.TTF /usr/share/fonts/
             sudo fc-cache -f
-            fc-list
-            fc-match Arial
+            sudo fc-list
+            sudo fc-match Arial
 
       - run:
           name: Rendering tests
