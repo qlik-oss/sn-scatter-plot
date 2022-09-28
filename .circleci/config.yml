@@ -68,6 +68,7 @@ jobs:
       - run:
           name: Install Fonts
           command: |
+            DEBIAN_FRONTEND noninteractive
             sudo apt-get update
             sudo apt-get -y install ttf-mscorefonts-installer
             sudo fc-cache -f
