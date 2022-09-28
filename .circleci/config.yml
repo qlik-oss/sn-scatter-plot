@@ -73,7 +73,7 @@ jobs:
             sudo tar -xzf webfonts.tar.gz
             cd msfonts/
             sudo cabextract *.exe
-            cp *.ttf *.TTF /usr/share/fonts/
+            sudo cp *.ttf *.TTF /usr/share/fonts/
             fc-cache -f
             fc-list
             fc-match Arial
