@@ -2,7 +2,7 @@
   "_inherit": false,
   "color": "#ffffff",
   "fontSize": "20px",
-  "fontFamily": "Source Sans Pro",
+  "fontFamily": "Arial",
   "backgroundColor": "#272822",
   "object": {
     "axis": {
@@ -10,7 +10,7 @@
         "name": {
           "color": "#66d9ef",
           "fontSize": "12px",
-          "fontFamily": "Source Sans Pro"
+          "fontFamily": "Arial"
         }
       },
       "line": {
@@ -24,7 +24,7 @@
       "title": {
         "color": "#fd971f",
         "fontSize": "15px",
-        "fontFamily": "Source Sans Pro"
+        "fontFamily": "Arial"
       }
     },
     "grid": {
@@ -44,12 +44,12 @@
       "name": {
         "color": "#8db837",
         "fontSize": "12px",
-        "fontFamily": "Source Sans Pro"
+        "fontFamily": "Arial"
       },
       "value": {
         "color": "#f92672",
         "fontSize": "12px",
-        "fontFamily": "Source Sans Pro"
+        "fontFamily": "Arial"
       }
     },
     "referenceLine": {

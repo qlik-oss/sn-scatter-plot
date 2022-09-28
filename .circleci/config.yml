@@ -66,12 +66,11 @@ jobs:
           command: |
             npx playwright install
       - run:
-          name: Install Source Sans Pro
+          name: Install Arial
           command: |
-            wget https://github.com/adobe-fonts/source-sans-pro/archive/2.020R-ro/1.075R-it.zip
-            unzip 1.075R-it.zip
-            sudo cp source-sans-2.020R-ro-1.075R-it/OTF/*.otf /usr/share/fonts/
-            fc-cache -f -v
+            sudo apt install fontconfig
+            sudo fc-cache -f
+            fc-list
       - run:
           name: Rendering tests
           command: yarn test:rendering
