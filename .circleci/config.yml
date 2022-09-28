@@ -71,12 +71,12 @@ jobs:
             sudo apt install cabextract
             sudo wget https://www.freedesktop.org/software/fontconfig/webfonts/webfonts.tar.gz
             sudo tar -xzf webfonts.tar.gz
-            sudo cd msfonts/
+            cd msfonts/
             sudo cabextract *.exe
-            sudo cp *.ttf *.TTF /usr/share/fonts/
-            sudo fc-cache -f
-            sudo fc-list
-            sudo fc-match Arial
+            cp *.ttf *.TTF /usr/share/fonts/
+            fc-cache -f
+            fc-list
+            fc-match Arial
 
       - run:
           name: Rendering tests
