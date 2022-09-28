@@ -71,6 +71,8 @@ jobs:
             sudo apt install fontconfig
             sudo fc-cache -f
             fc-list
+            fc-match Arial
+
       - run:
           name: Rendering tests
           command: yarn test:rendering
