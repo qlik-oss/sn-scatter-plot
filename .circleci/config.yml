@@ -66,6 +66,15 @@ jobs:
           command: |
             npx playwright install
       - run:
+          name: Install Fonts
+          command: |
+            sudo apt install cabextract
+            sudo wget https://www.freedesktop.org/software/fontconfig/webfonts/webfonts.tar.gz
+            sudo tar -xzf webfonts.tar.gz
+            cd msfonts/
+            sudo cabextract *.exe
+            sudo cp *.ttf *.TTF /usr/share/fonts/
+      - run:
           name: Rendering tests
           command: yarn test:rendering
       - store_artifacts:

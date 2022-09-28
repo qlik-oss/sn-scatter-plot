@@ -2,7 +2,7 @@
   "_inherit": false,
   "color": "#ffffff",
   "fontSize": "20px",
-  "fontFamily": "Helvetica",
+  "fontFamily": "Arial",
   "backgroundColor": "#272822",
   "object": {
     "axis": {
