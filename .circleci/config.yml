@@ -74,10 +74,6 @@ jobs:
             cd msfonts/
             sudo cabextract *.exe
             sudo cp *.ttf *.TTF /usr/share/fonts/
-            fc-cache -f
-            fc-list
-            fc-match Arial
-
       - run:
           name: Rendering tests
           command: yarn test:rendering
