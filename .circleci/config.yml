@@ -66,10 +66,10 @@ jobs:
           command: |
             npx playwright install
       - run:
-          name: Install Arial
+          name: Install Fonts
           command: |
-            sudo apt update
-            sudo apt -y install ttf-mscorefonts-installer
+            sudo apt-get update
+            sudo apt-get -y install ttf-mscorefonts-installer
             sudo fc-cache -f
             fc-list
             fc-match Arial
