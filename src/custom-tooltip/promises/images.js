@@ -11,11 +11,17 @@ function getSenseServerUrl(app) {
   let prefix;
   let isSecure;
 
-  if (
-    (app && app.session && app.session.options) ||
-    (app && app.enigmaModel && app.enigmaModel.session && app.enigmaModel.session.sessionConfig)
-  ) {
-    config = app.session.options || app.enigmaModel.session.sessionConfig;
+  if (app && (app.session?.options || app.enigmaModel?.session?.sessionConfig || app.session?.config?.url)) {
+    config = app.session.options || app.enigmaModel?.session.sessionConfig;
+
+    // fix for usage in mashups
+    if (!config) {
+      config = app.session?.config;
+      const url = new URL(config.url);
+      config.host = url.hostname;
+      config.port = url.port;
+      config.isSecure = url.protocol === 'wss:';
+    }
 
     if (config.secure !== undefined) {
       isSecure = config.secure;
