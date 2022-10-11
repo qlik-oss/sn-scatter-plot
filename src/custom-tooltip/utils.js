@@ -5,15 +5,9 @@ import tooltipChart from './chart/index';
 
 // used by the deprecated custom tooltip
 function toPoint(event, chart) {
-  let x = 0;
-  let y = 0;
-  if (event.center) {
-    x += event.center.x;
-    y += event.center.y;
-  } else {
-    x += event.clientX;
-    y += event.clientY;
-  }
+  const x = event.clientX === undefined ? Math.floor(event.srcEvent.clientX) : event.clientX;
+  const y = event.clientY === undefined ? Math.floor(event.srcEvent.clientY) : event.clientY;
+
   const chartBounds = chart.element.getBoundingClientRect();
   const cx = x - chartBounds.left;
   const cy = y - chartBounds.top;
