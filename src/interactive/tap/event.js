@@ -3,15 +3,8 @@ import { updateLazySelectionOnEnd } from '../update-selection';
 function eventToLocalPoint(event, chart) {
   const bounds = chart.element.getBoundingClientRect();
 
-  let x;
-  let y;
-  if (event.center) {
-    ({ x } = event.center);
-    ({ y } = event.center);
-  } else {
-    x = event.clientX;
-    y = event.clientY;
-  }
+  const x = event.clientX === undefined ? Math.floor(event.srcEvent.clientX) : event.clientX;
+  const y = event.clientY === undefined ? Math.floor(event.srcEvent.clientY) : event.clientY;
 
   return {
     x: x - bounds.left,
