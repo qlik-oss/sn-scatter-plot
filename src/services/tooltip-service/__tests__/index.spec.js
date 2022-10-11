@@ -220,7 +220,8 @@ describe('tooltip-service', () => {
             keys: ['point'],
             distance: 3,
             collect: {
-              from: 'position',
+              from: 'radius',
+              distance: 3,
             },
             placement: 'collectible',
           },

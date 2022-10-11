@@ -49,7 +49,8 @@ export default function createTooltipService({
             keys: [KEYS.COMPONENT.POINT],
             distance: 3,
             collect: {
-              from: 'position',
+              from: 'radius',
+              distance: 3,
             },
             placement: 'collectible',
           },
