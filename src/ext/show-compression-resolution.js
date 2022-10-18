@@ -1,6 +1,5 @@
-const COMPRESSION_THRESHOLD = 1000;
-
-export default function showCompressionResolution(layout) {
+export default function showCompressionResolution(layout, properties) {
+  const compressionThreshold = Math.max(1000, properties?.maxVisibleBubbles || 1000);
   const dim = layout.qHyperCube.qDimensionInfo[0];
-  return dim?.qCardinal > COMPRESSION_THRESHOLD;
+  return dim?.qCardinal > compressionThreshold;
 }

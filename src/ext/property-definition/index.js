@@ -271,7 +271,7 @@ export default function propertyDefinition(env) {
             step: 1,
             defaultValue: 5,
             show(data, handler) {
-              return showCompressionResolution(handler.layout);
+              return showCompressionResolution(handler.layout, flags.isEnabled('NUM_BUBBLES') ? data : undefined);
             },
           },
           maxVisibleBubbles: !flags.isEnabled('NUM_BUBBLES')
