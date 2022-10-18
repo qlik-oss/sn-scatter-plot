@@ -1,4 +1,4 @@
-import softProperties from '..';
+import exploreDefinition from '..';
 import * as showBubbleSizes from '../show-bubble-sizes';
 import * as showRangeBubbleSizes from '../show-range-bubble-sizes';
 import * as showCompressionResolution from '../../show-compression-resolution';
@@ -8,10 +8,16 @@ import * as showPersistentColors from '../show-persistent-colors';
 
 describe('softProperties', () => {
   let sandbox;
+  let softProperties;
+  let flags;
+  let env;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     sandbox.stub(showCompressionResolution, 'default');
+    flags = { isEnabled: sandbox.stub().returns(false) };
+    env = { flags };
+    softProperties = exploreDefinition(env);
   });
 
   afterEach(() => {
