@@ -55,7 +55,7 @@ export default function createTickModel({
       const field = axis === KEYS.SCALE.X ? 'qMeasureInfo.0' : 'qMeasureInfo.1';
       const isAutoFormat = layoutService.getHyperCubeValue(`${field}.qIsAutoFormat`, false);
       if (isAutoFormat) {
-        formatPatterns[axis] = chartModel.query.getFormatPattern(axis);
+        formatPatterns[axis] = chartModel.query.getAutoFormatPattern(axis);
       }
     }
 
