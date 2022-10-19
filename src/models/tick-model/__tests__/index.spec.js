@@ -24,7 +24,7 @@ describe('createTickModel', () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    chartModel = { query: { getFormatPattern: sandbox.stub() } };
+    chartModel = { query: { getAutoFormatPattern: sandbox.stub() } };
     layoutService = { getLayoutValue: sandbox.stub(), getHyperCubeValue: sandbox.stub() };
     layoutService.getLayoutValue.withArgs('xAxis.spacing', 1).returns(0.5);
     layoutService.getLayoutValue.withArgs('yAxis.spacing', 1).returns(2);
@@ -84,7 +84,7 @@ describe('createTickModel', () => {
             formatter: sinon.match.object,
           })
           .returns({ ticks: 'correct ticks', minMax: 'correct minMax' });
-        chartModel.query.getFormatPattern.withArgs('x').returns('#.###');
+        chartModel.query.getAutoFormatPattern.withArgs('x').returns('#.###');
       });
 
       it('should return correct X ticks, when it is not autoFormat', () => {
