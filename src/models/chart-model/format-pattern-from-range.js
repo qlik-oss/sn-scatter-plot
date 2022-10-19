@@ -20,8 +20,8 @@ export default function getAutoFormatPatternFromRange(scaleName, viewHandler, lo
 
   let nDecimals = Math.abs(rangeMagnitude);
 
-  const thousandDelimiter = localeInfo.qThousandSep || false;
-  const decimalDelimiter = localeInfo.qDecimalSep || '.';
+  const thousandDelimiter = localeInfo?.qThousandSep || false;
+  const decimalDelimiter = localeInfo?.qDecimalSep || '.';
   if (range === 0) {
     return '0'.concat(decimalDelimiter, '##');
   }
