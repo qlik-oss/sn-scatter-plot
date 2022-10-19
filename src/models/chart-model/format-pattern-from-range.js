@@ -1,6 +1,10 @@
 import KEYS from '../../constants/keys';
 
 export default function getAutoFormatPatternFromRange(scaleName, viewHandler, localeInfo) {
+  if (!localeInfo) {
+    return '';
+  }
+
   let min;
   let max;
   if (scaleName === KEYS.SCALE.X) {
@@ -20,8 +24,9 @@ export default function getAutoFormatPatternFromRange(scaleName, viewHandler, lo
 
   let nDecimals = Math.abs(rangeMagnitude);
 
-  const thousandDelimiter = localeInfo?.qThousandSep || false;
-  const decimalDelimiter = localeInfo?.qDecimalSep || '.';
+  const thousandDelimiter = localeInfo.qThousandSep || false;
+  const decimalDelimiter = localeInfo.qDecimalSep || '.';
+
   if (range === 0) {
     return '0'.concat(decimalDelimiter, '##');
   }
