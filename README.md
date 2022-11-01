@@ -18,6 +18,10 @@ Requires `@nebula.js/stardust` version `2.3.0` or later.
 
 If you use npm: npm install @nebula.js/sn-scatter-plot. You can also load through the script tag directly from [https://unpkg.com](https://unpkg.com/@nebula.js/sn-scatter-plot).
 
+## Development
+
+Instructions on how to [release and patch](./docs/development.md).
+
 ## Usage
 
 ```js
