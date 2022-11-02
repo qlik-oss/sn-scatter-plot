@@ -1,6 +1,6 @@
 import * as KEYS from '../../../constants/keys';
 import createChartModel from '..';
-import * as getFormatPatternFromRange from '../format-pattern-from-range';
+import * as getAutoFormatPatternFromRange from '../format-pattern-from-range';
 import * as shouldUpdateTicks from '../should-update-ticks';
 import * as createViewHandler from '../../../view-handler';
 
@@ -82,7 +82,7 @@ describe('chart-model', () => {
     colorService = {
       getData: colorModelDataFn,
     };
-    sandbox.stub(getFormatPatternFromRange, 'default');
+    sandbox.stub(getAutoFormatPatternFromRange, 'default');
     sandbox.stub(shouldUpdateTicks, 'default').returns(false);
     create = () =>
       createChartModel({
@@ -113,7 +113,7 @@ describe('chart-model', () => {
         'getDataHandler',
         'getLocaleInfo',
         'getMeta',
-        'getFormatPattern',
+        'getAutoFormatPattern',
         'animationEnabled',
         'miniChartEnabled',
       ]);
@@ -154,10 +154,10 @@ describe('chart-model', () => {
       });
     });
 
-    describe('getFormatPattern', () => {
-      it('should call getFormatPatternFromRange', () => {
-        create().query.getFormatPattern('x');
-        expect(getFormatPatternFromRange.default).to.have.been.calledOnce;
+    describe('getAutoFormatPattern', () => {
+      it('should call getAutoFormatPatternFromRange', () => {
+        create().query.getAutoFormatPattern('x');
+        expect(getAutoFormatPatternFromRange.default).to.have.been.calledOnce;
       });
     });
 
