@@ -1,6 +1,10 @@
 import KEYS from '../../constants/keys';
 
-export default function getFormatPatternFromRange(scaleName, viewHandler, layoutService) {
+export default function getAutoFormatPatternFromRange(scaleName, viewHandler, localeInfo) {
+  if (!localeInfo) {
+    return '';
+  }
+
   let min;
   let max;
   if (scaleName === KEYS.SCALE.X) {
@@ -20,9 +24,9 @@ export default function getFormatPatternFromRange(scaleName, viewHandler, layout
 
   let nDecimals = Math.abs(rangeMagnitude);
 
-  const field = scaleName === KEYS.SCALE.X ? 'qMeasureInfo.0' : 'qMeasureInfo.1';
-  const thousandDelimiter = layoutService.getHyperCubeValue(`${field}.qNumFormat.qThou`, false);
-  const decimalDelimiter = layoutService.getHyperCubeValue(`${field}.qNumFormat.qDec`, '.');
+  const thousandDelimiter = localeInfo.qThousandSep || false;
+  const decimalDelimiter = localeInfo.qDecimalSep || '.';
+
   if (range === 0) {
     return '0'.concat(decimalDelimiter, '##');
   }

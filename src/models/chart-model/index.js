@@ -3,7 +3,7 @@ import extend from 'extend';
 import KEYS from '../../constants/keys';
 import NUMBERS from '../../constants/numbers';
 import createViewHandler from '../../view-handler';
-import getFormatPatternFromRange from './format-pattern-from-range';
+import getAutoFormatPatternFromRange from './format-pattern-from-range';
 import shouldUpdateTicks from './should-update-ticks';
 import isProgressiveAllowed from '../../utils/is-progressive-allowed';
 import getVisiblePoints from '../../utils/get-visible-points';
@@ -345,7 +345,7 @@ export default function createChartModel({
       getViewHandler: () => viewHandler,
       getDataHandler: () => dataHandler,
       getLocaleInfo: () => localeInfo,
-      getFormatPattern: (scaleName) => getFormatPatternFromRange(scaleName, viewHandler, layoutService),
+      getAutoFormatPattern: (scaleName) => getAutoFormatPatternFromRange(scaleName, viewHandler, localeInfo),
       getMeta: () => meta,
       animationEnabled,
       miniChartEnabled,
