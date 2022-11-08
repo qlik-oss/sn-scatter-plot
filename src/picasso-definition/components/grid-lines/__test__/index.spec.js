@@ -6,8 +6,8 @@ describe('grid-line', () => {
   let layoutService;
   let themeService;
   let gridLine;
-  let chartModel;
   let create;
+  let animationsEnabled;
 
   before(() => {
     sandbox = sinon.createSandbox();
@@ -16,11 +16,13 @@ describe('grid-line', () => {
     };
     themeService = { getStyles: sandbox.stub() };
     create = () =>
-      createGridLines({
-        layoutService,
-        themeService,
-        chartModel,
-      });
+      createGridLines(
+        {
+          layoutService,
+          themeService,
+        },
+        animationsEnabled
+      );
   });
 
   beforeEach(() => {
@@ -47,7 +49,7 @@ describe('grid-line', () => {
       },
     });
 
-    chartModel = { query: { animationEnabled: sandbox.stub() } };
+    animationsEnabled = () => true;
   });
 
   after(() => {
@@ -265,13 +267,12 @@ describe('grid-line', () => {
 
     describe('animation', () => {
       describe('enabled', () => {
-        it('should be true if animation is enabled in chartModel', () => {
-          chartModel.query.animationEnabled.returns(true);
+        it('should be true if animation is enabled', () => {
           expect(create().animations.enabled()).to.equal(true);
         });
 
-        it('should be false if animation is not enabled in chartModel', () => {
-          chartModel.query.animationEnabled.returns(false);
+        it('should be false if animation is not enabled', () => {
+          animationsEnabled = () => false;
           expect(create().animations.enabled()).to.equal(false);
         });
       });

@@ -13,11 +13,11 @@ describe('axes', () => {
   let isHomeState;
   let chartModel;
   let models;
-  let flags;
   const scales = {
     X: 'x',
     Y: 'y',
   };
+  let animationsEnabled;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -76,12 +76,11 @@ describe('axes', () => {
     chartModel = {
       query: {
         getViewHandler: () => viewHandler,
-        animationEnabled: sandbox.stub(),
       },
     };
     models = { layoutService, dockService, themeService, chartModel };
-    flags = { isEnabled: sandbox.stub().returns(true) };
-    axes = createAxes({ models, flags });
+    animationsEnabled = () => true;
+    axes = createAxes({ models, animationsEnabled });
   });
 
   afterEach(() => {
@@ -98,14 +97,14 @@ describe('axes', () => {
     it('should have axis definition false when layout axis undefined', () => {
       layout.xAxis = undefined;
       layout.yAxis = undefined;
-      axes = createAxes({ models, flags });
+      axes = createAxes({ models, animationsEnabled });
       expect(axes).to.deep.equal([false, false]);
     });
 
     it('should have axis definition false when axis show is none', () => {
       layout.xAxis.show = 'none';
       layout.yAxis.show = 'none';
-      axes = createAxes({ models, flags });
+      axes = createAxes({ models, animationsEnabled });
       expect(axes).to.deep.equal([false, false]);
     });
 
@@ -126,7 +125,7 @@ describe('axes', () => {
       expect(axes[1].settings.labels.show).to.equal(true);
       layout.yAxis.show = 'title';
       layout.xAxis.show = 'title';
-      axes = createAxes({ models, flags });
+      axes = createAxes({ models, animationsEnabled });
       expect(axes[0].settings.labels.show).to.equal(false);
       expect(axes[1].settings.labels.show).to.equal(false);
     });
@@ -141,20 +140,20 @@ describe('axes', () => {
       expect(axes[1].settings.paddingEnd()).to.equal(0);
       layout.yAxis.show = 'all';
       isHomeState = true;
-      const yAxis = createAxes({ models, flags })[1];
+      const yAxis = createAxes({ models, animationsEnabled })[1];
       expect(yAxis.settings.paddingEnd()).to.equal(NUMBERS.AXIS.Y.PADDING.END);
     });
   });
 
   describe('animations for x axis', () => {
     describe('enabled', () => {
-      it('should be true if animation is enabled in chartModel', () => {
-        chartModel.query.animationEnabled.returns(true);
+      it('should be true if animation is enabled', () => {
         expect(axes[0].animations.enabled()).to.equal(true);
       });
 
       it('should be false if animation is not enabled in chartModel', () => {
-        chartModel.query.animationEnabled.returns(false);
+        animationsEnabled = () => false;
+        axes = createAxes({ models, animationsEnabled });
         expect(axes[0].animations.enabled()).to.equal(false);
       });
     });
@@ -193,12 +192,12 @@ describe('axes', () => {
   describe('animations for y axis', () => {
     describe('enabled', () => {
       it('should be true if animation is enabled in chartModel', () => {
-        chartModel.query.animationEnabled.returns(true);
         expect(axes[1].animations.enabled()).to.equal(true);
       });
 
       it('should be true if animation is enabled in chartModel', () => {
-        chartModel.query.animationEnabled.returns(false);
+        animationsEnabled = () => false;
+        axes = createAxes({ models, animationsEnabled });
         expect(axes[1].animations.enabled()).to.equal(false);
       });
     });

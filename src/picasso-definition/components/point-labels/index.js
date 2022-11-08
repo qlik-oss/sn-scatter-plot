@@ -10,7 +10,7 @@ const LABEL_MODE = {
   FALLBACK: 1,
 };
 
-export default function createPointLabels({ models }) {
+export default function createPointLabels({ models, animationsEnabled }) {
   const { layoutService, themeService, chartModel } = models;
   const labels = layoutService.getLayoutValue('labels', {});
   if (labels.mode === LABEL_MODE.NONE) {
@@ -43,7 +43,7 @@ export default function createPointLabels({ models }) {
       backgroundColor: style.backgroundColor,
     },
     animations: {
-      enabled: () => chartModel.query.animationEnabled(),
+      enabled: animationsEnabled,
       trackBy: (node) => {
         let id;
         if (node.type === 'text') {

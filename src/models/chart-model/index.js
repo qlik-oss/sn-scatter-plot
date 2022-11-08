@@ -22,6 +22,8 @@ export default function createChartModel({
   progressive,
   getCurrentYTicks,
   getYTicks,
+  options,
+  constraints,
 }) {
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
@@ -104,8 +106,8 @@ export default function createChartModel({
 
   const meta = {
     isPrelayout: true,
-    updateWithSettings: undefined,
-    sizeChanged: undefined,
+    isPartialUpdating: undefined,
+    isSizeChanging: undefined,
     progressive: false,
   };
 
@@ -197,7 +199,7 @@ export default function createChartModel({
   };
 
   function updatePartial(interactionInProgress = false) {
-    meta.updateWithSettings = false;
+    meta.isPartialUpdating = true;
     trendLinesService.update();
     if (interactionInProgress || !isProgressiveAllowed(layoutService)) {
       renderOnce();
@@ -222,7 +224,7 @@ export default function createChartModel({
       progressive.renderPromise?.resolve();
     }
     meta.progressive = false;
-    meta.updateWithSettings = !!settings;
+    meta.isPartialUpdating = settings === undefined;
     trendLinesService.update();
     if (!isProgressiveAllowed(layoutService)) {
       chart.update({
@@ -291,9 +293,17 @@ export default function createChartModel({
     );
   };
 
-  const animationEnabled = () => {
+  const animationsEnabled = () => {
+    if (options.chartAnimations !== true) {
+      return false;
+    }
+
+    if (constraints.active) {
+      return false;
+    }
+
     const interactionInProgress = viewHandler.getInteractionInProgress();
-    if (interactionInProgress || !meta.updateWithSettings || meta.sizeChanged) {
+    if (interactionInProgress || meta.isPartialUpdating || meta.isSizeChanging) {
       return false;
     }
 
@@ -347,7 +357,7 @@ export default function createChartModel({
       getLocaleInfo: () => localeInfo,
       getAutoFormatPattern: (scaleName) => getAutoFormatPatternFromRange(scaleName, viewHandler, localeInfo),
       getMeta: () => meta,
-      animationEnabled,
+      animationsEnabled,
       miniChartEnabled,
       getChart: () => chart,
       areSameVisiblePoints: () => areSameVisiblePoints(meta.visiblePoints),

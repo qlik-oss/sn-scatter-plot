@@ -13,6 +13,7 @@ describe('point-labels', () => {
   let chartModel;
   let viewHandler;
   let models;
+  let animationsEnabled;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -32,9 +33,10 @@ describe('point-labels', () => {
       redererSettings: 'renderer-settings',
       transform: 'transform-function',
     };
-    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler), animationEnabled: sandbox.stub() } };
+    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
     models = { layoutService, themeService, chartModel };
-    create = () => createPointLabels({ models });
+    animationsEnabled = () => true;
+    create = () => createPointLabels({ models, animationsEnabled });
     labels = { mode: 1 };
     layoutService.getLayoutValue.withArgs('labels').returns(labels);
     themeService.getStyles.returns({ label: { value: { fontFamily: 'Sans serif', fontSize: '1px', color: 'red' } } });
@@ -111,13 +113,12 @@ describe('point-labels', () => {
 
     describe('animation', () => {
       describe('enabled', () => {
-        it('should be true if animation is enabled in chartModel', () => {
-          chartModel.query.animationEnabled.returns(true);
+        it('should be true if animation is enabled', () => {
           expect(create().animations.enabled()).to.equal(true);
         });
 
-        it('should be false if animation is not enabled in chartModel', () => {
-          chartModel.query.animationEnabled.returns(false);
+        it('should be false if animation is not enabled', () => {
+          animationsEnabled = () => false;
           expect(create().animations.enabled()).to.equal(false);
         });
       });

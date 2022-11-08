@@ -19,6 +19,7 @@ describe('point', () => {
   const wsm = 1;
   let rect;
   let viewHandler;
+  let animationsEnabled;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -50,7 +51,6 @@ describe('point', () => {
       query: {
         getViewHandler: sandbox.stub(),
         getDataHandler: sandbox.stub(),
-        animationEnabled: sandbox.stub(),
         getMeta: sandbox.stub(),
       },
     };
@@ -85,6 +85,8 @@ describe('point', () => {
     sandbox.stub(movePath, 'default').returns('new-path');
     sandbox.stub(getNumPointsInBigData, 'default').returns(1000);
 
+    animationsEnabled = () => true;
+
     create = () =>
       createPoint({
         models: {
@@ -92,6 +94,7 @@ describe('point', () => {
           colorService,
           chartModel,
         },
+        animationsEnabled,
       });
   });
 
@@ -208,13 +211,12 @@ describe('point', () => {
 
   describe('animation', () => {
     describe('enabled', () => {
-      it('should be true if animation is enabled in chartModel', () => {
-        chartModel.query.animationEnabled.returns(true);
+      it('should be true if animation is enabled', () => {
         expect(create().animations.enabled()).to.equal(true);
       });
 
-      it('should be false if animation is not enabled in chartModel', () => {
-        chartModel.query.animationEnabled.returns(false);
+      it('should be false if animation is not enabled', () => {
+        animationsEnabled = () => false;
         expect(create().animations.enabled()).to.equal(false);
       });
     });

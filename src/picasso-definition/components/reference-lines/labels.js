@@ -30,8 +30,16 @@ const getOobColors = (style, theme) => {
   return getContrastColors(foreColor);
 };
 
-export default function createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode }) {
-  const { colorService, layoutService, themeService, chartModel } = models;
+export default function createRefLineLabels({
+  models,
+  context,
+  scale,
+  key,
+  dock,
+  minimumLayoutMode,
+  animationsEnabled,
+}) {
+  const { colorService, layoutService, themeService } = models;
   const { rtl, localeInfo } = context;
   const themeStyle = themeService.getStyles();
   const theme = themeService.getTheme();
@@ -95,7 +103,7 @@ export default function createRefLineLabels({ models, context, scale, key, dock,
       },
     },
     animations: {
-      enabled: () => chartModel.query.animationEnabled(),
+      enabled: animationsEnabled,
       trackBy: (node) => `${node.labelID}: ${node.text}`,
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         const deltaX = currentRect.x - previousRect.x;

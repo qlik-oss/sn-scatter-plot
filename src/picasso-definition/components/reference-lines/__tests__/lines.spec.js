@@ -6,6 +6,11 @@ describe('createRefLines', () => {
   let colorService;
   let layoutService;
   let chartModel;
+  let animationsEnabled;
+  let create;
+  let scale;
+  let key;
+  let minimumLayoutMode;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -43,7 +48,17 @@ describe('createRefLines', () => {
         },
       },
     ]);
-    chartModel = { query: { animationEnabled: sandbox.stub() } };
+    animationsEnabled = () => true;
+    create = () =>
+      createRefLines({
+        colorService,
+        layoutService,
+        chartModel,
+        scale,
+        key,
+        minimumLayoutMode,
+        animationsEnabled,
+      });
   });
 
   afterEach(() => {
@@ -51,19 +66,19 @@ describe('createRefLines', () => {
   });
 
   it('should return false if there is no reference line to show', () => {
-    const scale = 'y';
-    const key = 'reference-line-Y';
-    const minimumLayoutMode = 'min-layout-mode';
+    scale = 'y';
+    key = 'reference-line-Y';
+    minimumLayoutMode = 'min-layout-mode';
     layoutService.getLayoutValue.withArgs('refLine.refLinesY').returns([]);
-    const result = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
+    const result = create();
     expect(result).to.deep.equal(false);
   });
 
   it('should return correct settings of x reference line, when show is enabled', () => {
-    const scale = 'x';
-    const key = 'reference-line-X';
-    const minimumLayoutMode = 'min-layout-mode';
-    const result = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
+    scale = 'x';
+    key = 'reference-line-X';
+    minimumLayoutMode = 'min-layout-mode';
+    const result = create();
     result.animations.enabled = 'function';
     result.animations.compensateForLayoutChanges = 'function';
     expect(result).to.deep.equal({
@@ -99,24 +114,24 @@ describe('createRefLines', () => {
   });
 
   it('should return false when x reference line is selected but its show option is disabled', () => {
-    const scale = 'x';
-    const key = 'reference-line-X';
-    const minimumLayoutMode = 'min-layout-mode';
+    scale = 'x';
+    key = 'reference-line-X';
+    minimumLayoutMode = 'min-layout-mode';
     layoutService.getLayoutValue.withArgs('refLine.refLinesX').returns([
       {
         show: false,
         label: 'X ref label',
       },
     ]);
-    const result = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
+    const result = create();
     expect(result).to.deep.equal(false);
   });
 
   it('should return correct settings of y reference line, when show is enabled', () => {
-    const scale = 'y';
-    const key = 'reference-line-Y';
-    const minimumLayoutMode = 'min-layout-mode';
-    const result = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
+    scale = 'y';
+    key = 'reference-line-Y';
+    minimumLayoutMode = 'min-layout-mode';
+    const result = create();
     result.animations.enabled = 'function';
     result.animations.compensateForLayoutChanges = 'function';
     expect(result).to.deep.equal({
@@ -152,34 +167,33 @@ describe('createRefLines', () => {
   });
 
   it('should return false when y reference line is selected but its show option is disabled', () => {
-    const scale = 'y';
-    const key = 'reference-line-Y';
-    const minimumLayoutMode = 'min-layout-mode';
+    scale = 'y';
+    key = 'reference-line-Y';
+    minimumLayoutMode = 'min-layout-mode';
     layoutService.getLayoutValue.withArgs('refLine.refLinesY').returns([
       {
         show: false,
         label: 'Y ref label',
       },
     ]);
-    const result = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
+    const result = create();
     expect(result).to.deep.equal(false);
   });
 
   describe('animation', () => {
-    let scale = 'y';
-    let key = 'reference-line-Y';
-    const minimumLayoutMode = 'min-layout-mode';
+    scale = 'y';
+    key = 'reference-line-Y';
+    minimumLayoutMode = 'min-layout-mode';
 
     describe('enabled', () => {
       it('should be true if animation is enabled in chartModel', () => {
-        chartModel.query.animationEnabled.returns(true);
-        const refLines = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
+        const refLines = create();
         expect(refLines.animations.enabled()).to.equal(true);
       });
 
       it('should be false if animation is not enabled in chartModel', () => {
-        chartModel.query.animationEnabled.returns(false);
-        const refLines = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
+        animationsEnabled = () => false;
+        const refLines = create();
         expect(refLines.animations.enabled()).to.equal(false);
       });
     });
@@ -192,7 +206,7 @@ describe('createRefLines', () => {
       it('should not adjust node if the rect does not change, case 1: X', () => {
         scale = 'x';
         key = 'reference-line-X';
-        const refLines = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
+        const refLines = create();
         refLines.animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
         expect(currentNodes).to.deep.equal([{ x1: 50, x2: 50, y1: 10, y2: 200 }]);
       });
@@ -203,7 +217,7 @@ describe('createRefLines', () => {
         currentNodes = [{ x1: 10, x2: 210, y1: 50, y2: 50 }];
         currentRect = { width: 200 };
         previousRect = { width: 200 };
-        const refLines = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
+        const refLines = create();
         refLines.animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
         expect(currentNodes).to.deep.equal([{ x1: 10, x2: 210, y1: 50, y2: 50 }]);
       });
@@ -214,7 +228,7 @@ describe('createRefLines', () => {
         currentNodes = [{ x1: 50, x2: 50, y1: 10, y2: 200 }];
         currentRect = { x: 15 };
         previousRect = { x: 10 };
-        const refLines = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
+        const refLines = create();
         refLines.animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
         expect(currentNodes).to.deep.equal([{ x1: 45, x2: 45, y1: 10, y2: 200 }]);
       });
@@ -225,7 +239,7 @@ describe('createRefLines', () => {
         currentNodes = [{ x1: 10, x2: 210, y1: 50, y2: 50 }];
         currentRect = { width: 210 };
         previousRect = { width: 200 };
-        const refLines = createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode });
+        const refLines = create();
         refLines.animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
         expect(currentNodes).to.deep.equal([{ x1: 10, x2: 220, y1: 50, y2: 50 }]);
       });

@@ -9,8 +9,8 @@ const SPACINGS = {
   NARROW: 3,
 };
 
-export default function createGridLines(models) {
-  const { layoutService, themeService, chartModel } = models;
+export default function createGridLines(models, animationsEnabled) {
+  const { layoutService, themeService } = models;
   const { auto, spacing } = layoutService.getLayoutValue('gridLine', {});
   if (!auto && spacing === SPACINGS.NO_LINES) {
     return false;
@@ -52,7 +52,7 @@ export default function createGridLines(models) {
       strokeWidth: 1,
     },
     animations: {
-      enabled: () => chartModel.query.animationEnabled(),
+      enabled: animationsEnabled,
       trackBy: (node) => `${node.dir}: ${node.value}`,
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         const deltaWidth = currentRect.width - previousRect.width;

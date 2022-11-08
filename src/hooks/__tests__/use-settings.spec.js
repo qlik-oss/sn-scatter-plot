@@ -144,8 +144,8 @@ describe('use-settings', () => {
       it('should call chartModel setMeta correctly', () => {
         stardust.useConstraints.returns({});
         fn();
-        expect(chartModel.command.setMeta.firstCall).to.have.been.calledWithExactly({ sizeChanged: true });
-        expect(chartModel.command.setMeta.secondCall).to.have.been.calledWithExactly({ sizeChanged: undefined });
+        expect(chartModel.command.setMeta.firstCall).to.have.been.calledWithExactly({ isSizeChanging: true });
+        expect(chartModel.command.setMeta.secondCall).to.have.been.calledWithExactly({ isSizeChanging: undefined });
       });
 
       it('should call setSettings with the new settings ', () => {

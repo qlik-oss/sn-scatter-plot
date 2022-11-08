@@ -11,7 +11,7 @@ describe('createReferenceLines', () => {
   let models;
   const colorService = 'colorService';
   const layoutService = 'layoutService';
-  const chartModel = 'chart-model';
+  const animationsEnabled = 'animations enabled function';
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -29,7 +29,8 @@ describe('createReferenceLines', () => {
     sandbox.stub(MODES, 'REFERENCE_LINES').value('XSMALL');
     sandbox.stub(createLines, 'default');
     sandbox.stub(createLabels, 'default');
-    models = { colorService, layoutService, dockService, chartModel };
+
+    models = { colorService, layoutService, dockService };
   });
 
   afterEach(() => {
@@ -37,12 +38,12 @@ describe('createReferenceLines', () => {
   });
 
   it('should call createLines twice, each with correct arguments', () => {
-    createReferenceLines({ models, context });
+    createReferenceLines({ models, context, animationsEnabled });
     expect(
       createLines.default.withArgs({
         colorService: 'colorService',
         layoutService: 'layoutService',
-        chartModel: 'chart-model',
+        animationsEnabled: 'animations enabled function',
         scale: 'Y',
         key: 'ref-lines-y',
         minimumLayoutMode: 'XSMALL',
@@ -52,7 +53,7 @@ describe('createReferenceLines', () => {
       createLines.default.withArgs({
         colorService: 'colorService',
         layoutService: 'layoutService',
-        chartModel: 'chart-model',
+        animationsEnabled: 'animations enabled function',
         scale: 'X',
         key: 'ref-lines-x',
         minimumLayoutMode: 'XSMALL',
@@ -61,7 +62,7 @@ describe('createReferenceLines', () => {
   });
 
   it('should call createLabels twice, each with correct arguments', () => {
-    createReferenceLines({ models, context });
+    createReferenceLines({ models, context, animationsEnabled });
     expect(
       createLabels.default.withArgs({
         models,
@@ -70,6 +71,7 @@ describe('createReferenceLines', () => {
         key: 'ref-line-labels-x',
         dock: 'top',
         minimumLayoutMode: 'XSMALL',
+        animationsEnabled: 'animations enabled function',
       })
     ).to.have.been.calledOnce;
     expect(
@@ -80,6 +82,7 @@ describe('createReferenceLines', () => {
         key: 'ref-line-labels-y',
         dock: 'right',
         minimumLayoutMode: 'XSMALL',
+        animationsEnabled: 'animations enabled function',
       })
     ).to.have.been.calledOnce;
   });

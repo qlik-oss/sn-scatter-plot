@@ -17,7 +17,7 @@ describe('trendlines-service', () => {
   it('create', () => {
     const chart = 'chart';
     const colorService = 'colorService';
-    const enableAnimations = 'enableAnimations';
+    const animationsEnabled = 'animationsEnabled';
     const flags = 'flags';
     const layoutService = 'layoutService';
     const translator = 'translator';
@@ -25,7 +25,7 @@ describe('trendlines-service', () => {
     createTrendlinesService({
       chart,
       colorService,
-      enableAnimations,
+      animationsEnabled,
       flags,
       layoutService,
       translator,
@@ -45,7 +45,7 @@ describe('trendlines-service', () => {
       },
       isEnabled: sinon.match.func,
       animations: {
-        enabled: enableAnimations,
+        enabled: animationsEnabled,
         trackBy: sinon.match.func,
         compensateForLayoutChanges: sinon.match.func,
       },

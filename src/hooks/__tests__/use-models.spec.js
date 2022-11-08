@@ -44,6 +44,7 @@ describe('use-models', () => {
   let actions;
   let viewState;
   let layoutService;
+  let constraints;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -57,6 +58,7 @@ describe('use-models', () => {
     app = 'app';
     localeInfo = 'localeInfo';
     plugins = 'plugins';
+    constraints = 'constraints';
     selectionService = { setLayout: sandbox.stub() };
     setSelectionService = sandbox.stub();
     models = 'models';
@@ -79,6 +81,7 @@ describe('use-models', () => {
     sandbox.stub(stardust, 'useState');
     sandbox.stub(stardust, 'useEffect');
     sandbox.stub(stardust, 'useEmbed');
+    sandbox.stub(stardust, 'useConstraints').returns(constraints);
     stardust.useState.onFirstCall().returns([selectionService, setSelectionService]);
     stardust.useState.onSecondCall().returns([models, setModels]);
     sandbox.stub(createSelectionService, 'default').returns(localSelectionService);

@@ -1,7 +1,7 @@
 import KEYS from '../../../constants/keys';
 import createBrush from '../../brush/heat-map-brush';
 
-export default function createHeatMap(chartModel) {
+export default function createHeatMap(chartModel, animationsEnabled) {
   const viewHandler = chartModel.query.getViewHandler();
   const { transform } = viewHandler;
   const dataHandler = chartModel.query.getDataHandler();
@@ -60,7 +60,7 @@ export default function createHeatMap(chartModel) {
     },
 
     animations: {
-      enabled: () => chartModel.query.animationEnabled(),
+      enabled: animationsEnabled,
       trackBy: (node, i) => {
         // If it is a current node (dataHanler.binArray contains current nodes)
         // Or it is an old node, but oldNodes and currentNodes are identical (corner case: select all)

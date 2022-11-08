@@ -7,6 +7,7 @@ describe('heat-map', () => {
   let dataHandler;
   let create;
   let viewHandler;
+  let animationsEnabled;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -41,11 +42,12 @@ describe('heat-map', () => {
       query: {
         getViewHandler: () => viewHandler,
         getDataHandler: () => dataHandler,
-        animationEnabled: sandbox.stub(),
       },
     };
 
-    create = () => createHeatMap(chartModel);
+    animationsEnabled = () => true;
+
+    create = () => createHeatMap(chartModel, animationsEnabled);
   });
 
   afterEach(() => {
@@ -142,13 +144,12 @@ describe('heat-map', () => {
 
     describe('animations', () => {
       describe('enabled', () => {
-        it('should be true if animation is enabled in chartModel', () => {
-          chartModel.query.animationEnabled.returns(true);
+        it('should be true if animation is enabled', () => {
           expect(create().animations.enabled()).to.equal(true);
         });
 
-        it('should be false if animation is not enabled in chartModel', () => {
-          chartModel.query.animationEnabled.returns(false);
+        it('should be false if animation is not enabled', () => {
+          animationsEnabled = () => false;
           expect(create().animations.enabled()).to.equal(false);
         });
       });

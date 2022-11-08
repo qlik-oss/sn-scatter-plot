@@ -15,7 +15,7 @@ function movePath(path, distance) {
 export default function createTrenslinesService({
   chart,
   colorService,
-  enableAnimations,
+  animationsEnabled,
   flags,
   layoutService,
   translator,
@@ -42,7 +42,7 @@ export default function createTrenslinesService({
     },
     isEnabled: () => flags.isEnabled('BEST_FIT_LINE'),
     animations: {
-      enabled: enableAnimations,
+      enabled: animationsEnabled,
       trackBy: (node) => node.data.layer.value,
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         if (currentRect.x !== previousRect.x) {

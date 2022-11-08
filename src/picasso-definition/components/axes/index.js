@@ -3,7 +3,7 @@ import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 import NUMBERS from '../../../constants/numbers';
 
-export default function createAxes({ models }) {
+export default function createAxes({ models, animationsEnabled }) {
   const { layoutService, dockService, themeService, chartModel } = models;
   const { xAxis, yAxis } = layoutService.getLayout();
 
@@ -49,7 +49,7 @@ export default function createAxes({ models }) {
             paddingEnd: NUMBERS.AXIS.X.PADDING.END,
           },
           animations: {
-            enabled: () => chartModel.query.animationEnabled(),
+            enabled: animationsEnabled,
             trackBy,
             compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
               if (currentRect.width !== previousRect.width) {
@@ -95,7 +95,7 @@ export default function createAxes({ models }) {
               yAxis.show === 'title' || viewHandler.getMeta().isHomeState === false ? 0 : NUMBERS.AXIS.Y.PADDING.END,
           },
           animations: {
-            enabled: () => chartModel.query.animationEnabled(),
+            enabled: animationsEnabled,
             trackBy,
             compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
               if (dockService.meta.y.dock === 'right') {

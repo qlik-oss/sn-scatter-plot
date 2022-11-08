@@ -23,6 +23,8 @@ describe('chart-model', () => {
   let extremumModel;
   let dataPages;
   let dataHandler;
+  let options;
+  let constraints;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -95,6 +97,8 @@ describe('chart-model', () => {
     sandbox.stub(shouldUpdateTicks, 'default').returns(false);
     sandbox.stub(getVisiblePoints, 'default').returns(new Array(100));
     sandbox.stub(isProgressiveAllowed, 'default').returns(false);
+    options = { chartAnimations: true };
+    constraints = { active: false };
     create = () =>
       createChartModel({
         chart,
@@ -107,6 +111,8 @@ describe('chart-model', () => {
         viewState,
         extremumModel,
         dataHandler,
+        options,
+        constraints,
       });
   });
 
@@ -127,7 +133,7 @@ describe('chart-model', () => {
         'getLocaleInfo',
         'getMeta',
         'getAutoFormatPattern',
-        'animationEnabled',
+        'animationsEnabled',
         'miniChartEnabled',
         'getChart',
         'areSameVisiblePoints',
@@ -162,8 +168,8 @@ describe('chart-model', () => {
       it('should return correct meta', () => {
         expect(create().query.getMeta()).to.deep.equal({
           isPrelayout: true,
-          sizeChanged: undefined,
-          updateWithSettings: undefined,
+          isSizeChanging: undefined,
+          isPartialUpdating: undefined,
           progressive: false,
         });
       });
@@ -176,22 +182,34 @@ describe('chart-model', () => {
       });
     });
 
-    describe('animationEnabled', () => {
+    describe('animationsEnabled', () => {
       it('should return correctly', () => {
-        const chartModel = create();
+        // chartAnimations
+        options.chartAnimations = false;
+        let chartModel = create();
+        expect(chartModel.query.animationsEnabled()).to.equal(false);
+
+        // constraints active
+        options.chartAnimations = true;
+        constraints.active = true;
+        chartModel = create();
+        expect(chartModel.query.animationsEnabled()).to.equal(false);
+
+        constraints.active = false;
+        chartModel = create();
 
         viewHandler.setInteractionInProgress(true);
-        expect(chartModel.query.animationEnabled()).to.equal(false);
+        expect(chartModel.query.animationsEnabled()).to.equal(false);
 
         viewHandler.setInteractionInProgress(false);
         layoutService.meta.isBigData = true;
-        chartModel.command.setMeta({ updateWithSettings: true, sizeChanged: undefined });
-        expect(chartModel.query.animationEnabled()).to.equal(true);
+        chartModel.command.setMeta({ isPartialUpdating: false, isSizeChanging: undefined });
+        expect(chartModel.query.animationsEnabled()).to.equal(true);
 
         layoutService.meta.isBigData = false;
         viewHandler.setInteractionInProgress(false);
         layoutService.getHyperCubeValue.returns(10);
-        expect(chartModel.query.animationEnabled()).to.equal(true);
+        expect(chartModel.query.animationsEnabled()).to.equal(true);
       });
     });
   });
@@ -236,7 +254,7 @@ describe('chart-model', () => {
         const chartModel = create();
         chartModel.command.update({ settings: { key: 'settings' } });
         const argsObject = chart.update.args[0][0];
-        expect(chartModel.query.getMeta().updateWithSettings).to.equal(true);
+        expect(chartModel.query.getMeta().isPartialUpdating).to.equal(false);
         expect(chart.update).to.have.been.calledOnce;
         expect(argsObject.data).to.be.an('array');
         expect(argsObject.data[0].config.localeInfo).to.equal(localeInfo);
@@ -246,7 +264,7 @@ describe('chart-model', () => {
       it('should call update, when settings is implicit', () => {
         const chartModel = create();
         chartModel.command.update();
-        expect(chartModel.query.getMeta().updateWithSettings).to.equal(false);
+        expect(chartModel.query.getMeta().isPartialUpdating).to.equal(true);
         expect(chart.update).to.have.been.calledOnce;
       });
 
@@ -255,7 +273,7 @@ describe('chart-model', () => {
         const chartModel = create();
         chartModel.command.update({ settings: { key: 'settings' } });
         const argsObject = chart.update.args[0][0];
-        expect(chartModel.query.getMeta().updateWithSettings).to.equal(true);
+        expect(chartModel.query.getMeta().isPartialUpdating).to.equal(false);
         expect(chart.update).to.have.been.calledOnce;
         expect(argsObject.data).to.be.an('array');
         expect(argsObject.data[1].key).to.equal('db');
@@ -330,7 +348,7 @@ describe('chart-model', () => {
         await viewState.dataView();
         await clock.tick(50);
 
-        expect(chartModel.query.getMeta().updateWithSettings).to.equal(false);
+        expect(chartModel.query.getMeta().isPartialUpdating).to.equal(true);
         expect(chart.update).to.have.been.calledWithExactly({
           partialData: true,
           excludeFromUpdate: ['xat', 'yat', 'mcp'],
