@@ -295,24 +295,16 @@ export default function createChartModel({
   };
 
   const animationsEnabled = () => {
-    if (options.chartAnimations !== true) {
-      return false;
-    }
-
-    if (constraints.active) {
-      return false;
-    }
-
     const interactionInProgress = viewHandler.getInteractionInProgress();
-    if (interactionInProgress || meta.isPartialUpdating || meta.isSizeChanging) {
-      return false;
-    }
-
-    if (isProgressiveAllowed(layoutService)) {
-      return false;
-    }
-
-    if (layoutService.meta.isBigData !== viewCache.get('isBigData')) {
+    if (
+      options.chartAnimations !== true ||
+      constraints.active ||
+      interactionInProgress ||
+      meta.isPartialUpdating ||
+      meta.isSizeChanging ||
+      isProgressiveAllowed(layoutService) ||
+      layoutService.meta.isBigData !== viewCache.get('isBigData')
+    ) {
       return false;
     }
 
