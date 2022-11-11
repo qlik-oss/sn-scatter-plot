@@ -20,6 +20,7 @@ describe('chart-model', () => {
   let create;
   let viewHandler;
   let viewState;
+  let viewCache;
   let extremumModel;
   let dataPages;
   let dataHandler;
@@ -99,6 +100,7 @@ describe('chart-model', () => {
     sandbox.stub(isProgressiveAllowed, 'default').returns(false);
     options = { chartAnimations: true };
     constraints = { active: false };
+    viewCache = { set: sandbox.stub(), get: sandbox.stub() };
     create = () =>
       createChartModel({
         chart,
@@ -109,6 +111,7 @@ describe('chart-model', () => {
         actions,
         progressive,
         viewState,
+        viewCache,
         extremumModel,
         dataHandler,
         options,
@@ -203,10 +206,12 @@ describe('chart-model', () => {
 
         viewHandler.setInteractionInProgress(false);
         layoutService.meta.isBigData = true;
+        viewCache.get.returns(true);
         chartModel.command.setMeta({ isPartialUpdating: false, isSizeChanging: undefined });
         expect(chartModel.query.animationsEnabled()).to.equal(true);
 
-        layoutService.meta.isBigData = false;
+        layoutService.meta.isBigData = true;
+        viewCache.get.returns(true);
         viewHandler.setInteractionInProgress(false);
         layoutService.getHyperCubeValue.returns(10);
         expect(chartModel.query.animationsEnabled()).to.equal(true);

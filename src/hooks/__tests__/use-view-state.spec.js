@@ -8,15 +8,21 @@ describe('use-view-state', () => {
   let create;
   let viewState;
   let setViewState;
+  let viewCache;
+  let setViewCache;
   let fn;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
     viewState = undefined;
     setViewState = sandbox.stub();
-    sandbox.stub(stardust, 'useState').returns([viewState, setViewState]);
+    setViewCache = sandbox.stub();
+    sandbox.stub(stardust, 'useState');
+    stardust.useState.onCall(0).returns([viewState, setViewState]);
+    stardust.useState.onCall(1).returns([viewCache, setViewCache]);
     sandbox.stub(stardust, 'useEffect');
     sandbox.stub(chartModules, 'storage');
+    sandbox.stub(chartModules, 'cache');
     create = () => useViewState();
   });
 

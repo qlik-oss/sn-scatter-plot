@@ -153,13 +153,6 @@ describe('heat-map', () => {
           expect(create().animations.enabled()).to.equal(false);
         });
       });
-
-      describe('trackBy', () => {
-        it('should return correct node ID', () => {
-          expect(create().animations.trackBy({ data: { value: 7964, binDensity: { value: 10 } } }, 0)).to.equal(7964);
-          expect(create().animations.trackBy({ data: { value: 7965, binDensity: { value: 11 } } }, 1)).to.equal(7965.5);
-        });
-      });
     });
 
     describe('rendererSettings', () => {
