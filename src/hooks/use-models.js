@@ -77,7 +77,7 @@ const useModels = ({ core, flags }) => {
       return;
     }
 
-    const { picassoInstance, chart, actions, viewState, progressive } = core;
+    const { picassoInstance, chart, actions, viewState, viewCache, progressive } = core;
 
     const rtl = options.direction === 'rtl';
 
@@ -151,6 +151,7 @@ const useModels = ({ core, flags }) => {
       layoutService,
       picasso: picassoInstance,
       viewState,
+      viewCache,
       colorService,
       extremumModel,
       dataHandler,

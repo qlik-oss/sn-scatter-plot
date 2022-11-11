@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-export default function movePath(path, distance, close = true) {
+export default function movePath(path, dX, dY, close = true) {
   // Convert path to points
   const coordinates = path
     .replace(/[MLZ]/g, '')
@@ -13,7 +13,8 @@ export default function movePath(path, distance, close = true) {
 
   // Displace points
   points.forEach((point) => {
-    point.x += distance;
+    point.x += dX;
+    point.y += dY;
   });
 
   // Convert points to path

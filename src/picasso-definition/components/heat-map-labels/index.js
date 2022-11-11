@@ -1,5 +1,6 @@
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
+import compensateForLayoutChanges from '../animations/labels/compensate';
 
 export default function createHeatMapLabels({ themeService, chartModel, picasso, context, animationsEnabled }) {
   const formatter = picasso.formatter('q-number');
@@ -47,6 +48,7 @@ export default function createHeatMapLabels({ themeService, chartModel, picasso,
     animations: {
       enabled: animationsEnabled,
       trackBy: () => Math.random(),
+      compensateForLayoutChanges,
     },
     rendererSettings: {
       transform,

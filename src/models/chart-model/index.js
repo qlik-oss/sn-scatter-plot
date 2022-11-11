@@ -15,6 +15,7 @@ export default function createChartModel({
   layoutService,
   colorService,
   viewState,
+  viewCache,
   extremumModel,
   dataHandler,
   trendLinesService,
@@ -46,7 +47,6 @@ export default function createChartModel({
 
   const viewHandler = createViewHandler({
     extremumModel,
-    layoutService,
     viewState,
   });
 
@@ -232,6 +232,7 @@ export default function createChartModel({
         settings,
       });
       updateMeta();
+      viewCache.set('isBigData', layoutService.meta.isBigData);
       return Promise.resolve();
     }
     // Render the first time without data
@@ -304,6 +305,14 @@ export default function createChartModel({
 
     const interactionInProgress = viewHandler.getInteractionInProgress();
     if (interactionInProgress || meta.isPartialUpdating || meta.isSizeChanging) {
+      return false;
+    }
+
+    if (isProgressiveAllowed(layoutService)) {
+      return false;
+    }
+
+    if (layoutService.meta.isBigData !== viewCache.get('isBigData')) {
       return false;
     }
 

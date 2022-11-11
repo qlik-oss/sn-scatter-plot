@@ -1,5 +1,6 @@
 import KEYS from '../../../constants/keys';
 import createBrush from '../../brush/heat-map-brush';
+import compensateForLayoutChanges from '../animations/point/compensate';
 
 export default function createHeatMap(chartModel, animationsEnabled) {
   const viewHandler = chartModel.query.getViewHandler();
@@ -61,20 +62,9 @@ export default function createHeatMap(chartModel, animationsEnabled) {
 
     animations: {
       enabled: animationsEnabled,
-      trackBy: (node, i) => {
-        // If it is a current node (dataHanler.binArray contains current nodes)
-        // Or it is an old node, but oldNodes and currentNodes are identical (corner case: select all)
-        if (
-          dataHandler.binArray[i] !== undefined &&
-          dataHandler.binArray[i].qElemNumber === node.data.value &&
-          dataHandler.binArray[i].qNum === node.data.binDensity.value
-        ) {
-          return node.data.value;
-        }
-
-        // Old node, make sure that its ID is different from that of current nodes
-        return node.data.value + 0.5;
-      },
+      isMainComponent: true,
+      trackBy: () => Math.random(),
+      compensateForLayoutChanges,
     },
 
     rendererSettings: {

@@ -1,7 +1,6 @@
 import createPoint from '../index';
 import * as KEYS from '../../../../constants/keys';
 import createSizeScale from '../../../scales/size';
-import * as movePath from '../../../../utils/move-path';
 import * as getNumPointsInBigData from '../../../../utils/get-num-points-in-big-data';
 
 describe('point', () => {
@@ -82,7 +81,6 @@ describe('point', () => {
       },
     };
 
-    sandbox.stub(movePath, 'default').returns('new-path');
     sandbox.stub(getNumPointsInBigData, 'default').returns(1000);
 
     animationsEnabled = () => true;
@@ -218,37 +216,6 @@ describe('point', () => {
       it('should be false if animation is not enabled', () => {
         animationsEnabled = () => false;
         expect(create().animations.enabled()).to.equal(false);
-      });
-    });
-
-    describe('compensateForLayoutChanges', () => {
-      let currentNodes = [
-        { type: 'circle', cx: 50, cy: 100 },
-        { type: 'path', d: 'old-path' },
-      ];
-      let currentRect = { x: 100 };
-      let previousRect = { x: 100 };
-
-      it('should not adjust node if the rect does not change', () => {
-        create().animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
-        expect(currentNodes).to.deep.equal([
-          { type: 'circle', cx: 50, cy: 100 },
-          { type: 'path', d: 'old-path' },
-        ]);
-      });
-
-      it('should adjust label correctly if the rect shifts 5px to right', () => {
-        currentRect = { width: 200, x: 15 };
-        previousRect = { width: 200, x: 10 };
-        currentNodes = [
-          { type: 'circle', cx: 50, cy: 100 },
-          { type: 'path', d: 'old-path' },
-        ];
-        create().animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
-        expect(currentNodes).to.deep.equal([
-          { type: 'circle', cx: 45, cy: 100 },
-          { type: 'path', d: 'new-path' },
-        ]);
       });
     });
   });

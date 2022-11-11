@@ -1,10 +1,9 @@
-/* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 import createSizeScale from '../../scales/size';
 import createBrush from '../../brush/point-brush';
-import movePath from '../../../utils/move-path';
 import isOob from '../out-of-bounds/is-oob';
+import compensateForLayoutChanges from '../animations/point/compensate';
 
 export default function createPoint({ models, chart, animationsEnabled }) {
   const { layoutService, colorService, chartModel } = models;
@@ -48,24 +47,7 @@ export default function createPoint({ models, chart, animationsEnabled }) {
     animations: {
       enabled: animationsEnabled,
       isMainComponent: true,
-      compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
-        if (currentRect.x !== previousRect.x) {
-          const deltaX = currentRect.x - previousRect.x;
-          currentNodes.forEach((node) => {
-            switch (node.type) {
-              case 'circle':
-                node.cx -= deltaX;
-                break;
-              case 'path': {
-                node.d = movePath(node.d, -deltaX);
-                break;
-              }
-              default:
-                break;
-            }
-          });
-        }
-      },
+      compensateForLayoutChanges,
     },
     rendererSettings: {
       transform,
