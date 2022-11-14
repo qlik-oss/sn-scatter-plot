@@ -297,7 +297,7 @@ export default function createChartModel({
   const animationsEnabled = () => {
     const interactionInProgress = viewHandler.getInteractionInProgress();
     if (
-      options.chartAnimations !== true ||
+      options.chartAnimations === false ||
       constraints.active ||
       interactionInProgress ||
       meta.isPartialUpdating ||
