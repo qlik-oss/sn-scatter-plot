@@ -108,6 +108,7 @@ export default function createAxes({ models, animationsEnabled }) {
                   node.x1 += deltaWidth;
                   node.x2 += deltaWidth;
                   if (node.x1 === node.x2) {
+                    node.y1 = currentRect.y;
                     node.y2 = node.y1 + currentRect.height;
                   }
                 } else if (node.type === 'text') {

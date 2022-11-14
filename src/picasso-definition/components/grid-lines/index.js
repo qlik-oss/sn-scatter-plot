@@ -55,16 +55,20 @@ export default function createGridLines(models, animationsEnabled) {
       enabled: animationsEnabled,
       trackBy: (node) => `${node.dir}: ${node.value}`,
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
-        const deltaWidth = currentRect.width - previousRect.width;
         const deltaX = currentRect.x - previousRect.x;
+        const deltaY = currentRect.y - previousRect.y;
         currentNodes.forEach((node) => {
-          if (node.dir === 'x') {
-            // Move x grid lines towards the opposite direction to make them stay at the same absolute positions
+          // Horizontal line
+          if (node.y1 === node.y2) {
+            node.x2 = node.x1 + currentRect.width;
+            node.y1 -= deltaY;
+            node.y2 -= deltaY;
+          }
+          // Vertical line
+          else if (node.x1 === node.x2) {
+            node.y2 = node.y1 + currentRect.height;
             node.x1 -= deltaX;
             node.x2 -= deltaX;
-          } else {
-            // Only expand y grid lines at right ends, the left ends go with the currentRect to avoid the gap
-            node.x2 += deltaWidth;
           }
         });
       },
