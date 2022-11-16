@@ -26,7 +26,7 @@ describe('use-core', () => {
     sandbox.stub(configurePicasso, 'default');
     setCore = sandbox.stub();
     stardust.useState.returns([core, setCore]);
-    useViewState.default.returns('some-view-state');
+    useViewState.default.returns({ viewState: 'some-view-state', viewCache: 'some-view-cache' });
     stardust.useElement.returns({ style: { overflow: undefined } });
     chart = { destroy: sandbox.stub() };
     picassoInstance = { chart: sandbox.stub() };
@@ -55,7 +55,7 @@ describe('use-core', () => {
 
     describe('function in useEffect arguments list', () => {
       it('should return undefined if viewState is undefined', () => {
-        useViewState.default.returns(undefined);
+        useViewState.default.returns({});
         create();
         fn = stardust.useEffect.getCall(0).args[0];
         expect(fn()).to.equal(undefined);

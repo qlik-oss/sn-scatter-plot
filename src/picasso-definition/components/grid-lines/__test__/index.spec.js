@@ -6,8 +6,8 @@ describe('grid-line', () => {
   let layoutService;
   let themeService;
   let gridLine;
-  let chartModel;
   let create;
+  let animationsEnabled;
 
   before(() => {
     sandbox = sinon.createSandbox();
@@ -16,11 +16,13 @@ describe('grid-line', () => {
     };
     themeService = { getStyles: sandbox.stub() };
     create = () =>
-      createGridLines({
-        layoutService,
-        themeService,
-        chartModel,
-      });
+      createGridLines(
+        {
+          layoutService,
+          themeService,
+        },
+        animationsEnabled
+      );
   });
 
   beforeEach(() => {
@@ -47,7 +49,7 @@ describe('grid-line', () => {
       },
     });
 
-    chartModel = { query: { animationEnabled: sandbox.stub() } };
+    animationsEnabled = () => true;
   });
 
   after(() => {
@@ -265,13 +267,12 @@ describe('grid-line', () => {
 
     describe('animation', () => {
       describe('enabled', () => {
-        it('should be true if animation is enabled in chartModel', () => {
-          chartModel.query.animationEnabled.returns(true);
+        it('should be true if animation is enabled', () => {
           expect(create().animations.enabled()).to.equal(true);
         });
 
-        it('should be false if animation is not enabled in chartModel', () => {
-          chartModel.query.animationEnabled.returns(false);
+        it('should be false if animation is not enabled', () => {
+          animationsEnabled = () => false;
           expect(create().animations.enabled()).to.equal(false);
         });
       });
@@ -284,24 +285,24 @@ describe('grid-line', () => {
       });
 
       describe('compensateForLayoutChanges', () => {
-        let currentNodes = [{ x1: 10, x2: 10, y1: 10, y2: 100 }];
-        let currentRect = { width: 200, x: 10 };
-        let previousRect = { width: 200, x: 10 };
+        let currentNodes = [{ x1: 10, x2: 10, y1: 0, y2: 150 }];
+        let currentRect = { width: 200, x: 10, y: 20, height: 150 };
+        let previousRect = { width: 200, x: 10, y: 20, height: 150 };
         it('should not adjust grid lines if the rect does not change', () => {
           create().animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
-          expect(currentNodes).to.deep.equal([{ x1: 10, x2: 10, y1: 10, y2: 100 }]);
+          expect(currentNodes).to.deep.equal([{ x1: 10, x2: 10, y1: 0, y2: 150 }]);
         });
 
         it('should adjust grid lines correctly if the rect shifts 5px to left and increases 10px in width', () => {
-          currentRect = { width: 210, x: 5 };
-          previousRect = { width: 200, x: 10 };
+          currentRect = { width: 210, x: 5, y: 20, height: 150 };
+          previousRect = { width: 200, x: 10, y: 20, height: 150 };
           currentNodes = [
-            { dir: 'x', x1: 50, x2: 50, y1: 10, y2: 100 },
+            { dir: 'x', x1: 50, x2: 50, y1: 0, y2: 150 },
             { dir: 'y', x1: 0, x2: 200, y1: 50, y2: 50 },
           ];
           create().animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
           expect(currentNodes).to.deep.equal([
-            { dir: 'x', x1: 55, x2: 55, y1: 10, y2: 100 },
+            { dir: 'x', x1: 55, x2: 55, y1: 0, y2: 150 },
             { dir: 'y', x1: 0, x2: 210, y1: 50, y2: 50 },
           ]);
         });

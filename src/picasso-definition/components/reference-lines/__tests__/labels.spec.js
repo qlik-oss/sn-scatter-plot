@@ -10,6 +10,12 @@ describe('createRefLineLabels', () => {
   let themeService;
   let context;
   let theme;
+  let create;
+  let scale;
+  let key;
+  let dock;
+  let minimumLayoutMode;
+  let animationsEnabled;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -55,9 +61,10 @@ describe('createRefLineLabels', () => {
       colorService,
       layoutService,
       themeService,
-      chartModel: { query: { animationEnabled: sandbox.stub() } },
     };
+    animationsEnabled = () => true;
     context = { rtl: false, localeInfo: 'valid localeInfo' };
+    create = () => createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode, animationsEnabled });
   });
 
   afterEach(() => {
@@ -66,31 +73,31 @@ describe('createRefLineLabels', () => {
 
   it('should return false if there is no reference line to show', () => {
     layoutService.getLayoutValue.withArgs('refLine.refLinesY').returns([]);
-    const dock = 'left';
-    const scale = 'y';
-    const key = 'reference-line-Y';
-    const result = createRefLineLabels({ models, context, dock, scale, key });
+    dock = 'left';
+    scale = 'y';
+    key = 'reference-line-Y';
+    const result = create();
     expect(result).to.deep.equal(false);
   });
 
   it('should return false if x reference lines are selected but not enabled', () => {
-    const dock = 'top';
-    const scale = 'x';
-    const key = 'reference-line-labels-X';
+    dock = 'top';
+    scale = 'x';
+    key = 'reference-line-labels-X';
     layoutService.getLayoutValue.withArgs('refLine.refLinesX').returns([
       {
         show: false,
         label: 'X ref label',
       },
     ]);
-    const result = createRefLineLabels({ models, context, dock, scale, key });
+    const result = create();
     expect(result).to.deep.equal(false);
   });
 
   it('should return correct x reference lables when show is enabled', () => {
-    const dock = 'top';
-    const minimumLayoutMode = 'XSMALL';
-    const scale = 'x';
+    dock = 'top';
+    minimumLayoutMode = 'XSMALL';
+    scale = 'x';
     const themeStyle = {
       referenceLine: {
         label: { name: { fontFamily: '"font1", "font2", "fontType"', fontSize: '13px' } },
@@ -99,8 +106,8 @@ describe('createRefLineLabels', () => {
     };
     themeService.getStyles = sandbox.stub().returns(themeStyle);
 
-    const key = 'reference-line-labels-X';
-    const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+    key = 'reference-line-labels-X';
+    const result = create();
     result.animations.enabled = 'function';
     result.animations.trackBy = 'function';
     result.animations.compensateForLayoutChanges = 'function';
@@ -150,9 +157,9 @@ describe('createRefLineLabels', () => {
   });
 
   it('should return correct x reference lables when show is enabled and theme does not have oob style', () => {
-    const dock = 'top';
-    const minimumLayoutMode = 'XSMALL';
-    const scale = 'x';
+    dock = 'top';
+    minimumLayoutMode = 'XSMALL';
+    scale = 'x';
     theme = { getStyle: sandbox.stub().returns(false) };
     themeService.getTheme = sandbox.stub().returns(theme);
     getContrastColors.default.returns({ backgroundColor: '#123456', color: '#654321' });
@@ -164,8 +171,8 @@ describe('createRefLineLabels', () => {
     };
     themeService.getStyles = sandbox.stub().returns(themeStyle);
 
-    const key = 'reference-line-labels-X';
-    const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+    key = 'reference-line-labels-X';
+    const result = create();
     result.animations.enabled = 'function';
     result.animations.trackBy = 'function';
     result.animations.compensateForLayoutChanges = 'function';
@@ -215,9 +222,9 @@ describe('createRefLineLabels', () => {
   });
 
   it('should return correct y reference lables when show is enabled', () => {
-    const dock = 'right';
-    const minimumLayoutMode = 'SMALL';
-    const scale = 'y';
+    dock = 'right';
+    minimumLayoutMode = 'SMALL';
+    scale = 'y';
     const themeStyle = {
       referenceLine: {
         label: { name: { fontFamily: '"font1", "font2", "fontType"', fontSize: '13px' } },
@@ -225,8 +232,8 @@ describe('createRefLineLabels', () => {
       },
     };
     themeService.getStyles = sandbox.stub().returns(themeStyle);
-    const key = 'reference-line-labels-Y';
-    const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+    key = 'reference-line-labels-Y';
+    const result = create();
     result.animations.enabled = 'function';
     result.animations.trackBy = 'function';
     result.animations.compensateForLayoutChanges = 'function';
@@ -283,9 +290,9 @@ describe('createRefLineLabels', () => {
   });
 
   it('should return correct y reference lables when show is enabled, rtl is true, and some layout properties are missing', () => {
-    const dock = 'left';
-    const minimumLayoutMode = 'SMALL';
-    const scale = 'y';
+    dock = 'left';
+    minimumLayoutMode = 'SMALL';
+    scale = 'y';
     const themeStyle = {
       referenceLine: {
         label: { name: { fontSize: '15px' } },
@@ -294,8 +301,8 @@ describe('createRefLineLabels', () => {
     };
     themeService.getStyles = sandbox.stub().returns(themeStyle);
     context.rtl = true;
-    const key = 'reference-line-labels-Y';
-    const result = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+    key = 'reference-line-labels-Y';
+    const result = create();
     result.animations.enabled = 'function';
     result.animations.trackBy = 'function';
     result.animations.compensateForLayoutChanges = 'function';
@@ -352,21 +359,20 @@ describe('createRefLineLabels', () => {
   });
 
   describe('animation', () => {
-    let scale;
-    let dock;
-    let minimumLayoutMode;
-    let key;
+    scale;
+    dock;
+    minimumLayoutMode;
+    key;
 
     describe('enabled', () => {
-      it('should be true if animation is enabled in chartModel', () => {
-        models.chartModel.query.animationEnabled.returns(true);
-        const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+      it('should be true if animation is enabled', () => {
+        const refLineLabels = create();
         expect(refLineLabels.animations.enabled()).to.equal(true);
       });
 
-      it('should be false if animation is not enabled in chartModel', () => {
-        models.chartModel.query.animationEnabled.returns(false);
-        const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+      it('should be false if animation is not enabled', () => {
+        animationsEnabled = () => false;
+        const refLineLabels = create();
         expect(refLineLabels.animations.enabled()).to.equal(false);
       });
     });
@@ -374,7 +380,7 @@ describe('createRefLineLabels', () => {
     describe('trackBy', () => {
       it('should be return correct IDs', () => {
         const node = { labelID: 'x1', text: 'part-1' };
-        const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+        const refLineLabels = create();
         expect(refLineLabels.animations.trackBy(node)).to.equal('x1: part-1');
       });
     });
@@ -385,7 +391,7 @@ describe('createRefLineLabels', () => {
       let previousRect = { x: 100 };
 
       it('should not adjust node if the rect does not change', () => {
-        const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+        const refLineLabels = create();
         refLineLabels.animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
         expect(currentNodes).to.deep.equal([{ x: 50, y: 100 }]);
       });
@@ -397,7 +403,7 @@ describe('createRefLineLabels', () => {
           { labelID: 'x-0', x: 150, y: 10 },
           { labelID: 'y-0', x: 150, y: 100 },
         ];
-        const refLineLabels = createRefLineLabels({ models, context, scale, key, dock, minimumLayoutMode });
+        const refLineLabels = create();
         refLineLabels.animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
         expect(currentNodes).to.deep.equal([
           { labelID: 'x-0', x: 145, y: 10 },

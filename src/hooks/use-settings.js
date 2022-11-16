@@ -37,6 +37,7 @@ const useSettings = ({ core, models, flags }) => {
       translator,
       logicalSize,
       flags,
+      animationsEnabled: models.chartModel.query.animationsEnabled,
     });
 
   usePromise(async () => {
@@ -76,9 +77,9 @@ const useSettings = ({ core, models, flags }) => {
     colorService.custom.updateLegend();
 
     const newSettings = getPicassoDef(logicalSize || rect);
-    chartModel.command.setMeta({ sizeChanged: true });
+    chartModel.command.setMeta({ isSizeChanging: true });
     chartModel.command.layoutComponents({ settings: newSettings });
-    chartModel.command.setMeta({ sizeChanged: undefined });
+    chartModel.command.setMeta({ isSizeChanging: undefined });
     updateViewState({ viewState, viewStateOptions: options.viewState, models });
     setSettings(newSettings);
   }, [rect.width, rect.height]);

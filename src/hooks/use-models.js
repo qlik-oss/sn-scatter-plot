@@ -12,6 +12,7 @@ import {
   useSelections,
   usePlugins,
   useEmbed,
+  useConstraints,
 } from '@nebula.js/stardust';
 import {
   layoutService as createLayoutService,
@@ -48,6 +49,7 @@ const useModels = ({ core, flags }) => {
   const [selectionService, setSelectionService] = useState();
   const [models, setModels] = useState();
   const embed = useEmbed();
+  const constraints = useConstraints();
 
   useEffect(() => {
     if (!core) {
@@ -75,7 +77,7 @@ const useModels = ({ core, flags }) => {
       return;
     }
 
-    const { picassoInstance, chart, actions, viewState, progressive } = core;
+    const { picassoInstance, chart, actions, viewState, viewCache, progressive } = core;
 
     const rtl = options.direction === 'rtl';
 
@@ -122,7 +124,7 @@ const useModels = ({ core, flags }) => {
     const trendLinesService = createTrenslinesService({
       chart,
       colorService,
-      enableAnimations: () => chartModel.query.getViewHandler().animationEnabled,
+      animationsEnabled: () => chartModel.query.animationsEnabled(),
       flags,
       layoutService,
       translator,
@@ -149,6 +151,7 @@ const useModels = ({ core, flags }) => {
       layoutService,
       picasso: picassoInstance,
       viewState,
+      viewCache,
       colorService,
       extremumModel,
       dataHandler,
@@ -157,6 +160,8 @@ const useModels = ({ core, flags }) => {
       progressive,
       getCurrentYTicks: () => tickModel.query.getCurrentYTicks(),
       getYTicks: () => tickModel.query.getYTicks(),
+      options,
+      constraints,
     });
 
     const tooltipService = createTooltipService({

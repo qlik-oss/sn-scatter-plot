@@ -7,7 +7,7 @@ const useCore = () => {
   const element = useElement();
   const options = useOptions();
   const actions = useActions();
-  const viewState = useViewState();
+  const { viewState, viewCache } = useViewState();
 
   const [core, setCore] = useState();
 
@@ -38,6 +38,7 @@ const useCore = () => {
       chart,
       actions,
       viewState,
+      viewCache,
       picasso,
       progressive,
     });

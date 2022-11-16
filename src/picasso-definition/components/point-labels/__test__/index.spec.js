@@ -13,6 +13,7 @@ describe('point-labels', () => {
   let chartModel;
   let viewHandler;
   let models;
+  let animationsEnabled;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -32,9 +33,10 @@ describe('point-labels', () => {
       redererSettings: 'renderer-settings',
       transform: 'transform-function',
     };
-    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler), animationEnabled: sandbox.stub() } };
+    chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
     models = { layoutService, themeService, chartModel };
-    create = () => createPointLabels({ models });
+    animationsEnabled = () => true;
+    create = () => createPointLabels({ models, animationsEnabled });
     labels = { mode: 1 };
     layoutService.getLayoutValue.withArgs('labels').returns(labels);
     themeService.getStyles.returns({ label: { value: { fontFamily: 'Sans serif', fontSize: '1px', color: 'red' } } });
@@ -111,13 +113,12 @@ describe('point-labels', () => {
 
     describe('animation', () => {
       describe('enabled', () => {
-        it('should be true if animation is enabled in chartModel', () => {
-          chartModel.query.animationEnabled.returns(true);
+        it('should be true if animation is enabled', () => {
           expect(create().animations.enabled()).to.equal(true);
         });
 
-        it('should be false if animation is not enabled in chartModel', () => {
-          chartModel.query.animationEnabled.returns(false);
+        it('should be false if animation is not enabled', () => {
+          animationsEnabled = () => false;
           expect(create().animations.enabled()).to.equal(false);
         });
       });
@@ -125,38 +126,11 @@ describe('point-labels', () => {
       describe('trackBy', () => {
         it('should be return correct IDs', () => {
           let node = { type: 'text', pointValue: 1000 };
-          expect(create().animations.trackBy(node)).to.equal('label: 1000');
+          expect(create().animations.trackBy(node)).to.equal('text 1000');
           node = { type: 'line', pointValue: 2000 };
-          expect(create().animations.trackBy(node)).to.equal('line: 2000');
+          expect(create().animations.trackBy(node)).to.equal('line 2000');
           node = { type: 'rect', pointValue: 3000 };
-          expect(create().animations.trackBy(node)).to.equal('rect: 3000');
-        });
-      });
-
-      describe('compensateForLayoutChanges', () => {
-        let currentNodes = [{ x1: 10, x2: 10, y1: 10, y2: 100 }];
-        let currentRect = { x: 100 };
-        let previousRect = { x: 100 };
-
-        it('should not adjust node if the rect does not change', () => {
-          create().animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
-          expect(currentNodes).to.deep.equal([{ x1: 10, x2: 10, y1: 10, y2: 100 }]);
-        });
-
-        it('should adjust label correctly if the rect shifts 5px to right and increases 10px in width', () => {
-          currentRect = { width: 210, x: 15 };
-          previousRect = { width: 200, x: 10 };
-          currentNodes = [
-            { type: 'text', x: 50, y: 10 },
-            { type: 'line', x1: 51, x2: 51, y1: 11, y2: 15 },
-            { type: 'rect', x: 50, y: 10 },
-          ];
-          create().animations.compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
-          expect(currentNodes).to.deep.equal([
-            { type: 'text', x: 45, y: 10 },
-            { type: 'line', x1: 46, x2: 46, y1: 11, y2: 15 },
-            { type: 'rect', x: 45, y: 10 },
-          ]);
+          expect(create().animations.trackBy(node)).to.equal('rect 3000');
         });
       });
     });

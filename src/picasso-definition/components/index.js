@@ -13,7 +13,7 @@ import createNavigationPanel from './navigation-panel';
 import createMiniChart from './mini-chart';
 import createHeatMapHighLight from './heat-map-highlight';
 
-export default function createComponents({ context, models, picasso, chart, actions }) {
+export default function createComponents({ context, models, picasso, chart, actions, animationsEnabled }) {
   const { colorService, disclaimerModel, layoutService, themeService, chartModel, trendLinesService, tooltipService } =
     models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, themeService, picasso });
@@ -24,20 +24,20 @@ export default function createComponents({ context, models, picasso, chart, acti
 
   const components = [
     ...createOutOfBoundsSpace({ models }),
-    createGridLines(models),
-    ...createReferenceLines({ models, context }),
-    createPoint({ models, chart }),
-    createHeatMap(chartModel),
+    createGridLines(models, animationsEnabled),
+    ...createReferenceLines({ models, context, animationsEnabled }),
+    createPoint({ models, chart, animationsEnabled }),
+    createHeatMap(chartModel, animationsEnabled),
     createHeatMapHighLight({ chartModel, layoutService, actions, context }),
     ...trendLinesService.getComponents(),
-    ...createAxes({ models }),
+    ...createAxes({ models, animationsEnabled }),
     ...createAxisTitles({ models, context }),
-    createPointLabels({ models }),
+    createPointLabels({ models, animationsEnabled }),
     createOutOfBounds({ models, context, chart }),
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
-    createHeatMapLabels({ themeService, chartModel, picasso, context }),
+    createHeatMapLabels({ themeService, chartModel, picasso, context, animationsEnabled }),
     ...createNavigationPanel({ models, chart, actions, context }),
     ...createMiniChart({ models, context }),
     ...tooltipService.getComponents(),

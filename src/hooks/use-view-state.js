@@ -1,8 +1,9 @@
 import { useEffect, useState } from '@nebula.js/stardust';
-import { storage as createViewState } from 'qlik-chart-modules';
+import { cache as createViewCache, storage as createViewState } from 'qlik-chart-modules';
 
 export default function useViewState() {
   const [viewState, setViewState] = useState();
+  const [viewCache, setViewCache] = useState();
 
   useEffect(() => {
     setViewState(
@@ -11,7 +12,8 @@ export default function useViewState() {
         legendScrollOffset: undefined,
       })
     );
+    setViewCache(createViewCache());
   }, []);
 
-  return viewState;
+  return { viewCache, viewState };
 }

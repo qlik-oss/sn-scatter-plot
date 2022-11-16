@@ -1,7 +1,14 @@
 /* eslint-disable no-param-reassign */
 import KEYS from '../../../constants/keys';
 
-export default function createRefLines({ colorService, layoutService, chartModel, scale, key, minimumLayoutMode }) {
+export default function createRefLines({
+  colorService,
+  layoutService,
+  scale,
+  key,
+  minimumLayoutMode,
+  animationsEnabled,
+}) {
   const path = scale === KEYS.SCALE.X ? 'refLine.refLinesX' : 'refLine.refLinesY';
   const refLines = layoutService
     .getLayoutValue(path)
@@ -29,7 +36,7 @@ export default function createRefLines({ colorService, layoutService, chartModel
       },
     },
     animations: {
-      enabled: () => chartModel.query.animationEnabled(),
+      enabled: animationsEnabled,
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         switch (scale) {
           case KEYS.SCALE.X:
