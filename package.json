@@ -63,7 +63,7 @@
     "@nebula.js/cli": "2.3.1",
     "@nebula.js/cli-build": "2.3.1",
     "@nebula.js/cli-sense": "2.3.1",
-    "@nebula.js/cli-serve": "2.3.1",
+    "@nebula.js/cli-serve": "3.0.4",
     "@playwright/test": "1.25.1",
     "babel-eslint": "10.1.0",
     "babel-plugin-istanbul": "^6.1.1",
