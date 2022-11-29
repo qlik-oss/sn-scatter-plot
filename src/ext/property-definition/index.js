@@ -5,6 +5,9 @@ import showCompressionResolution from '../show-compression-resolution';
 import colorModeOptions from './color-mode-options';
 import showUseDimValCol from '../show-use-dim-val-col';
 import compressionNoteProperties from './compression-note-properties';
+import NUMBERS from '../../constants/numbers';
+
+const { MAX_NR_SCATTER, DEFAULT_VISIBLE_BUBBLES, MAX_VISIBLE_BUBBLES } = NUMBERS;
 
 const persistentColorsShow = (data) => !getValue(data, 'color.auto') && getValue(data, 'color.mode') === 'byDimension';
 
@@ -281,7 +284,9 @@ export default function propertyDefinition(env) {
                 expression: 'optional',
                 ref: 'maxVisibleBubbles',
                 translation: 'properties.dataPoints.maxVisibleBubbles',
-                defaultValue: 2500,
+                defaultValue: DEFAULT_VISIBLE_BUBBLES,
+                min: MAX_NR_SCATTER,
+                max: MAX_VISIBLE_BUBBLES,
               },
           gridLines: {
             type: 'items',
