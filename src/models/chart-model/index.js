@@ -164,6 +164,15 @@ export default function createChartModel({
     updateMeta(); // This can be done before progressive rendering
     let renderCount = 0;
 
+    const onFinishProgressive = () => {
+      requestAnimationFrame(() => {
+        meta.progressive = false;
+        actions.setProgressive(false);
+        progressive.timer = null;
+        resolve();
+      });
+    };
+
     const renderChunk = () => {
       progressive.timer = requestAnimationFrame(() => {
         extractDataPages();
@@ -187,10 +196,7 @@ export default function createChartModel({
         if (renderCount < nbrOfChunks) {
           renderChunk();
         } else {
-          meta.progressive = false;
-          actions.setProgressive(false);
-          progressive.timer = null;
-          resolve();
+          onFinishProgressive();
         }
       });
     };
