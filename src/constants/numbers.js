@@ -37,7 +37,7 @@ export default {
   LARGE_NUM_DATA_POINTS: 5000,
   DEFAULT_VISIBLE_BUBBLES: 2500,
   MAX_VISIBLE_BUBBLES: 100000,
-  CHUNK_SIZE: 1000,
+  CHUNK_SIZE: 3000,
 
   // Ratio = minichart_size/chart_size, Padding: away from the bottom right corner
   MINI_CHART: { RATIO: 0.15, PADDING: 10 },
