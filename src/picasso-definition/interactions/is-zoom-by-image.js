@@ -2,7 +2,6 @@ const isZoomByImage = (models, threshold = 0) => {
   const { layoutService, chartModel } = models;
   const { meta } = layoutService;
   if (!meta.isMaxVisibleBubblesEnabled) return false;
-  if (!(threshold > 0)) return true;
   if (meta.isBigData) {
     const dataPages = layoutService.getDataPages();
     if (dataPages.length) {

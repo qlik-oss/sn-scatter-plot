@@ -1,4 +1,5 @@
 import KEYS from '../../constants/keys';
+import NUMBERS from '../../constants/numbers';
 import zoom from '../../view-handler/zoom';
 import clearMinor from '../../utils/clear-minor';
 import isInBinValueSelection from '../../utils/is-in-bin-value-selection';
@@ -42,7 +43,7 @@ export default function native({ chart, actions, viewHandler, models }) {
             if (rectSize?.height && rectSize?.width) {
               componentSize = { ...rectSize };
             }
-            const enabledZoomByImage = isZoomByImage(models);
+            const enabledZoomByImage = isZoomByImage(models, NUMBERS.LARGE_NUM_DATA_POINTS);
             viewHandler.setInteractionInProgress(enabledZoomByImage);
             zoom({ e, chart, componentSize, viewHandler, models });
             e.preventDefault();

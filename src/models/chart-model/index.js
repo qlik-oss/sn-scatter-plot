@@ -128,13 +128,19 @@ export default function createChartModel({
     meta.isLargeNumVisibleBubbles = meta.numVisiblePoints > layoutService.meta.largeNumDataPoints;
   }
 
+  function resetProgressive() {
+    if (progressive.timer !== null) {
+      cancelAnimationFrame(progressive.timer);
+      progressive.timer = null;
+      progressive.renderPromise?.resolve();
+      progressive.renderPromise = null;
+    }
+  }
+
   function renderOnce() {
     actions.setProgressive(false);
     meta.progressive = false;
-    if (progressive.timer !== null) {
-      cancelAnimationFrame(progressive.timer);
-      progressive.renderPromise?.resolve();
-    }
+    resetProgressive();
     chart.update({
       partialData: true,
       excludeFromUpdate: EXCLUDE,
@@ -143,10 +149,7 @@ export default function createChartModel({
   }
 
   const renderProgressive = (resolve) => {
-    if (progressive.timer !== null) {
-      cancelAnimationFrame(progressive.timer);
-      progressive.renderPromise?.resolve();
-    }
+    resetProgressive();
     progressive.renderPromise = { resolve };
 
     actions.setProgressive(false);
@@ -175,6 +178,10 @@ export default function createChartModel({
 
     const renderChunk = () => {
       progressive.timer = requestAnimationFrame(() => {
+        if (!chart?.update) {
+          resetProgressive();
+          return;
+        }
         extractDataPages();
         const start = renderCount * NUMBERS.CHUNK_SIZE;
         const end = Math.min(dataSize, (renderCount + 1) * NUMBERS.CHUNK_SIZE);
@@ -225,10 +232,7 @@ export default function createChartModel({
   ];
 
   const update = ({ settings } = {}) => {
-    if (progressive.timer !== null) {
-      cancelAnimationFrame(progressive.timer);
-      progressive.renderPromise?.resolve();
-    }
+    resetProgressive();
     meta.progressive = false;
     meta.isPartialUpdating = settings === undefined;
     trendLinesService.update();
@@ -252,9 +256,7 @@ export default function createChartModel({
   };
 
   const brush = ({ render, nodes }) => {
-    if (progressive.timer !== null) {
-      cancelAnimationFrame(progressive.timer);
-    }
+    resetProgressive();
 
     const nbrOfChunks = Math.ceil(nodes.length / NUMBERS.CHUNK_SIZE);
     if (nbrOfChunks <= 1) {
@@ -266,6 +268,10 @@ export default function createChartModel({
 
     const renderChunk = () => {
       progressive.timer = requestAnimationFrame(() => {
+        if (!chart?.update) {
+          resetProgressive();
+          return;
+        }
         const start = renderCount * NUMBERS.CHUNK_SIZE;
         const end = Math.min(nodes.length, (renderCount + 1) * NUMBERS.CHUNK_SIZE);
         meta.progressive = { start, end, isFirst: renderCount === 0, isLast: renderCount === nbrOfChunks - 1 };
