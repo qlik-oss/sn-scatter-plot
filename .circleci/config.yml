@@ -86,6 +86,12 @@ jobs:
       - run:
           name: Integration tests
           command: yarn test:integration
+      - store_artifacts:
+          path: test/integration/index.spec.js-snapshots
+      - store_artifacts:
+          path: ./test/integration/__artifacts__
+      - store_artifacts:
+          path: test/integration/test-report
       - persist_to_workspace:
           root: ~/scatter
           paths:
