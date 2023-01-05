@@ -57,7 +57,7 @@ test.describe('sn scatter plot: ui integration tests to test visual bugs', () =>
         expect(await getTooltipContent(page)).toEqual('Density: 3805');
       });
     });
-    test.describe.only('Brush', () => {
+    test.describe('Brush', () => {
       test('Select by point ', async () => {
         const renderUrl = await route.renderFixture('scatter_render_tooltip.fix.js');
         // Open page in Nebula which renders fixture
