@@ -6,7 +6,7 @@ import isOob from '../out-of-bounds/is-oob';
 import compensateForLayoutChanges from '../animations/point/compensate';
 
 export default function createPoint({ models, chart, animationsEnabled }) {
-  const { layoutService, colorService, chartModel } = models;
+  const { layoutService, largeDataService, colorService, chartModel } = models;
   let compSize;
   let windowSizeMultiplier;
   const sizeScaleFn = createSizeScale(layoutService);
@@ -23,6 +23,7 @@ export default function createPoint({ models, chart, animationsEnabled }) {
     show: () => !dataHandler.getMeta().isBinnedData,
     brush: createBrush({
       layoutService,
+      largeDataService,
       chartModel,
     }),
     settings: {

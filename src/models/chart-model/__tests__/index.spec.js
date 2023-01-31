@@ -12,6 +12,7 @@ describe('chart-model', () => {
   let localeInfo;
   let hyperCube;
   let layoutService;
+  let largeDataService;
   let colorService;
   let trendLinesService;
   let actions;
@@ -99,6 +100,9 @@ describe('chart-model', () => {
     sandbox.stub(getVisiblePoints, 'default').returns(new Array(100));
     sandbox.stub(isProgressiveAllowed, 'default').returns(false);
     options = { chartAnimations: true };
+    largeDataService = {
+      shouldUseProgressive: () => isProgressiveAllowed.default(),
+    };
     constraints = { active: false };
     viewCache = { set: sandbox.stub(), get: sandbox.stub() };
     create = () =>
@@ -106,6 +110,7 @@ describe('chart-model', () => {
         chart,
         localeInfo,
         layoutService,
+        largeDataService,
         colorService,
         trendLinesService,
         actions,

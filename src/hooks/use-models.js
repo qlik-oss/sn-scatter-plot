@@ -20,6 +20,7 @@ import {
   dockService as createDockService,
   pluginService as createPluginService,
 } from 'qlik-chart-modules';
+import createLargeDataService from '../services/large-data-service';
 import layoutServiceMeta from '../services/layout-service/meta';
 import createTrenslinesService from '../services/trendlines-service';
 import createChartModel from '../models/chart-model';
@@ -85,6 +86,7 @@ const useModels = ({ core, flags }) => {
       source: layout,
       metaAdditionsFn: layoutServiceMeta(flags, qUnsupportedFeatures),
     });
+    const largeDataService = createLargeDataService({ layoutService, options });
     const logicalSize = getLogicalSize({ layout: layoutService.getLayout(), options });
     const dockService = createDockService({
       chart,
@@ -149,6 +151,7 @@ const useModels = ({ core, flags }) => {
       chart,
       localeInfo,
       layoutService,
+      largeDataService,
       picasso: picassoInstance,
       viewState,
       viewCache,
@@ -192,6 +195,7 @@ const useModels = ({ core, flags }) => {
     selectionService.setLayout(layoutService.getLayout());
     setModels({
       layoutService,
+      largeDataService,
       tickModel,
       chartModel,
       dockService,
