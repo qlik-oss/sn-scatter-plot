@@ -5,7 +5,6 @@ import NUMBERS from '../../constants/numbers';
 import createViewHandler from '../../view-handler';
 import getAutoFormatPatternFromRange from './format-pattern-from-range';
 import shouldUpdateTicks from './should-update-ticks';
-import isProgressiveAllowed from '../../utils/is-progressive-allowed';
 import getVisiblePoints from '../../utils/get-visible-points';
 import areSameVisiblePoints from '../../utils/are-same-visible-points';
 
@@ -13,6 +12,7 @@ export default function createChartModel({
   chart,
   localeInfo,
   layoutService,
+  largeDataService,
   colorService,
   viewState,
   viewCache,
@@ -214,7 +214,7 @@ export default function createChartModel({
   function updatePartial(interactionInProgress = false) {
     meta.isPartialUpdating = true;
     trendLinesService.update();
-    if (interactionInProgress || !isProgressiveAllowed(layoutService)) {
+    if (interactionInProgress || !largeDataService.shouldUseProgressive()) {
       renderOnce();
       return Promise.resolve();
     }
@@ -236,7 +236,7 @@ export default function createChartModel({
     meta.progressive = false;
     meta.isPartialUpdating = settings === undefined;
     trendLinesService.update();
-    if (!isProgressiveAllowed(layoutService)) {
+    if (!largeDataService.shouldUseProgressive()) {
       chart.update({
         data: getData(),
         settings,
@@ -314,7 +314,7 @@ export default function createChartModel({
       interactionInProgress ||
       meta.isPartialUpdating ||
       meta.isSizeChanging ||
-      isProgressiveAllowed(layoutService) ||
+      largeDataService.shouldUseProgressive() ||
       layoutService.meta.isBigData !== viewCache.get('isBigData')
     ) {
       return false;

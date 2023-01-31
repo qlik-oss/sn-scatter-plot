@@ -1,10 +1,9 @@
 import getSelectionContext from './get-selection-context';
-import isProgressiveAllowed from '../../utils/is-progressive-allowed';
 import { computeWidth, computeColor } from './border-width-color';
 
 const INACTIVE_OPACITY = 0.3;
 
-export default function createBrush({ layoutService, chartModel }) {
+export default function createBrush({ layoutService, largeDataService, chartModel }) {
   const data = ({ brush }) => {
     const res = brush.brushes();
     return res.length > 1 ? ['x', 'y'] : undefined;
@@ -52,7 +51,7 @@ export default function createBrush({ layoutService, chartModel }) {
     customRender: !layoutService.meta.isMaxVisibleBubblesEnabled
       ? undefined
       : ({ render, nodes }) => {
-          if (isProgressiveAllowed(layoutService)) {
+          if (largeDataService.shouldUseProgressive()) {
             chartModel.command.brush({ render, nodes });
           } else {
             render(nodes);

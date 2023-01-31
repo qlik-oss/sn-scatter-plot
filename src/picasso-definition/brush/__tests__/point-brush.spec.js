@@ -5,6 +5,7 @@ import * as isProgressiveAllowed from '../../../utils/is-progressive-allowed';
 describe('createPointBrush', () => {
   let sandbox;
   let layoutService;
+  let largeDataService;
   let chartModel;
   let strokeWidthInBigData;
   let strokeColorInBigData;
@@ -32,10 +33,12 @@ describe('createPointBrush', () => {
     strokeColorInLargeData = sandbox.spy();
     sandbox.stub(getSelectionContext, 'default').returns('selection');
     sandbox.stub(isProgressiveAllowed, 'default').returns(false);
+    largeDataService = { shouldUseProgressive: () => isProgressiveAllowed.default() };
     render = sandbox.spy();
     create = () =>
       createBrush({
         layoutService,
+        largeDataService,
         chartModel,
         strokeWidthInBigData,
         strokeColorInBigData,
