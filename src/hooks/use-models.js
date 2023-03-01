@@ -19,7 +19,6 @@ import {
   dockService as createDockService,
   pluginService as createPluginService,
 } from 'qlik-chart-modules';
-import themeStyleMatrix from '../services/theme-service/theme-style-matrix';
 import layoutServiceMeta from '../services/layout-service/meta';
 import createTrenslinesService from '../services/trendlines-service';
 import createChartModel from '../models/chart-model';
@@ -95,7 +94,7 @@ const useModels = ({ core, flags }) => {
         type: 'x-y',
       },
     });
-    const themeService = createThemeService({ theme, styleMatrix: themeStyleMatrix });
+    const themeService = createThemeService({ theme, config: { id: 'scatterPlot' } });
     const pluginArgs = getPluginArgs(layoutService);
     const pluginService = createPluginService({ picassoInstance, plugins, pluginArgs });
     const extremumModel = createExtremumModel(layoutService, options.viewState);
