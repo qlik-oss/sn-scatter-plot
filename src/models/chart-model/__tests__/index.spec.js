@@ -1,4 +1,6 @@
+import * as animations from '../animations-properties-handler';
 import * as KEYS from '../../../constants/keys';
+import NUMBERS from '../../../constants/numbers';
 import createChartModel from '..';
 import * as getAutoFormatPatternFromRange from '../format-pattern-from-range';
 import * as shouldUpdateTicks from '../should-update-ticks';
@@ -26,7 +28,6 @@ describe('chart-model', () => {
   let dataPages;
   let dataHandler;
   let options;
-  let constraints;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -81,6 +82,7 @@ describe('chart-model', () => {
       meta: { isContinuous: false, isSnapshot: false, isBigData: false },
       getHyperCube: sandbox.stub().returns(hyperCube),
       getHyperCubeValue: sandbox.stub(),
+      getLayout: sandbox.stub(),
     };
     trendLinesService = {
       getData: () => [{ trendlineData: 'here' }],
@@ -103,8 +105,10 @@ describe('chart-model', () => {
     largeDataService = {
       shouldUseProgressive: () => isProgressiveAllowed.default(),
     };
-    constraints = { active: false };
     viewCache = { set: sandbox.stub(), get: sandbox.stub() };
+    sandbox.stub(animations, 'cacheProperties');
+    sandbox.stub(animations, 'propertiesHaveChanged');
+
     create = () =>
       createChartModel({
         chart,
@@ -120,7 +124,6 @@ describe('chart-model', () => {
         extremumModel,
         dataHandler,
         options,
-        constraints,
       });
   });
 
@@ -191,35 +194,80 @@ describe('chart-model', () => {
     });
 
     describe('animationsEnabled', () => {
-      it('should return correctly', () => {
-        // chartAnimations
-        options.chartAnimations = false;
-        let chartModel = create();
-        expect(chartModel.query.animationsEnabled()).to.equal(false);
+      let chartModel;
 
-        // constraints active
+      beforeEach(() => {
         options.chartAnimations = true;
-        constraints.active = true;
-        chartModel = create();
-        expect(chartModel.query.animationsEnabled()).to.equal(false);
-
-        constraints.active = false;
-        chartModel = create();
-
-        viewHandler.setInteractionInProgress(true);
-        expect(chartModel.query.animationsEnabled()).to.equal(false);
-
-        viewHandler.setInteractionInProgress(false);
-        layoutService.meta.isBigData = true;
-        viewCache.get.returns(true);
-        chartModel.command.setMeta({ isPartialUpdating: false, isSizeChanging: undefined });
-        expect(chartModel.query.animationsEnabled()).to.equal(true);
-
-        layoutService.meta.isBigData = true;
-        viewCache.get.returns(true);
-        viewHandler.setInteractionInProgress(false);
+        animations.propertiesHaveChanged.returns(false);
+        viewHandler.getInteractionInProgress.returns(false);
+        isProgressiveAllowed.default.returns(false);
+        layoutService.meta.isBigData = false;
+        viewCache.get.withArgs('isBigData').returns(false);
         layoutService.getHyperCubeValue.returns(10);
+        sandbox.stub(NUMBERS, 'MAX_NR_ANIMATION').value(11);
+        chartModel = create();
+        chartModel.command.setMeta({ isPartialUpdating: false, isSizeChanging: false });
+      });
+
+      it('should return true under favorable conditions', () => {
         expect(chartModel.query.animationsEnabled()).to.equal(true);
+      });
+
+      it('should return false if animation option is false', () => {
+        options.chartAnimations = false;
+        chartModel = create();
+        expect(chartModel.query.animationsEnabled()).to.equal(false);
+      });
+
+      it('should return false if properties have changed', () => {
+        animations.propertiesHaveChanged.returns(true);
+        chartModel = create();
+        expect(chartModel.query.animationsEnabled()).to.equal(false);
+      });
+
+      it('should return false if interaction is in progress', () => {
+        viewHandler.getInteractionInProgress.returns(true);
+        chartModel = create();
+        expect(chartModel.query.animationsEnabled()).to.equal(false);
+      });
+
+      it('should return false if isPartialUpdating is true', () => {
+        chartModel = create();
+        chartModel.command.setMeta({ isPartialUpdating: true, isSizeChanging: false });
+        expect(chartModel.query.animationsEnabled()).to.equal(false);
+      });
+
+      it('should return false if isSizeChanging is true', () => {
+        chartModel = create();
+        chartModel.command.setMeta({ isPartialUpdating: false, isSizeChanging: true });
+        expect(chartModel.query.animationsEnabled()).to.equal(false);
+      });
+
+      it('should return false if progressive rendering', () => {
+        isProgressiveAllowed.default.returns(true);
+        chartModel = create();
+        expect(chartModel.query.animationsEnabled()).to.equal(false);
+      });
+
+      it('should return false if changing from bubbles to heatmap', () => {
+        layoutService.meta.isBigData = true;
+        viewCache.get.withArgs('isBigData').returns(false);
+        chartModel = create();
+        expect(chartModel.query.animationsEnabled()).to.equal(false);
+      });
+
+      it('should return false if changing from heatmap to bubbles', () => {
+        layoutService.meta.isBigData = false;
+        viewCache.get.withArgs('isBigData').returns(true);
+        chartModel = create();
+        expect(chartModel.query.animationsEnabled()).to.equal(false);
+      });
+
+      it('should return false if showing bubbles, and the number of bubbles exceeds MAX_NR_ANIMATION', () => {
+        layoutService.getHyperCubeValue.returns(12);
+        viewCache.get.withArgs('isBigData').returns(true);
+        chartModel = create();
+        expect(chartModel.query.animationsEnabled()).to.equal(false);
       });
     });
   });
@@ -297,43 +345,49 @@ describe('chart-model', () => {
         expect(trendLinesService.update).to.have.been.calledOnce;
       });
 
-      describe('getBinnedDataConfig', () => {
-        describe('the returned object', () => {
-          it('should have correct config.parse.fields function', () => {
-            dataHandler.getMeta.returns({ isBinnedData: true });
-            create().command.update();
-            const binnedDataConfigObject = chart.update.args[0][0].data[1];
-            expect(binnedDataConfigObject.config.parse.fields()).to.deep.equal([
-              {
-                key: 'fb',
-                title: 'Bin',
-              },
-              {
-                key: 'fbx',
-                title: 'X',
-              },
-              {
-                key: 'fby',
-                title: 'Y',
-              },
-              {
-                key: 'fbd',
-                title: 'Density',
-              },
-            ]);
-          });
+      it('should call animations cacheProperties', () => {
+        const chartModel = create();
+        chartModel.command.update({ settings: { key: 'settings' } });
+        expect(animations.cacheProperties).calledOnce;
+      });
+    });
 
-          it('should have correct config.parse.row function', () => {
-            dataHandler.getMeta.returns({ isBinnedData: true });
-            create().command.update();
-            const binnedDataConfigObject = chart.update.args[0][0].data[1];
-            const d = { qElemNumber: 1, qText: [1, 2, 3, 4], qNum: 5 };
-            expect(binnedDataConfigObject.config.parse.row(d)).to.deep.equal({
-              bin: 1,
-              binX: 2,
-              binY: 3,
-              binDensity: 5,
-            });
+    describe('getBinnedDataConfig', () => {
+      describe('the returned object', () => {
+        it('should have correct config.parse.fields function', () => {
+          dataHandler.getMeta.returns({ isBinnedData: true });
+          create().command.update();
+          const binnedDataConfigObject = chart.update.args[0][0].data[1];
+          expect(binnedDataConfigObject.config.parse.fields()).to.deep.equal([
+            {
+              key: 'fb',
+              title: 'Bin',
+            },
+            {
+              key: 'fbx',
+              title: 'X',
+            },
+            {
+              key: 'fby',
+              title: 'Y',
+            },
+            {
+              key: 'fbd',
+              title: 'Density',
+            },
+          ]);
+        });
+
+        it('should have correct config.parse.row function', () => {
+          dataHandler.getMeta.returns({ isBinnedData: true });
+          create().command.update();
+          const binnedDataConfigObject = chart.update.args[0][0].data[1];
+          const d = { qElemNumber: 1, qText: [1, 2, 3, 4], qNum: 5 };
+          expect(binnedDataConfigObject.config.parse.row(d)).to.deep.equal({
+            bin: 1,
+            binX: 2,
+            binY: 3,
+            binDensity: 5,
           });
         });
       });
