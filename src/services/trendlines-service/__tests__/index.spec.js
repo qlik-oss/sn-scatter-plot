@@ -50,5 +50,45 @@ describe('trendlines-service', () => {
         compensateForLayoutChanges: sinon.match.func,
       },
     });
+
+    // animations.compensateForLayoutChanges
+    const currentNodes = [
+      {
+        major: { size: 1000, p: 'x' },
+        minor: { size: 500, p: 'y' },
+        points: [
+          { major: 0.25, minor: 0.75, minor0: 1 },
+          { major: 0.75, minor: 0.25, minor0: 1 },
+        ],
+      },
+    ];
+
+    const previousRect = { width: 1000, height: 500, x: 80, y: 50 };
+    const currentRect = { width: 1040, height: 470, x: 40, y: 80 };
+    const { compensateForLayoutChanges } = chartModules.trendlinesService.getCall(0).args[0].animations;
+    compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+    expect(currentNodes).to.deep.equal([
+      {
+        major: { size: 1000, p: 'x' },
+        minor: { size: 500, p: 'y' },
+        points: [
+          { major: 40 / 1000 + 0.25, minor: -30 / 500 + 0.75, minor0: -30 / 500 + 1, modified: true },
+          { major: 40 / 1000 + 0.75, minor: -30 / 500 + 0.25, minor0: -30 / 500 + 1, modified: true },
+        ],
+      },
+    ]);
+
+    // not compensate for nodes that have already modified
+    compensateForLayoutChanges({ currentNodes, currentRect, previousRect });
+    expect(currentNodes).to.deep.equal([
+      {
+        major: { size: 1000, p: 'x' },
+        minor: { size: 500, p: 'y' },
+        points: [
+          { major: 40 / 1000 + 0.25, minor: -30 / 500 + 0.75, minor0: -30 / 500 + 1, modified: true },
+          { major: 40 / 1000 + 0.75, minor: -30 / 500 + 0.25, minor0: -30 / 500 + 1, modified: true },
+        ],
+      },
+    ]);
   });
 });
