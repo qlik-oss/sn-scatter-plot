@@ -3,7 +3,15 @@ import { setValue, getValue } from 'qlik-chart-modules';
 import PATHS from '../../constants/paths';
 
 export function extractProperties(layout) {
-  const properties = extend(true, {}, layout);
+  // Destructuring to improve performance when data are large
+  const { qHyperCube, ...restOfLayout } = layout;
+  const { qDataPages, qStackedDataPages, qTreeDataPages, ...restOfCube } = qHyperCube;
+  const properties = extend(
+    true,
+    {},
+    { ...restOfLayout, qHyperCube: { ...restOfCube, qDataPages: null, qStackedDataPages: null, qTreeDataPages: null } }
+  );
+
   const { dataRelatedPropertiesPaths: ignoredPaths } = PATHS;
 
   ignoredPaths.forEach((path) => {

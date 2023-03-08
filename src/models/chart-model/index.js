@@ -314,13 +314,13 @@ export default function createChartModel({
     const numOfPoints = layoutService.getHyperCubeValue('qSize.qcy', 0);
     if (
       options.chartAnimations === false ||
-      propertiesHaveChanged({ viewCache, layout: layoutService.getLayout() }) ||
       interactionInProgress ||
       meta.isPartialUpdating ||
       meta.isSizeChanging ||
       largeDataService.shouldUseProgressive() ||
       layoutService.meta.isBigData !== viewCache.get('isBigData') ||
-      (!layoutService.meta.isBigData && numOfPoints > NUMBERS.MAX_NR_ANIMATION)
+      (!layoutService.meta.isBigData && numOfPoints > NUMBERS.MAX_NR_ANIMATION) ||
+      propertiesHaveChanged({ viewCache, layout: layoutService.getLayout() })
     ) {
       return false;
     }

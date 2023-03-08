@@ -1,7 +1,7 @@
 import * as PATHS from '../../../constants/paths';
 import { cacheProperties, propertiesHaveChanged } from '../animations-properties-handler';
 
-describe('black-list-properties-handler', () => {
+describe('animations-properties-handler', () => {
   let viewCache;
   let cachedContent;
   let layout;
@@ -22,6 +22,7 @@ describe('black-list-properties-handler', () => {
     layout = {
       dog: { speed: 'fast', ears: [{ shape: 'bat' }, { shape: 'drop' }] },
       cat: { fur: 'black', legs: [{ color: 'red' }, { color: 'pink' }, { color: 'blue' }, { color: 'tan' }] },
+      qHyperCube: { qDataPages: 'pages', qStackedDataPages: 'stack' },
     };
     cacheProperties({ viewCache, layout });
   });
@@ -34,7 +35,7 @@ describe('black-list-properties-handler', () => {
     it('should ignore data-related properties by setting them to null', () => {
       expect(cachedContent).to.deep.equal({
         dataIndependentProperties:
-          '{"dog":{"speed":null,"ears":[{"shape":"bat"},{"shape":"drop"}]},"cat":{"fur":"black","legs":[{"color":null},{"color":null},{"color":null},{"color":null}]}}',
+          '{"dog":{"speed":null,"ears":[{"shape":"bat"},{"shape":"drop"}]},"cat":{"fur":"black","legs":[{"color":null},{"color":null},{"color":null},{"color":null}]},"qHyperCube":{"qDataPages":null,"qStackedDataPages":null,"qTreeDataPages":null}}',
       });
     });
 
@@ -45,7 +46,7 @@ describe('black-list-properties-handler', () => {
       cacheProperties({ viewCache, layout });
       expect(cachedContent).to.deep.equal({
         dataIndependentProperties:
-          '{"dog":{"speed":null,"ears":[{"shape":"bat"},{"shape":"drop"}]},"cat":{"fur":"black","legs":[{"color":null},{"color":null},{"color":null},{"color":null}]}}',
+          '{"dog":{"speed":null,"ears":[{"shape":"bat"},{"shape":"drop"}]},"cat":{"fur":"black","legs":[{"color":null},{"color":null},{"color":null},{"color":null}]},"qHyperCube":{"qDataPages":null,"qStackedDataPages":null,"qTreeDataPages":null}}',
       });
     });
   });
@@ -59,6 +60,7 @@ describe('black-list-properties-handler', () => {
       layout = {
         dog: { speed: 'fast', ears: [{ shape: 'rose' }, { shape: 'drop' }] },
         cat: { fur: 'white', legs: [{ color: 'red' }, { color: 'pink' }, { color: 'blue' }, { color: 'tan' }] },
+        qHyperCube: { qDataPages: 'pages', qStackedDataPages: 'stack' },
       };
       expect(propertiesHaveChanged({ viewCache, layout })).to.equal(true);
     });
@@ -67,6 +69,7 @@ describe('black-list-properties-handler', () => {
       layout = {
         dog: { speed: 'slow', ears: [{ shape: 'bat' }, { shape: 'drop' }] },
         cat: { fur: 'black', legs: [{ color: 'red' }, { color: 'gray' }, { color: 'blue' }, { color: 'tan' }] },
+        qHyperCube: { qDataPages: 'pages', qStackedDataPages: 'stack' },
       };
       expect(propertiesHaveChanged({ viewCache, layout })).to.equal(false);
     });
