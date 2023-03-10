@@ -11,6 +11,7 @@ export default {
     'qHyperCube.qMeasureInfo[].qApprMaxGlyphCount',
     'qHyperCube.qMeasureInfo[].qMax',
     'qHyperCube.qMeasureInfo[].qMin',
+    'qHyperCube.qMeasureInfo[].qTrendLines',
     'qHyperCube.qTreeNodesOnDim',
   ],
 };
