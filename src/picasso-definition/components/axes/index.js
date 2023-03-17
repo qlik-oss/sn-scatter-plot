@@ -4,10 +4,11 @@ import MODES from '../../../constants/modes';
 import NUMBERS from '../../../constants/numbers';
 
 export default function createAxes({ models, animationsEnabled }) {
-  const { layoutService, dockService, themeService, chartModel } = models;
+  const { layoutService, dockService, themeService, styleModel, chartModel } = models;
   const { xAxis, yAxis } = layoutService.getLayout();
 
   const style = themeService.getStyles();
+  const labelStyle = styleModel.query.axis.label.getStyle();
   const viewHandler = chartModel.query.getViewHandler();
   const trackBy = (node, i) => {
     if (i === 0) {
@@ -33,9 +34,9 @@ export default function createAxes({ models, animationsEnabled }) {
           settings: {
             labels: {
               show: xAxis.show !== 'title',
-              fontFamily: style.axis.label.name.fontFamily,
-              fontSize: style.axis.label.name.fontSize,
-              fill: style.axis.label.name.color,
+              fontFamily: labelStyle.fontFamily,
+              fontSize: labelStyle.fontSize,
+              fill: labelStyle.fill,
             },
             line: {
               stroke: style.axis.line.major.color,
@@ -77,9 +78,9 @@ export default function createAxes({ models, animationsEnabled }) {
           settings: {
             labels: {
               show: yAxis.show !== 'title',
-              fontFamily: style.axis.label.name.fontFamily,
-              fontSize: style.axis.label.name.fontSize,
-              fill: style.axis.label.name.color,
+              fontFamily: labelStyle.fontFamily,
+              fontSize: labelStyle.fontSize,
+              fill: labelStyle.fill,
             },
             line: {
               stroke: style.axis.line.major.color,

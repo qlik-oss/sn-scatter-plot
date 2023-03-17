@@ -9,7 +9,7 @@ export default function createXAxisTitle({
   rtl,
   layoutService,
   dockService,
-  themeService,
+  styleModel,
   propertiesModel,
 }) {
   const { xAxis } = layoutService.getLayout();
@@ -24,7 +24,7 @@ export default function createXAxisTitle({
     return false;
   }
 
-  const styles = themeService.getStyles();
+  const titleStyle = styleModel.query.axis.title.getStyle();
   const properties = propertiesModel.query.getProperties();
   const xAxisInfo = layoutService.getHyperCubeValue('qMeasureInfo.0');
 
@@ -48,9 +48,9 @@ export default function createXAxisTitle({
       selections: undefined,
     },
     style: {
-      fontFamily: styles.axis.title.fontFamily,
-      fontSize: styles.axis.title.fontSize,
-      color: styles.axis.title.color,
+      fontFamily: titleStyle.fontFamily,
+      fontSize: titleStyle.fontSize,
+      color: titleStyle.color,
     },
   };
 

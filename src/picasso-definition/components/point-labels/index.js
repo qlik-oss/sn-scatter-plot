@@ -11,14 +11,14 @@ const LABEL_MODE = {
 };
 
 export default function createPointLabels({ models, animationsEnabled }) {
-  const { layoutService, themeService, chartModel } = models;
+  const { layoutService, themeService, chartModel, styleModel } = models;
   const labels = layoutService.getLayoutValue('labels', {});
   if (labels.mode === LABEL_MODE.NONE) {
     return false;
   }
 
   const style = themeService.getStyles();
-  const { fontFamily, fontSize, color } = style.label?.value || {};
+  const labelStyle = styleModel.query.label.getStyle();
   const viewHandler = chartModel.query.getViewHandler();
   const { transform } = viewHandler;
 
@@ -37,9 +37,9 @@ export default function createPointLabels({ models, animationsEnabled }) {
       // debugMode: true,
     },
     style: {
-      fontFamily,
-      fontSize,
-      fill: color,
+      fontFamily: labelStyle.fontFamily,
+      fontSize: labelStyle.fontSize,
+      fill: labelStyle.fill,
       backgroundColor: style.backgroundColor,
     },
     animations: {

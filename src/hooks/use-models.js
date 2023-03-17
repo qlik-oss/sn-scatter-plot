@@ -22,7 +22,7 @@ import {
 } from 'qlik-chart-modules';
 import createLargeDataService from '../services/large-data-service';
 import layoutServiceMeta from '../services/layout-service/meta';
-import createTrenslinesService from '../services/trendlines-service';
+import createTrendlinesService from '../services/trendlines-service';
 import createChartModel from '../models/chart-model';
 import createTickModel from '../models/tick-model';
 import createSelectionService from '../services/selection-service';
@@ -35,6 +35,7 @@ import createExtremumModel from '../models/extremum-model';
 import createDisclaimerModel from '../models/disclaimer-model';
 import createPropertiesModel from '../models/properties-model';
 import createDataHandler from '../data-handler';
+import createStyleModel from '../models/style-model';
 
 const useModels = ({ core, flags }) => {
   const layout = useStaleLayout();
@@ -123,7 +124,7 @@ const useModels = ({ core, flags }) => {
 
     let chartModel;
     let tickModel;
-    const trendLinesService = createTrenslinesService({
+    const trendLinesService = createTrendlinesService({
       chart,
       colorService,
       animationsEnabled: () => chartModel.query.animationsEnabled(),
@@ -191,6 +192,7 @@ const useModels = ({ core, flags }) => {
     });
 
     const disclaimerModel = createDisclaimerModel({ layoutService });
+    const styleModel = createStyleModel({ layoutService, themeService, flags });
 
     selectionService.setLayout(layoutService.getLayout());
     setModels({
@@ -209,6 +211,7 @@ const useModels = ({ core, flags }) => {
       propertiesModel,
       trendLinesService,
       app,
+      styleModel,
     });
   }, [
     model,
