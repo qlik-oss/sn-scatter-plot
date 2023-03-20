@@ -50,7 +50,7 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, flags, translator, theme) 
         : undefined,
       labelValueSection: flags?.isEnabled('CLIENT_IM_3050')
         ? {
-            translation: 'properties.labels',
+            translation: 'properties.value.label',
             component: 'panel-section',
             items: {
               labelItems: {
