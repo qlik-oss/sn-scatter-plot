@@ -7,6 +7,7 @@ import getAutoFormatPatternFromRange from './format-pattern-from-range';
 import shouldUpdateTicks from './should-update-ticks';
 import getVisiblePoints from '../../utils/get-visible-points';
 import areSameVisiblePoints from '../../utils/are-same-visible-points';
+import { cacheProperties, propertiesHaveChanged } from './animations-properties-handler';
 
 export default function createChartModel({
   chart,
@@ -24,7 +25,6 @@ export default function createChartModel({
   getCurrentYTicks,
   getYTicks,
   options,
-  constraints,
 }) {
   const EXCLUDE = [
     KEYS.COMPONENT.X_AXIS_TITLE,
@@ -243,6 +243,7 @@ export default function createChartModel({
       });
       updateMeta();
       viewCache.set('isBigData', layoutService.meta.isBigData);
+      cacheProperties({ viewCache, layout: layoutService.getLayout() });
       return Promise.resolve();
     }
     // Render the first time without data
@@ -252,6 +253,8 @@ export default function createChartModel({
       settings,
     });
     insertDataPages();
+    viewCache.set('isBigData', layoutService.meta.isBigData);
+    cacheProperties({ viewCache, layout: layoutService.getLayout() });
     return new Promise((resolve, reject) => renderProgressive(resolve, reject));
   };
 
@@ -308,23 +311,21 @@ export default function createChartModel({
 
   const animationsEnabled = () => {
     const interactionInProgress = viewHandler.getInteractionInProgress();
+    const numOfPoints = layoutService.getHyperCubeValue('qSize.qcy', 0);
     if (
       options.chartAnimations === false ||
-      constraints.active ||
       interactionInProgress ||
       meta.isPartialUpdating ||
       meta.isSizeChanging ||
       largeDataService.shouldUseProgressive() ||
-      layoutService.meta.isBigData !== viewCache.get('isBigData')
+      layoutService.meta.isBigData !== viewCache.get('isBigData') ||
+      (!layoutService.meta.isBigData && numOfPoints > NUMBERS.MAX_NR_ANIMATION) ||
+      propertiesHaveChanged({ viewCache, layout: layoutService.getLayout() })
     ) {
       return false;
     }
 
-    if (layoutService.meta.isBigData) {
-      return true;
-    }
-
-    return layoutService.getHyperCubeValue('qSize.qcy', 0) <= NUMBERS.MAX_NR_ANIMATION && !interactionInProgress;
+    return true;
   };
 
   let updateTicks = false;

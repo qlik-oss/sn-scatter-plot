@@ -1,16 +1,6 @@
+/* eslint-disable no-param-reassign */
 import { trendlinesService } from 'qlik-chart-modules';
 import KEYS from '../../constants/keys';
-
-function movePath(path, distance) {
-  let counter = 0;
-  return path.replace(/[\d.e+-]+/g, (val) => {
-    ++counter;
-    if (counter % 2 === 1) {
-      return String(parseFloat(val) + distance);
-    }
-    return val;
-  });
-}
 
 export default function createTrenslinesService({
   chart,
@@ -47,11 +37,19 @@ export default function createTrenslinesService({
       compensateForLayoutChanges({ currentNodes, currentRect, previousRect }) {
         if (currentRect.x !== previousRect.x) {
           const deltaX = currentRect.x - previousRect.x;
+          const deltaY = currentRect.y - previousRect.y;
           currentNodes.forEach((node) => {
-            if (node.d) {
-              // eslint-disable-next-line no-param-reassign
-              node.d = movePath(node.d, -deltaX);
-            }
+            const deltaMajor = node.major.p === 'x' ? deltaX / node.major.size : deltaY / node.major.size;
+            const deltaMinor = node.minor.p === 'y' ? deltaY / node.minor.size : deltaX / node.minor.size;
+
+            node.points.forEach((point) => {
+              if (!point.modified) {
+                point.major -= deltaMajor;
+                point.minor -= deltaMinor;
+                point.minor0 -= deltaMinor;
+                point.modified = true;
+              }
+            });
           });
         }
       },
