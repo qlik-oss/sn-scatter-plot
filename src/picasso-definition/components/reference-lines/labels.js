@@ -55,20 +55,20 @@ export default function createRefLineLabels({
 
   const colorModel = { resolveUIColor: colorService.getPaletteColor };
   const labelStyle = styleModel.query.referenceLine.label.getStyle();
+  const hasStyleColor = layoutService.getLayoutValue('components', [])?.find((c) => c.key === 'referenceLine')
+    ?.referenceLine?.label?.name?.color?.color;
 
-  const labels = refLineLabels.map((refLineLayout) => {
-    const useStandardColor = labelStyle.fill === refLineLayout.paletteColor || labelStyle.fill === refLineLayout.color;
-    const standardColor = colorModel.resolveUIColor(refLineLayout.paletteColor || { index: refLineLayout.color });
-    return {
-      text: refLineLayout.label,
-      fill: useStandardColor ? standardColor : labelStyle.fill,
-      showValue: refLineLayout.showValue !== false,
-      showLabel: refLineLayout.showLabel !== false,
-      value: refLineLayout.refLineExpr.value,
-      valueLabel: refLineLayout.refLineExpr.label,
-      scale,
-    };
-  });
+  const labels = refLineLabels.map((refLineLayout) => ({
+    text: refLineLayout.label,
+    fill: hasStyleColor
+      ? labelStyle.fill
+      : colorModel.resolveUIColor(refLineLayout.paletteColor || { index: refLineLayout.color }),
+    showValue: refLineLayout.showValue !== false,
+    showLabel: refLineLayout.showLabel !== false,
+    value: refLineLayout.refLineExpr.value,
+    valueLabel: refLineLayout.refLineExpr.label,
+    scale,
+  }));
 
   const style = extend(true, {}, defaultStyle, themeStyle);
   const oobColors = getOobColors(style, theme);
