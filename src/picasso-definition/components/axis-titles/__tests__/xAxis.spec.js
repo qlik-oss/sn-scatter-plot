@@ -8,8 +8,8 @@ describe('x-axis-title', () => {
   let rtl;
   let layoutService;
   let dockService;
-  let themeService;
   let propertiesModel;
+  let styleModel;
   let xAxis;
   let create;
 
@@ -31,8 +31,14 @@ describe('x-axis-title', () => {
       getHyperCube: sandbox.stub(),
       getHyperCubeValue: sandbox.stub(),
     };
-    themeService = {
-      getStyles: sandbox.stub(),
+    styleModel = {
+      query: {
+        axis: {
+          title: {
+            getStyle: sandbox.stub(),
+          },
+        },
+      },
     };
     create = () =>
       createMajorAxisTitle({
@@ -43,7 +49,7 @@ describe('x-axis-title', () => {
         rtl,
         layoutService,
         dockService,
-        themeService,
+        styleModel,
         propertiesModel,
       });
   });
@@ -64,14 +70,10 @@ describe('x-axis-title', () => {
         },
       },
     };
-    themeService.getStyles.returns({
-      axis: {
-        title: {
-          fontFamily: 'title-font-family',
-          fontSize: 'title-font-size',
-          color: 'title-color',
-        },
-      },
+    styleModel.query.axis.title.getStyle.returns({
+      fontFamily: 'title-font-family',
+      fontSize: 'title-font-size',
+      color: 'title-color',
     });
     propertiesModel = {
       query: {

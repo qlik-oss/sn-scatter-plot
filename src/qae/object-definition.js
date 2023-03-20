@@ -464,6 +464,11 @@ const objectDefinition = () => {
        */
       max: 10,
     },
+    /**
+     * Styling of chart components.
+     * @type {scatterPlotStyle[]}
+     */
+    components: [],
   };
 
   return definition;
@@ -508,6 +513,42 @@ export default objectDefinition;
  * @property {paletteColor} paletteColor
  * @property {boolean} dashed=true
  * @property {string} lineDash Represents the lengths of the dashes and the breaks
+ */
+
+/**
+ * @typedef {object} scatterPlotStyle
+ * @property {string} key Determines which component the settings apply to.
+ * @property {axisStyle} axis
+ * @property {labelStyle} label
+ * @property {referenceLineStyle} referenceLine
+ */
+
+/**
+ * @typedef {object} axisStyle
+ * @property {labelNameStyle} label
+ * @property {fontStyle} title
+ */
+
+/**
+ * @typedef {object} labelStyle
+ * @property {fontStyle} value
+ */
+
+/**
+ * @typedef {object} referenceLineStyle
+ * @property {labelNameStyle} label
+ */
+
+/**
+ * @typedef {object} labelNameStyle
+ * @property {fontStyle} name
+ */
+
+/**
+ * @typedef {object} fontStyle
+ * @property {paletteColor} color
+ * @property {string} fontFamily
+ * @property {string} fontSize
  */
 
 /**

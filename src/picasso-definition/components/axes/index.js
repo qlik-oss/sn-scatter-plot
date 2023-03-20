@@ -4,7 +4,7 @@ import MODES from '../../../constants/modes';
 import NUMBERS from '../../../constants/numbers';
 
 export default function createAxes({ models, animationsEnabled }) {
-  const { layoutService, dockService, themeService, styleModel, chartModel } = models;
+  const { layoutService, dockService, themeService, chartModel, styleModel } = models;
   const { xAxis, yAxis } = layoutService.getLayout();
 
   const style = themeService.getStyles();

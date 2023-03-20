@@ -68,7 +68,11 @@ describe('createStyleService', () => {
   });
 
   it('should have correct properties', () => {
-    expect(create()).to.have.all.keys(['axis', 'label', 'referenceLine']);
+    expect(create()).to.have.all.keys(['query']);
+  });
+
+  it('query should have correct properties', () => {
+    expect(create().query).to.have.all.keys(['axis', 'label', 'referenceLine']);
   });
 
   describe('axis', () => {
@@ -92,14 +96,9 @@ describe('createStyleService', () => {
             key: 'axis',
             axis: { title: { fontFamily: 'Arial, sans-serif', fontSize: '44', color: 'green' } },
           };
-          layoutService.getLayoutValue
-            .withArgs('components', [])
-            .returns([
-              component,
-              { key: 'line', line: { title: { fontFamily: 'Arial, sans-serif', fontSize: '12px', color: 'green' } } },
-            ]);
+          layoutService.getLayoutValue.withArgs('components', []).returns([component, { key: 'lind', line: {} }]);
           const { fontSize, fontFamily, color } = create().query.axis.title.getStyle();
-          expect(fontSize).to.equal('12px');
+          expect(fontSize).to.equal('44');
           expect(fontFamily).to.equal('Arial, sans-serif');
           expect(color).to.equal('green');
         });
@@ -139,7 +138,7 @@ describe('createStyleService', () => {
 
   describe('label', () => {
     it('should expose correct properties', () => {
-      expect(create().label).to.have.all.keys(['getStyle']);
+      expect(create().query.label).to.have.all.keys(['getStyle']);
     });
     describe('getStyle', () => {
       it('should return theme style when no matching component', () => {
@@ -166,25 +165,27 @@ describe('createStyleService', () => {
 
   describe('reference line', () => {
     it('should expose correct properties', () => {
-      expect(create().label).to.have.all.keys(['label']);
+      expect(create().query.referenceLine).to.have.all.keys(['label']);
     });
     describe('label', () => {
       it('should expose correct properties', () => {
-        expect(create().label).to.have.all.keys(['getStyle']);
+        expect(create().query.referenceLine.label).to.have.all.keys(['getStyle']);
       });
       describe('getStyle', () => {
         it('should return theme style when no matching component', () => {
           layoutService.getLayoutValue.withArgs('components', []).returns([]);
           const { fontSize, fontFamily, fill } = create().query.referenceLine.label.getStyle();
-          expect(fontSize).to.equal(themeStyles.referenceLine.name.fontSize);
-          expect(fontFamily).to.equal(themeStyles.referenceLine.name.fontFamily);
-          expect(fill).to.equal(themeStyles.referenceLine.name.color);
+          expect(fontSize).to.equal(themeStyles.referenceLine.label.name.fontSize);
+          expect(fontFamily).to.equal(themeStyles.referenceLine.label.name.fontFamily);
+          expect(fill).to.equal(themeStyles.referenceLine.label.name.color);
         });
 
         it('should return correct result when layout components has axis and other components', () => {
           component = {
-            key: 'label',
-            label: { value: { fontFamily: 'Arial, sans-serif', fontSize: '44', color: { color: 'yellow' } } },
+            key: 'referenceLine',
+            referenceLine: {
+              label: { name: { fontFamily: 'Arial, sans-serif', fontSize: '44', color: { color: 'yellow' } } },
+            },
           };
           layoutService.getLayoutValue.withArgs('components', []).returns([component, { key: 'line' }]);
           const { fontSize, fontFamily, fill } = create().query.referenceLine.label.getStyle();

@@ -12,6 +12,7 @@ describe('axes', () => {
   let viewHandler;
   let isHomeState;
   let chartModel;
+  let styleModel;
   let models;
   const scales = {
     X: 'x',
@@ -57,13 +58,6 @@ describe('axes', () => {
     layoutService.getLayoutValue.withArgs('gridLine', {}).returns(gridLine);
     const style = {
       axis: {
-        label: {
-          name: {
-            color: '#595959',
-            fontFamily: "'Source Sans Pro', 'Arial', 'sans-serif'",
-            fontSize: '13px',
-          },
-        },
         line: {
           major: { color: '#595959' },
           minor: { color: '#595959' },
@@ -71,6 +65,19 @@ describe('axes', () => {
       },
     };
     themeService = { getStyles: () => style };
+    styleModel = {
+      query: {
+        axis: {
+          label: {
+            getStyle: sandbox.stub().returns({
+              fill: '#595959',
+              fontFamily: "'Source Sans Pro', 'Arial', 'sans-serif'",
+              fontSize: '13px',
+            }),
+          },
+        },
+      },
+    };
     isHomeState = false;
     viewHandler = { getMeta: sandbox.stub().returns(isHomeState) };
     chartModel = {
@@ -78,7 +85,7 @@ describe('axes', () => {
         getViewHandler: () => viewHandler,
       },
     };
-    models = { layoutService, dockService, themeService, chartModel };
+    models = { layoutService, dockService, themeService, chartModel, styleModel };
     animationsEnabled = () => true;
     axes = createAxes({ models, animationsEnabled });
   });
@@ -131,7 +138,7 @@ describe('axes', () => {
     });
 
     it('should have correct font size property for labels', () => {
-      const { fontSize } = themeService.getStyles().axis.label.name;
+      const { fontSize } = styleModel.query.axis.label.getStyle();
       expect(axes[0].settings.labels.fontSize).to.equal(fontSize);
     });
 

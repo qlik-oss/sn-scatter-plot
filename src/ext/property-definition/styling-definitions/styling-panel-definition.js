@@ -7,7 +7,7 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, flags, translator, theme) 
     translator,
     config: {
       id: 'scatterPlot',
-      paths: ['axis.title', 'axis.label.name', 'label.value', 'referenceLine.label'],
+      paths: ['axis.title', 'axis.label.name', 'label.value', 'referenceLine.label.name'],
     },
   });
 
@@ -71,7 +71,7 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, flags, translator, theme) 
                 component: 'items',
                 ref: 'components',
                 key: 'referenceLine',
-                items: scatterPlotLabelsDefinition('referenceLine.label', fontResolver, theme),
+                items: scatterPlotLabelsDefinition('referenceLine.label.name', fontResolver, theme),
               },
             },
           }

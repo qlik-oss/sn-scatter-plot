@@ -21,9 +21,9 @@ describe('axis-titles', () => {
     models = {
       layoutService: { key: 'layout-service' },
       dockService: { key: 'dock-service' },
-      themeService: { key: 'theme-service' },
       propertiesModel: { key: 'properties-model' },
       app: { key: 'app' },
+      styleModel: { key: 'style-model' },
     };
 
     axisTitles = createAxisTitles({ models, context });
@@ -42,8 +42,8 @@ describe('axis-titles', () => {
       rtl: true,
       layoutService: { key: 'layout-service' },
       dockService: { key: 'dock-service' },
-      themeService: { key: 'theme-service' },
       propertiesModel: { key: 'properties-model' },
+      styleModel: { key: 'style-model' },
     });
   });
 
@@ -56,8 +56,8 @@ describe('axis-titles', () => {
       rtl: true,
       layoutService: { key: 'layout-service' },
       dockService: { key: 'dock-service' },
-      themeService: { key: 'theme-service' },
       propertiesModel: { key: 'properties-model' },
+      styleModel: { key: 'style-model' },
     });
   });
 

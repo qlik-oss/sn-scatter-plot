@@ -57,12 +57,11 @@ export default function createRefLineLabels({
   const labelStyle = styleModel.query.referenceLine.label.getStyle();
 
   const labels = refLineLabels.map((refLineLayout) => {
-    const hasUniqueStylingColor = labelStyle.fill !== (refLineLayout.paletteColor || refLineLayout.color);
+    const useStandardColor = labelStyle.fill === refLineLayout.paletteColor || labelStyle.fill === refLineLayout.color;
+    const standardColor = colorModel.resolveUIColor(refLineLayout.paletteColor || { index: refLineLayout.color });
     return {
       text: refLineLayout.label,
-      fill: hasUniqueStylingColor
-        ? labelStyle.fill
-        : colorModel.resolveUIColor(refLineLayout.paletteColor || { index: refLineLayout.color }),
+      fill: useStandardColor ? standardColor : labelStyle.fill,
       showValue: refLineLayout.showValue !== false,
       showLabel: refLineLayout.showLabel !== false,
       value: refLineLayout.refLineExpr.value,

@@ -3,18 +3,22 @@ export default function createStyleModel({ layoutService, themeService, flags })
 
   const overrides = (key) => {
     const isEnabled = flags.isEnabled('CLIENT_IM_3050');
-    return isEnabled ? layoutService.getLayoutValue('components', []).find((c) => c.key === key) : undefined;
+    return isEnabled ? layoutService.getLayoutValue('components', [])?.find((c) => c.key === key) : undefined;
   };
 
   const query = {
     referenceLine: {
       label: {
         getStyle: () => ({
-          fill: overrides('referenceLine')?.referenceLine?.label?.color?.color ?? styles.referenceLine.label.name.color,
+          fill:
+            overrides('referenceLine')?.referenceLine?.label?.name?.color?.color ??
+            styles.referenceLine.label.name.color,
           fontSize:
-            overrides('referenceLine')?.referenceLine?.label?.fontSize ?? styles.referenceLine.label.name.fontSize,
+            overrides('referenceLine')?.referenceLine?.label?.name?.fontSize ??
+            styles.referenceLine.label.name.fontSize,
           fontFamily:
-            overrides('referenceLine')?.referenceLine?.label?.fontFamily ?? styles.referenceLine.label.name.fontFamily,
+            overrides('referenceLine')?.referenceLine?.label?.name?.fontFamily ??
+            styles.referenceLine.label.name.fontFamily,
         }),
       },
     },
@@ -36,9 +40,9 @@ export default function createStyleModel({ layoutService, themeService, flags })
     },
     label: {
       getStyle: () => ({
-        fill: overrides('label')?.label?.color?.color ?? styles.label.value.color,
-        fontSize: overrides('label')?.label?.fontSize ?? styles.label.value.fontSize,
-        fontFamily: overrides('label')?.label?.fontFamily ?? styles.label.value.fontFamily,
+        fill: overrides('label')?.label?.value?.color?.color ?? styles.label.value.color,
+        fontSize: overrides('label')?.label?.value?.fontSize ?? styles.label.value.fontSize,
+        fontFamily: overrides('label')?.label?.value?.fontFamily ?? styles.label.value.fontFamily,
       }),
     },
   };
