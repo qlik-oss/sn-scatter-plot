@@ -55,7 +55,7 @@ export default function createRefLineLabels({
 
   const colorModel = { resolveUIColor: colorService.getPaletteColor };
   const labelStyle = styleModel.query.referenceLine.label.getStyle();
-  const hasStyleColor = layoutService.getLayoutValue('components', [])?.find((c) => c.key === 'referenceLine')
+  const hasStyleColor = !!layoutService.getLayoutValue('components', [])?.find((c) => c.key === 'referenceLine')
     ?.referenceLine?.label?.name?.color?.color;
 
   const labels = refLineLabels.map((refLineLayout) => ({

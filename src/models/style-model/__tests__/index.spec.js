@@ -1,6 +1,6 @@
-import createStyleService from '..';
+import createStyleModel from '..';
 
-describe('createStyleService', () => {
+describe('createStyleModel', () => {
   let sandbox;
   let layoutService;
   let themeService;
@@ -54,7 +54,7 @@ describe('createStyleService', () => {
   });
 
   const create = () =>
-    createStyleService({
+    createStyleModel({
       layoutService,
       themeService,
       flags,
@@ -96,7 +96,7 @@ describe('createStyleService', () => {
             key: 'axis',
             axis: { title: { fontFamily: 'Arial, sans-serif', fontSize: '44', color: 'green' } },
           };
-          layoutService.getLayoutValue.withArgs('components', []).returns([component, { key: 'lind', line: {} }]);
+          layoutService.getLayoutValue.withArgs('components', []).returns([component, { key: 'line', line: {} }]);
           const { fontSize, fontFamily, color } = create().query.axis.title.getStyle();
           expect(fontSize).to.equal('44');
           expect(fontFamily).to.equal('Arial, sans-serif');
@@ -149,7 +149,7 @@ describe('createStyleService', () => {
         expect(fill).to.equal(themeStyles.label.value.color);
       });
 
-      it('should return correct result when layout components has axis and other components', () => {
+      it('should return label component', () => {
         component = {
           key: 'label',
           label: { value: { fontFamily: 'Arial, sans-serif', fontSize: '44', color: { color: 'yellow' } } },
@@ -180,7 +180,7 @@ describe('createStyleService', () => {
           expect(fill).to.equal(themeStyles.referenceLine.label.name.color);
         });
 
-        it('should return correct result when layout components has axis and other components', () => {
+        it('should return reference line label component', () => {
           component = {
             key: 'referenceLine',
             referenceLine: {
