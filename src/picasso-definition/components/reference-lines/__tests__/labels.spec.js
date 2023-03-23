@@ -16,6 +16,7 @@ describe('createRefLineLabels', () => {
   let dock;
   let minimumLayoutMode;
   let animationsEnabled;
+  let styleModel;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -57,10 +58,24 @@ describe('createRefLineLabels', () => {
       getStyles: sandbox.stub().returns('theme'),
       getTheme: sandbox.stub().returns(theme),
     };
+    styleModel = {
+      query: {
+        referenceLine: {
+          label: {
+            getStyle: sandbox.stub().returns({
+              fill: 'red',
+              fontFamily: '"font1", "font2", "fontType"',
+              fontSize: '13px',
+            }),
+          },
+        },
+      },
+    };
     models = {
       colorService,
       layoutService,
       themeService,
+      styleModel,
     };
     animationsEnabled = () => true;
     context = { rtl: false, localeInfo: 'valid localeInfo' };
@@ -94,13 +109,12 @@ describe('createRefLineLabels', () => {
     expect(result).to.deep.equal(false);
   });
 
-  it('should return correct x reference lables when show is enabled', () => {
+  it('should return correct x reference labels when show is enabled', () => {
     dock = 'top';
     minimumLayoutMode = 'XSMALL';
     scale = 'x';
     const themeStyle = {
       referenceLine: {
-        label: { name: { fontFamily: '"font1", "font2", "fontType"', fontSize: '13px' } },
         outOfBounds: { backgroundColor: '#111111', color: '#ffffff', fontFamily: 'oob font', fontSize: 'oob fontSize' },
       },
     };
@@ -156,7 +170,7 @@ describe('createRefLineLabels', () => {
     });
   });
 
-  it('should return correct x reference lables when show is enabled and theme does not have oob style', () => {
+  it('should return correct x reference labels when show is enabled and theme does not have oob style', () => {
     dock = 'top';
     minimumLayoutMode = 'XSMALL';
     scale = 'x';
@@ -165,7 +179,6 @@ describe('createRefLineLabels', () => {
     getContrastColors.default.returns({ backgroundColor: '#123456', color: '#654321' });
     const themeStyle = {
       referenceLine: {
-        label: { name: { fontFamily: '"font1", "font2", "fontType"', fontSize: '13px' } },
         outOfBounds: { backgroundColor: '#111111', color: '#ffffff', fontFamily: 'oob font', fontSize: 'oob fontSize' },
       },
     };
@@ -221,17 +234,22 @@ describe('createRefLineLabels', () => {
     });
   });
 
-  it('should return correct y reference lables when show is enabled', () => {
+  it('should return correct y reference labels when show is enabled', () => {
     dock = 'right';
     minimumLayoutMode = 'SMALL';
     scale = 'y';
     const themeStyle = {
       referenceLine: {
-        label: { name: { fontFamily: '"font1", "font2", "fontType"', fontSize: '13px' } },
         outOfBounds: { backgroundColor: '#111111', color: '#ffffff', fontFamily: 'oob font', fontSize: 'oob fontSize' },
       },
     };
+    const labelStyle = {
+      fill: 'blue',
+      fontSize: '13px',
+      fontFamily: '"font1", "font2", "fontType"',
+    };
     themeService.getStyles = sandbox.stub().returns(themeStyle);
+    styleModel.query.referenceLine.label.getStyle = sandbox.stub().returns(labelStyle);
     key = 'reference-line-labels-Y';
     const result = create();
     result.animations.enabled = 'function';
@@ -289,17 +307,22 @@ describe('createRefLineLabels', () => {
     });
   });
 
-  it('should return correct y reference lables when show is enabled, rtl is true, and some layout properties are missing', () => {
+  it('should return correct y reference labels when show is enabled, rtl is true, and some layout properties are missing', () => {
     dock = 'left';
     minimumLayoutMode = 'SMALL';
     scale = 'y';
     const themeStyle = {
       referenceLine: {
-        label: { name: { fontSize: '15px' } },
         outOfBounds: { color: '#ffffff', fontFamily: 'oob font' },
       },
     };
+    const labelStyle = {
+      fill: 'blue',
+      fontSize: '15px',
+      fontFamily: 'Source Sans Pro, sans-serif',
+    };
     themeService.getStyles = sandbox.stub().returns(themeStyle);
+    styleModel.query.referenceLine.label.getStyle = sandbox.stub().returns(labelStyle);
     context.rtl = true;
     key = 'reference-line-labels-Y';
     const result = create();

@@ -9,7 +9,7 @@ export default function createYAxisTitle({
   rtl,
   layoutService,
   dockService,
-  themeService,
+  styleModel,
   propertiesModel,
 }) {
   const { yAxis } = layoutService.getLayout();
@@ -24,7 +24,7 @@ export default function createYAxisTitle({
     return false;
   }
 
-  const styles = themeService.getStyles();
+  const titleStyle = styleModel.query.axis.title.getStyle();
   const properties = propertiesModel.query.getProperties();
   const yAxisInfo = layoutService.getHyperCubeValue('qMeasureInfo.1');
 
@@ -48,9 +48,9 @@ export default function createYAxisTitle({
       selections: undefined,
     },
     style: {
-      fontFamily: styles.axis.title.fontFamily,
-      fontSize: styles.axis.title.fontSize,
-      color: styles.axis.title.color,
+      fontFamily: titleStyle.fontFamily,
+      fontSize: titleStyle.fontSize,
+      color: titleStyle.color,
     },
   };
 

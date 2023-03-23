@@ -39,7 +39,7 @@ export default function createRefLineLabels({
   minimumLayoutMode,
   animationsEnabled,
 }) {
-  const { colorService, layoutService, themeService } = models;
+  const { colorService, layoutService, themeService, styleModel } = models;
   const { rtl, localeInfo } = context;
   const themeStyle = themeService.getStyles();
   const theme = themeService.getTheme();
@@ -54,10 +54,15 @@ export default function createRefLineLabels({
   }
 
   const colorModel = { resolveUIColor: colorService.getPaletteColor };
+  const labelStyle = styleModel.query.referenceLine.label.getStyle();
+  const hasStyleColor = !!layoutService.getLayoutValue('components', [])?.find((c) => c.key === 'referenceLine')
+    ?.referenceLine?.label?.name?.color?.color;
 
   const labels = refLineLabels.map((refLineLayout) => ({
     text: refLineLayout.label,
-    fill: colorModel.resolveUIColor(refLineLayout.paletteColor || { index: refLineLayout.color }),
+    fill: hasStyleColor
+      ? labelStyle.fill
+      : colorModel.resolveUIColor(refLineLayout.paletteColor || { index: refLineLayout.color }),
     showValue: refLineLayout.showValue !== false,
     showLabel: refLineLayout.showLabel !== false,
     value: refLineLayout.refLineExpr.value,
@@ -77,8 +82,8 @@ export default function createRefLineLabels({
     layout: { dock, minimumLayoutMode, rtl },
     style: {
       label: {
-        fontFamily: style.referenceLine.label.name.fontFamily,
-        fontSize: style.referenceLine.label.name.fontSize,
+        fontFamily: labelStyle.fontFamily,
+        fontSize: labelStyle.fontSize,
         padding: {
           top: NUMBERS.REF_LABELS.PADDING.TOP,
           bottom: NUMBERS.REF_LABELS.PADDING.BOTTOM,

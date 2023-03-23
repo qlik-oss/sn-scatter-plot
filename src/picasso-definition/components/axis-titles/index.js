@@ -2,7 +2,7 @@ import createXAxisTitle from './xAxis';
 import createYAxisTitle from './yAxis';
 
 export default function createAxisTitles({ models, context }) {
-  const { layoutService, dockService, themeService, propertiesModel, app } = models;
+  const { layoutService, dockService, styleModel, propertiesModel, app } = models;
   const { translator, constraints, rtl, model } = context;
   const args = {
     model,
@@ -12,7 +12,7 @@ export default function createAxisTitles({ models, context }) {
     rtl,
     layoutService,
     dockService,
-    themeService,
+    styleModel,
     propertiesModel,
   };
 

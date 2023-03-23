@@ -6,14 +6,15 @@ import colorModeOptions from './color-mode-options';
 import showUseDimValCol from '../show-use-dim-val-col';
 import compressionNoteProperties from './compression-note-properties';
 import NUMBERS from '../../constants/numbers';
-import getStylingPanelDefinition from './styling-panel-definition';
+import getStylingPanelDefinition from './styling-definitions/styling-panel-definition';
 
 const { MAX_NR_SCATTER, DEFAULT_VISIBLE_BUBBLES, MAX_VISIBLE_BUBBLES } = NUMBERS;
 
 const persistentColorsShow = (data) => !getValue(data, 'color.auto') && getValue(data, 'color.mode') === 'byDimension';
 
 export default function propertyDefinition(env) {
-  const { flags } = env;
+  const { flags, translator, sense } = env;
+  const theme = sense?.theme;
 
   // Feature Flags for Styling Panel
   const stylingPanelEnabled = flags.isEnabled('SENSECLIENT_IM_2206_STYLINGPANEL_SCATTERPLOT');
@@ -190,7 +191,7 @@ export default function propertyDefinition(env) {
         translation: 'properties.presentation',
         grouped: true,
         items: {
-          styleEditor: stylingPanelEnabled && getStylingPanelDefinition(bkgOptionsEnabled),
+          styleEditor: stylingPanelEnabled && getStylingPanelDefinition(bkgOptionsEnabled, flags, translator, theme),
           showNavigation: {
             ref: 'navigation',
             type: 'boolean',

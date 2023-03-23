@@ -14,6 +14,7 @@ describe('point-labels', () => {
   let viewHandler;
   let models;
   let animationsEnabled;
+  let styleModel;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -29,17 +30,19 @@ describe('point-labels', () => {
       },
     };
     themeService = { getStyles: sandbox.stub() };
+    styleModel = { query: { label: { getStyle: sandbox.stub() } } };
     viewHandler = {
       redererSettings: 'renderer-settings',
       transform: 'transform-function',
     };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler) } };
-    models = { layoutService, themeService, chartModel };
+    models = { layoutService, themeService, chartModel, styleModel };
     animationsEnabled = () => true;
     create = () => createPointLabels({ models, animationsEnabled });
     labels = { mode: 1 };
     layoutService.getLayoutValue.withArgs('labels').returns(labels);
-    themeService.getStyles.returns({ label: { value: { fontFamily: 'Sans serif', fontSize: '1px', color: 'red' } } });
+    themeService.getStyles.returns({ label: { value: { backgroundColor: 'blue' } } });
+    styleModel.query.label.getStyle.returns({ fontFamily: 'Sans serif', fontSize: '1px', color: 'red' });
     sandbox.stub(KEYS, 'default').value({
       COMPONENT: {
         POINT: 'point-component',

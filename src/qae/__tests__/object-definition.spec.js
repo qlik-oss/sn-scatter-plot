@@ -33,6 +33,7 @@ describe('object-definition', () => {
       'trendLines',
       'xAxis',
       'yAxis',
+      'components',
     ]);
   });
 
