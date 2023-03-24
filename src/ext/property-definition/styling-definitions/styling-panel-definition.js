@@ -62,20 +62,6 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, flags, translator, theme) 
             },
           }
         : undefined,
-      referenceLineLabel: flags?.isEnabled('CLIENT_IM_3050')
-        ? {
-            translation: 'properties.referenceLine.label.value',
-            component: 'panel-section',
-            items: {
-              labelItems: {
-                component: 'items',
-                ref: 'components',
-                key: 'referenceLine',
-                items: scatterPlotLabelsDefinition('referenceLine.label.name', fontResolver, theme),
-              },
-            },
-          }
-        : undefined,
     },
   };
 };
