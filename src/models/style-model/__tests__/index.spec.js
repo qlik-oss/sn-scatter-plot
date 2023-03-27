@@ -179,20 +179,6 @@ describe('createStyleModel', () => {
           expect(fontFamily).to.equal(themeStyles.referenceLine.label.name.fontFamily);
           expect(fill).to.equal(themeStyles.referenceLine.label.name.color);
         });
-
-        it('should return reference line label component', () => {
-          component = {
-            key: 'referenceLine',
-            referenceLine: {
-              label: { name: { fontFamily: 'Arial, sans-serif', fontSize: '44', color: { color: 'yellow' } } },
-            },
-          };
-          layoutService.getLayoutValue.withArgs('components', []).returns([component, { key: 'line' }]);
-          const { fontSize, fontFamily, fill } = create().query.referenceLine.label.getStyle();
-          expect(fontSize).to.equal('44');
-          expect(fontFamily).to.equal('Arial, sans-serif');
-          expect(fill).to.equal('yellow');
-        });
       });
     });
   });

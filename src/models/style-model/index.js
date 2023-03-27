@@ -10,15 +10,9 @@ export default function createStyleModel({ layoutService, themeService, flags })
     referenceLine: {
       label: {
         getStyle: () => ({
-          fill:
-            overrides('referenceLine')?.referenceLine?.label?.name?.color?.color ??
-            styles.referenceLine.label.name.color,
-          fontSize:
-            overrides('referenceLine')?.referenceLine?.label?.name?.fontSize ??
-            styles.referenceLine.label.name.fontSize,
-          fontFamily:
-            overrides('referenceLine')?.referenceLine?.label?.name?.fontFamily ??
-            styles.referenceLine.label.name.fontFamily,
+          fill: styles.referenceLine.label.name.color,
+          fontSize: styles.referenceLine.label.name.fontSize,
+          fontFamily: styles.referenceLine.label.name.fontFamily,
         }),
       },
     },
