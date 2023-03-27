@@ -19,9 +19,9 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, flags, translator, theme) 
     ref: 'components',
     useGeneral: true,
     useBackground: bkgOptionsEnabled,
-    items: {
-      axisTitleSection: flags?.isEnabled('CLIENT_IM_3050')
-        ? {
+    items: flags?.isEnabled('CLIENT_IM_3050')
+      ? {
+          axisTitleSection: {
             translation: 'properties.axis.title',
             component: 'panel-section',
             items: {
@@ -32,10 +32,8 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, flags, translator, theme) 
                 items: scatterPlotLabelsDefinition('axis.title', fontResolver, theme),
               },
             },
-          }
-        : undefined,
-      axisLabelSection: flags?.isEnabled('CLIENT_IM_3050')
-        ? {
+          },
+          axisLabelSection: {
             translation: 'properties.axis.label',
             component: 'panel-section',
             items: {
@@ -46,10 +44,8 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, flags, translator, theme) 
                 items: scatterPlotLabelsDefinition('axis.label.name', fontResolver, theme),
               },
             },
-          }
-        : undefined,
-      labelValueSection: flags?.isEnabled('CLIENT_IM_3050')
-        ? {
+          },
+          labelValueSection: {
             translation: 'properties.value.label',
             component: 'panel-section',
             items: {
@@ -60,9 +56,9 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, flags, translator, theme) 
                 items: scatterPlotLabelsDefinition('label.value', fontResolver, theme),
               },
             },
-          }
-        : undefined,
-    },
+          },
+        }
+      : undefined,
   };
 };
 
