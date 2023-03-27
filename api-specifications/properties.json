@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-scatter-plot:properties",
     "description": "Scatter plot generic object definition",
-    "version": "3.43.0",
+    "version": "3.44.0",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
@@ -190,6 +190,13 @@
               "kind": "literal",
               "value": true
             }
+          }
+        },
+        "components": {
+          "description": "Styling of chart components.",
+          "kind": "array",
+          "items": {
+            "type": "#/definitions/scatterPlotStyle"
           }
         },
         "dataPoint": {
@@ -750,6 +757,17 @@
       ],
       "type": "any"
     },
+    "axisStyle": {
+      "kind": "object",
+      "entries": {
+        "label": {
+          "type": "#/definitions/labelNameStyle"
+        },
+        "title": {
+          "type": "#/definitions/fontStyle"
+        }
+      }
+    },
     "ColorAttributes": {
       "description": "Extends `NxAttrExprDef`, see Engine API: `NxAttrExprDef`.",
       "extends": [
@@ -815,6 +833,20 @@
         },
         "qDef": {
           "type": "#/definitions/InlineDimensionDef"
+        }
+      }
+    },
+    "fontStyle": {
+      "kind": "object",
+      "entries": {
+        "color": {
+          "type": "#/definitions/paletteColor"
+        },
+        "fontFamily": {
+          "type": "string"
+        },
+        "fontSize": {
+          "type": "string"
         }
       }
     },
@@ -893,6 +925,22 @@
         }
       }
     },
+    "labelNameStyle": {
+      "kind": "object",
+      "entries": {
+        "name": {
+          "type": "#/definitions/fontStyle"
+        }
+      }
+    },
+    "labelStyle": {
+      "kind": "object",
+      "entries": {
+        "value": {
+          "type": "#/definitions/fontStyle"
+        }
+      }
+    },
     "MeasureProperties": {
       "description": "Extends `NxMeasure`, see Engine API: `NxMeasure`.",
       "extends": [
@@ -924,6 +972,14 @@
         "index": {
           "description": "Index in palette",
           "type": "number"
+        }
+      }
+    },
+    "referenceLineStyle": {
+      "kind": "object",
+      "entries": {
+        "label": {
+          "type": "#/definitions/labelNameStyle"
         }
       }
     },
@@ -980,6 +1036,24 @@
               "type": "any"
             }
           }
+        }
+      }
+    },
+    "scatterPlotStyle": {
+      "kind": "object",
+      "entries": {
+        "key": {
+          "description": "Determines which component the settings apply to.",
+          "type": "string"
+        },
+        "axis": {
+          "type": "#/definitions/axisStyle"
+        },
+        "label": {
+          "type": "#/definitions/labelStyle"
+        },
+        "referenceLine": {
+          "type": "#/definitions/referenceLineStyle"
         }
       }
     },
