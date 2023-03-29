@@ -21,9 +21,6 @@ module.exports = {
       NUM_BUBBLES: true,
       PROGRESSIVE_RENDERING: true,
       CLIENT_IM_3050: true,
-      SENSECLIENT_PS_17478: true,
-      STYLINGPANEL_BARCHART: true,
-      CLIENT_IM_747: true,
     },
   },
 };
