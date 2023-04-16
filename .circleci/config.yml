@@ -21,7 +21,7 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
@@ -37,7 +37,7 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:lts-browsers
+      - image: cimg/node:lts-browsers
       - image: mcr.microsoft.com/playwright:focal
     steps:
       - attach_workspace:
@@ -68,7 +68,8 @@ jobs:
       - run:
           name: Install Fonts
           command: |
-            sudo apt install cabextract
+            sudo apt-get update
+            sudo apt-get install cabextract
             sudo wget https://www.freedesktop.org/software/fontconfig/webfonts/webfonts.tar.gz
             sudo tar -xzf webfonts.tar.gz
             cd msfonts/
@@ -100,7 +101,7 @@ jobs:
   publish-dev:
     <<: *defaults
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     steps:
       - attach_workspace:
           at: ~/scatter
@@ -111,7 +112,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     steps:
       - attach_workspace:
           at: ~/scatter
