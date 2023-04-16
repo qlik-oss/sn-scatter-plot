@@ -21,7 +21,7 @@ jobs:
   install:
     <<: *defaults
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     steps:
       - checkout
       - restore_cache: *restore_yarn_cache
@@ -37,7 +37,7 @@ jobs:
   build:
     <<: *defaults
     docker:
-      - image: circleci/node:lts-browsers
+      - image: cimg/node:lts-browsers
       - image: mcr.microsoft.com/playwright:focal
     steps:
       - attach_workspace:
@@ -100,7 +100,7 @@ jobs:
   publish-dev:
     <<: *defaults
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     steps:
       - attach_workspace:
           at: ~/scatter
@@ -111,7 +111,7 @@ jobs:
   publish:
     <<: *defaults
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
     steps:
       - attach_workspace:
           at: ~/scatter
