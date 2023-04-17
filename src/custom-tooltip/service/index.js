@@ -58,12 +58,12 @@ export default function createCustomTooltipService({
     createImageRow: ({ value, h }) => utils.getImageRow(value, { h, rtl }),
     addImages: ({ nodes }) => {
       const modified = utils.getDataNodes(chart, nodes);
-      const expressions = utils.getAttrExprData(layout);
+      const { attrExps } = utils.getAttrExprData(layout);
 
       return promises.handlePromises({
         customTooltipModel,
         nodes: modified,
-        attrExps: expressions,
+        attrExps,
         opts: {
           flags,
           app,

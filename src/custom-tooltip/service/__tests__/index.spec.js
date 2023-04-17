@@ -42,7 +42,7 @@ describe('custom-tooltip-service', () => {
     utils.checkIfPromisesExist.returns({ key: 'promises-exists' });
     utils.getImageRow.returns({ key: 'image-row' });
     utils.getDataNodes.returns({ key: 'data-nodes' });
-    utils.getAttrExprData.returns({ key: 'attr-expr-data' });
+    utils.getAttrExprData.returns({ attrExps: { key: 'attr-exps' } });
     utils.getFooterRow.returns({ key: 'footer-row' });
     promises.handlePromises.returns({ key: 'handled-promises' });
     customTooltipChart.createContainer.returns({ key: 'container' });
@@ -253,7 +253,7 @@ describe('custom-tooltip-service', () => {
         promises.handlePromises.withArgs({
           customTooltipModel,
           nodes: { key: 'data-nodes' },
-          attrExps: { key: 'attr-expr-data' },
+          attrExps: { key: 'attr-exps' },
           opts: {
             flags,
             app,
