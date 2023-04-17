@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import * as stardust from '@nebula.js/stardust';
+import stardust from '@nebula.js/stardust';
 import * as lassoIcon from '../lasso-icon';
 import useLasso from '../use-lasso';
 

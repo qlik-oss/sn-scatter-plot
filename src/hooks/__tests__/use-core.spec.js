@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import * as stardust from '@nebula.js/stardust';
+import stardust from '@nebula.js/stardust';
 import * as useViewState from '../use-view-state';
 import * as useActions from '../use-actions';
 import * as configurePicasso from '../../configure-picasso';

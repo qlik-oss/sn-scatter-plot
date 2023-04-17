@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import * as stardust from '@nebula.js/stardust';
+import stardust from '@nebula.js/stardust';
 import useSelect from '../use-select';
 
 describe('use-select', () => {

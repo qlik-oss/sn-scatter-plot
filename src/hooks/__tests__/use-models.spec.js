@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import * as stardust from '@nebula.js/stardust';
+import stardust from '@nebula.js/stardust';
 import * as chartModules from 'qlik-chart-modules';
 import * as layoutServiceMeta from '../../services/layout-service/meta';
 import * as createChartModel from '../../models/chart-model';
