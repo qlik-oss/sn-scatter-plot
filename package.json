@@ -70,7 +70,7 @@
     "@playwright/test": "1.32.3",
     "babel-plugin-istanbul": "^6.1.1",
     "d3-color": "1.4.1",
-    "d3-scale": "2.2.2",
+    "d3-scale": "4.0.2",
     "eslint": "8.38.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-prettier": "7.2.0",
