@@ -30,12 +30,12 @@ export function extractFieldFromId(id) {
  * Helper method to generate suitable QIX selection methods and parameters based on a brush instance.
  * @alias brush
  * @param {Brush} brush A brush instance
+ * @param {object} [layout] QIX data layout. Needed only when brushing on attribute expressions, to be able to calculate the measure index.
  * @param {object} [opts]
  * @param {boolean} [opts.orMode=true] If false, combine measure range selections.
- * @param {object} [layout] QIX data layout. Needed only when brushing on attribute expressions, to be able to calculate the measure index.
  * @return {object[]} An array of relevant selections
  */
-export default function qBrush(brush, opts = {}, layout) {
+export default function qBrush(brush, layout, opts = {}) {
   const selections = [];
   const methods = {};
   const isActive = brush.isActive();
