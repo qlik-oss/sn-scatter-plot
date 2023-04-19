@@ -111,7 +111,7 @@ describe('q-brush', () => {
     });
 
     it('should have valid params if opts = { orMode: true }', () => {
-      const selections = qBrush(brush, { orMode: true });
+      const selections = qBrush(brush, undefined, { orMode: true });
       expect(selections[0].params).to.eql([
         '/qHyperCubeDef',
         [
@@ -149,7 +149,7 @@ describe('q-brush', () => {
     });
 
     it('should have valid params if opts = { orMode: false }', () => {
-      const selections = qBrush(brush, { orMode: false });
+      const selections = qBrush(brush, undefined, { orMode: false });
       expect(selections[0].params).to.eql([
         '/qHyperCubeDef',
         [

@@ -218,7 +218,9 @@ export default function createChartModel({
       renderOnce();
       return Promise.resolve();
     }
-    return new Promise((resolve, reject) => renderProgressive(resolve, reject));
+    return new Promise((resolve) => {
+      renderProgressive(resolve);
+    });
   }
 
   const getData = () => [
@@ -255,7 +257,9 @@ export default function createChartModel({
     insertDataPages();
     viewCache.set('isBigData', layoutService.meta.isBigData);
     cacheProperties({ viewCache, layout: layoutService.getLayout() });
-    return new Promise((resolve, reject) => renderProgressive(resolve, reject));
+    return new Promise((resolve) => {
+      renderProgressive(resolve);
+    });
   };
 
   const brush = ({ render, nodes }) => {

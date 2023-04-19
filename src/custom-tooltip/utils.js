@@ -211,7 +211,7 @@ const customTooltipUtils = {
       }
     }
   },
-  moveCustomTooltipAttrs(data, oldDimension = {}, index) {
+  moveCustomTooltipAttrs(data, oldDimension = {}) {
     let attributesToMove = [];
     const newDimensionList = getDimensions(data) || [];
     const oldDimensionList = [...newDimensionList, ...[oldDimension]];
@@ -231,7 +231,7 @@ const customTooltipUtils = {
       return result;
     });
 
-    const targetIndex = index !== undefined ? index : cleanedAttributes.length - 1;
+    const targetIndex = cleanedAttributes.length - 1;
     // move tooltip attributes to target dim
     if (cleanedAttributes.length > 0) {
       cleanedAttributes[targetIndex].qAttributeExpressions =

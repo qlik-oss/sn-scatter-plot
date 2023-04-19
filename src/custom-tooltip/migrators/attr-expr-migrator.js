@@ -68,7 +68,7 @@ const customTooltipMigrator = {
 
   getPatches(props) {
     const tooltipMeasures = props.tooltip?.data?.qHyperCubeDef?.qMeasures || [];
-    const lastDimIndex = props.qHyperCubeDef?.qDimensions.length - 1;
+    const lastDimIndex = props.qHyperCubeDef.qDimensions.length - 1;
     const attrExprs = getAttrExprs(props);
     const patches = createPatches(attrExprs, tooltipMeasures, lastDimIndex);
     return patches;
