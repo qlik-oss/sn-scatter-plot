@@ -6,6 +6,7 @@
   "semanticCommits": true,
   "rangeStrategy": "bump",
   "dependencyDashboard": true,
+  "platformAutomerge": true,
   "packageRules": [
     {
       "description": "Automatically merge major, minor and patch-level updates for dev dependencies",
