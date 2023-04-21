@@ -12,6 +12,7 @@ module.exports = {
   },
   mocks: [
     ['**/d3-color/src/index.js', '{ hcl() {} }'],
+    ['**/d3-scale/src/index.js', '{}'],
     ['**/hammer.js', '{}'],
     [
       '**/dist/conversion.js',
