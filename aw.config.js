@@ -11,6 +11,7 @@ module.exports = {
     reporter: 'min',
   },
   mocks: [
+    ['**/d3-color/src/index.js', '{ hcl() {} }'],
     ['**/hammer.js', '{}'],
     [
       '**/dist/conversion.js',

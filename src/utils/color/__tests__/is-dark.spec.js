@@ -1,10 +1,10 @@
-import * as d3Color from 'd3-color';
-import isDark from '../is-dark';
-
 describe('isDark', () => {
   it('should return correct boolean value', () => {
     const sandbox = sinon.createSandbox();
-    sandbox.stub(d3Color, 'hcl').withArgs('dark blue').returns({ l: 60 });
+    const d3ColorMock = {
+      hcl: sandbox.stub().withArgs('dark blue').returns({ l: 60 }),
+    };
+    const [{ default: isDark }] = aw.mock([['d3-color', () => d3ColorMock]], ['../is-dark']);
     expect(isDark('dark blue')).to.equal(true);
     sandbox.restore();
   });
