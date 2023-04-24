@@ -3,8 +3,8 @@ import CONST from '../constants/index';
 export async function destroySessionAlternateState({ app, customTooltipModel }) {
   const cttModel = customTooltipModel;
   const stateName = CONST.CHART.STATE;
-  await app.removeSessionAlternateState(stateName);
   cttModel.miniChartToken.alternateState = undefined;
+  await app.removeSessionAlternateState(stateName);
 }
 
 export async function createSessionAlternateState({ app, properties, customTooltipModel }) {
