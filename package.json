@@ -25,7 +25,7 @@
     "sn-scatter-plot-ext"
   ],
   "engines": {
-    "node": ">=v18.16.0"
+    "node": ">=v18.15.0"
   },
   "main": "dist/sn-scatter-plot.js",
   "systemjs": "dist/sn-scatter-plot.systemjs.js",
