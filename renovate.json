@@ -6,5 +6,11 @@
   "semanticCommits": true,
   "rangeStrategy": "bump",
   "dependencyDashboard": true,
-  "platformAutomerge": true
+  "platformAutomerge": true,
+  "packageRules": [
+    {
+      "depTypeList": ["engines"],
+      "enabled": false
+    }
+  ]
 }
