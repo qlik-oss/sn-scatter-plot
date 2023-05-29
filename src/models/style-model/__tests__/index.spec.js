@@ -47,6 +47,18 @@ describe('createStyleModel', () => {
           },
         },
       },
+      legend: {
+        title: {
+          fontFamily: 'Arial, sans-serif',
+          fontSize: '12',
+          color: 'green',
+        },
+        label: {
+          fontFamily: 'Comic Sans MS, cursive',
+          fontSize: '13',
+          color: 'blue',
+        },
+      },
     };
 
     themeService = { getStyles: sandbox.stub() };
@@ -72,7 +84,67 @@ describe('createStyleModel', () => {
   });
 
   it('query should have correct properties', () => {
-    expect(create().query).to.have.all.keys(['axis', 'label', 'referenceLine']);
+    expect(create().query).to.have.all.keys(['axis', 'label', 'referenceLine', 'legend']);
+  });
+
+  it('query should have only four keys', () => {
+    expect(Object.keys(create().query).length).to.equal(4);
+  });
+
+  describe('legend', () => {
+    it('should expose correct properties', () => {
+      expect(create().query.legend).to.have.all.keys(['title', 'label']);
+    });
+
+    describe('title', () => {
+      it('should expose correct properties', () => {
+        expect(create().query.legend.title).to.have.all.keys(['getStyle']);
+      });
+
+      describe('getStyle', () => {
+        it('should return theme style when no matching component', () => {
+          layoutService.getLayoutValue.withArgs('components', []).returns([]);
+          expect(create().query.legend.title.getStyle()).to.deep.equal(themeStyles.legend.title);
+        });
+
+        it('should return legend title component', () => {
+          component = {
+            key: 'legend',
+            legend: { title: { fontFamily: 'TheFont', fontSize: '1234', color: { color: 'tranquil-teal', index: 3 } } },
+          };
+          layoutService.getLayoutValue.withArgs('components', []).returns([component, { key: 'line', line: {} }]);
+          const { fontSize, fontFamily, color } = create().query.legend.title.getStyle();
+          expect(fontSize).to.equal('1234');
+          expect(fontFamily).to.equal('TheFont');
+          expect(color).to.equal('tranquil-teal');
+        });
+      });
+    });
+
+    describe('label', () => {
+      it('should expose correct properties', () => {
+        expect(create().query.legend.label).to.have.all.keys(['getStyle']);
+      });
+
+      describe('getStyle', () => {
+        it('should return theme style when no matching component', () => {
+          layoutService.getLayoutValue.withArgs('components', []).returns([]);
+          expect(create().query.legend.label.getStyle()).to.deep.equal(themeStyles.legend.label);
+        });
+
+        it('should return legend title component', () => {
+          component = {
+            key: 'legend',
+            legend: { label: { fontFamily: 'DuFont', fontSize: '14234', color: { color: 'tranquil-blue', index: 3 } } },
+          };
+          layoutService.getLayoutValue.withArgs('components', []).returns([component, { key: 'line', line: {} }]);
+          const { fontSize, fontFamily, color } = create().query.legend.label.getStyle();
+          expect(fontSize).to.equal('14234');
+          expect(fontFamily).to.equal('DuFont');
+          expect(color).to.equal('tranquil-blue');
+        });
+      });
+    });
   });
 
   describe('axis', () => {
@@ -94,13 +166,13 @@ describe('createStyleModel', () => {
         it('should return axis title component', () => {
           component = {
             key: 'axis',
-            axis: { title: { fontFamily: 'Arial, sans-serif', fontSize: '44', color: 'green' } },
+            axis: { title: { fontFamily: 'Arial, sans-serif', fontSize: '44', color: { color: 'greens', index: 3 } } },
           };
           layoutService.getLayoutValue.withArgs('components', []).returns([component, { key: 'line', line: {} }]);
           const { fontSize, fontFamily, color } = create().query.axis.title.getStyle();
           expect(fontSize).to.equal('44');
           expect(fontFamily).to.equal('Arial, sans-serif');
-          expect(color).to.equal('green');
+          expect(color).to.equal('greens');
         });
       });
     });
@@ -123,14 +195,14 @@ describe('createStyleModel', () => {
           component = {
             key: 'axis',
             axis: {
-              label: { name: { fontFamily: 'Arial, sans-serif', fontSize: '44', color: { color: 'yellow' } } },
+              label: { name: { fontFamily: 'Arials, sans-serif', fontSize: '444', color: { color: 'black' } } },
             },
           };
           layoutService.getLayoutValue.withArgs('components', []).returns([component, { key: 'line' }]);
           const { fontSize, fontFamily, fill } = create().query.axis.label.getStyle();
-          expect(fontSize).to.equal('44');
-          expect(fontFamily).to.equal('Arial, sans-serif');
-          expect(fill).to.equal('yellow');
+          expect(fontSize).to.equal('444');
+          expect(fontFamily).to.equal('Arials, sans-serif');
+          expect(fill).to.equal('black');
         });
       });
     });
