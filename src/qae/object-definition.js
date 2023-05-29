@@ -521,6 +521,7 @@ export default objectDefinition;
  * @property {axisStyle} axis
  * @property {labelStyle} label
  * @property {referenceLineStyle} referenceLine
+ * @property {legendStyle} legendStyle
  */
 
 /**
@@ -537,6 +538,12 @@ export default objectDefinition;
 /**
  * @typedef {object} referenceLineStyle
  * @property {labelNameStyle} label
+ */
+
+/**
+ * @typedef {object} legendStyle
+ * @property {fontStyle} title
+ * @property {fontStyle} label
  */
 
 /**
