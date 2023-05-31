@@ -5,6 +5,7 @@ const getStylingPanelDefinition = (bkgOptionsEnabled, flags, translator, theme) 
   const fontResolver = createFontResolver({
     theme,
     translator,
+    flags,
     config: {
       id: 'scatterPlot',
       paths: ['axis.title', 'axis.label.name', 'label.value', 'referenceLine.label.name'],
