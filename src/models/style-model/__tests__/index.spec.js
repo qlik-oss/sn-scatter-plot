@@ -87,10 +87,6 @@ describe('createStyleModel', () => {
     expect(create().query).to.have.all.keys(['axis', 'label', 'referenceLine', 'legend']);
   });
 
-  it('query should have only four keys', () => {
-    expect(Object.keys(create().query).length).to.equal(4);
-  });
-
   describe('legend', () => {
     it('should expose correct properties', () => {
       expect(create().query.legend).to.have.all.keys(['title', 'label']);
