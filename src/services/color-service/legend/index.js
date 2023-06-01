@@ -1,7 +1,7 @@
 import KEYS from '../../../constants/keys';
 import settings from './settings';
 
-export default function createLegend({ viewState, chart, options, colorService, actions }) {
+export default function createLegend({ viewState, chart, options, colorService, actions, styleModel }) {
   const rtl = options.direction === 'rtl';
 
   const config = {
@@ -10,6 +10,10 @@ export default function createLegend({ viewState, chart, options, colorService, 
     viewState,
     chart,
     styleReference: 'object.scatterPlot',
+    styleOverrides: {
+      title: styleModel.query.legend.title.getStyle(),
+      label: styleModel.query.legend.label.getStyle(),
+    },
     rtl,
     settings: settings({ colorService }),
   };

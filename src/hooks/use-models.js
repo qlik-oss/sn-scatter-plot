@@ -106,6 +106,7 @@ const useModels = ({ core, flags }) => {
     const extremumModel = createExtremumModel(layoutService, options.viewState);
 
     const dataHandler = createDataHandler({ layoutService, model, extremumModel });
+    const styleModel = createStyleModel({ layoutService, themeService, flags });
 
     const colorService = createColorService({
       actions,
@@ -120,6 +121,7 @@ const useModels = ({ core, flags }) => {
       picasso: picassoInstance,
       viewState,
       dataHandler,
+      styleModel,
     });
 
     let chartModel;
@@ -192,7 +194,6 @@ const useModels = ({ core, flags }) => {
     });
 
     const disclaimerModel = createDisclaimerModel({ layoutService });
-    const styleModel = createStyleModel({ layoutService, themeService, flags });
 
     selectionService.setLayout(layoutService.getLayout());
     setModels({

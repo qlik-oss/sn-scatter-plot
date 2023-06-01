@@ -2,7 +2,7 @@ export default function createStyleModel({ layoutService, themeService, flags })
   const styles = themeService.getStyles();
 
   const overrides = (key) => {
-    const isEnabled = flags.isEnabled('CLIENT_IM_3050');
+    const isEnabled = flags.isEnabled('CLIENT_IM_3050') || flags.isEnabled('CLIENT_IM_3051');
     return isEnabled ? layoutService.getLayoutValue('components', [])?.find((c) => c.key === key) : undefined;
   };
 
@@ -38,6 +38,22 @@ export default function createStyleModel({ layoutService, themeService, flags })
         fontSize: overrides('label')?.label?.value?.fontSize ?? styles.label.value.fontSize,
         fontFamily: overrides('label')?.label?.value?.fontFamily ?? styles.label.value.fontFamily,
       }),
+    },
+    legend: {
+      title: {
+        getStyle: () => ({
+          fontFamily: overrides('legend')?.legend?.title?.fontFamily ?? styles.legend.title.fontFamily,
+          fontSize: overrides('legend')?.legend?.title?.fontSize ?? styles.legend.title.fontSize,
+          color: overrides('legend')?.legend?.title?.color?.color ?? styles.legend.title.color,
+        }),
+      },
+      label: {
+        getStyle: () => ({
+          fontFamily: overrides('legend')?.legend?.label?.fontFamily ?? styles.legend.label.fontFamily,
+          fontSize: overrides('legend')?.legend?.label?.fontSize ?? styles.legend.label.fontSize,
+          color: overrides('legend')?.legend?.label?.color?.color ?? styles.legend.label.color,
+        }),
+      },
     },
   };
 

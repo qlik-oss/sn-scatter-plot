@@ -15,6 +15,7 @@ export default function createService({
   picasso,
   viewState,
   dataHandler,
+  styleModel,
 }) {
   let colorService;
   const state = {
@@ -36,6 +37,7 @@ export default function createService({
       options,
       colorService,
       actions,
+      styleModel,
     });
 
     state.wrappedScales = scales;

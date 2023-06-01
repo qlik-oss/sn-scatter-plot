@@ -11,6 +11,7 @@ describe('legend', () => {
   let options;
   let colorService;
   let actions;
+  let styleModel;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -24,7 +25,8 @@ describe('legend', () => {
     options = { direction: 'rtl' };
     sandbox.stub(settings, 'default').returns('settings');
     actions = { interact: { enabled: sandbox.stub().returns(true) } };
-    create = () => createLegend({ viewState, chart, options, colorService, actions });
+    styleModel = { query: { legend: { title: { getStyle: () => {} }, label: { getStyle: () => {} } } } };
+    create = () => createLegend({ viewState, chart, options, colorService, actions, styleModel });
   });
 
   afterEach(() => {
@@ -40,6 +42,10 @@ describe('legend', () => {
         viewState: 'view-state',
         chart: 'chart',
         styleReference: 'object.scatterPlot',
+        styleOverrides: {
+          title: styleModel.query.legend.title.getStyle(),
+          label: styleModel.query.legend.label.getStyle(),
+        },
         rtl: true,
         settings: 'settings',
       },
