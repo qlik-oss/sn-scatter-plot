@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-scatter-plot:properties",
     "description": "Scatter plot generic object definition",
-    "version": "3.48.0",
+    "version": "3.49.0",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
@@ -941,6 +941,17 @@
         }
       }
     },
+    "legendStyle": {
+      "kind": "object",
+      "entries": {
+        "title": {
+          "type": "#/definitions/fontStyle"
+        },
+        "label": {
+          "type": "#/definitions/fontStyle"
+        }
+      }
+    },
     "MeasureProperties": {
       "description": "Extends `NxMeasure`, see Engine API: `NxMeasure`.",
       "extends": [
@@ -1054,6 +1065,9 @@
         },
         "referenceLine": {
           "type": "#/definitions/referenceLineStyle"
+        },
+        "legendStyle": {
+          "type": "#/definitions/legendStyle"
         }
       }
     },
