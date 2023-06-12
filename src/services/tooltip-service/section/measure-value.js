@@ -1,8 +1,10 @@
 export default function getMeasureValue({ dataset, data }) {
   const { source, label, value } = data;
   const field = dataset(source.key).field(source.field);
-
-  if (field.raw().isCustomFormatted) {
+  const measureInfo = field.raw();
+  const useFormatter =
+    !measureInfo.isCustomFormatted && (measureInfo.qIsAutoFormat || measureInfo.qNumFormat.qType === 'U');
+  if (!useFormatter) {
     return label;
   }
 
