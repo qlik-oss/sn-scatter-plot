@@ -27,6 +27,8 @@ describe('measure-value', () => {
     };
     raw = {
       isCustomFormatted: false,
+      qIsAutoFormat: true,
+      qNumFormat: {},
     };
     formatter = sandbox.stub().callsFake((value) => `formatted-${value}`);
     field = {
