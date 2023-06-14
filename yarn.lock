@@ -10903,20 +10903,20 @@ phin@^2.9.1:
   resolved "https://registry.yarnpkg.com/phin/-/phin-2.9.3.tgz#f9b6ac10a035636fb65dfc576aaaa17b8743125c"
   integrity sha512-CzFr90qM24ju5f88quFC/6qohjC144rehe5n6DH900lgXmUe86+xCKc10ev56gRKC4/BkHUoG4uSiQgBiIXwDA==
 
-picasso-plugin-hammer@2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/picasso-plugin-hammer/-/picasso-plugin-hammer-2.2.3.tgz#be73374ef8c86197508775e9e3bb10ff8ac157c0"
-  integrity sha512-9H39iil6px4f5yFH0kaHv8Coh1rwogerW/dtBKU+tQP0kiKcoMHuqrEH6I0fugyYMk+PCXv9PRorppDmrIGuQg==
+picasso-plugin-hammer@2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/picasso-plugin-hammer/-/picasso-plugin-hammer-2.2.4.tgz#9d7c32e33b0eb04c25c29484e907fff650d6f400"
+  integrity sha512-BEi+4yN59x+U1ktUaj8V0JE1O8Pf1PGr9Yw/97xwOU4fUIrfFytYYkj+DTVrwbhfVBGfNVBSw0ZFCQccCW+qVA==
 
-picasso-plugin-q@2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/picasso-plugin-q/-/picasso-plugin-q-2.2.3.tgz#e96955f3845da18d45391207378ca4c481ee30a9"
-  integrity sha512-gRf12eYfx35MD0S58Enpuoo+ZdZ/47D6NNx2YWGnnsl9u031gGK0W/1rL9PqUFCeQaPTPURWtyCWCEDk4/kRiA==
+picasso-plugin-q@2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/picasso-plugin-q/-/picasso-plugin-q-2.2.4.tgz#88e7fec5ffe8244b2375c21c43107ca7544aacd3"
+  integrity sha512-CBgdGeGJC5qxdW2ZzvlXnBBYJEi6mqoSerrPDOH6+tQRdTdEJm7wIl2D+VUmN5nLZNhY64qLgnDKypXRAjKv4g==
 
-picasso.js@2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/picasso.js/-/picasso.js-2.2.3.tgz#f32039a6cf7bda0989c4967641435f801ca45ec2"
-  integrity sha512-s2shnImqaM4XCR1E8mg8y86ZmhOgrTDhO1WIZ86LtZTXdvllkFS1TRVgpvxIfIIrbXb0IZPPQsrBNJomYvbD0Q==
+picasso.js@2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/picasso.js/-/picasso.js-2.2.4.tgz#b9167b752525b989d66099f2cf9e7deac8161aae"
+  integrity sha512-x+eSGDP5FtCugGoPJ2I2PvEZjTDDwPhcLMWaynPWnS7KPPCv5KOz2E2AsDRsBqO5xkV8boZppwZqv0dNnxIKjg==
 
 picocolors@^1.0.0:
   version "1.0.0"
