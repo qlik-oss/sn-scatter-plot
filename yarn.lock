@@ -6727,10 +6727,10 @@ eslint-plugin-mocha@10.1.0:
     eslint-utils "^3.0.0"
     rambda "^7.1.0"
 
-eslint-plugin-playwright@0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-playwright/-/eslint-plugin-playwright-0.14.0.tgz#c3ad1d5de01bef734720a1cd29fd936996979871"
-  integrity sha512-LEin7QeBdnyTINJ4ZTpn5EzJUIqEkLr8o041Ed69wStkW7KvB4UcL3eTJBO3Jgh3PH1FlExdVXnMao1mKrUX1g==
+eslint-plugin-playwright@0.15.1:
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-playwright/-/eslint-plugin-playwright-0.15.1.tgz#63881b3c497ab8597f9beebd9c75810dd7fa56a3"
+  integrity sha512-JyzskjLkCZqswRZ+ZZNH+jS8qnI/w0qTHOA2i5IJxXC+MfaKv03YqOFb+aoJukxTpOp0rOnm9FQ/jsF+lj/cBg==
 
 eslint-plugin-prettier@4.2.1:
   version "4.2.1"
