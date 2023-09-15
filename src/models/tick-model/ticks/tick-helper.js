@@ -1,6 +1,15 @@
 import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 
+function hasDuplicateItems(array) {
+  for (let i = 1; i < array.length; i++) {
+    if (array[i] === array[i - 1]) {
+      return true;
+    }
+  }
+  return false;
+}
+
 const tickHelper = {
   getTicksAndMinMax(scale, nicing, count, originalMin, originalMax) {
     if (nicing) {
@@ -46,6 +55,10 @@ const tickHelper = {
 
     // It is also not valid if the axis labels overlap
     const labels = ticks.map(formatter);
+    const hasDuplicateLabels = hasDuplicateItems(labels);
+    if (hasDuplicateLabels) {
+      return false;
+    }
     const available = size / ticks.length;
     return Math.max(...labels.map(measure)) <= available;
   },

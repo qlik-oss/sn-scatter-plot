@@ -108,7 +108,7 @@ describe('valid', () => {
   let measure;
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    formatter = sandbox.stub().returns('formatted');
+    formatter = (v) => v;
     measure = sandbox.stub();
     scale = sandbox.stub();
 
@@ -122,7 +122,7 @@ describe('valid', () => {
   it('should return true if the space between ticks is larger than or equal 50% of the distance and the labels do not overlap', () => {
     ticks = [0, 800, 1600];
     distance = 100;
-    measure.withArgs('formatted').returns(50);
+    measure.returns(50);
     size = 300;
     scale.withArgs(800).returns(0.2);
     scale.withArgs(0).returns(0);
@@ -132,7 +132,7 @@ describe('valid', () => {
   it('should return false if the space between ticks is smaller than 50% of the distance', () => {
     ticks = [0, 700, 1400];
     distance = 100;
-    measure.withArgs('formatted').returns(50);
+    measure.returns(50);
     size = 300;
     scale.withArgs(700).returns(0.1);
     scale.withArgs(0).returns(0);
@@ -151,7 +151,7 @@ describe('valid', () => {
   it('should return false if the labels overlap', () => {
     ticks = [0, 800, 1600];
     distance = 100;
-    measure.withArgs('formatted').returns(110);
+    measure.returns(110);
     size = 300;
     scale.withArgs(800).returns(0.3);
     scale.withArgs(0).returns(0);
