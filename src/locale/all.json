@@ -718,5 +718,11 @@
       "zh-TW": "關閉套索選取",
       "ru-RU": "Выключить выбор лассо"
     }
+  },
+  "properties.compression.providingOverviewOf": {
+    "id": "properties.compression.providingOverviewOf",
+    "locale": {
+      "en-US": "Providing overview of {0} dimension values."
+    }
   }
 }
