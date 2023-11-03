@@ -52,7 +52,7 @@ describe('meta', () => {
       isBigData: false,
       isContinuous: true,
       isRangeSelectionsSupported: true,
-      isLargeNumDataPoints: false,
+      isLargeNumDataPoints: true,
       maxVisibleBubbles: 100,
       largeNumDataPoints: 100,
       numDataPoints: 15000,

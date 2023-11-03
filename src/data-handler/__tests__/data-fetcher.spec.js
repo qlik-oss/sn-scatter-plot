@@ -13,13 +13,16 @@ describe('createDataFetcher', () => {
     layoutService = {
       meta: {
         isSnapshot: false,
+        size: {
+          y: 1000,
+        },
       },
       getDataPages: sinon.stub().returns([{ snapshotData: true }]),
       setLayoutValue: sandbox.stub(),
       setDataPages: sandbox.stub(),
     };
 
-    pages = [{ realDataPageBlabla: true, qNodes: [] }];
+    pages = [{ realDataPageBlabla: true, qNodes: [], qMatrix: [], qArea: { qWidth: 4 }, qTails: {} }];
     model = {
       getHyperCubeData: sinon.stub().callsFake(async () => pages),
     };
@@ -45,12 +48,24 @@ describe('createDataFetcher', () => {
         qTop: 0,
         qLeft: 0,
         qWidth: 4,
-        qHeight: 2000,
+        qHeight: 2500,
       },
     ]);
-    expect(dataPages).to.eql(pages);
+
+    expect(dataPages).to.eql([
+      {
+        qArea: {
+          qHeight: 1000,
+          qLeft: 0,
+          qTop: 0,
+          qWidth: 4,
+        },
+        qMatrix: [],
+        qTails: {},
+      },
+    ]);
     expect(layoutService.setLayoutValue.withArgs('dataPages', undefined)).to.have.been.calledOnce;
-    expect(layoutService.setDataPages.withArgs(pages)).to.have.been.calledOnce;
+    expect(layoutService.setDataPages.withArgs(dataPages)).to.have.been.calledOnce;
   });
 
   it('should reject promise when trying to fetch the same data window twice in a row', async () => {
