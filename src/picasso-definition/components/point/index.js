@@ -56,12 +56,10 @@ export default function createPoint({ models, chart, animationsEnabled }) {
         width: rect.computedPhysical.width + 100,
         height: rect.computedPhysical.height + 100,
       }),
-      progressive: layoutService.meta.isProgressiveEnabled
-        ? () => {
-            const meta = chartModel.query.getMeta();
-            return meta.progressive;
-          }
-        : undefined,
+      progressive: () => {
+        const meta = chartModel.query.getMeta();
+        return meta.progressive;
+      },
     },
   };
 }

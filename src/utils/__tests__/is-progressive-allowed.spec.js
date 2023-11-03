@@ -15,40 +15,30 @@ describe('isProgressiveAllowed', () => {
     sandbox.restore();
   });
 
-  it('should return false if isProgressiveEnabled = false', () => {
-    layoutService.meta.isProgressiveEnabled = false;
-    expect(isProgressiveEnabled(layoutService)).to.equal(false);
-  });
-
-  it('should return false if isProgressiveEnabled = true, isBigData = true && getNumPointsInBigData(layoutService) < largeNumDataPoints', () => {
-    layoutService.meta.isProgressiveEnabled = true;
+  it('should return false if isBigData = true && getNumPointsInBigData(layoutService) < largeNumDataPoints', () => {
     layoutService.meta.isBigData = true;
     expect(isProgressiveEnabled(layoutService)).to.equal(false);
   });
 
-  it('should return false if isProgressiveEnabled = true, isBigData = true && getNumPointsInBigData(layoutService) = largeNumDataPoints', () => {
-    layoutService.meta.isProgressiveEnabled = true;
+  it('should return false if isBigData = true && getNumPointsInBigData(layoutService) = largeNumDataPoints', () => {
     layoutService.meta.isBigData = true;
     layoutService.meta.largeNumDataPoints = 10;
     expect(isProgressiveEnabled(layoutService)).to.equal(false);
   });
 
-  it('should return true if isProgressiveEnabled = true, isBigData = true && getNumPointsInBigData(layoutService) > largeNumDataPoints', () => {
-    layoutService.meta.isProgressiveEnabled = true;
+  it('should return true if isBigData = true && getNumPointsInBigData(layoutService) > largeNumDataPoints', () => {
     layoutService.meta.isBigData = true;
     layoutService.meta.largeNumDataPoints = 5;
     expect(isProgressiveEnabled(layoutService)).to.equal(true);
   });
 
-  it('should return true if isProgressiveEnabled = true, isBigData = false && isLargeNumDataPoints = true', () => {
-    layoutService.meta.isProgressiveEnabled = true;
+  it('should return true if isBigData = false && isLargeNumDataPoints = true', () => {
     layoutService.meta.isBigData = false;
     layoutService.meta.isLargeNumDataPoints = true;
     expect(isProgressiveEnabled(layoutService)).to.equal(true);
   });
 
-  it('should return false if isProgressiveEnabled = true, isBigData = false && isLargeNumDataPoints = false', () => {
-    layoutService.meta.isProgressiveEnabled = true;
+  it('should return false if isBigData = false && isLargeNumDataPoints = false', () => {
     layoutService.meta.isBigData = false;
     layoutService.meta.isLargeNumDataPoints = false;
     expect(isProgressiveEnabled(layoutService)).to.equal(false);

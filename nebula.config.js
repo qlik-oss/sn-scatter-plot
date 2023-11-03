@@ -17,9 +17,6 @@ module.exports = {
   serve: {
     flags: {
       panZoom: true,
-      DATA_BINNING: true,
-      NUM_BUBBLES: true,
-      PROGRESSIVE_RENDERING: true,
       CLIENT_IM_3050: true,
     },
   },

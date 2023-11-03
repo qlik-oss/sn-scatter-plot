@@ -6,7 +6,6 @@ describe('createMiniChartNavigationWindow', () => {
   let sandbox;
   let create;
   let chartModel;
-  let flags;
   let viewHandler;
 
   beforeEach(() => {
@@ -24,8 +23,6 @@ describe('createMiniChartNavigationWindow', () => {
       getDataView: sandbox.stub().returns({ xAxisMin: 10, xAxisMax: 30, yAxisMin: 5, yAxisMax: 15 }),
     };
     chartModel = { query: { getViewHandler: sandbox.stub().returns(viewHandler), miniChartEnabled: sandbox.stub() } };
-    flags = { isEnabled: sandbox.stub() };
-    flags.isEnabled.withArgs('DATA_BINNING').returns(true);
     create = () => createMiniChartNavigationWindow(chartModel);
   });
 

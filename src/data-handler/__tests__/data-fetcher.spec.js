@@ -60,10 +60,9 @@ describe('createDataFetcher', () => {
     expect(someRejectFn).to.have.been.calledOnce;
   });
 
-  describe('layoutService.meta.isMaxVisibleBubblesEnabled = true', () => {
+  describe('maxVisibleBubbles', () => {
     beforeEach(() => {
       pages = [{ realDataPageBlabla: true, qNodes: [], qArea: { qWidth: 3 }, qMatrix: [1, 2], qTails: [10, 20] }];
-      layoutService.meta.isMaxVisibleBubblesEnabled = true;
       layoutService.meta.maxVisibleBubbles = 4000;
       layoutService.meta.size = { y: 3000 };
     });
