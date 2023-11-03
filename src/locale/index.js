@@ -2,7 +2,7 @@ import all from './all.json';
 
 export default function autoRegister(translator) {
   if (translator && translator.get && translator.add) {
-    const t = 'Object.Disclaimer.LimitedData';
+    const t = 'properties.compression.providingOverviewOf';
     const g = translator.get(t);
     // if translated string is different from its id
     // assume translations already exists for current locale
