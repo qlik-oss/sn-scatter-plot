@@ -24,7 +24,7 @@ describe('autoRegister', () => {
   });
 
   it('should call translator.add if translated string is the same as its id', () => {
-    translator.get.returns('Object.Disclaimer.LimitedData');
+    translator.get.returns('properties.compression.providingOverviewOf');
     create();
     expect(translator.add).to.have.been.called;
   });
