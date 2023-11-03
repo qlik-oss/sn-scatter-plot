@@ -1,4 +1,5 @@
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import * as mui from '../mui';
 import r from '../react-renderer';
 
@@ -9,6 +10,7 @@ describe('r', () => {
   let opts;
   let createElement;
   let element;
+  let root;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -18,8 +20,11 @@ describe('r', () => {
     element = {};
     element.appendChild = sandbox.stub();
     opts = {};
-    sandbox.stub(ReactDOM, 'render');
-    sandbox.stub(ReactDOM, 'unmountComponentAtNode');
+    root = {
+      render: sandbox.stub(),
+      unmount: sandbox.stub(),
+    };
+    sandbox.stub(ReactDOM, 'createRoot').returns(root);
     sandbox.stub(mui, 'Mui').returns('mui output');
     renderer = r();
   });
@@ -108,7 +113,7 @@ describe('r', () => {
         dom.appendTo(element);
         expect(dom.render('nodes')).to.equal(true);
         expect(
-          ReactDOM.render.withArgs('mui output', {
+          ReactDOM.createRoot.withArgs({
             id: 'div-1',
             style: {
               position: 'absolute',
@@ -124,6 +129,7 @@ describe('r', () => {
             },
           })
         ).to.have.been.calledOnce;
+        expect(root.render.withArgs('mui output')).to.have.been.calledOnce;
       });
     });
 
@@ -145,42 +151,34 @@ describe('r', () => {
     });
 
     describe('clear', () => {
-      it('should unmount component, case 1: el is defined', () => {
+      it('should not unmount component, case 1: render has not been triggered', () => {
         dom.appendTo(element);
         dom.clear();
-        expect(
-          ReactDOM.unmountComponentAtNode.withArgs({
-            id: 'div-1',
-            style: {
-              position: 'absolute',
-              '-webkit-font-smoothing': 'antialiased',
-              '-moz-osx-font-smoothing': 'antialiased',
-              pointerEvents: 'none',
-            },
-          })
-        ).to.have.been.calledOnce;
+        expect(root.unmount).not.to.have.been.called;
       });
 
-      it('should unmount component, case 2: el is not defined', () => {
+      it('should not unmount component, case 2: el is not defined', () => {
         dom.clear();
-        expect(ReactDOM.unmountComponentAtNode).not.to.have.been.called;
+        expect(root.unmount).not.to.have.been.called;
       });
     });
 
     describe('destroy', () => {
-      it('should destroy el correctly, case 1: el has been appended to', () => {
+      it('should destroy el correctly, case 1: el has been appended to and render has been called', () => {
         element.appendChild = (el) => {
           // eslint-disable-next-line no-param-reassign
           el.parentElement = { removeChild: sandbox.stub };
         };
         dom.appendTo(element);
+        dom.render('nodes');
+
         dom.destroy();
-        expect(ReactDOM.unmountComponentAtNode).to.have.been.calledOnce;
+        expect(root.unmount).to.have.been.calledOnce;
       });
 
       it('should destroy el correctly, case 2: el has not been appended to', () => {
         dom.destroy();
-        expect(ReactDOM.unmountComponentAtNode).not.to.have.been.called;
+        expect(root.unmount).not.to.have.been.called;
       });
     });
 

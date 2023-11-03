@@ -1,4 +1,5 @@
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import { Mui, classGenerator } from './mui';
 
@@ -43,6 +44,7 @@ export default function r() {
 
     let el;
     let rect = createRendererBox();
+    let root;
 
     const dom = {
       element: () => el,
@@ -74,7 +76,10 @@ export default function r() {
         el.style.height = `${Math.round(rect.height)}px`;
         el.style.transform = `scale(${scaleX}, ${scaleY})`;
         el.style.transformOrigin = 'top left';
-        ReactDOM.render(Mui(nodes, classNameGenerator), el);
+        if (!root) {
+          root = createRoot(el);
+        }
+        root.render(Mui(nodes, classNameGenerator));
 
         return true;
       },
@@ -94,16 +99,18 @@ export default function r() {
       findShapes: () => [],
 
       clear() {
-        if (el) {
-          ReactDOM.unmountComponentAtNode(el);
+        if (root) {
+          root.unmount();
         }
 
         return dom;
       },
 
       destroy() {
+        if (root) {
+          root.unmount();
+        }
         if (el && el.parentElement) {
-          ReactDOM.unmountComponentAtNode(el);
           el.parentElement.removeChild(el);
         }
         el = null;
