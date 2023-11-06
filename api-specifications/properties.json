@@ -3,7 +3,7 @@
   "info": {
     "name": "@nebula.js/sn-scatter-plot:properties",
     "description": "Scatter plot generic object definition",
-    "version": "3.51.0",
+    "version": "3.52.0",
     "license": "MIT",
     "stability": "stable",
     "x-qlik-visibility": "public"
@@ -348,6 +348,11 @@
               "type": "boolean"
             }
           }
+        },
+        "maxVisibleBubbles": {
+          "description": "Set the maximum number of visible bubbles for the chart.\nMax is 50000 and min is 1000.",
+          "defaultValue": 2500,
+          "type": "number"
         },
         "navigation": {
           "description": "Show navigation UI.",
