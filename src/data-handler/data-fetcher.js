@@ -1,7 +1,4 @@
 import KEYS from '../constants/keys';
-import NUMBERS from '../constants/numbers';
-
-const { DEFAULT_VISIBLE_BUBBLES } = NUMBERS;
 
 export default function createDataFetcher({ layoutService, model }) {
   let lastDataWindow;
@@ -13,10 +10,7 @@ export default function createDataFetcher({ layoutService, model }) {
       }
 
       const NUM_BUBBLES_PER_FETCH = 2500;
-      const NUM_BUBBLES = Math.min(
-        layoutService.meta.maxVisibleBubbles || DEFAULT_VISIBLE_BUBBLES,
-        layoutService.meta.size.y || 0
-      );
+      const NUM_BUBBLES = Math.min(layoutService.meta.maxVisibleBubbles, layoutService.meta.size.y || 0);
       const numFetches = Math.ceil(NUM_BUBBLES / NUM_BUBBLES_PER_FETCH);
       const dataRects = [];
       for (let i = 0; i < numFetches; i++) {
