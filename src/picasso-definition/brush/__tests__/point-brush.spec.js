@@ -23,7 +23,6 @@ describe('createPointBrush', () => {
         isBigData: false,
         isLargeNumDataPoints: false,
         hasSizeMeasure: true,
-        isMaxVisibleBubblesEnabled: true,
       },
     };
     chartModel = { command: { brush: sandbox.spy() } };
@@ -210,10 +209,5 @@ describe('createPointBrush', () => {
     create().customRender({ render, nodes });
     expect(render).to.not.have.been.called;
     expect(chartModel.command.brush).to.have.been.calledWithExactly({ render, nodes });
-  });
-
-  it('should not have customRender if isMaxVisibleBubblesEnabled = false', () => {
-    layoutService.meta.isMaxVisibleBubblesEnabled = false;
-    expect(typeof create().customRender).to.equal('undefined');
   });
 });

@@ -5,9 +5,7 @@ import colorModeOptions from './color-mode-options';
 import showColorScheme from './show-color-scheme';
 import showPersistentColors from './show-persistent-colors';
 
-export default function exploreDefinition(env) {
-  const { flags } = env;
-
+export default function exploreDefinition() {
   return {
     type: 'items',
     component: 'accordion',
@@ -85,7 +83,7 @@ export default function exploreDefinition(env) {
             max: 8,
             step: 1,
             show(data, layout) {
-              return showCompressionResolution(layout, flags.isEnabled('NUM_BUBBLES') ? data : undefined);
+              return showCompressionResolution(layout, data);
             },
           },
         },

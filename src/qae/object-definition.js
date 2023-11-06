@@ -251,6 +251,13 @@ const objectDefinition = () => {
       showTitle: true,
     },
     /**
+     * Set the maximum number of visible bubbles for the chart.
+     * Max is 50000 and min is 1000.
+     * @type {number}
+     * @default
+     */
+    maxVisibleBubbles: 2500,
+    /**
      * Show navigation UI.
      * @type {boolean}
      * @default

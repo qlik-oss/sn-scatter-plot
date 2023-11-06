@@ -21,6 +21,7 @@ describe('object-definition', () => {
       'labels',
       'gridLine',
       'legend',
+      'maxVisibleBubbles',
       'navigation',
       'qHyperCubeDef',
       'refLine',

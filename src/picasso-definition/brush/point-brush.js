@@ -48,14 +48,12 @@ export default function createBrush({ layoutService, largeDataService, chartMode
       }
       return inactiveNodes.concat(activeNodes);
     },
-    customRender: !layoutService.meta.isMaxVisibleBubblesEnabled
-      ? undefined
-      : ({ render, nodes }) => {
-          if (largeDataService.shouldUseProgressive()) {
-            chartModel.command.brush({ render, nodes });
-          } else {
-            render(nodes);
-          }
-        },
+    customRender: ({ render, nodes }) => {
+      if (largeDataService.shouldUseProgressive()) {
+        chartModel.command.brush({ render, nodes });
+      } else {
+        render(nodes);
+      }
+    },
   };
 }

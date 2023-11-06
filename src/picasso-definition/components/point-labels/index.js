@@ -31,9 +31,7 @@ export default function createPointLabels({ models, animationsEnabled }) {
     settings: {
       label: (node) => node.data.label,
       mode: labels.mode,
-      maxVisibleBubblesForLabeling: layoutService.meta.isMaxVisibleBubblesEnabled
-        ? NUMBERS.LARGE_NUM_DATA_POINTS
-        : undefined,
+      maxVisibleBubblesForLabeling: NUMBERS.LARGE_NUM_DATA_POINTS,
       // debugMode: true,
     },
     style: {

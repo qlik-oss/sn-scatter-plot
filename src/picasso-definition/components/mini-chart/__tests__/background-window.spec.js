@@ -6,7 +6,6 @@ describe('createMiniChartBackgroundWindow', () => {
   let sandbox;
   let create;
   let chartModel;
-  let flags;
   let viewHandler;
 
   beforeEach(() => {
@@ -24,8 +23,6 @@ describe('createMiniChartBackgroundWindow', () => {
         miniChartEnabled: sandbox.stub(),
       },
     };
-    flags = { isEnabled: sandbox.stub() };
-    flags.isEnabled.withArgs('DATA_BINNING').returns(true);
     create = () => createMiniChartBackgroundWindow(chartModel);
   });
 

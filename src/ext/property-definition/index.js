@@ -281,20 +281,18 @@ export default function propertyDefinition(env) {
             step: 1,
             defaultValue: 5,
             show(data, handler) {
-              return showCompressionResolution(handler.layout, flags.isEnabled('NUM_BUBBLES') ? data : undefined);
+              return showCompressionResolution(handler.layout, data);
             },
           },
-          maxVisibleBubbles: !flags.isEnabled('NUM_BUBBLES')
-            ? undefined
-            : {
-                type: 'integer',
-                expression: 'optional',
-                ref: 'maxVisibleBubbles',
-                translation: 'properties.dataPoints.maxVisibleBubbles',
-                defaultValue: DEFAULT_VISIBLE_BUBBLES,
-                min: MAX_NR_SCATTER,
-                max: MAX_VISIBLE_BUBBLES,
-              },
+          maxVisibleBubbles: {
+            type: 'integer',
+            expression: 'optional',
+            ref: 'maxVisibleBubbles',
+            translation: 'properties.dataPoints.maxVisibleBubbles',
+            defaultValue: DEFAULT_VISIBLE_BUBBLES,
+            min: MAX_NR_SCATTER,
+            max: MAX_VISIBLE_BUBBLES,
+          },
           gridLines: {
             type: 'items',
             snapshot: {

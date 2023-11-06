@@ -6,7 +6,6 @@ describe('createMiniChartPoints', () => {
   let sandbox;
   let create;
   let chartModel;
-  let flags;
   let viewHandler;
   let dataHandler;
   let d;
@@ -36,8 +35,6 @@ describe('createMiniChartPoints', () => {
         miniChartEnabled: sandbox.stub(),
       },
     };
-    flags = { isEnabled: sandbox.stub() };
-    flags.isEnabled.withArgs('DATA_BINNING').returns(true);
     d = { datum: { value: { qText: [8, 12, 12, 8], qNum: 3 } }, scale: sandbox.stub() };
     d.scale.withArgs(3).returns(0.3);
     rtl = false;
