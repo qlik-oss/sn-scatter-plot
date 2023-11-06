@@ -16,6 +16,7 @@ describe('createDataFetcher', () => {
         size: {
           y: 1000,
         },
+        maxVisibleBubbles: 1000,
       },
       getDataPages: sinon.stub().returns([{ snapshotData: true }]),
       setLayoutValue: sandbox.stub(),
