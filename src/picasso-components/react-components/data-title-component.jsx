@@ -244,7 +244,7 @@ export default function createDataTitileComp() {
       const dir = rtlUtils.detectTextDirection(titleData.text);
       const label = (
         <FadeButton
-          aria-label={translator.get('Accessibility.Alternative.Instructions', [titleData.text])}
+          aria-label={translator.get(`Accessibility.${popover ? 'Alternative' : 'Normal'}.Instructions`, [titleData.text])}
           style={style}
           onClick={disabledLabel ? undefined : onClick}
           title={titleData.text}
