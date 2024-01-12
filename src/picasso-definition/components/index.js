@@ -13,7 +13,7 @@ import createNavigationPanel from './navigation-panel';
 import createMiniChart from './mini-chart';
 import createHeatMapHighLight from './heat-map-highlight';
 
-export default function createComponents({ context, models, picasso, chart, actions, animationsEnabled }) {
+export default function createComponents({ context, models, picasso, chart, actions, animationsEnabled, flags }) {
   const { colorService, disclaimerModel, layoutService, themeService, chartModel, trendLinesService, tooltipService } =
     models;
   const disclaimer = createDisclaimer({ disclaimerModel, context, layoutService, themeService, picasso });
@@ -30,14 +30,14 @@ export default function createComponents({ context, models, picasso, chart, acti
     createHeatMap(chartModel, animationsEnabled),
     createHeatMapHighLight({ chartModel, layoutService, actions, context }),
     ...trendLinesService.getComponents(),
-    ...createAxes({ models, animationsEnabled }),
+    ...createAxes({ models, animationsEnabled, flags }),
     ...createAxisTitles({ models, context }),
-    createPointLabels({ models, animationsEnabled }),
+    createPointLabels({ models, animationsEnabled, flags }),
     createOutOfBounds({ models, context, chart }),
     ...colorService.custom.legendComponents(),
     createHeatMapLegend({ models, context, chart }),
     disclaimer,
-    createHeatMapLabels({ themeService, chartModel, picasso, context, animationsEnabled }),
+    createHeatMapLabels({ themeService, chartModel, picasso, context, animationsEnabled, flags }),
     ...createNavigationPanel({ models, chart, actions, context }),
     ...createMiniChart({ models, context }),
     ...tooltipService.getComponents(),

@@ -2,8 +2,9 @@
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 import NUMBERS from '../../../constants/numbers';
+import getTextRenderer from '../../../utils/get-text-renderer';
 
-export default function createAxes({ models, animationsEnabled }) {
+export default function createAxes({ models, animationsEnabled, flags }) {
   const { layoutService, dockService, themeService, chartModel, styleModel } = models;
   const { xAxis, yAxis } = layoutService.getLayout();
 
@@ -20,12 +21,15 @@ export default function createAxes({ models, animationsEnabled }) {
     return `mark: ${node.tickValue}`;
   };
 
+  const renderer = getTextRenderer(flags);
+
   const xAxisDefinition =
     !xAxis || xAxis.show === 'none'
       ? false
       : {
           type: 'axis',
           key: KEYS.COMPONENT.X_AXIS,
+          renderer,
           scale: KEYS.SCALE.X,
           layout: {
             dock: dockService.meta.x.dock,
@@ -70,6 +74,7 @@ export default function createAxes({ models, animationsEnabled }) {
       : {
           type: 'axis',
           key: KEYS.COMPONENT.Y_AXIS,
+          renderer,
           scale: KEYS.SCALE.Y,
           layout: {
             dock: dockService.meta.y.dock,
