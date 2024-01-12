@@ -1,8 +1,9 @@
 import KEYS from '../../../constants/keys';
 import MODES from '../../../constants/modes';
 import compensateForLayoutChanges from '../animations/labels/compensate';
+import getTextRenderer from '../../../utils/get-text-renderer';
 
-export default function createHeatMapLabels({ themeService, chartModel, picasso, context, animationsEnabled }) {
+export default function createHeatMapLabels({ themeService, chartModel, picasso, context, animationsEnabled, flags }) {
   const formatter = picasso.formatter('q-number');
   const style = themeService.getStyles();
   const { fontFamily, numFontSize } = style.label?.value || {};
@@ -12,6 +13,7 @@ export default function createHeatMapLabels({ themeService, chartModel, picasso,
   const heatMapLabelsComponent = {
     type: 'labels',
     key: KEYS.COMPONENT.HEAT_MAP_LABELS,
+    renderer: getTextRenderer(flags),
     layout: {
       minimumLayoutMode: MODES.HEAT_MAP_LABELS,
     },

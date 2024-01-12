@@ -18,6 +18,7 @@ module.exports = {
     flags: {
       panZoom: true,
       CLIENT_IM_3050: true,
+      IM_5791_SVG_LABEL_RENDERING: true,
     },
   },
 };

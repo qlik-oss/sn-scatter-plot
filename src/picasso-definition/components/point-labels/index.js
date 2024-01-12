@@ -2,6 +2,7 @@ import KEYS from '../../../constants/keys';
 import NUMBERS from '../../../constants/numbers';
 import MODES from '../../../constants/modes';
 import compensateForLayoutChanges from '../animations/labels/compensate';
+import getTextRenderer from '../../../utils/get-text-renderer';
 
 const LABEL_MODE = {
   NONE: 0,
@@ -10,7 +11,7 @@ const LABEL_MODE = {
   FALLBACK: 1,
 };
 
-export default function createPointLabels({ models, animationsEnabled }) {
+export default function createPointLabels({ models, animationsEnabled, flags }) {
   const { layoutService, themeService, chartModel, styleModel } = models;
   const labels = layoutService.getLayoutValue('labels', {});
   if (labels.mode === LABEL_MODE.NONE) {
@@ -25,6 +26,7 @@ export default function createPointLabels({ models, animationsEnabled }) {
   const pointLabelsComponent = {
     type: 'point-label',
     key: KEYS.COMPONENT.POINT_LABELS,
+    renderer: getTextRenderer(flags),
     layout: {
       minimumLayoutMode: MODES.POINT_LABELS,
     },
