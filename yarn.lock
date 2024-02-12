@@ -10755,10 +10755,10 @@ puppeteer@14.4.1:
     unbzip2-stream "1.4.3"
     ws "8.7.0"
 
-qlik-chart-modules@0.59.0:
-  version "0.59.0"
-  resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.59.0.tgz#2bffe8ebdbef5dc0316907933c1061e2fe1bfac7"
-  integrity sha512-ErnAjpIugAUzXPnRS4l+rxQghmMjd67Q3FeFyWVWT2WCZDMjsOw4a3hSUIN3h5OOwtzSBmw3jxdDqL8DmTMDjw==
+qlik-chart-modules@0.67.0:
+  version "0.67.0"
+  resolved "https://registry.yarnpkg.com/qlik-chart-modules/-/qlik-chart-modules-0.67.0.tgz#f7a9c2fbb47e7c4cd9511b18d2be78e8de3565a4"
+  integrity sha512-e4UpltO9Dq+1p/Te79TNtQ6NMdNJ+wa1K036LmJtpSJg58P046IQtJ2myy3f24I5XSOxTQ/RPTnyRbF530zcaQ==
 
 qlik-modifiers@0.9.1:
   version "0.9.1"
