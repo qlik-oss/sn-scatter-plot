@@ -16,7 +16,7 @@ describe('r', () => {
     sandbox = sinon.createSandbox();
     createElement = sandbox.stub();
     createElement.withArgs('div').returns({ id: 'div-1', style: {} });
-    global.document = { createElement: { bind: sandbox.stub().returns(createElement) } };
+    global.document.createElement.bind = sandbox.stub().returns(createElement);
     element = {};
     element.appendChild = sandbox.stub();
     opts = {};
@@ -165,10 +165,6 @@ describe('r', () => {
 
     describe('destroy', () => {
       it('should destroy el correctly, case 1: el has been appended to and render has been called', () => {
-        element.appendChild = (el) => {
-          // eslint-disable-next-line no-param-reassign
-          el.parentElement = { removeChild: sandbox.stub };
-        };
         dom.appendTo(element);
         dom.render('nodes');
 

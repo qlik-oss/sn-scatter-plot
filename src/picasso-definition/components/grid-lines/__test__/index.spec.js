@@ -9,7 +9,7 @@ describe('grid-line', () => {
   let create;
   let animationsEnabled;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
     layoutService = {
       getLayoutValue: sandbox.stub(),
@@ -52,7 +52,7 @@ describe('grid-line', () => {
     animationsEnabled = () => true;
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
   // No lines

@@ -18,12 +18,14 @@ import createComponents from '..';
 describe('createComponents', () => {
   let sandbox;
   let create;
+  let context;
   let models;
   let picasso;
   let chart;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
+    context = { key: 'context' };
     models = {
       colorService: {
         custom: { legendComponents: sandbox.stub().returns(['legend-component-1', 'legend-component-2']) },

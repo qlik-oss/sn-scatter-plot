@@ -13,13 +13,13 @@ describe('trendlines definition', () => {
   };
   let def;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
     def = trendlinesDef(env);
     sandbox.stub(trendlinesService, 'propertyPanelProperties').callsFake(() => {});
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 

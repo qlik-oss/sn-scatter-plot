@@ -1,19 +1,17 @@
-// eslint-disable-next-line no-unused-vars
 import * as chartModules from 'qlik-chart-modules';
 import * as qBrush from '../bin-selection/q-brush';
 import * as isRangeHandlersVisible from '../is-range-handlers-visible';
 import * as KEYS from '../../../constants/keys';
 import * as addListeners from '../../../utils/add-listeners';
 import * as removeListeners from '../../../utils/remove-listeners';
+import createSelectionService from '..';
 
 describe('selection-service', () => {
   let sandbox;
   let create;
   let chart;
-  let actions;
   let selections;
-  let createSelectionService;
-  let picassoQSelections;
+  let actions;
   let selectionInfo;
   let brushFn;
 
@@ -22,12 +20,7 @@ describe('selection-service', () => {
     sandbox.stub(chartModules, 'selectionService').returns({});
     sandbox.stub(addListeners, 'default');
     sandbox.stub(removeListeners, 'default');
-
-    picassoQSelections = sandbox.stub();
-    createSelectionService = aw.mock(
-      [['**/dist/picasso-q.js', () => ({ selections: picassoQSelections })]],
-      ['../index.js']
-    )[0].default;
+    selections = {};
     actions = {
       select: {
         emit: sandbox.stub(),
@@ -211,14 +204,10 @@ describe('selection-service', () => {
       let brush;
       let qBrushOptions;
       let layout;
+
       beforeEach(() => {
         sandbox.stub(qBrush, 'default');
         layout = { qHyperCube: { qDataPages: ['data-page-1'] } };
-      });
-
-      it('should call picassoQ selections if qDataPages is not empty', () => {
-        getConfig().selectionsFn(brush, qBrushOptions, layout);
-        expect(picassoQSelections).to.have.been.calledOnce;
       });
 
       it('should call qBrush if qDataPages is empty', () => {

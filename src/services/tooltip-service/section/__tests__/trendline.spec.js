@@ -7,7 +7,7 @@ describe('trendline-tooltip', () => {
   let createAPI;
   let create;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
   });
 
@@ -51,7 +51,7 @@ describe('trendline-tooltip', () => {
     create = () => createTrendlineSection({ dataset, translator, nodes, create: createAPI, h, trendLinesService });
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 

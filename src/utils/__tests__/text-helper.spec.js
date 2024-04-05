@@ -11,12 +11,11 @@ describe('Text helper (for testing measureTextWidth)', () => {
     element = {
       getContext: () => context,
     };
-    global.document = { createElement: () => element };
+    global.document.createElement = () => element;
   });
 
   afterEach(() => {
     sandbox.restore();
-    delete global.document;
   });
 
   describe('measureTextWidth', () => {
@@ -100,12 +99,11 @@ describe('Text helper', () => {
     element = {
       getContext: () => context,
     };
-    global.document = { createElement: () => element };
+    global.document.createElement = () => element;
   });
 
   afterEach(() => {
     sandbox.restore();
-    delete global.document;
   });
 
   describe('lineWrap', () => {

@@ -68,7 +68,7 @@ describe('setColorVars', () => {
 describe('data definition', () => {
   let dataDef;
 
-  before(() => {
+  beforeAll(() => {
     const env = {
       translator: {
         get: (x) => x,

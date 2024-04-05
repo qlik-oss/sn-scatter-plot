@@ -11,7 +11,7 @@ describe('attribute', () => {
   let dataset;
   let formatter;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
     getDirection = sandbox.stub();
     getCustomAttrExps = sandbox.stub();
@@ -46,7 +46,7 @@ describe('attribute', () => {
     layoutService.meta.isStacked = false;
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 

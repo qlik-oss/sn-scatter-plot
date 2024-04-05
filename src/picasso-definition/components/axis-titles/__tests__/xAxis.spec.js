@@ -1,6 +1,9 @@
+import * as keys from '../../../../constants/keys';
+import * as modes from '../../../../constants/modes';
+import createMajorAxisTitle from '../xAxis';
+
 describe('x-axis-title', () => {
   let sandbox;
-  let createMajorAxisTitle;
   let model;
   let app;
   let translator;
@@ -13,15 +16,8 @@ describe('x-axis-title', () => {
   let xAxis;
   let create;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
-    createMajorAxisTitle = aw.mock(
-      [
-        ['**/src/constants/keys.js', () => ({ COMPONENT: { X_AXIS_TITLE: 'x-axis-title' } })],
-        ['**/src/constants/modes.js', () => ({ AXIS_TITLE: { X: 'small-layout-mode' } })],
-      ],
-      ['../../../../../src/picasso-definition/components/axis-titles/xAxis']
-    )[0].default;
     model = { key: 'model' };
     app = { key: 'app' };
     translator = { key: 'translator' };
@@ -40,6 +36,8 @@ describe('x-axis-title', () => {
         },
       },
     };
+    sandbox.stub(keys, 'default').get(() => ({ COMPONENT: { X_AXIS_TITLE: 'x-axis-title' } }));
+    sandbox.stub(modes, 'default').get(() => ({ AXIS_TITLE: { X: 'small-layout-mode' } }));
     create = () =>
       createMajorAxisTitle({
         model,
@@ -82,7 +80,7 @@ describe('x-axis-title', () => {
     };
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 
@@ -178,8 +176,19 @@ describe('x-axis-title', () => {
 
         it('should return true if active is false and has no model', () => {
           constraints.active = false;
-          model = undefined;
-          expect(create().settings.disabled()).to.be.true;
+          expect(
+            createMajorAxisTitle({
+              model: undefined,
+              app,
+              translator,
+              constraints,
+              rtl,
+              layoutService,
+              dockService,
+              styleModel,
+              propertiesModel,
+            }).settings.disabled()
+          ).to.be.true;
         });
 
         it('should return true if active is true and has model', () => {
@@ -189,8 +198,19 @@ describe('x-axis-title', () => {
 
         it('should return true if active is true and has no model', () => {
           constraints.active = true;
-          model = undefined;
-          expect(create().settings.disabled()).to.be.true;
+          expect(
+            createMajorAxisTitle({
+              model: undefined,
+              app,
+              translator,
+              constraints,
+              rtl,
+              layoutService,
+              dockService,
+              styleModel,
+              propertiesModel,
+            }).settings.disabled()
+          ).to.be.true;
         });
       });
 

@@ -19,7 +19,7 @@ describe('tooltip-service', () => {
   let custom;
   let create;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
     sandbox.stub(chartModules, 'tooltipService');
     sandbox.stub(KEYS, 'default').get(() => ({
@@ -109,7 +109,7 @@ describe('tooltip-service', () => {
       });
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 

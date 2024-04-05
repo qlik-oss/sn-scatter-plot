@@ -14,12 +14,11 @@ describe('Custom Tooltip Chart', () => {
 
   beforeEach(() => {
     htmlElement = { textContent: undefined };
-    global.document = {
-      getElementById: () => htmlElement,
-    };
-    layout = {
-      tooltip: {},
-    };
+    (global.document.getElementById = () => htmlElement)(
+      (layout = {
+        tooltip: {},
+      })
+    );
     ctx = { h: (param1, param2) => param2 };
     properties = {
       qHyperCubeDef: {
