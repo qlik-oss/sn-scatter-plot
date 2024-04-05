@@ -1,22 +1,20 @@
 import * as updateSelection from '../../../../interactive/update-selection';
+import * as range from '../../../../interactive/range';
+import createLegendRange from '../legend';
 
 describe('legend', () => {
   let sandbox;
-  let range;
   let actions;
   let selectionService;
   let scales;
   let legend;
   let enableInteraction;
-  let createLegendRange;
   let layoutService;
   let chartModel;
   let create;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
-    range = sandbox.stub();
-    createLegendRange = aw.mock([['**/src/interactive/index.js', () => ({ range })]], ['../legend'])[0].default;
     actions = {
       select: {
         emit: sandbox.spy(),
@@ -27,6 +25,7 @@ describe('legend', () => {
     };
     enableInteraction = 'enableInteraction';
     chartModel = { query: { getChart: sandbox.stub().returns({}) } };
+    sandbox.stub(range, 'default');
     sandbox.stub(updateSelection, 'updateLazySelectionOnEnd');
     create = () =>
       createLegendRange({
@@ -42,7 +41,7 @@ describe('legend', () => {
 
   beforeEach(() => {
     sandbox.reset();
-    range.returns({ key: 'range' });
+    range.default.returns({ key: 'range' });
     selectionService.getIsDimensionLocked.returns(false);
     scales = {
       colorRange: {
@@ -61,7 +60,7 @@ describe('legend', () => {
     ];
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 
@@ -99,7 +98,7 @@ describe('legend', () => {
 
   it('should create legend range', () => {
     create();
-    expect(range).to.have.been.calledOnce;
+    expect(range.default).to.have.been.calledOnce;
   });
 
   it('should return legend range', () => {
@@ -110,7 +109,7 @@ describe('legend', () => {
     it('should have correct properties', () => {
       create();
 
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
 
       expect(config).to.have.all.keys([
         'eventName',
@@ -129,56 +128,56 @@ describe('legend', () => {
 
     it('should have correct eventName', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.eventName).to.equal('legendRange');
     });
 
     it('should have correct key', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.key).to.equal('legend-range-brush');
     });
 
     it('should have correct targets', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.targets).to.deep.equal(['legend-0']);
     });
 
     it('should have correct fillTargets', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.fillTargets).to.deep.equal(['legend-0']);
     });
 
     it('should have correct dock', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.dock).to.equal('right');
     });
 
     it('should have correct scale', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.scale).to.equal('colorRange');
     });
 
     it('should have correct bubblesPlacement', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.bubblesPlacement).to.equal('outside');
     });
 
     it('should have correct onEdited', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       config.onEdited();
       expect(actions.select.emit.withArgs('end', 'legendRange')).to.have.been.calledOnce;
     });
 
     it('should have correct enableInteraction', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.enableInteraction).to.equal('enableInteraction');
     });
   });
@@ -189,12 +188,12 @@ describe('legend', () => {
     });
 
     it('should have correct properties', () => {
-      const [, options] = range.getCall(0).args;
+      const [, options] = range.default.getCall(0).args;
       expect(options).to.have.all.keys(['actions', 'chartModel', 'layoutService']);
     });
 
     it('should have correct actions', () => {
-      const [, options] = range.getCall(0).args;
+      const [, options] = range.default.getCall(0).args;
       expect(options.actions).to.equal(actions);
     });
   });

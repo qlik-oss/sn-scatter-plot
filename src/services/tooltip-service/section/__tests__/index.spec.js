@@ -16,7 +16,7 @@ describe('section', () => {
   let util;
   let create;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
     sandbox.stub(getMeasureValue, 'default');
   });
@@ -162,7 +162,7 @@ describe('section', () => {
       createSection({ translator, custom, measureProperties, h, nodes, dataset, meta, create: createAPI, util });
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 

@@ -65,7 +65,6 @@ describe('use-models', () => {
     models = 'models';
     setModels = sandbox.stub();
     core = { picassoInstance, chart, actions, viewState };
-    global.document = 'document';
     localSelectionService = { destroy: sandbox.stub(), destroyLazySelection: sandbox.stub() };
     layoutService = { getLayout: sandbox.stub() };
 
@@ -137,7 +136,7 @@ describe('use-models', () => {
           chart: 'some-chart',
           actions: 'some-actions',
           selections: 'selections',
-          document: 'document',
+          document: global.document,
         });
       });
 

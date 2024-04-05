@@ -1,35 +1,21 @@
-describe('bin-x-Range', () => {
+import * as updateSelection from '../../../../interactive/update-selection';
+import * as range from '../../../../interactive/range';
+import * as keys from '../../../../constants/keys';
+import createYRange from '../y-range';
+
+describe('yRange', () => {
   let sandbox;
-  let range;
   let actions;
   let selectionService;
   let dockService;
   let enableInteraction;
-  let createBinXRange;
-  let chart;
+  let layoutService;
+  let chartModel;
   let create;
   let isRangeSelectionsSupported;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
-    range = sandbox.stub();
-    createBinXRange = aw.mock(
-      [
-        ['**/src/interactive/index.js', () => ({ range })],
-        [
-          '**/src/constants/keys.js',
-          () => ({
-            SCALE: { BIN_X: 'bin-x-scale' },
-            COMPONENT: { X_AXIS: 'x-axis-key', HEAT_MAP: 'heat-map-key' },
-            FORMATTER: { X: 'x-formatter' },
-            BRUSH: {
-              BIN_X_RANGE: 'bin-x-range-brush',
-            },
-          }),
-        ],
-      ],
-      ['../bin-x-range']
-    )[0].default;
     actions = {
       select: {
         emit: sandbox.spy(),
@@ -40,35 +26,42 @@ describe('bin-x-Range', () => {
     };
     dockService = {
       meta: {
-        x: {
-          dock: 'bottom',
+        y: {
+          dock: 'right',
         },
       },
     };
     enableInteraction = 'enableInteraction';
-    chart = {
-      formatter: sandbox.stub(),
-    };
+    chartModel = { query: { getChart: sandbox.stub().returns({}) } };
+    sandbox.stub(range, 'default');
+    sandbox.stub(keys, 'default').get(() => ({
+      SCALE: { Y: 'y-scale' },
+      COMPONENT: { Y_AXIS: 'y-axis-key', POINT: 'point-key' },
+      BRUSH: {
+        Y_RANGE: 'y-range-brush',
+      },
+    }));
+    sandbox.stub(updateSelection, 'updateLazySelectionOnEnd');
     create = () =>
-      createBinXRange({
-        chart,
+      createYRange({
         actions,
         selectionService,
         dockService,
         enableInteraction,
         isRangeSelectionsSupported,
+        layoutService,
+        chartModel,
       });
   });
 
   beforeEach(() => {
     sandbox.reset();
     isRangeSelectionsSupported = true;
-    range.returns({ key: 'range' });
+    range.default.returns({ key: 'range' });
     selectionService.getIsDimensionLocked.returns(false);
-    chart.formatter.withArgs('x-formatter').returns((datum) => `${datum}-formatted`);
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 
@@ -82,11 +75,11 @@ describe('bin-x-Range', () => {
     expect(create()).to.be.false;
   });
 
-  describe('bin x range config', () => {
+  describe('y range config', () => {
     it('should have correct properties', () => {
       create();
 
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
 
       expect(config).to.have.all.keys([
         'eventName',
@@ -97,89 +90,77 @@ describe('bin-x-Range', () => {
         'scale',
         'onEdited',
         'enableInteraction',
-        'toLabel',
       ]);
     });
 
     it('should have correct eventName', () => {
       create();
-      const [config] = range.getCall(0).args;
-      expect(config.eventName).to.equal('binXRange');
+      const [config] = range.default.getCall(0).args;
+      expect(config.eventName).to.equal('yRange');
     });
 
     it('should have correct key', () => {
       create();
-      const [config] = range.getCall(0).args;
-      expect(config.key).to.equal('bin-x-range-brush');
+      const [config] = range.default.getCall(0).args;
+      expect(config.key).to.equal('y-range-brush');
     });
 
     it('should have correct targets', () => {
       create();
-      const [config] = range.getCall(0).args;
-      expect(config.targets).to.deep.equal(['x-axis-key', 'heat-map-key']);
+      const [config] = range.default.getCall(0).args;
+      expect(config.targets).to.deep.equal(['y-axis-key', 'point-key']);
     });
 
     it('should have correct fillTargets', () => {
       create();
-      const [config] = range.getCall(0).args;
-      expect(config.fillTargets).to.deep.equal(['x-axis-key']);
+      const [config] = range.default.getCall(0).args;
+      expect(config.fillTargets).to.deep.equal(['y-axis-key']);
     });
 
     it('should have correct dock', () => {
       create();
-      const [config] = range.getCall(0).args;
-      expect(config.dock).to.equal('bottom');
+      const [config] = range.default.getCall(0).args;
+      expect(config.dock).to.equal('right');
     });
 
     it('should have correct scale', () => {
       create();
-      const [config] = range.getCall(0).args;
-      expect(config.scale).to.equal('bin-x-scale');
+      const [config] = range.default.getCall(0).args;
+      expect(config.scale).to.equal('y-scale');
     });
 
     it('should have correct onEdited', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       config.onEdited();
-      expect(actions.select.emit.withArgs('end', 'binXRange')).to.have.been.calledOnce;
-    });
-
-    it('should have correct toLabel', () => {
-      create();
-      const [config] = range.getCall(0).args;
-      expect(
-        config.toLabel({
-          datum: 2,
-          data: [1, 10],
-        })
-      ).to.equal('2-formatted');
+      expect(actions.select.emit.withArgs('end', 'yRange')).to.have.been.calledOnce;
     });
 
     it('should have correct enableInteraction', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.enableInteraction).to.equal('enableInteraction');
     });
   });
 
-  describe('bin x range options', () => {
+  describe('y range options', () => {
     beforeEach(() => {
       create();
     });
 
     it('should have correct properties', () => {
-      const [, options] = range.getCall(0).args;
+      const [, options] = range.default.getCall(0).args;
 
       expect(options).to.have.all.keys(['actions', 'chartModel', 'layoutService']);
     });
 
     it('should have correct actions', () => {
-      const [, options] = range.getCall(0).args;
+      const [, options] = range.default.getCall(0).args;
       expect(options.actions).to.equal(actions);
     });
   });
 
-  it('should return bin x range', () => {
+  it('should return y range', () => {
     expect(create()).to.deep.equal({ key: 'range' });
   });
 });

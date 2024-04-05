@@ -1,10 +1,13 @@
 import * as tapMiniChart from '../tap-mini-chart';
 import * as tapButton from '../tap-button';
+import * as native from '../native';
+import * as pan from '../pan';
+import * as pinch from '../pinch';
+
+import create from '..';
 
 describe('interactions', () => {
   let sandbox;
-  let createNative;
-  let create;
   let gestures;
   let colorService;
   let tooltipService;
@@ -14,22 +17,12 @@ describe('interactions', () => {
   let viewHandler;
   let models;
   let rtl;
-  let pan;
-  let pinch;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    createNative = sandbox.stub().returns({ key: 'native' });
-    pan = sandbox.stub().returns({ key: 'panorama' });
-    pinch = sandbox.stub().returns({ key: 'pinchZoom' });
-    create = aw.mock(
-      [
-        ['**/src/picasso-definition/interactions/native.js', () => createNative],
-        ['**/src/picasso-definition/interactions/pan.js', () => pan],
-        ['**/src/picasso-definition/interactions/pinch.js', () => pinch],
-      ],
-      ['../index']
-    )[0].default;
+    sandbox.stub(native, 'default').returns({ key: 'native' });
+    sandbox.stub(pan, 'default').returns({ key: 'panorama' });
+    sandbox.stub(pinch, 'default').returns({ key: 'pinchZoom' });
     chart = { key: 'chart' };
     viewHandler = {};
     rtl = false;
@@ -73,7 +66,7 @@ describe('interactions', () => {
 
   it('should create native interactions', () => {
     create(args);
-    expect(createNative).calledWithExactly({
+    expect(native.default).calledWithExactly({
       chart,
       actions,
       viewHandler,

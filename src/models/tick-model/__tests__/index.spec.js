@@ -1,15 +1,15 @@
-// import * as d3Scale from 'd3-scale';
-// import picasso from 'picasso.js';
+import * as d3Scale from 'd3-scale';
+import * as picassojs from 'picasso.js';
+import * as keys from '../../../constants/keys';
+import * as getTicks from '../ticks';
+import tickHelper from '../ticks/tick-helper';
+import createTickModel from '..';
 
-// import * as KEYS from '../../../constants/keys';
-// import * as getTicks from '../ticks';
-
-// // import createTickModel from '..';
-// import tickHelper from '../ticks/tick-helper';
+jest.mock('d3-scale', () => ({ scaleLinear: jest.fn() }));
+jest.mock('picasso.js', () => ({ renderer: jest.fn() }));
 
 describe('createTickModel', () => {
   let sandbox;
-  let createTickModel;
   let layoutService;
   let extremumModel;
   let dockService;
@@ -18,12 +18,9 @@ describe('createTickModel', () => {
   let themeService;
   let chart;
   let chartModel;
-  let scaleLinear;
   let renderer;
   let measureText;
   let formatters;
-  let tickHelper;
-  let getTicks;
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -31,37 +28,21 @@ describe('createTickModel', () => {
     layoutService = { getLayoutValue: sandbox.stub(), getHyperCubeValue: sandbox.stub() };
     layoutService.getLayoutValue.withArgs('xAxis.spacing', 1).returns(0.5);
     layoutService.getLayoutValue.withArgs('yAxis.spacing', 1).returns(2);
-    // sandbox.stub(tickHelper, 'getSize');
-    // sandbox.stub(tickHelper, 'getDistance');
-    tickHelper = {
-      getSize: sandbox.stub(),
-      getDistance: sandbox.stub(),
-    };
+    sandbox.stub(tickHelper, 'getSize');
+    sandbox.stub(tickHelper, 'getDistance');
     extremumModel = {
       query: { getXExtrema: sandbox.stub(), getYExtrema: sandbox.stub() },
     };
-    const KEYS = { SCALE: { X: 'x', Y: 'y' }, FIELDS: { X: 'x', Y: 'y' } };
-    scaleLinear = () => ({ domain: sandbox.stub().returns('correct scale') });
-    // sandbox.stub(d3Scale, 'scaleLinear').returns(linearScale);
-    // sandbox.stub(getTicks, 'default');
-    getTicks = sandbox.stub();
-    // getTicks = { default: sandbox.stub() };
+    d3Scale.scaleLinear.mockImplementation(() => ({ domain: sandbox.stub().returns('correct scale') }));
+    sandbox.stub(getTicks, 'default');
     measureText = sandbox.stub().returns({ width: 10, height: 20 });
     renderer = sandbox.stub().returns(measureText);
-    // sandbox.stub(picasso, 'renderer').returns(renderer);
+    picassojs.renderer.mockImplementation(() => renderer);
     themeService = { getStyles: sandbox.stub().returns('theme') };
     formatters = { x: { pattern: sandbox.stub() }, y: { pattern: sandbox.stub() } };
     chart = { formatters: sandbox.stub().returns(formatters) };
-    [{ default: createTickModel }] = aw.mock(
-      [
-        ['d3-scale', () => ({ scaleLinear })],
-        ['picasso.js', () => ({ renderer })],
-        ['**/src/constants/keys.js', () => KEYS],
-        ['**/src/models/tick-model/ticks/index.js', () => getTicks],
-        ['**/src/models/tick-model/ticks/tick-helper.js', () => tickHelper],
-      ],
-      ['../index']
-    );
+    sandbox.stub(keys, 'default').get(() => ({ SCALE: { X: 'x', Y: 'y' }, FIELDS: { X: 'x', Y: 'y' } }));
+    sandbox.stub('');
     create = () => createTickModel({ layoutService, dockService, extremumModel, themeService, chartModel, chart });
   });
 
@@ -93,7 +74,7 @@ describe('createTickModel', () => {
         });
         tickHelper.getSize.returns(200);
         tickHelper.getDistance.returns(100);
-        getTicks
+        getTicks.default
           .withArgs({
             scale: 'correct scale',
             explicitType: 'minMax',
@@ -139,7 +120,7 @@ describe('createTickModel', () => {
         });
         tickHelper.getSize.returns(400);
         tickHelper.getDistance.returns(100);
-        getTicks
+        getTicks.default
           .withArgs({
             scale: 'correct scale',
             explicitType: 'minMax',
@@ -165,7 +146,7 @@ describe('createTickModel', () => {
         });
         tickHelper.getSize.returns(200);
         tickHelper.getDistance.returns(100);
-        getTicks
+        getTicks.default
           .withArgs({
             scale: 'correct scale',
             explicitType: 'minMax',
@@ -191,7 +172,7 @@ describe('createTickModel', () => {
         });
         tickHelper.getSize.returns(400);
         tickHelper.getDistance.returns(100);
-        getTicks
+        getTicks.default
           .withArgs({
             scale: 'correct scale',
             explicitType: 'minMax',
@@ -217,7 +198,7 @@ describe('createTickModel', () => {
         });
         tickHelper.getSize.returns(400);
         tickHelper.getDistance.returns(100);
-        getTicks
+        getTicks.default
           .withArgs({
             scale: 'correct scale',
             explicitType: 'minMax',

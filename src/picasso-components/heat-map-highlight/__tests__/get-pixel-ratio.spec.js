@@ -3,9 +3,9 @@ import getPixelRatio from '../get-pixel-ratio';
 describe('getPixelRatio', () => {
   let canvasContext;
   beforeEach(() => {
-    global.window = {
-      devicePixelRatio: 1.25,
-    };
+    Object.defineProperty(window, 'devicePixelRatio', {
+      value: 1.25,
+    });
   });
 
   it('shoule return correct pixel ratio when has webkitBackingStorePixelRatio', () => {
@@ -35,7 +35,9 @@ describe('getPixelRatio', () => {
 
   it('should return correct pixel ratio when window.devicePixelRatio is not defined', () => {
     canvasContext = { webkitBackingStorePixelRatio: 1.25 };
-    global.window = { devicePixelRatio: undefined };
+    Object.defineProperty(window, 'devicePixelRatio', {
+      value: undefined,
+    });
     expect(getPixelRatio(canvasContext)).to.equal(0.8);
   });
 });

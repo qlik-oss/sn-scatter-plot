@@ -5,12 +5,12 @@ import createTrendlinesService from '..';
 describe('trendlines-service', () => {
   let sandbox;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
     sandbox.stub(chartModules, 'trendlinesService').returns('service');
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 

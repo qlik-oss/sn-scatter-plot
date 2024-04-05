@@ -1,35 +1,19 @@
+import * as range from '../../../../interactive/range';
+import * as keys from '../../../../constants/keys';
+import createBinYRange from '../bin-y-range';
+
 describe('bin-y-Range', () => {
   let sandbox;
-  let range;
   let actions;
   let selectionService;
   let dockService;
   let enableInteraction;
-  let createBinYRange;
   let chart;
   let create;
   let isRangeSelectionsSupported;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
-    range = sandbox.stub();
-    createBinYRange = aw.mock(
-      [
-        ['**/src/interactive/index.js', () => ({ range })],
-        [
-          '**/src/constants/keys.js',
-          () => ({
-            SCALE: { BIN_Y: 'bin-y-scale' },
-            COMPONENT: { Y_AXIS: 'y-axis-key', HEAT_MAP: 'heat-map-key' },
-            FORMATTER: { Y: 'y-formatter' },
-            BRUSH: {
-              BIN_Y_RANGE: 'bin-y-range-brush',
-            },
-          }),
-        ],
-      ],
-      ['../bin-y-range']
-    )[0].default;
     actions = {
       select: {
         emit: sandbox.spy(),
@@ -46,10 +30,18 @@ describe('bin-y-Range', () => {
       },
     };
     enableInteraction = 'enableInteraction';
-
     chart = {
       formatter: sandbox.stub(),
     };
+    sandbox.stub(range, 'default');
+    sandbox.stub(keys, 'default').get(() => ({
+      SCALE: { BIN_Y: 'bin-y-scale' },
+      COMPONENT: { Y_AXIS: 'y-axis-key', HEAT_MAP: 'heat-map-key' },
+      FORMATTER: { Y: 'y-formatter' },
+      BRUSH: {
+        BIN_Y_RANGE: 'bin-y-range-brush',
+      },
+    }));
     create = () =>
       createBinYRange({
         chart,
@@ -64,12 +56,12 @@ describe('bin-y-Range', () => {
   beforeEach(() => {
     sandbox.reset();
     isRangeSelectionsSupported = true;
-    range.returns({ key: 'range' });
+    range.default.returns({ key: 'range' });
     selectionService.getIsDimensionLocked.returns(false);
     chart.formatter.withArgs('y-formatter').returns((datum) => `${datum}-formatted`);
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 
@@ -87,7 +79,7 @@ describe('bin-y-Range', () => {
     it('should have correct properties', () => {
       create();
 
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
 
       expect(config).to.have.all.keys([
         'eventName',
@@ -104,50 +96,50 @@ describe('bin-y-Range', () => {
 
     it('should have correct eventName', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.eventName).to.equal('binYRange');
     });
 
     it('should have correct key', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.key).to.equal('bin-y-range-brush');
     });
 
     it('should have correct targets', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.targets).to.deep.equal(['y-axis-key', 'heat-map-key']);
     });
 
     it('should have correct fillTargets', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.fillTargets).to.deep.equal(['y-axis-key']);
     });
 
     it('should have correct dock', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.dock).to.equal('right');
     });
 
     it('should have correct scale', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.scale).to.equal('bin-y-scale');
     });
 
     it('should have correct onEdited', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       config.onEdited();
       expect(actions.select.emit.withArgs('end', 'binYRange')).to.have.been.calledOnce;
     });
 
     it('should have correct toLabel', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(
         config.toLabel({
           datum: 2,
@@ -158,7 +150,7 @@ describe('bin-y-Range', () => {
 
     it('should have correct enableInteraction', () => {
       create();
-      const [config] = range.getCall(0).args;
+      const [config] = range.default.getCall(0).args;
       expect(config.enableInteraction).to.equal('enableInteraction');
     });
   });
@@ -169,13 +161,13 @@ describe('bin-y-Range', () => {
     });
 
     it('should have correct properties', () => {
-      const [, options] = range.getCall(0).args;
+      const [, options] = range.default.getCall(0).args;
 
       expect(options).to.have.all.keys(['actions', 'chartModel', 'layoutService']);
     });
 
     it('should have correct actions', () => {
-      const [, options] = range.getCall(0).args;
+      const [, options] = range.default.getCall(0).args;
       expect(options.actions).to.equal(actions);
     });
   });

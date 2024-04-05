@@ -21,7 +21,7 @@ describe('custom-tooltip-service', () => {
   let options;
   let create;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
     sandbox.stub(utils, 'checkIfPromisesExist');
     sandbox.stub(utils, 'getImageRow');
@@ -112,7 +112,7 @@ describe('custom-tooltip-service', () => {
       });
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 

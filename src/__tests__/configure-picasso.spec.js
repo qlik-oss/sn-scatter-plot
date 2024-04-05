@@ -1,56 +1,61 @@
+import * as picassojs from 'picasso.js';
+import * as picassoHammer from 'picasso-plugin-hammer';
 import * as renderer from '../picasso-components/react-components/react-renderer';
 import * as disclaimer from '../picasso-components/react-components/disclaimer';
 import * as dataTitle from '../picasso-components/react-components/data-title-component';
 import * as button from '../picasso-components/react-components/button';
+import * as refLineLabels from '../picasso-components/ref-line-labels';
+import * as pointLabel from '../picasso-components/point-label';
+import * as miniChartWindow from '../picasso-components/mini-chart-window';
+import * as heatMapHighlight from '../picasso-components/heat-map-highlight';
+import configurePicasso from '../configure-picasso';
+
+jest.mock('picasso.js', () => jest.fn());
+jest.mock('picasso-plugin-q', () => ({ key: 'picasso-q' }));
+jest.mock('picasso-plugin-hammer', () => jest.fn());
+jest.mock('hammerjs', () => ({ key: 'hammer' }));
 
 describe('configure-picasso', () => {
   let sandbox;
   let picasso;
-  let picassoHammer;
-  let createPicassoJS;
-  let configurePicasso;
 
-  beforeEach(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
     picasso = {
       use: sandbox.spy(),
       component: sandbox.spy(),
       renderer: sandbox.spy(),
     };
-    createPicassoJS = sandbox.stub().returns(picasso);
-    picassoHammer = sandbox.stub();
-    sandbox.stub(renderer, 'default');
-    renderer.default.returns('renderer');
-    sandbox.stub(disclaimer, 'default');
-    disclaimer.default.returns('disclaimer');
-    sandbox.stub(dataTitle, 'default');
-    dataTitle.default.returns('dataTitle');
-    sandbox.stub(button, 'default');
-    button.default.returns('button');
-    configurePicasso = aw.mock(
-      [
-        ['**/dist/picasso.js', () => createPicassoJS],
-        ['**/dist/picasso-q.js', () => ({ key: 'picasso-q' })],
-        ['**/dist/picasso-hammer.js', () => picassoHammer],
-        ['**/hammer.js', () => 'touch it'],
-        ['**/picasso-components/ref-line-labels/index.js', () => 'refLineLabelsComponent'],
-        ['**/picasso-components/point-label/index.js', () => 'pointLabelComponent'],
-        ['**/picasso-components/mini-chart-window/index.js', () => 'miniChartWindow'],
-        ['**/picasso-components/heat-map-highlight/index.js', () => 'heatMapHighlight'],
-      ],
-      ['../configure-picasso']
-    )[0].default;
+    picassojs.mockImplementation(() => picasso);
 
-    picassoHammer.withArgs('touch it').returns('picasso hammered it');
+    sandbox.stub(renderer, 'default');
+    sandbox.stub(disclaimer, 'default');
+    sandbox.stub(dataTitle, 'default');
+    sandbox.stub(button, 'default');
+    sandbox.stub(refLineLabels, 'default').get(() => 'refLineLabelsComponent');
+    sandbox.stub(pointLabel, 'default').get(() => 'pointLabelComponent');
+    sandbox.stub(miniChartWindow, 'default').get(() => 'miniChartWindowComponent');
+    sandbox.stub(heatMapHighlight, 'default').get(() => 'heatMapHighlightComponent');
+  });
+
+  beforeEach(() => {
+    sandbox.reset();
+    jest.clearAllMocks();
+
+    renderer.default.returns('renderer');
+    disclaimer.default.returns('disclaimer');
+    dataTitle.default.returns('dataTitle');
+    button.default.returns('button');
+
     configurePicasso();
   });
 
-  afterEach(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 
   it('should create picasso instance', () => {
-    expect(createPicassoJS).to.have.been.calledOnce;
+    expect(picassojs.mock.calls.length).to.equal(1);
   });
 
   it('should use correct amount of components', () => {
@@ -62,8 +67,8 @@ describe('configure-picasso', () => {
   });
 
   it('should use picasso-hammer', () => {
-    expect(picassoHammer).to.have.been.calledWithExactly('touch it');
-    expect(picasso.use.withArgs('picasso hammered it')).to.have.been.calledOnce;
+    expect(picassoHammer.mock.calls.length).to.equal(1);
+    expect(picassoHammer.mock.calls[0][0]).to.deep.equal({ key: 'hammer' });
   });
 
   it('should register all custom components', () => {
@@ -71,10 +76,10 @@ describe('configure-picasso', () => {
     expect(picasso.component.getCall(0).calledWith('reference-line-labels', 'refLineLabelsComponent')).to.be.true;
     expect(picasso.component.getCall(1).calledWith('point-label', 'pointLabelComponent')).to.be.true;
     expect(picasso.component.getCall(2).calledWith('disclaimer', 'disclaimer')).to.be.true;
-    expect(picasso.component.getCall(3).calledWith('mini-chart-window', 'miniChartWindow')).to.be.true;
+    expect(picasso.component.getCall(3).calledWith('mini-chart-window', 'miniChartWindowComponent')).to.be.true;
     expect(picasso.component.getCall(4).calledWith('button', 'button')).to.be.true;
     expect(picasso.component.getCall(5).calledWith('data-title', 'dataTitle')).to.be.true;
-    expect(picasso.component.getCall(6).calledWith('heat-map-highlight', 'heatMapHighlight')).to.be.true;
+    expect(picasso.component.getCall(6).calledWith('heat-map-highlight', 'heatMapHighlightComponent')).to.be.true;
   });
 
   it('should return picasso instance', () => {

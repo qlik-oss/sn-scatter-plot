@@ -7,7 +7,7 @@ describe('out of bounds - margin', () => {
   let layoutService;
   let components;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
     sandbox.stub(KEYS, 'default').get(() => ({
       COMPONENT: {
@@ -27,7 +27,7 @@ describe('out of bounds - margin', () => {
     components = createSpace({ models });
   });
 
-  after(() => sandbox.restore());
+  afterAll(() => sandbox.restore());
 
   it('should create two componennts', () => {
     expect(components).to.have.length(2);

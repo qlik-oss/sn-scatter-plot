@@ -31,19 +31,17 @@
       "env": {
         "browser": false,
         "node": true,
-        "mocha": true
+        "jest": true
       },
       "globals": {
         "chai": false,
         "expect": false,
+        "jestExpect": false,
         "sinon": false,
-        "aw": false,
-        "page": false
+        "page": false,
+        "window": false
       },
-      "plugins": ["mocha", "react"],
-      "rules": {
-        "mocha/no-exclusive-tests": "error"
-      }
+      "plugins": ["react"]
     }
   ]
 }

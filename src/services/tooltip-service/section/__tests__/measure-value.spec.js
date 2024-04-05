@@ -10,7 +10,7 @@ describe('measure-value', () => {
   let fieldFn;
   let get;
 
-  before(() => {
+  beforeAll(() => {
     sandbox = sinon.createSandbox();
     dataset = sandbox.stub();
   });
@@ -41,7 +41,7 @@ describe('measure-value', () => {
     get = () => getMeasureValue({ dataset, data });
   });
 
-  after(() => {
+  afterAll(() => {
     sandbox.restore();
   });
 
