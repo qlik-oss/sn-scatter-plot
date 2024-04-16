@@ -101,6 +101,7 @@ export default function r() {
       clear() {
         if (root) {
           root.unmount();
+          root = undefined;
         }
 
         return dom;
@@ -109,6 +110,7 @@ export default function r() {
       destroy() {
         if (root) {
           root.unmount();
+          root = undefined;
         }
         if (el && el.parentElement) {
           el.parentElement.removeChild(el);
