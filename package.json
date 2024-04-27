@@ -65,7 +65,7 @@
     "@nebula.js/cli": "4.6.1",
     "@nebula.js/cli-build": "4.6.1",
     "@nebula.js/cli-sense": "4.6.1",
-    "@nebula.js/cli-serve": "4.6.1",
+    "@nebula.js/cli-serve": "5.0.1",
     "@playwright/test": "1.39.0",
     "babel-plugin-istanbul": "^6.1.1",
     "chai": "^4.3.6",
