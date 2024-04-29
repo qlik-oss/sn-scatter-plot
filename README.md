@@ -1,3 +1,7 @@
+> **Warning** This repository is now archived and will not be updated
+
+> This repository was originally published to foster collaboration and engagement with developers as they customized or developed visualizations, but due to customer feedback and usage data, it is now moved back to closed source. Moving this and other projects back to closed source will support better integration with internal build and test tooling, and free up resources for investment in these and other visualizations.
+
 [![CircleCI](https://circleci.com/gh/qlik-oss/sn-scatter-plot.svg?style=shield)](https://circleci.com/gh/qlik-oss/sn-scatter-plot)
 [![Maintainability](https://api.codeclimate.com/v1/badges/da3b3287eeb33acd72c9/maintainability)](https://codeclimate.com/github/qlik-oss/sn-scatter-plot/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/da3b3287eeb33acd72c9/test_coverage)](https://codeclimate.com/github/qlik-oss/sn-scatter-plot/test_coverage)
